@@ -45,3 +45,7 @@ tr.gewaehlt td { background: #2c3c4c; }
 .liste div.gewaehlt { background: #2c3c4c; }
 #toast { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 520px; margin: 0 auto; padding: 10px 14px; background: var(--rot); color: #fff; border-radius: 4px; z-index: 50; }
 @media (max-width: 800px) { .spalten { grid-template-columns: minmax(0, 1fr); } }
+.live { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+.drei-d { height: 62vh; min-height: 320px; background: #101113; border: 1px solid var(--linie); border-radius: 4px; overflow: hidden; }
+.drei-d canvas { display: block; }
+@media (max-width: 900px) { .live { grid-template-columns: minmax(0, 1fr); } .drei-d { height: 44vh; } }

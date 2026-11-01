@@ -5,11 +5,12 @@ Prüfungen wie alles andere. Es gibt hier keinen Weg an der Prüfung vorbei.
 """
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
 
-from fastapi import Body, FastAPI, Request
+from fastapi import Body, FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -20,6 +21,7 @@ from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .show import Show
 
 WEB_ORDNER = PROJEKT / "web"
+LIVE_BILDER_PRO_SEKUNDE = 25
 
 
 def patch_antwort(show: Show) -> dict:
@@ -158,6 +160,22 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def dmx_aus():
         show.ausgabe.ausschalten()
         return {"eingeschaltet": False}
+
+    # --- Live-Daten für die 3D-Vorschau ------------------------------------
+
+    @app.get("/api/buehne")
+    def buehne_lesen():
+        return show.buehnen_aufbau()
+
+    @app.websocket("/api/live")
+    async def live(verbindung: WebSocket):
+        await verbindung.accept()
+        try:
+            while True:
+                await verbindung.send_json(show.live_daten())
+                await asyncio.sleep(1 / LIVE_BILDER_PRO_SEKUNDE)
+        except (WebSocketDisconnect, RuntimeError):
+            pass
 
     # --- Die Oberfläche ---------------------------------------------------
 

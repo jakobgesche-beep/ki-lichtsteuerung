@@ -20,6 +20,7 @@ from .patch import Patch
 from .pruefung import Pruefer, Vorgaben
 from .render import Eigenschaften, Renderer
 from .sicherheit import Grenzen
+from .simulator import Simulator
 
 
 class Show:
@@ -46,6 +47,7 @@ class Show:
         with self.sperre:
             self.renderer = Renderer(self.patch)
             self.pruefer = Pruefer(self.patch, self.buehne, self.grenzen)
+            self.simulator = Simulator(self.patch, self.buehne)
 
     # --- Ein Bild bauen ---------------------------------------------------
 
@@ -62,6 +64,17 @@ class Show:
             self.meldungen = meldungen
             self.letztes_bild = bytes(bild)
             return self.letztes_bild
+
+    def live_daten(self) -> dict:
+        """Das schickt der Server laufend an die 3D-Vorschau."""
+        with self.sperre:
+            return {"geraete": self.simulator.lies(self.letztes_bild),
+                    "dmx_ein": self.ausgabe.eingeschaltet, "meldungen": self.meldungen}
+
+    def buehnen_aufbau(self) -> dict:
+        return {"buehne": self.buehne.daten["buehne"], "publikum": self.buehne.publikum,
+                "traverse": self.buehne.traverse, "geraete": self.simulator.aufbau(),
+                "positionen": self.positionen}
 
     # --- Die Schleife -----------------------------------------------------
 

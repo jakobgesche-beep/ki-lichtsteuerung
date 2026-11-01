@@ -1,9 +1,11 @@
 // Der Rahmen: Reiter oben, die Seiten liegen jeweils in einer eigenen Datei.
+import { liveSeite } from "./live.js";
 import { patchSeite } from "./patch.js";
 import { katalogSeite } from "./katalog.js";
 import { dmxTestSeite } from "./dmxtest.js";
 
 const seiten = [
+  ["Live", liveSeite],
   ["Patch", patchSeite],
   ["Katalog", katalogSeite],
   ["DMX-Test", dmxTestSeite],
