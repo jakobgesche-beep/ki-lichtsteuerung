@@ -4,6 +4,7 @@ __pycache__/
 .pytest_cache/
 # Wird beim Betrieb geschrieben (letztes Profil, letzte Cueliste):
 daten/sitzung.json
+daten/audio/
 # Lokale Einstellungen, zum Beispiel später der API-Key. Niemals ins Repository!
 lokal.json
 .env

@@ -49,3 +49,7 @@ tr.gewaehlt td { background: #2c3c4c; }
 .drei-d { height: 62vh; min-height: 320px; background: #101113; border: 1px solid var(--linie); border-radius: 4px; overflow: hidden; }
 .drei-d canvas { display: block; }
 @media (max-width: 900px) { .live { grid-template-columns: minmax(0, 1fr); } .drei-d { height: 44vh; } }
+.beat { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--blau); opacity: .15; }
+.pegel { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 13px; color: var(--leise); }
+.pegel span { width: 60px; }
+.pegel i { display: block; height: 8px; background: var(--blau); }

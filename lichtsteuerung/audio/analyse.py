@@ -1,0 +1,173 @@
+"""Musik-Analyse: Macht aus Ton-Blöcken ein paar einfache Zahlen.
+
+    beat        gerade ist ein Schlag
+    tempo_bpm   Schläge pro Minute
+    bass, mitte, hoehe     wie stark diese Bereiche sind, je 0 bis 1
+    energie     geglättete Gesamtenergie, 0 bis 1
+    leise, rede sind die Regeln für das ruhige Grundlicht
+
+Bass, Mitten und Höhen kommen aus einer eigenen FFT mit numpy. Den Beat liefert
+aubio. Lässt sich aubio nicht installieren, springt EigeneBeatErkennung ein.
+"""
+from __future__ import annotations
+
+from collections import deque
+from dataclasses import dataclass
+
+import numpy as np
+
+from .quellen import ABTASTRATE, BLOCK
+
+FFT_LAENGE = 2048
+BAENDER = {"bass": (20, 150), "mitte": (150, 2000), "hoehe": (2000, 16000)}
+LEISE_PEGEL = 10 ** (-45 / 20)     # unter -45 dB gilt es als Stille
+RUHE_S = 0.8                       # so lange muss es still sein
+KEIN_BEAT_S = 3.0                  # so lange ohne Beat, bevor es Rede sein kann
+
+
+@dataclass
+class Messwerte:
+    beat: bool = False
+    tempo_bpm: float = 0.0
+    bass: float = 0.0
+    mitte: float = 0.0
+    hoehe: float = 0.0
+    energie: float = 0.0
+    pegel: float = 0.0
+    leise: bool = True
+    rede: bool = False
+
+
+class AubioBeatErkennung:
+    name = "aubio"
+
+    def __init__(self):
+        import aubio
+        self.tempo = aubio.tempo("default", 1024, BLOCK, ABTASTRATE)
+
+    def verarbeite(self, block: np.ndarray):
+        beat = bool(self.tempo(block.astype(np.float32))[0])
+        return beat, float(self.tempo.get_bpm())
+
+
+class EigeneBeatErkennung:
+    """Einfacher Ersatz für aubio: Ein Beat ist ein plötzlicher Sprung im Spektrum."""
+
+    name = "eigene"
+
+    def __init__(self):
+        self.letztes = np.zeros(FFT_LAENGE // 2 // 4 + 1)
+        self.verlauf = deque(maxlen=int(1.5 * ABTASTRATE / BLOCK))
+        self.puffer = np.zeros(FFT_LAENGE // 4)
+        self.fenster = np.hanning(len(self.puffer))
+        self.seit_beat = 0
+        self.abstaende = deque(maxlen=12)
+
+    def verarbeite(self, block: np.ndarray):
+        self.puffer = np.concatenate([self.puffer[len(block):], block])
+        betrag = np.abs(np.fft.rfft(self.puffer * self.fenster))
+        betrag = np.log1p(betrag * 10)
+        sprung = float(np.maximum(betrag - self.letztes, 0).sum())
+        self.letztes = betrag
+        self.seit_beat += 1
+        schwelle = np.mean(self.verlauf) + 1.8 * np.std(self.verlauf) if len(self.verlauf) > 20 else np.inf
+        self.verlauf.append(sprung)
+        kleinster_abstand = int(0.28 * ABTASTRATE / BLOCK)      # höchstens gut 210 BPM
+        beat = sprung > schwelle and sprung > 1.0 and self.seit_beat >= kleinster_abstand
+        if beat:
+            self.abstaende.append(self.seit_beat)
+            self.seit_beat = 0
+        tempo = 60.0 * ABTASTRATE / BLOCK / float(np.median(self.abstaende)) if self.abstaende else 0.0
+        return beat, tempo
+
+
+def beat_erkennung():
+    try:
+        return AubioBeatErkennung()
+    except Exception:
+        return EigeneBeatErkennung()
+
+
+class BeatUhr:
+    """Überbrückt Lücken: Auch aubio lässt mal einen Schlag aus, das Tempo stimmt aber.
+
+    Jeder erkannte Schlag stellt die Uhr. Dazwischen tickt sie im Tempo weiter,
+    aber nur kurz. Hört die Musik auf, hört auch die Uhr auf.
+    """
+
+    MAX_OHNE_ECHTEN_BEAT_S = 6.0
+
+    def __init__(self):
+        self.bis_naechstem = 0.0
+        self.seit_ausgabe = 99.0
+        self.seit_echtem = 99.0
+
+    def takt(self, echter_beat: bool, tempo: float, dauer: float) -> bool:
+        periode = 60.0 / tempo if 40.0 <= tempo <= 240.0 else 0.0
+        self.bis_naechstem -= dauer
+        self.seit_ausgabe += dauer
+        self.seit_echtem = 0.0 if echter_beat else self.seit_echtem + dauer
+        faellig = (periode > 0 and self.bis_naechstem <= 0
+                   and self.seit_echtem < self.MAX_OHNE_ECHTEN_BEAT_S)
+        if echter_beat:
+            self.bis_naechstem = periode
+            faellig = self.seit_ausgabe >= 0.5 * periode
+        elif faellig:
+            self.bis_naechstem += periode
+        if faellig:
+            self.seit_ausgabe = 0.0
+        return faellig
+
+
+class Analyse:
+    def __init__(self, beat=None):
+        self.beat = beat or beat_erkennung()
+        self.uhr = BeatUhr()
+        self.puffer = np.zeros(FFT_LAENGE, dtype=np.float32)
+        self.fenster = np.hanning(FFT_LAENGE)
+        frequenzen = np.fft.rfftfreq(FFT_LAENGE, 1 / ABTASTRATE)
+        self.masken = {n: (frequenzen >= von) & (frequenzen < bis) for n, (von, bis) in BAENDER.items()}
+        self.spitzen = {name: 1e-4 for name in BAENDER}
+        self.werte = {name: 0.0 for name in BAENDER}
+        self.pegel_spitze = 1e-3
+        self.energie = 0.0
+        self.pegel_glatt = 0.0
+        self.zeit_still = 0.0
+        self.zeit_ohne_beat = KEIN_BEAT_S
+        self.tempo = 0.0
+        self.anteil_mitte = 0.0
+
+    def verarbeite(self, block: np.ndarray) -> Messwerte:
+        dauer = len(block) / ABTASTRATE
+        beat, tempo = self.beat.verarbeite(block)
+        if tempo > 0:
+            self.tempo = tempo
+        self.puffer = np.concatenate([self.puffer[len(block):], block])
+        spektrum = np.abs(np.fft.rfft(self.puffer * self.fenster))
+
+        for name, maske in self.masken.items():
+            staerke = float(np.sqrt(np.mean(spektrum[maske] ** 2)))
+            # Automatische Anpassung: Die Spitze der letzten Zeit gilt als 1.
+            self.spitzen[name] = max(staerke, self.spitzen[name] * 0.9995, 1e-4)
+            ziel = staerke / self.spitzen[name]
+            # Schnell nach oben, langsam nach unten: So pumpt das Licht mit dem Bass.
+            alt = self.werte[name]
+            self.werte[name] = ziel if ziel > alt else alt + (ziel - alt) * 0.15
+
+        pegel = float(np.sqrt(np.mean(block ** 2)))
+        self.pegel_glatt += (pegel - self.pegel_glatt) * 0.1
+        self.pegel_spitze = max(self.pegel_glatt, self.pegel_spitze * 0.99995, 1e-3)
+        roh = self.pegel_glatt / self.pegel_spitze
+        self.energie += (roh - self.energie) * 0.02
+
+        leise_jetzt = self.pegel_glatt < LEISE_PEGEL
+        self.zeit_still = self.zeit_still + dauer if leise_jetzt else 0.0
+        self.zeit_ohne_beat = 0.0 if beat else self.zeit_ohne_beat + dauer
+        gesamt = sum(self.werte.values()) or 1.0
+        self.anteil_mitte += (self.werte["mitte"] / gesamt - self.anteil_mitte) * 0.02
+        leise = self.zeit_still >= RUHE_S
+        # Grobe Schätzung. Sicher erkennt es später das X32 (offenes Rednerpult).
+        rede = not leise and self.zeit_ohne_beat >= KEIN_BEAT_S and self.anteil_mitte > 0.45
+        return Messwerte(beat=self.uhr.takt(beat, self.tempo, dauer), tempo_bpm=round(self.tempo, 1), bass=self.werte["bass"],
+                         mitte=self.werte["mitte"], hoehe=self.werte["hoehe"],
+                         energie=min(1.0, self.energie), pegel=pegel, leise=leise, rede=rede)

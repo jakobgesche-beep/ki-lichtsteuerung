@@ -14,6 +14,7 @@ from fastapi import Body, FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+from .audio import quellen
 from .daten import PROJEKT
 from .dmx_ausgabe import EnttecFehler
 from .katalog import KatalogFehler
@@ -22,6 +23,7 @@ from .show import Show
 
 WEB_ORDNER = PROJEKT / "web"
 LIVE_BILDER_PRO_SEKUNDE = 25
+AUDIO_ENDUNGEN = {".wav", ".flac", ".mp3", ".ogg", ".aiff"}
 
 
 def patch_antwort(show: Show) -> dict:
@@ -160,6 +162,44 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def dmx_aus():
         show.ausgabe.ausschalten()
         return {"eingeschaltet": False}
+
+    # --- Audio -------------------------------------------------------------
+
+    @app.get("/api/audio")
+    def audio_lesen():
+        ordner = show.pfade.audio
+        dateien = sorted(p.name for p in ordner.glob("*") if p.suffix.lower() in AUDIO_ENDUNGEN)
+        return {"eingaenge": quellen.eingaenge(), "dateien": dateien}
+
+    @app.post("/api/audio/quelle")
+    def audio_quelle(auftrag: dict = Body(...)):
+        art = auftrag.get("art", "aus")
+        try:
+            if art == "aus":
+                show.audio.stoppen()
+            elif art == "test":
+                show.audio.starten(quellen.Testsignal(float(auftrag.get("bpm", 120))), "Testsignal")
+            elif art == "datei":
+                name = Path(auftrag["name"]).name     # nie aus dem Ordner hinaus
+                show.audio.starten(quellen.Datei(show.pfade.audio / name), name)
+            elif art == "eingang":
+                nummer = auftrag.get("geraet")
+                kanaele = tuple(auftrag.get("kanaele", (1,)))
+                show.audio.starten(quellen.Eingang(nummer, kanaele), "Eingang")
+            else:
+                raise ValueError(f"Unbekannte Audioquelle: {art}")
+        except quellen.AudioFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        return {"quelle": show.audio.name}
+
+    @app.post("/api/audio/hochladen")
+    async def audio_hochladen(anfrage: Request, name: str):
+        ziel = Path(name).name
+        if Path(ziel).suffix.lower() not in AUDIO_ENDUNGEN:
+            raise ValueError("Diese Dateiart kann das Programm nicht lesen.")
+        show.pfade.audio.mkdir(parents=True, exist_ok=True)
+        (show.pfade.audio / ziel).write_bytes(await anfrage.body())
+        return {"name": ziel}
 
     # --- Live-Daten für die 3D-Vorschau ------------------------------------
 

@@ -31,6 +31,7 @@ class Pfade:
         self.cuelisten = self.wurzel / "cues" / "listen"
         self.fader = self.wurzel / "cues" / "fader.json"
         self.sitzung = self.wurzel / "daten" / "sitzung.json"
+        self.audio = self.wurzel / "daten" / "audio"
 
 
 def lese_json(pfad: Path, standard: Any = None) -> Any:
