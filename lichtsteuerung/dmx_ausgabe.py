@@ -17,6 +17,13 @@ KANAELE = 512
 FTDI_HERSTELLER, FTDI_PRODUKT = 0x0403, 0x6001
 
 
+def _lade_usb_treiber() -> None:
+    """Macht den mitgelieferten libusb-Treiber bekannt. Danach findet ihn auch pyftdi."""
+    import libusb_package
+    import usb.backend.libusb1
+    usb.backend.libusb1.get_backend(find_library=libusb_package.find_library)
+
+
 class EnttecFehler(Exception):
     """Kein Enttec gefunden oder die Verbindung ist abgerissen."""
 
@@ -28,6 +35,7 @@ class EnttecOpenDmx:
     def suchen() -> list:
         """Liste der angeschlossenen Geräte. Leer, wenn keins da ist."""
         try:
+            _lade_usb_treiber()
             from pyftdi.usbtools import UsbTools
             return UsbTools.find_all([(FTDI_HERSTELLER, FTDI_PRODUKT)])
         except ImportError:
@@ -37,6 +45,7 @@ class EnttecOpenDmx:
             return []
 
     def __init__(self):
+        _lade_usb_treiber()
         from pyftdi.ftdi import Ftdi
         self.ftdi = Ftdi()
         try:

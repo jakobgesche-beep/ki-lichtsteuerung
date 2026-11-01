@@ -64,6 +64,17 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **GDTF:** nur gegen eine selbst gebaute Beispieldatei getestet. QLC+-Import gegen die echte Datei des Hero Spot 60.
 - **Die genaue Lage** eines Geräts (x, y, z, Drehung, Neigung) trägt man in `stage.json` ein, solange es die Klick-Oberfläche aus Schritt 11 nicht gibt.
 
+## Mac-App, Website und Updates
+
+- **Die Website** ist für GitHub Pages vorbereitet. Cloudflare muss einmal im eigenen Konto mit dem Repo verbunden werden.
+- **Das Repo muss öffentlich sein,** denn Downloads aus privaten Repos gehen nicht ohne Anmeldung.
+- **Keine Lizenz vergeben:** Es wurde noch keine Lizenz für den eigenen Code gewählt.
+- **Die Mac-App enthält aubio nicht,** wegen der GPL. Sie nutzt die eigene Beat-Erkennung, die bei Musik ohne klaren Takt öfter daneben liegt.
+- **Die App ist nicht von Apple beglaubigt** (kein bezahltes Konto). Beim ersten Start braucht es „Dennoch öffnen“. Nach Updates kann macOS erneut nach dem Mikrofon fragen.
+- **Updates:** Beim Start wird einmal gesucht, die Datei lädt im Hintergrund. Installiert wird nur auf Klick und nie bei laufender DMX-Ausgabe. Geprüft wird die Prüfsumme aus dem Release. Eine eigene digitale Unterschrift gibt es nicht, die Sicherheit hängt also am GitHub-Konto.
+- **Beispieldaten** kommen nur beim allerersten Start in den Datenordner. Neue Beispielprofile aus Updates erscheinen daher nicht von selbst. Der Gerätekatalog kommt dagegen mit jedem Update neu.
+- **Tablet:** Die App selbst hat noch keinen `--netz`-Knopf, das geht nur aus dem Quellcode.
+
 ## Vorbereitet für die Schritte 8 bis 12
 
 | Schritt | Wo es andockt |

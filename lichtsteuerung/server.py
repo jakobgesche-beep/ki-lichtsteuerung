@@ -367,6 +367,13 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         except (WebSocketDisconnect, RuntimeError):
             pass
 
+    # --- Update -------------------------------------------------------------
+
+    @app.post("/api/update/installieren")
+    def update_installieren():
+        show.update.installieren()
+        return {"zustand": "installiert"}
+
     # --- Die Oberfläche ---------------------------------------------------
 
     @app.get("/")

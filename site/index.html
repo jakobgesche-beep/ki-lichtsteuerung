@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lichtsteuerung der Technik-AG</title>
+<meta name="description" content="Eigenes Programm für das Bühnenlicht der Technik-AG. Download für den Mac.">
+<link rel="icon" href="symbol.png">
+<style>
+  :root { --grund: #1c1d1f; --flaeche: #26282b; --linie: #3a3d41; --text: #e6e6e6; --leise: #9a9ea3; --blau: #4a7fb5; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--grund); color: var(--text); font: 16px/1.55 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 680px; margin: 0 auto; padding: 48px 16px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 40px 0 8px; }
+  p { margin: 0 0 12px; }
+  ol, ul { padding-left: 22px; margin: 0 0 12px; }
+  li { margin-bottom: 6px; }
+  a { color: #9cc3e6; }
+  code { background: var(--flaeche); padding: 2px 5px; border-radius: 4px; font-size: 14px; overflow-wrap: anywhere; }
+  .leise { color: var(--leise); font-size: 14px; }
+  .knopf { display: inline-block; padding: 12px 18px; border-radius: 4px; background: var(--blau); color: #fff; font-weight: 600; text-decoration: none; margin: 4px 8px 4px 0; }
+  .knopf.zweit { background: var(--flaeche); border: 1px solid var(--linie); color: var(--text); font-weight: normal; }
+  .kasten { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 4px; padding: 14px 16px; margin: 16px 0; }
+  footer { margin-top: 48px; color: var(--leise); font-size: 13px; }
+  footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Lichtsteuerung der Technik-AG</h1>
+  <p>Unser eigenes Programm für das Bühnenlicht. Es reagiert live und ohne Internet auf die Musik, hält sich an ein Veranstaltungsprofil und zeigt alles auf einer 3D-Bühne.</p>
+
+  <div class="kasten">
+    <p id="version" class="leise">Für macOS 12 oder neuer</p>
+    <a class="knopf" href="https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-arm64.dmg">Download für Mac mit Apple-Chip</a>
+    <a class="knopf zweit" href="https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-intel.dmg">Mac mit Intel-Chip</a>
+    <p class="leise" style="margin-top:8px">Welcher Chip? Apple-Menü oben links → „Über diesen Mac“. Steht dort M1, M2, M3 oder höher, ist es ein Apple-Chip.</p>
+  </div>
+
+  <h2>Installieren</h2>
+  <ol>
+    <li>Die heruntergeladene Datei öffnen und <strong>Lichtsteuerung</strong> auf <strong>Programme</strong> ziehen.</li>
+    <li>Die App in Programme doppelklicken. macOS meldet, dass es den Entwickler nicht prüfen kann, denn wir haben kein bezahltes Apple-Konto.</li>
+    <li>Systemeinstellungen → Datenschutz &amp; Sicherheit → ganz unten <strong>Dennoch öffnen</strong> wählen. Das ist nur beim ersten Mal nötig.</li>
+  </ol>
+  <p class="leise">Klappt das nicht, hilft im Terminal: <code>xattr -dr com.apple.quarantine /Applications/Lichtsteuerung.app</code></p>
+
+  <h2>Updates</h2>
+  <p>Du musst nichts neu herunterladen. Beim Start lädt die App neue Versionen selbst im Hintergrund. Dann erscheint oben ein Knopf, und ein Klick reicht. Eure Patches, Profile und Cues bleiben dabei erhalten. Solange die DMX-Ausgabe läuft, wird nie aktualisiert.</p>
+
+  <h2>Was das Programm kann</h2>
+  <ul>
+    <li>Licht reagiert auf Beat, Bass und Energie der Musik, komplett offline</li>
+    <li>Über 600 Gerätetypen im Katalog, Patch wie bei grandMA3</li>
+    <li>3D-Vorschau, die auch ohne Lichter und ohne Enttec läuft</li>
+    <li>Profile für Weihnachten, Schulfest und Theater</li>
+    <li>Szenen, Cuelisten und Fader</li>
+    <li>Feste Tasten für den Abend: Blackout, Warmweiß, Pause, Strobo aus</li>
+    <li>Strobo-Grenze und Sperrzone fürs Publikum, die nichts umgehen kann</li>
+  </ul>
+
+  <footer>
+    <a href="https://github.com/jakobgesche-beep/ki-lichtsteuerung">Quellcode</a> ·
+    Gerätedaten: Open Fixture Library (MIT), QLC+ (Apache-2.0) · 3D: three.js (MIT)
+  </footer>
+</main>
+<script>
+  // Zeigt die aktuelle Version. Klappt das nicht, funktionieren die Knöpfe trotzdem.
+  fetch("https://api.github.com/repos/jakobgesche-beep/ki-lichtsteuerung/releases/latest")
+    .then((antwort) => antwort.ok ? antwort.json() : null)
+    .then((release) => {
+      if (release) document.getElementById("version").textContent =
+        `Version ${release.tag_name.replace(/^v/, "")} · für macOS 12 oder neuer`;
+    }).catch(() => {});
+</script>
+</body>
+</html>

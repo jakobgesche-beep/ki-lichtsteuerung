@@ -9,3 +9,5 @@ daten/audio/
 lokal.json
 .env
 .DS_Store
+build/
+dist/

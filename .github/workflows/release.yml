@@ -1,0 +1,62 @@
+# Tag vX.Y.Z pushen: testet, baut die Mac-App und legt das Release an.
+# Die App findet das neue Release dann selbst über latest.json.
+name: Release
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  bauen:
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - runner: macos-14
+            arch: arm64
+          - runner: macos-15-intel
+            arch: intel
+    runs-on: ${{ matrix.runner }}
+    env:
+      PYTHON: python
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Version passt zum Tag
+        run: python -c "import os; from lichtsteuerung.version import VERSION; assert 'v' + VERSION == os.environ['GITHUB_REF_NAME']"
+      - run: pip install -r requirements-dev.txt pyinstaller
+      - run: python -m pytest -q
+      - run: packaging/bauen.sh ${{ matrix.arch }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mac-${{ matrix.arch }}
+          path: |
+            dist/*.zip
+            dist/*.dmg
+  veroeffentlichen:
+    needs: bauen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dateien
+          merge-multiple: true
+      - name: latest.json für den Updater
+        working-directory: dateien
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os
+          dateien = {}
+          for arch in ("arm64", "intel"):
+              name = f"Lichtsteuerung-{arch}.zip"
+              summe = hashlib.sha256(open(name, "rb").read()).hexdigest()
+              dateien[arch] = {"name": name, "sha256": summe}
+          version = os.environ["GITHUB_REF_NAME"].lstrip("v")
+          json.dump({"version": version, "dateien": dateien}, open("latest.json", "w"), indent=2)
+          PY
+      - name: Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dateien/* --repo "$GITHUB_REPOSITORY" --title "$GITHUB_REF_NAME" --generate-notes

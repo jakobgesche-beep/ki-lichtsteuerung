@@ -5,3 +5,6 @@ uvicorn[standard]>=0.29
 sounddevice>=0.4
 soundfile>=0.12
 pyftdi>=0.55
+libusb-package>=1.0
+certifi
+pywebview>=5; sys_platform == "darwin"

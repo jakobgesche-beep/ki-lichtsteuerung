@@ -10,6 +10,23 @@ const TASTEN = [
 ];
 const WEITER = () => senden("/cue/weiter");
 
+// Ein Update startet nie von selbst: Es könnte gerade eine Show laufen.
+function updateHinweis(live) {
+  const update = live.update;
+  if (update.zustand === "bereit") {
+    const knopf = update.gesperrt
+      ? `<span class="leise">${update.gesperrt}</span>`
+      : `<button data-update>Jetzt aktualisieren und neu starten</button>`;
+    return `<div class="meldung gelb zeile">Version ${update.neu} ist bereit. ${knopf}</div>`;
+  }
+  if (update.zustand === "fehler") return `<div class="meldung gelb">${update.text}</div>`;
+  return "";
+}
+
+document.addEventListener("click", (ereignis) => {
+  if (ereignis.target.matches("[data-update]")) senden("/update/installieren");
+});
+
 export function tastenLeiste(leiste) {
   for (const { id, text, taste } of TASTEN) {
     const knopf = document.createElement("button");
@@ -43,7 +60,7 @@ export function tastenLeiste(leiste) {
     if (live.test_laeuft) texte.push(["gelb", "DMX-Test läuft: Die Automatik ruht, solange der Test läuft."]);
     if (live.strobo_erlaubt) texte.push(["gelb", "Dieses Profil erlaubt Strobo: Hinweisschild am Eingang aufhängen."]);
     if (live.hazer_erlaubt) texte.push(["gelb", "Hazer erlaubt: vorher mit dem Hausmeister klären (Brandmelder)."]);
-    const inhalt = texte.map(([art, text]) => `<div class="meldung ${art}">${text}</div>`).join("");
+    const inhalt = texte.map(([art, text]) => `<div class="meldung ${art}">${text}</div>`).join("") + updateHinweis(live);
     if (hinweis.dataset.inhalt !== inhalt) {
       hinweis.innerHTML = inhalt;
       hinweis.dataset.inhalt = inhalt;

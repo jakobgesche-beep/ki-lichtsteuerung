@@ -94,7 +94,7 @@ export function liveSeite(wurzel) {
     if (!live) return;
     buehne?.setzeWerte(live.geraete);
     feld("status").innerHTML = `${live.dmx_ein ? "DMX-Ausgabe: eingeschaltet" : "DMX-Ausgabe: aus (Simulator)"}<br>
-      Profil: ${t(live.profil)}<br>${t(live.engine)}`;
+      Profil: ${t(live.profil)}<br>${t(live.engine)}<br>Version ${t(live.version)}`;
     cuesZeigen(live.cues);
     faderZeigen(live.fader);
     const ton = live.audio;

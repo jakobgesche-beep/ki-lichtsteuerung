@@ -32,6 +32,8 @@ from .render import Eigenschaften, Renderer
 from .sicherheit import BlitzWaechter, Grenzen
 from .simulator import Simulator
 from .szenen import loese_auf
+from .update import Aktualisierer
+from .version import VERSION
 from .vorschau import Vorschau
 
 
@@ -41,13 +43,14 @@ TEST_MAX_S = 120.0          # Ein vergessener DMX-Test endet von selbst.
 
 class Show:
     def __init__(self, pfade: Optional[daten.Pfade] = None, ausgabe: Optional[DmxAusgabe] = None):
-        self.pfade = pfade or daten.Pfade()
-        self.katalog = Katalog(self.pfade.katalog)
+        self.pfade = pfade or daten.standard_pfade()
+        self.katalog = Katalog(self.pfade.katalog, self.pfade.eingebauter_katalog)
         self.patch = Patch(self.pfade.fixtures, self.katalog)
         self.buehne = Buehne(self.pfade.stage)
         self.positionen = daten.lese_json(self.pfade.positions, {"positionen": {}})["positionen"]
         self.grenzen = Grenzen.laden(self.pfade.sicherheit)
         self.ausgabe = ausgabe or DmxAusgabe()
+        self.update = Aktualisierer(self)
         self.audio = AudioBetrieb()
         self.profile = Profile(self.pfade.profile)
         self.profil = RUHE_PROFIL
@@ -208,7 +211,8 @@ class Show:
                     "dmx_ein": self.ausgabe.eingeschaltet, "meldungen": sorted(set(self.meldungen)),
                     "profil": self.profil["name"], "engine": self.engine.zustand_text,
                     "overrides": vars(self.overrides), "blitzt": self.blitzt,
-                    "test_laeuft": self._test_laeuft(),
+                    "test_laeuft": self._test_laeuft(), "version": VERSION,
+                    "update": self.update.status(),
                     "cues": self.cues.status(), "fader": self.fader.status(),
                     "vorschau": {"art": self.vorschau.art, "geraete": self.vorschau.geraete,
                                  "meldungen": self.vorschau.meldungen},

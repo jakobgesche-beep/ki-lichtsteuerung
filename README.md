@@ -4,7 +4,11 @@ Unser eigenes Programm für das Bühnenlicht. Es reagiert live und ohne Internet
 
 Der erste Entwurf läuft komplett **ohne Hardware** im Simulator. Die DMX-Ausgabe ist beim Start immer aus.
 
-## Installieren und starten
+## Mac-App
+
+Die fertige App gibt es auf der [Website](https://jakobgesche-beep.github.io/ki-lichtsteuerung/). Sie braucht kein Python und aktualisiert sich selbst. Ihre Show-Daten liegen in `~/Library/Application Support/Lichtsteuerung`, ein Update fasst sie nicht an.
+
+## Aus dem Quellcode starten
 
 Du brauchst Python 3.9 oder neuer und für den ersten Start einmal Internet. Hol dir den Projektordner, dann:
 
@@ -87,10 +91,21 @@ Das braucht Internet und läuft nie während einer Show.
 
 `./start.command --netz` macht die Oberfläche im Netzwerk erreichbar. Es gibt kein Passwort: Jeder im selben Netz kann das Licht bedienen. Also nur im eigenen Netz der Technik-AG benutzen.
 
+## Neue Version veröffentlichen
+
+1. In `lichtsteuerung/version.py` die Nummer erhöhen, zum Beispiel auf `1.1.0`, und committen.
+2. `git tag v1.1.0` und `git push origin main v1.1.0`.
+
+GitHub testet und baut dann alles selbst und legt das Release an. Jede installierte App findet es beim nächsten Start. Die Website im Ordner `site/` geht bei jedem Push auf `main` von selbst online.
+
+## Website auf Cloudflare
+
+Die `wrangler.toml` liegt bereit. Einmal im Cloudflare-Konto unter Workers & Pages → Create → Import a repository das Repo `ki-lichtsteuerung` wählen. Danach baut Cloudflare bei jedem Push von selbst.
+
 ## Quellen und Lizenzen
 
 - Gerätedaten: [Open Fixture Library](https://github.com/OpenLightingProject/open-fixture-library) (MIT) und [QLC+](https://github.com/mcallegari/qlcplus) (Apache-2.0). Die Lizenztexte liegen in `catalog/`.
 - 3D: [three.js](https://threejs.org) (MIT), liegt in `web/vendor/`, damit alles offline läuft.
-- Beat-Erkennung: [aubio](https://aubio.org). Es steht unter der GPL und wird nur beim Start nachinstalliert, es liegt nicht im Projekt. Das ist wichtig, falls das Programm je weitergegeben wird.
+- Beat-Erkennung: [aubio](https://aubio.org) steht unter der GPL. Es wird nur beim Start aus dem Quellcode nachinstalliert. Die fertige Mac-App enthält es nicht und nimmt die eigene Beat-Erkennung. Soll es mit in die App, muss das Projekt selbst unter die GPL.
 
 Annahmen und offene Punkte stehen in [ANNAHMEN.md](ANNAHMEN.md), die vollständige Vorgabe in [CLAUDE.md](CLAUDE.md).

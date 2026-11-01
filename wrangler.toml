@@ -1,0 +1,6 @@
+# Für Cloudflare: liefert nur die Website aus dem Ordner site/ aus.
+name = "ki-lichtsteuerung"
+compatibility_date = "2026-10-01"
+
+[assets]
+directory = "./site"

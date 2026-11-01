@@ -129,15 +129,19 @@ def pruefe_eintrag(eintrag: dict) -> list:
 class Katalog:
     """Alle Gerätetypen. Eigene Einträge haben Vorrang vor importierten."""
 
-    def __init__(self, ordner: Path):
+    def __init__(self, ordner: Path, eingebaut: Optional[Path] = None):
         self.ordner = Path(ordner)
+        self.eingebaut = Path(eingebaut) if eingebaut else None   # kommt mit der App und jedem Update
         self.typen = {}
         self.neu_laden()
 
     def neu_laden(self) -> None:
         self.typen = {}
-        for unterordner in ("ofl", "importiert", "eigene"):
-            for pfad in sorted((self.ordner / unterordner).glob("*/*.json")):
+        orte = [self.ordner / name for name in ("ofl", "importiert", "eigene")]
+        if self.eingebaut:
+            orte = [self.eingebaut / "ofl", self.eingebaut / "importiert"] + orte
+        for ort in orte:
+            for pfad in sorted(ort.glob("*/*.json")):
                 eintrag = daten.lese_json(pfad)
                 self.typen[eintrag["id"]] = Geraetetyp(eintrag)
 
