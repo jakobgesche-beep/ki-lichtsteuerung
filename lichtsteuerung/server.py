@@ -19,6 +19,7 @@ from .daten import PROJEKT
 from .dmx_ausgabe import EnttecFehler
 from .katalog import KatalogFehler
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
+from .profile import pruefe_profil
 from .show import Show
 
 WEB_ORDNER = PROJEKT / "web"
@@ -162,6 +163,37 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def dmx_aus():
         show.ausgabe.ausschalten()
         return {"eingeschaltet": False}
+
+    # --- Override-Tasten ----------------------------------------------------
+
+    @app.post("/api/override/{taste}")
+    def override(taste: str):
+        with show.sperre:
+            show.overrides.umschalten(taste)
+        return vars(show.overrides)
+
+    # --- Profile -----------------------------------------------------------
+
+    @app.get("/api/profile")
+    def profile_lesen():
+        return {"namen": show.profile.namen(), "aktiv": show.profil["name"]}
+
+    @app.get("/api/profile/{name}")
+    def profil_lesen(name: str):
+        return show.profile.laden(name)
+
+    @app.post("/api/profile/{name}/laden")
+    def profil_laden(name: str):
+        show.profil_laden(name)
+        return {"aktiv": show.profil["name"]}
+
+    @app.post("/api/profile")
+    def profil_speichern(profil: dict = Body(...)):
+        fehler = pruefe_profil(profil, show.patch.gruppen())
+        if fehler:
+            raise ValueError(" ".join(fehler))
+        show.profile.speichern(profil)
+        return {"name": profil["name"]}
 
     # --- Audio -------------------------------------------------------------
 

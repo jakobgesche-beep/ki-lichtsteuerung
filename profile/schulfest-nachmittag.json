@@ -1,0 +1,23 @@
+{
+  "_hinweis": "Grundstock aus der Projektbeschreibung. Helligkeiten und Grenzen sind Vorschläge (PLATZHALTER), bis sie in der Probe stimmen.",
+  "name": "Schulfest Nachmittag",
+  "palette": [
+    "warmweiss",
+    "gold",
+    "hellblau"
+  ],
+  "max_helligkeit": 0.8,
+  "bewegung": "aus",
+  "beat_reaktion": 0.3,
+  "strobo": "aus",
+  "grundlicht": {
+    "werte": [
+      {
+        "gruppe": "Farb-PARs",
+        "farbe": "warmweiss",
+        "helligkeit": 0.5
+      }
+    ]
+  },
+  "hazer": false
+}

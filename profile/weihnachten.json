@@ -1,0 +1,29 @@
+{
+  "_hinweis": "Grundstock aus der Projektbeschreibung. Helligkeiten und Grenzen sind Vorschläge (PLATZHALTER), bis sie in der Probe stimmen.",
+  "name": "Weihnachten",
+  "palette": [
+    "gold",
+    "rot",
+    "warmweiss"
+  ],
+  "max_helligkeit": 0.8,
+  "bewegung": "langsam",
+  "beat_reaktion": 0.15,
+  "strobo": "aus",
+  "grundlicht": {
+    "werte": [
+      {
+        "gruppe": "Farb-PARs",
+        "farbe": "warmweiss",
+        "helligkeit": 0.45
+      },
+      {
+        "gruppe": "Frontlicht",
+        "farbe": "warmweiss",
+        "helligkeit": 0.5,
+        "position": "Mitte"
+      }
+    ]
+  },
+  "hazer": false
+}

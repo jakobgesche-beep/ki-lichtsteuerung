@@ -107,7 +107,9 @@ class Engine:
         if not messwerte.beat:
             return
         self.beats += 1
-        alle = 1 if reaktion >= 0.7 else 2 if reaktion >= 0.4 else 8
+        if reaktion < 0.3:
+            return           # Bei wenig Reaktion bleiben die Farben fest.
+        alle = 1 if reaktion >= 0.7 else 2
         kleinster_abstand = 1.0 / max(self.grenzen.strobo_max_hz, 0.5)
         if self.beats % alle == 0 and jetzt - self.letzter_schritt >= kleinster_abstand:
             self.farb_schritt += 1

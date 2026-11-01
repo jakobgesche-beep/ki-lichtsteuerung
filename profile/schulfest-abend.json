@@ -1,0 +1,31 @@
+{
+  "_hinweis": "Grundstock aus der Projektbeschreibung. Helligkeiten und Grenzen sind Vorschläge (PLATZHALTER), bis sie in der Probe stimmen.",
+  "name": "Schulfest Abend",
+  "palette": [
+    "rot",
+    "blau",
+    "gruen",
+    "lila",
+    "pink",
+    "orange",
+    "cyan",
+    "gold"
+  ],
+  "max_helligkeit": 1.0,
+  "bewegung": "voll",
+  "beat_reaktion": 0.9,
+  "strobo": {
+    "max_blitze_pro_sekunde": 3,
+    "max_dauer_s": 5
+  },
+  "grundlicht": {
+    "werte": [
+      {
+        "gruppe": "Farb-PARs",
+        "farbe": "lila",
+        "helligkeit": 0.3
+      }
+    ]
+  },
+  "hazer": false
+}

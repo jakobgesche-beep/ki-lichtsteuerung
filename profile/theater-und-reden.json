@@ -1,0 +1,27 @@
+{
+  "_hinweis": "Grundstock aus der Projektbeschreibung. Helligkeiten und Grenzen sind Vorschläge (PLATZHALTER), bis sie in der Probe stimmen.",
+  "name": "Theater und Reden",
+  "palette": [
+    "warmweiss"
+  ],
+  "max_helligkeit": 0.8,
+  "bewegung": "aus",
+  "beat_reaktion": 0.0,
+  "strobo": "aus",
+  "grundlicht": {
+    "werte": [
+      {
+        "gruppe": "Farb-PARs",
+        "farbe": "warmweiss",
+        "helligkeit": 0.7
+      },
+      {
+        "gruppe": "Frontlicht",
+        "farbe": "warmweiss",
+        "helligkeit": 0.7,
+        "position": "Mitte"
+      }
+    ]
+  },
+  "hazer": false
+}

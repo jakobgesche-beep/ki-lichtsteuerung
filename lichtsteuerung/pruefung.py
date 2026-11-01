@@ -32,6 +32,7 @@ class Vorgaben:
     strobo_max_hz: float = 0.0        # 0 = aus
     strobo_max_dauer_s: float = 0.0
     hazer_erlaubt: bool = False
+    blackout: bool = False            # Die Taste gilt auch für rohe Werte.
 
 
 def bereich_von(kanal: dict, wert: int) -> Optional[dict]:
@@ -90,6 +91,8 @@ class Pruefer:
             if not vorgaben.hazer_erlaubt and "nebel" in geraet["typen"]:
                 bild[geraet["typen"]["nebel"][0]] = 0
             self._pruefe_sperrzone(bild, geraet, meldungen)
+            if vorgaben.blackout:
+                self._verdunkeln(bild, geraet)
         self.strobo.melde(blitzt, jetzt, self._max_dauer(vorgaben), self.grenzen.strobo_pause_s)
         return bild, meldungen, blitzt
 

@@ -1,6 +1,7 @@
 // Live-Seite: 3D-Bühne und Bedienung am Abend.
 import { api, senden, t } from "./api.js";
 import { Buehne3D } from "./buehne3d.js";
+import { abonnieren } from "./verbindung.js";
 
 export function liveSeite(wurzel) {
   wurzel.innerHTML = `
@@ -21,7 +22,6 @@ export function liveSeite(wurzel) {
     </div>`;
   const feld = (id) => wurzel.querySelector("#" + id);
   let buehne = null;
-  let leitung = null;
   let beendet = false;
   let letzterBeat = 0;
 
@@ -53,18 +53,8 @@ export function liveSeite(wurzel) {
     quelleWaehlen();
   }
 
-  function verbinden() {
-    const adresse = `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/api/live`;
-    leitung = new WebSocket(adresse);
-    leitung.onmessage = (nachricht) => zeigen(JSON.parse(nachricht.data));
-    leitung.onclose = () => {
-      if (beendet) return;
-      feld("status").textContent = "Verbindung zum Programm unterbrochen …";
-      setTimeout(verbinden, 1000);
-    };
-  }
-
   function zeigen(live) {
+    if (!live) return;
     buehne?.setzeWerte(live.geraete);
     feld("status").innerHTML = `${live.dmx_ein ? "DMX-Ausgabe: eingeschaltet" : "DMX-Ausgabe: aus (Simulator)"}<br>
       Profil: ${t(live.profil)}<br>${t(live.engine)}`;
@@ -89,12 +79,13 @@ export function liveSeite(wurzel) {
   api("/buehne").then((aufbau) => {
     if (beendet) return;
     buehne = new Buehne3D(feld("drei"), aufbau);
-    verbinden();
   });
+
+  const abmelden = abonnieren(zeigen);
 
   return () => {
     beendet = true;
-    leitung?.close();
+    abmelden();
     buehne?.beenden();
   };
 }

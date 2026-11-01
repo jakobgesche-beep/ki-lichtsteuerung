@@ -1,15 +1,20 @@
 // Der Rahmen: Reiter oben, die Seiten liegen jeweils in einer eigenen Datei.
 import { liveSeite } from "./live.js";
+import { profileSeite } from "./profile.js";
 import { patchSeite } from "./patch.js";
+import { tastenLeiste } from "./tasten.js";
 import { katalogSeite } from "./katalog.js";
 import { dmxTestSeite } from "./dmxtest.js";
 
 const seiten = [
   ["Live", liveSeite],
+  ["Profile", profileSeite],
   ["Patch", patchSeite],
   ["Katalog", katalogSeite],
   ["DMX-Test", dmxTestSeite],
 ];
+
+tastenLeiste(document.getElementById("tasten"));
 
 const inhalt = document.getElementById("inhalt");
 const reiter = document.getElementById("reiter");
