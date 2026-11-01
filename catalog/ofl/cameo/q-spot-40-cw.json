@@ -1,0 +1,111 @@
+{
+  "id": "cameo/q-spot-40-cw",
+  "hersteller": "cameo",
+  "name": "Q-Spot 40 CW",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 2.2,
+    "abstrahlwinkel_grad": 25
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Shutter / Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "offen"
+        },
+        {
+          "von": 6,
+          "bis": 10,
+          "typ": "zu"
+        },
+        {
+          "von": 11,
+          "bis": 33,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 34,
+          "bis": 56,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 57,
+          "bis": 79,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 80,
+          "bis": 102,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 103,
+          "bis": 127,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 128,
+          "bis": 250,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Shutter / Strobe"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

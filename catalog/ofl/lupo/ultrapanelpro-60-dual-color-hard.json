@@ -1,0 +1,127 @@
+{
+  "id": "lupo/ultrapanelpro-60-dual-color-hard",
+  "hersteller": "Lupo",
+  "name": "UltrapanelPRO Dual Color 60 Hard",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 9,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "CCT": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Strobe 16bit": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "CCT fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "CCT",
+      "stufe": 1
+    },
+    "Strobe 16bit fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Strobe 16bit",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "CCT 8bit",
+      "kanaele": [
+        "Dimmer",
+        "CCT"
+      ]
+    },
+    {
+      "name": "CCT + Strobe 8bit",
+      "kanaele": [
+        "Dimmer",
+        "CCT",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "CCT 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "CCT",
+        "CCT fine"
+      ]
+    },
+    {
+      "name": "CCT + Strobe 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "CCT",
+        "CCT fine",
+        "Strobe 16bit",
+        "Strobe 16bit fine"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

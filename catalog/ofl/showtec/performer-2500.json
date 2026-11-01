@@ -1,0 +1,208 @@
+{
+  "id": "showtec/performer-2500",
+  "hersteller": "Showtec",
+  "name": "Performer 2500",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 10,
+    "abstrahlwinkel_grad": 60
+  },
+  "kanaele": {
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Warm White": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Natural White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "CCT": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "offen"
+        },
+        {
+          "von": 10,
+          "bis": 99,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 25.0
+        },
+        {
+          "von": 100,
+          "bis": 109,
+          "typ": "offen"
+        },
+        {
+          "von": 110,
+          "bis": 179,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 25.0
+        },
+        {
+          "von": 180,
+          "bis": 189,
+          "typ": "offen"
+        },
+        {
+          "von": 190,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Master Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Master Dimmer",
+      "stufe": 1
+    },
+    "Warm White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Warm White",
+      "stufe": 1
+    },
+    "Natural White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Natural White",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Master Dimmer"
+      ]
+    },
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Warm White",
+        "Natural White"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Warm White",
+        "Warm White fine",
+        "Natural White",
+        "Natural White fine"
+      ]
+    },
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Warm White",
+        "Warm White fine",
+        "Natural White",
+        "Natural White fine",
+        "CCT",
+        "Strobe"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,33 @@
+{
+  "id": "stairville/afh-600",
+  "hersteller": "Stairville",
+  "name": "AFH-600",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 5.5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Haze": {
+      "typ": "nebel",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Haze"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

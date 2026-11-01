@@ -1,0 +1,2220 @@
+{
+  "id": "glp/jdc1",
+  "hersteller": "GLP",
+  "name": "JDC1",
+  "kategorien": [
+    "Strobe",
+    "Blinder",
+    "Matrix",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 12,
+    "abstrahlwinkel_grad": 148
+  },
+  "kanaele": {
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127,
+      "grad": 185.0
+    },
+    "Beam Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Beam Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Beam Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.289,
+          "hz_bis": 16.67
+        }
+      ]
+    },
+    "Beam FX Shutter": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 36,
+          "typ": "aus"
+        },
+        {
+          "von": 37,
+          "bis": 40,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 41,
+          "bis": 44,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 45,
+          "bis": 48,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 49,
+          "bis": 52,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 53,
+          "bis": 56,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 57,
+          "bis": 60,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 61,
+          "bis": 64,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 65,
+          "bis": 68,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 69,
+          "bis": 72,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 73,
+          "bis": 76,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 77,
+          "bis": 80,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 81,
+          "bis": 84,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 85,
+          "bis": 88,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 89,
+          "bis": 92,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 93,
+          "bis": 96,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 97,
+          "bis": 100,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 101,
+          "bis": 104,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 105,
+          "bis": 108,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 109,
+          "bis": 112,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 113,
+          "bis": 116,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 117,
+          "bis": 120,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 121,
+          "bis": 124,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 125,
+          "bis": 128,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 129,
+          "bis": 132,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 133,
+          "bis": 179,
+          "typ": "aus"
+        },
+        {
+          "von": 180,
+          "bis": 183,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 184,
+          "bis": 187,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 188,
+          "bis": 191,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 192,
+          "bis": 195,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 196,
+          "bis": 199,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 200,
+          "bis": 203,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 204,
+          "bis": 207,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 208,
+          "bis": 211,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 212,
+          "bis": 215,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 216,
+          "bis": 219,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 220,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 228,
+          "bis": 231,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 232,
+          "bis": 235,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 236,
+          "bis": 239,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 240,
+          "bis": 243,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 244,
+          "bis": 247,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 248,
+          "bis": 251,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Special / Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 1,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 2,
+          "bis": 2,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 3,
+          "bis": 3,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 4,
+          "bis": 4,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 5,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 6,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 7,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 8,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 9,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 14,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 15,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 16,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 18,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 19,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 21,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 22,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 27,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 28,
+          "bis": 28,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 29,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 32,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 33,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 39,
+          "typ": "aus"
+        },
+        {
+          "von": 40,
+          "bis": 44,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 45,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 54,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 55,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 102,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 103,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 123,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 124,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 131,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 132,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 136,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 137,
+          "bis": 138,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 139,
+          "bis": 141,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 142,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 146,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 147,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 151,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 152,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 162,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 163,
+          "bis": 164,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 165,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 172,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 173,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 177,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 178,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 183,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 184,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 188,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 189,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 194,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 195,
+          "bis": 197,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 198,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 209,
+          "typ": "aus"
+        },
+        {
+          "von": 210,
+          "bis": 214,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 215,
+          "bis": 219,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 220,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 234,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 235,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "aus"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Plate Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Flash Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Color Flash Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.289,
+          "hz_bis": 16.67
+        }
+      ]
+    },
+    "Color FX Shutter": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 1,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 2,
+          "bis": 2,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 3,
+          "bis": 3,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 4,
+          "bis": 4,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 5,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 6,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 7,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 8,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 9,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 14,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 15,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 16,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 18,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 19,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 21,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 22,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 27,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 28,
+          "bis": 28,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 29,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 32,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 33,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 40,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 41,
+          "bis": 44,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 45,
+          "bis": 48,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 49,
+          "bis": 52,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 53,
+          "bis": 56,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 57,
+          "bis": 60,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 61,
+          "bis": 64,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 65,
+          "bis": 68,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 69,
+          "bis": 72,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 73,
+          "bis": 76,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 77,
+          "bis": 179,
+          "typ": "aus"
+        },
+        {
+          "von": 180,
+          "bis": 191,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 192,
+          "bis": 203,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 204,
+          "bis": 215,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 216,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 228,
+          "bis": 239,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 240,
+          "bis": 251,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Plate Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Plate Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Plate Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Plate White Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Color Set 2 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Color Set 2 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Color Set 2 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "FX Crossfade": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Pattern Color Movement": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Pattern Select Color": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Pattern Beam Movement": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Pattern Select Beam": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Color Set 2 Master Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Master Pix Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "C1a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C1a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C1a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C1b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C1b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C1b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C2a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C2a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C2a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C2b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C2b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C2b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C3a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C3a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C3a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C3b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C3b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C3b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C4a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C4a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C4a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C4b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C4b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C4b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C5a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C5a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C5a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C5b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C5b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C5b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C6a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C6a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C6a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C6b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C6b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C6b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 1 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 1 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 2 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 2 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 3 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 3 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 4 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 4 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 5 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 5 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 6 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 6 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 6 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 7 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 7 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 7 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 8 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 8 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 8 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 9 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 9 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 9 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 10 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 10 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 10 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 11 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 11 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 11 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 12 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "White 12 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White 12 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C7a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C7a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C7a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C7b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C7b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C7b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C8a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C8a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C8a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C8b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C8b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C8b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C9a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C9a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C9a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C9b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C9b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C9b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C10a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C10a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C10a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C10b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C10b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C10b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C11a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C11a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C11a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C11b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C11b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C11b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C12a Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C12a Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C12a Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C12b Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C12b Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C12b Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 2 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 3 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 4 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 5 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 6 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 7 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 8 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 9 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 10 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 11 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "White 12 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Compressed Pro 14-channel",
+      "kanaele": [
+        "Tilt",
+        "Tilt fine",
+        "Beam Intensity",
+        "Beam Duration",
+        "Beam Rate",
+        "Beam FX Shutter",
+        "Special / Control",
+        "Color Plate Intensity",
+        "Color Flash Duration",
+        "Color Flash Rate",
+        "Color FX Shutter",
+        "Plate Red Intensity",
+        "Plate Green Intensity",
+        "Plate Blue Intensity"
+      ]
+    },
+    {
+      "name": "Normal 23-channel",
+      "kanaele": [
+        "Tilt",
+        "Tilt fine",
+        "Beam Intensity",
+        "Beam Duration",
+        "Beam Rate",
+        "Beam FX Shutter",
+        "Special / Control",
+        "Color Plate Intensity",
+        "Color Flash Duration",
+        "Color Flash Rate",
+        "Color FX Shutter",
+        "Plate Red Intensity",
+        "Plate Green Intensity",
+        "Plate Blue Intensity",
+        "FX Crossfade",
+        "Pattern Color Movement",
+        "Pattern Select Color",
+        "Pattern Beam Movement",
+        "Pattern Select Beam",
+        "Color Set 2 Master Intensity",
+        "Color Set 2 Red Intensity",
+        "Color Set 2 Green Intensity",
+        "Color Set 2 Blue Intensity"
+      ]
+    },
+    {
+      "name": "SPix 68-channel",
+      "kanaele": [
+        "Tilt",
+        "Tilt fine",
+        "Beam Intensity",
+        "Beam Duration",
+        "Beam Rate",
+        "Beam FX Shutter",
+        "Special / Control",
+        "Color Plate Intensity",
+        "Color Flash Duration",
+        "Color Flash Rate",
+        "Color FX Shutter",
+        "Plate Red Intensity",
+        "Plate Green Intensity",
+        "Plate Blue Intensity",
+        "FX Crossfade",
+        "Pattern Color Movement",
+        "Pattern Select Color",
+        "Pattern Beam Movement",
+        "Pattern Select Beam",
+        "Master Pix Intensity",
+        "C1a Red Intensity",
+        "C1a Green Intensity",
+        "C1a Blue Intensity",
+        "C1b Red Intensity",
+        "C1b Green Intensity",
+        "C1b Blue Intensity",
+        "C2a Red Intensity",
+        "C2a Green Intensity",
+        "C2a Blue Intensity",
+        "C2b Red Intensity",
+        "C2b Green Intensity",
+        "C2b Blue Intensity",
+        "C3a Red Intensity",
+        "C3a Green Intensity",
+        "C3a Blue Intensity",
+        "C3b Red Intensity",
+        "C3b Green Intensity",
+        "C3b Blue Intensity",
+        "C4a Red Intensity",
+        "C4a Green Intensity",
+        "C4a Blue Intensity",
+        "C4b Red Intensity",
+        "C4b Green Intensity",
+        "C4b Blue Intensity",
+        "C5a Red Intensity",
+        "C5a Green Intensity",
+        "C5a Blue Intensity",
+        "C5b Red Intensity",
+        "C5b Green Intensity",
+        "C5b Blue Intensity",
+        "C6a Red Intensity",
+        "C6a Green Intensity",
+        "C6a Blue Intensity",
+        "C6b Red Intensity",
+        "C6b Green Intensity",
+        "C6b Blue Intensity",
+        "White 1 Red Intensity",
+        "White 1 Green Intensity",
+        "White 1 Blue Intensity",
+        "White 2 Red Intensity",
+        "White 2 Green Intensity",
+        "White 2 Blue Intensity",
+        "White 3 Red Intensity",
+        "White 3 Green Intensity",
+        "White 3 Blue Intensity",
+        "White 4 Red Intensity",
+        "White 4 Green Intensity",
+        "White 4 Blue Intensity",
+        "White 5 Red Intensity",
+        "White 5 Green Intensity",
+        "White 5 Blue Intensity",
+        "White 6 Red Intensity",
+        "White 6 Green Intensity",
+        "White 6 Blue Intensity",
+        "White 7 Red Intensity",
+        "White 7 Green Intensity",
+        "White 7 Blue Intensity",
+        "White 8 Red Intensity",
+        "White 8 Green Intensity",
+        "White 8 Blue Intensity",
+        "White 9 Red Intensity",
+        "White 9 Green Intensity",
+        "White 9 Blue Intensity",
+        "White 10 Red Intensity",
+        "White 10 Green Intensity",
+        "White 10 Blue Intensity",
+        "White 11 Red Intensity",
+        "White 11 Green Intensity",
+        "White 11 Blue Intensity",
+        "White 12 Red Intensity",
+        "White 12 Green Intensity",
+        "White 12 Blue Intensity",
+        "C7a Red Intensity",
+        "C7a Green Intensity",
+        "C7a Blue Intensity",
+        "C7b Red Intensity",
+        "C7b Green Intensity",
+        "C7b Blue Intensity",
+        "C8a Red Intensity",
+        "C8a Green Intensity",
+        "C8a Blue Intensity",
+        "C8b Red Intensity",
+        "C8b Green Intensity",
+        "C8b Blue Intensity",
+        "C9a Red Intensity",
+        "C9a Green Intensity",
+        "C9a Blue Intensity",
+        "C9b Red Intensity",
+        "C9b Green Intensity",
+        "C9b Blue Intensity",
+        "C10a Red Intensity",
+        "C10a Green Intensity",
+        "C10a Blue Intensity",
+        "C10b Red Intensity",
+        "C10b Green Intensity",
+        "C10b Blue Intensity",
+        "C11a Red Intensity",
+        "C11a Green Intensity",
+        "C11a Blue Intensity",
+        "C11b Red Intensity",
+        "C11b Green Intensity",
+        "C11b Blue Intensity",
+        "C12a Red Intensity",
+        "C12a Green Intensity",
+        "C12a Blue Intensity",
+        "C12b Red Intensity",
+        "C12b Green Intensity",
+        "C12b Blue Intensity",
+        "White 1 Intensity",
+        "White 2 Intensity",
+        "White 3 Intensity",
+        "White 4 Intensity",
+        "White 5 Intensity",
+        "White 6 Intensity",
+        "White 7 Intensity",
+        "White 8 Intensity",
+        "White 9 Intensity",
+        "White 10 Intensity",
+        "White 11 Intensity",
+        "White 12 Intensity"
+      ]
+    },
+    {
+      "name": "SPix Pro 62-channel",
+      "kanaele": [
+        "Tilt",
+        "Tilt fine",
+        "Beam Intensity",
+        "Beam Duration",
+        "Beam Rate",
+        "Beam FX Shutter",
+        "Special / Control",
+        "Color Plate Intensity",
+        "Color Flash Duration",
+        "Color Flash Rate",
+        "Color FX Shutter",
+        "Plate Red Intensity",
+        "Plate Green Intensity",
+        "Plate Blue Intensity",
+        "C1a Red Intensity",
+        "C1a Green Intensity",
+        "C1a Blue Intensity",
+        "C1b Red Intensity",
+        "C1b Green Intensity",
+        "C1b Blue Intensity",
+        "C2a Red Intensity",
+        "C2a Green Intensity",
+        "C2a Blue Intensity",
+        "C2b Red Intensity",
+        "C2b Green Intensity",
+        "C2b Blue Intensity",
+        "C3a Red Intensity",
+        "C3a Green Intensity",
+        "C3a Blue Intensity",
+        "C3b Red Intensity",
+        "C3b Green Intensity",
+        "C3b Blue Intensity",
+        "C4a Red Intensity",
+        "C4a Green Intensity",
+        "C4a Blue Intensity",
+        "C4b Red Intensity",
+        "C4b Green Intensity",
+        "C4b Blue Intensity",
+        "C5a Red Intensity",
+        "C5a Green Intensity",
+        "C5a Blue Intensity",
+        "C5b Red Intensity",
+        "C5b Green Intensity",
+        "C5b Blue Intensity",
+        "C6a Red Intensity",
+        "C6a Green Intensity",
+        "C6a Blue Intensity",
+        "C6b Red Intensity",
+        "C6b Green Intensity",
+        "C6b Blue Intensity",
+        "White 1 Red Intensity",
+        "White 1 Green Intensity",
+        "White 1 Blue Intensity",
+        "White 2 Red Intensity",
+        "White 2 Green Intensity",
+        "White 2 Blue Intensity",
+        "White 3 Red Intensity",
+        "White 3 Green Intensity",
+        "White 3 Blue Intensity",
+        "White 4 Red Intensity",
+        "White 4 Green Intensity",
+        "White 4 Blue Intensity",
+        "White 5 Red Intensity",
+        "White 5 Green Intensity",
+        "White 5 Blue Intensity",
+        "White 6 Red Intensity",
+        "White 6 Green Intensity",
+        "White 6 Blue Intensity",
+        "White 7 Red Intensity",
+        "White 7 Green Intensity",
+        "White 7 Blue Intensity",
+        "White 8 Red Intensity",
+        "White 8 Green Intensity",
+        "White 8 Blue Intensity",
+        "White 9 Red Intensity",
+        "White 9 Green Intensity",
+        "White 9 Blue Intensity",
+        "White 10 Red Intensity",
+        "White 10 Green Intensity",
+        "White 10 Blue Intensity",
+        "White 11 Red Intensity",
+        "White 11 Green Intensity",
+        "White 11 Blue Intensity",
+        "White 12 Red Intensity",
+        "White 12 Green Intensity",
+        "White 12 Blue Intensity",
+        "C7a Red Intensity",
+        "C7a Green Intensity",
+        "C7a Blue Intensity",
+        "C7b Red Intensity",
+        "C7b Green Intensity",
+        "C7b Blue Intensity",
+        "C8a Red Intensity",
+        "C8a Green Intensity",
+        "C8a Blue Intensity",
+        "C8b Red Intensity",
+        "C8b Green Intensity",
+        "C8b Blue Intensity",
+        "C9a Red Intensity",
+        "C9a Green Intensity",
+        "C9a Blue Intensity",
+        "C9b Red Intensity",
+        "C9b Green Intensity",
+        "C9b Blue Intensity",
+        "C10a Red Intensity",
+        "C10a Green Intensity",
+        "C10a Blue Intensity",
+        "C10b Red Intensity",
+        "C10b Green Intensity",
+        "C10b Blue Intensity",
+        "C11a Red Intensity",
+        "C11a Green Intensity",
+        "C11a Blue Intensity",
+        "C11b Red Intensity",
+        "C11b Green Intensity",
+        "C11b Blue Intensity",
+        "C12a Red Intensity",
+        "C12a Green Intensity",
+        "C12a Blue Intensity",
+        "C12b Red Intensity",
+        "C12b Green Intensity",
+        "C12b Blue Intensity",
+        "White 1 Intensity",
+        "White 2 Intensity",
+        "White 3 Intensity",
+        "White 4 Intensity",
+        "White 5 Intensity",
+        "White 6 Intensity",
+        "White 7 Intensity",
+        "White 8 Intensity",
+        "White 9 Intensity",
+        "White 10 Intensity",
+        "White 11 Intensity",
+        "White 12 Intensity"
+      ]
+    },
+    {
+      "name": "1Pix Pro 17-channel",
+      "kanaele": [
+        "Tilt",
+        "Tilt fine",
+        "Beam Intensity",
+        "Beam Duration",
+        "Beam Rate",
+        "Beam FX Shutter",
+        "Special / Control",
+        "Color Plate Intensity",
+        "Color Flash Duration",
+        "Color Flash Rate",
+        "Color FX Shutter",
+        "Plate Red Intensity",
+        "Plate Green Intensity",
+        "Plate Blue Intensity",
+        "Color Set 2 Red Intensity",
+        "Color Set 2 Green Intensity",
+        "Color Set 2 Blue Intensity"
+      ]
+    },
+    {
+      "name": "Easy 11-channel",
+      "kanaele": [
+        "Tilt",
+        "Tilt fine",
+        "Beam Intensity",
+        "Beam Duration",
+        "Beam Rate",
+        "Beam FX Shutter",
+        "Special / Control",
+        "Plate Red Intensity",
+        "Plate Green Intensity",
+        "Plate Blue Intensity",
+        "Plate White Intensity"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

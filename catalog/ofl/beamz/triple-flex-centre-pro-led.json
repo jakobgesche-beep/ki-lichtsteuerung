@@ -1,0 +1,438 @@
+{
+  "id": "beamz/triple-flex-centre-pro-led",
+  "hersteller": "BeamZ",
+  "name": "Triple Flex Centre Pro LED",
+  "kategorien": [
+    "Flower",
+    "Scanner"
+  ],
+  "physik": {
+    "gewicht_kg": 1,
+    "abstrahlwinkel_grad": 20
+  },
+  "kanaele": {
+    "Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Motor Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Color Program 1": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 131,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 132,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 227,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 228,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Program 2": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 131,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 132,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 227,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 228,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Program 3": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 131,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 132,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 227,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 228,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Tilt 1": {
+      "typ": "tilt",
+      "standard": 0
+    },
+    "Tilt 2": {
+      "typ": "tilt",
+      "standard": 0
+    },
+    "Tilt 3": {
+      "typ": "tilt",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "7-channel",
+      "kanaele": [
+        "Mode",
+        "Color Program 1",
+        "Color Program 2",
+        "Color Program 3",
+        "Tilt 1",
+        "Tilt 2",
+        "Tilt 3"
+      ]
+    },
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Tilt 1",
+        "Tilt 2",
+        "Tilt 3",
+        "Motor Speed",
+        "Color Program 1",
+        "Color Program 2",
+        "Color Program 3",
+        "Program Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

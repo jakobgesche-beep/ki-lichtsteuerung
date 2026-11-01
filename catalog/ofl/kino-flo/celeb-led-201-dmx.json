@@ -1,0 +1,87 @@
+{
+  "id": "kino-flo/celeb-led-201-dmx",
+  "hersteller": "Kino Flo",
+  "name": "Celeb LED 201 DMX",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 32,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 33,
+          "bis": 114,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 115,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 186,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 187,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "DIMMING + CCT",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

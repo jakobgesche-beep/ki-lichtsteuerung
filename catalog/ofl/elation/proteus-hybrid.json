@@ -1,0 +1,1208 @@
+{
+  "id": "elation/proteus-hybrid",
+  "hersteller": "Elation",
+  "name": "Proteus Hybrid",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 38.0,
+    "abstrahlwinkel_grad": 40
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 630.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 270.0
+    },
+    "Cyan": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Magenta": {
+      "typ": "magenta",
+      "standard": 0
+    },
+    "Yellow": {
+      "typ": "gelb",
+      "standard": 0
+    },
+    "CTO": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Color Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Rotating Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 21,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 22,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 61,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 62,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 81,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 82,
+          "bis": 91,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 92,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 123,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 124,
+          "bis": 134,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 135,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 156,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 157,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 178,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 179,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo Rotation": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Static Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 14,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 15,
+          "bis": 21,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 22,
+          "bis": 28,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 29,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 56,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 57,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 91,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 92,
+          "bis": 98,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 99,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 118,
+          "bis": 123,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 124,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 141,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 142,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 153,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 154,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 171,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 172,
+          "bis": 177,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 178,
+          "bis": 183,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 184,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Rotating Prism / Prism/Gobo Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus"
+        },
+        {
+          "von": 32,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 151,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 152,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 183,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 184,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Prism Rotation": {
+      "typ": "prisma",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Focus": {
+      "typ": "fokus",
+      "standard": 0
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Auto Focus": {
+      "typ": "fokus",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 50,
+          "typ": "aus"
+        },
+        {
+          "von": 51,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Shutter / Strobe": {
+      "typ": "strobo",
+      "standard": 32,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "zu"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "offen"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "offen"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "offen"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Frost": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Animation Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "CMY Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "CMY Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus"
+        },
+        {
+          "von": 32,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 151,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 152,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 183,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 184,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan / Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Maintenance / Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 93,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 94,
+          "bis": 96,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 97,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 219,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 220,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 241,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 242,
+          "bis": 243,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 244,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Cyan fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cyan",
+      "stufe": 1
+    },
+    "Magenta fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Magenta",
+      "stufe": 1
+    },
+    "Yellow fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Yellow",
+      "stufe": 1
+    },
+    "CTO fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "CTO",
+      "stufe": 1
+    },
+    "Color Wheel fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Color Wheel",
+      "stufe": 1
+    },
+    "Gobo Rotation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Gobo Rotation",
+      "stufe": 1
+    },
+    "Static Gobo Wheel fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Static Gobo Wheel",
+      "stufe": 1
+    },
+    "Prism Rotation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Prism Rotation",
+      "stufe": 1
+    },
+    "Focus fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Focus",
+      "stufe": 1
+    },
+    "Zoom fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Zoom",
+      "stufe": 1
+    },
+    "Auto Focus fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Auto Focus",
+      "stufe": 1
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "Basic",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Cyan",
+        "Magenta",
+        "Yellow",
+        "CTO",
+        "Color Wheel",
+        "Rotating Gobo Wheel",
+        "Gobo Rotation",
+        "Static Gobo Wheel",
+        "Rotating Prism / Prism/Gobo Macros",
+        "Prism Rotation",
+        "Focus",
+        "Zoom",
+        "Auto Focus",
+        "Auto Focus fine",
+        "Shutter / Strobe",
+        "Dimmer",
+        "Frost",
+        "Animation Wheel",
+        "CMY Speed",
+        "CMY Macros",
+        "Pan / Tilt Speed",
+        "Maintenance / Programs"
+      ]
+    },
+    {
+      "name": "Standard",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Cyan",
+        "Magenta",
+        "Yellow",
+        "CTO",
+        "Color Wheel",
+        "Rotating Gobo Wheel",
+        "Gobo Rotation",
+        "Static Gobo Wheel",
+        "Rotating Prism / Prism/Gobo Macros",
+        "Prism Rotation",
+        "Focus",
+        "Zoom",
+        "Auto Focus",
+        "Auto Focus fine",
+        "Shutter / Strobe",
+        "Dimmer",
+        "Frost",
+        "Animation Wheel",
+        "CMY Speed",
+        "CMY Macros",
+        "Pan / Tilt Speed",
+        "Maintenance / Programs"
+      ]
+    },
+    {
+      "name": "Extended",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Cyan",
+        "Cyan fine",
+        "Magenta",
+        "Magenta fine",
+        "Yellow",
+        "Yellow fine",
+        "CTO",
+        "CTO fine",
+        "Color Wheel",
+        "Color Wheel fine",
+        "Rotating Gobo Wheel",
+        "Gobo Rotation",
+        "Gobo Rotation fine",
+        "Static Gobo Wheel",
+        "Static Gobo Wheel fine",
+        "Rotating Prism / Prism/Gobo Macros",
+        "Prism Rotation",
+        "Prism Rotation fine",
+        "Focus",
+        "Focus fine",
+        "Zoom",
+        "Zoom fine",
+        "Auto Focus",
+        "Auto Focus fine",
+        "Shutter / Strobe",
+        "Dimmer",
+        "Dimmer fine",
+        "Frost",
+        "Animation Wheel",
+        "CMY Speed",
+        "CMY Macros",
+        "Pan / Tilt Speed",
+        "Maintenance / Programs"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

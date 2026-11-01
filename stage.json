@@ -23,5 +23,92 @@
     "max_gewicht_kg": 60,
     "_hinweis": "Traverse steht auf der Bühne: 0,8 m Bühnenkante + 3,1 m Stativ."
   },
-  "geraete": {}
+  "geraete": {
+    "par-1": {
+      "ort": "traverse",
+      "x": -1.05,
+      "y": 2.0,
+      "z": 3.9,
+      "montage": "haengend",
+      "drehung_grad": 180,
+      "neigung_grad": 20
+    },
+    "par-2": {
+      "ort": "traverse",
+      "x": -0.63,
+      "y": 2.0,
+      "z": 3.9,
+      "montage": "haengend",
+      "drehung_grad": 180,
+      "neigung_grad": 20
+    },
+    "par-3": {
+      "ort": "traverse",
+      "x": -0.21,
+      "y": 2.0,
+      "z": 3.9,
+      "montage": "haengend",
+      "drehung_grad": 180,
+      "neigung_grad": 20
+    },
+    "par-4": {
+      "ort": "traverse",
+      "x": 0.21,
+      "y": 2.0,
+      "z": 3.9,
+      "montage": "haengend",
+      "drehung_grad": 180,
+      "neigung_grad": 20
+    },
+    "par-5": {
+      "ort": "traverse",
+      "x": 0.63,
+      "y": 2.0,
+      "z": 3.9,
+      "montage": "haengend",
+      "drehung_grad": 180,
+      "neigung_grad": 20
+    },
+    "par-6": {
+      "ort": "traverse",
+      "x": 1.05,
+      "y": 2.0,
+      "z": 3.9,
+      "montage": "haengend",
+      "drehung_grad": 180,
+      "neigung_grad": 20
+    },
+    "effekt": {
+      "ort": "traverse",
+      "x": -1.3,
+      "y": 2.0,
+      "z": 3.9,
+      "montage": "haengend",
+      "drehung_grad": 180
+    },
+    "front-1": {
+      "ort": "stativ",
+      "x": -3.5,
+      "y": -1.0,
+      "z": 2.5,
+      "montage": "stehend",
+      "drehung_grad": 0
+    },
+    "front-2": {
+      "ort": "stativ",
+      "x": 3.5,
+      "y": -1.0,
+      "z": 2.5,
+      "montage": "stehend",
+      "drehung_grad": 0
+    },
+    "hazer": {
+      "ort": "boden",
+      "x": 3.5,
+      "y": 4.5,
+      "z": 0.8,
+      "montage": "stehend",
+      "drehung_grad": 0
+    }
+  }
 }

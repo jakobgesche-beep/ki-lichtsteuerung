@@ -1,0 +1,440 @@
+{
+  "id": "mega-lite/washbot-led-cymk-300",
+  "hersteller": "MegaLite",
+  "name": "Washbot LED CYMK 300",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 23.2,
+    "abstrahlwinkel_grad": 31
+  },
+  "kanaele": {
+    "Color Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 2,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 32,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 33,
+          "bis": 46,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 47,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Selection 1": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Selection 2": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Selection 3": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Selection 4": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan": {
+      "typ": "pan",
+      "standard": 255,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 255,
+      "grad": 240.0
+    },
+    "P/T Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 255,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 3,
+          "typ": "zu"
+        },
+        {
+          "von": 4,
+          "bis": 103,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 18.0
+        },
+        {
+          "von": 104,
+          "bis": 107,
+          "typ": "offen"
+        },
+        {
+          "von": 108,
+          "bis": 207,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 18.0
+        },
+        {
+          "von": 208,
+          "bis": 212,
+          "typ": "offen"
+        },
+        {
+          "von": 213,
+          "bis": 251,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 18.0
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Cyan": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Magenta": {
+      "typ": "magenta",
+      "standard": 0
+    },
+    "Yellow": {
+      "typ": "gelb",
+      "standard": 0
+    },
+    "Kelvin": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Prism": {
+      "typ": "prisma",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "aus"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Prism Rotation": {
+      "typ": "prisma",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Focus": {
+      "typ": "fokus",
+      "standard": 255
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 255
+    },
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 119,
+          "typ": "aus"
+        },
+        {
+          "von": 120,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Focus fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Focus",
+      "stufe": 1
+    },
+    "Zoom fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Zoom",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "20-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Dimmer",
+        "Shutter",
+        "Cyan",
+        "Magenta",
+        "Yellow",
+        "Kelvin",
+        "Color Selection 1",
+        "Color Selection 2",
+        "Color Selection 3",
+        "Color Selection 4",
+        "Color Wheel",
+        "Prism",
+        "Prism Rotation",
+        "Focus",
+        "Zoom",
+        "Control"
+      ]
+    },
+    {
+      "name": "23-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "P/T Speed",
+        "Dimmer",
+        "Shutter",
+        "Cyan",
+        "Magenta",
+        "Yellow",
+        "Kelvin",
+        "Color Selection 1",
+        "Color Selection 2",
+        "Color Selection 3",
+        "Color Selection 4",
+        "Color Wheel",
+        "Prism",
+        "Prism Rotation",
+        "Focus",
+        "Focus fine",
+        "Zoom",
+        "Zoom fine",
+        "Control"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

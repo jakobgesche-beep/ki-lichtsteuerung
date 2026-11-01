@@ -1,0 +1,55 @@
+{
+  "id": "magicfx/stage-flame",
+  "hersteller": "MagicFX",
+  "name": "Stage Flame",
+  "kategorien": [
+    "Effect"
+  ],
+  "physik": {
+    "gewicht_kg": 11.5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Safety": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 153,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 154,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Flame": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "Default",
+      "kanaele": [
+        "Safety",
+        "Flame"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

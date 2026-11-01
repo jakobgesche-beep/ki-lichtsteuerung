@@ -1,0 +1,162 @@
+{
+  "id": "martin/atomic-3000",
+  "hersteller": "Martin",
+  "name": "Atomic 3000",
+  "kategorien": [
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": 7.5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 250,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "zu"
+        },
+        {
+          "von": 6,
+          "bis": 249,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "dimmer"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Flash Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Flash Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Effects": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 42,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 43,
+          "bis": 85,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 86,
+          "bis": 128,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 129,
+          "bis": 171,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 172,
+          "bis": 214,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 215,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Strobe"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Intensity",
+        "Flash Duration",
+        "Flash Rate"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Intensity",
+        "Flash Duration",
+        "Flash Rate",
+        "Effects"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

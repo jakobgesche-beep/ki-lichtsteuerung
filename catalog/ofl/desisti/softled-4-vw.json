@@ -1,0 +1,127 @@
+{
+  "id": "desisti/softled-4-vw",
+  "hersteller": "Desisti",
+  "name": "SoftLED 4 VW",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.7,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "CCT Linear Mode": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "CCT Step Mode": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 233,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 234,
+          "bis": 253,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 254,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Temperature Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "CCT Linear Mode / CCT Step Mode": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "SLOT4",
+      "kanaele": [
+        "Dimmer",
+        "CCT Linear Mode / CCT Step Mode",
+        "Color Temperature Mode"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

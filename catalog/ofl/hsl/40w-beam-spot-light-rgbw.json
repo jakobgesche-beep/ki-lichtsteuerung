@@ -1,0 +1,129 @@
+{
+  "id": "hsl/40w-beam-spot-light-rgbw",
+  "hersteller": "HSL",
+  "name": "40W Beam Spot Light RGBW",
+  "kategorien": [
+    "Color Changer",
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 1.36,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "SMD Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "SMD Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "SMD Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Program Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "7-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "SMD Red",
+        "SMD Green",
+        "SMD Blue"
+      ]
+    },
+    {
+      "name": "11-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Program Mode",
+        "Program Speed",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "SMD Red",
+        "SMD Green",
+        "SMD Blue"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

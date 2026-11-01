@@ -1,0 +1,168 @@
+{
+  "id": "chauvet-dj/slim-par-64",
+  "hersteller": "Chauvet DJ",
+  "name": "SlimPAR 64",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 1.3,
+    "abstrahlwinkel_grad": 23
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Effect Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Speed / Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue"
+      ]
+    },
+    {
+      "name": "7-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "Color Macros",
+        "Speed / Strobe",
+        "Mode",
+        "Dimmer"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,366 @@
+{
+  "id": "varytec/giga-bar-hex-3",
+  "hersteller": "Varytec",
+  "name": "Giga Bar HEX 3",
+  "kategorien": [
+    "Color Changer",
+    "Strobe",
+    "Effect"
+  ],
+  "physik": {
+    "gewicht_kg": 1.2,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Auto Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Program Selection": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "aus"
+        },
+        {
+          "von": 15,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 62,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 63,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 78,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 79,
+          "bis": 86,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 87,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 102,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 103,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 126,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 127,
+          "bis": 134,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 135,
+          "bis": 142,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 143,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 158,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 159,
+          "bis": 166,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 167,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 182,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 183,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 198,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 199,
+          "bis": 206,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 207,
+          "bis": 214,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 215,
+          "bis": 222,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 223,
+          "bis": 230,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 231,
+          "bis": 238,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 239,
+          "bis": 246,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 247,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed / Sound Sensitivity": {
+      "typ": "tempo",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "UV"
+      ]
+    },
+    {
+      "name": "9-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "UV",
+        "Intensity",
+        "Strobe",
+        "Auto Programs"
+      ]
+    },
+    {
+      "name": "11-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "UV",
+        "Intensity",
+        "Strobe",
+        "Auto Program Selection",
+        "Program Speed / Sound Sensitivity",
+        "Color Macros"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

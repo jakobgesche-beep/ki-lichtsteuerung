@@ -1,0 +1,115 @@
+{
+  "id": "litegear/s2-litemat-2",
+  "hersteller": "LiteGear",
+  "name": "S2 LiteMat 2",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 1.6,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Color Temperature 2": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Dimmer 2 fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer 2",
+      "stufe": 1
+    },
+    "Color Temperature fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Color Temperature",
+      "stufe": 1
+    },
+    "Color Temperature 2 fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Color Temperature 2",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "Single 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature"
+      ]
+    },
+    {
+      "name": "Single 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine"
+      ]
+    },
+    {
+      "name": "Double 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Dimmer 2",
+        "Color Temperature 2"
+      ]
+    },
+    {
+      "name": "Double 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Dimmer 2",
+        "Dimmer 2 fine",
+        "Color Temperature 2",
+        "Color Temperature 2 fine"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

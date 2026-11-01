@@ -1,0 +1,359 @@
+{
+  "id": "venue/tristrip3z",
+  "hersteller": "Venue",
+  "name": "TriStrip3Z",
+  "kategorien": [
+    "Pixel Bar",
+    "Effect",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 2.8,
+    "abstrahlwinkel_grad": 27
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        }
+      ]
+    },
+    "Dimmer Speed": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 51,
+          "typ": "aus"
+        },
+        {
+          "von": 52,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "RGB / Auto Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "RGB / Auto Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 114,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 115,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 138,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 139,
+          "bis": 146,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 147,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 162,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 163,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 178,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 179,
+          "bis": 186,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 187,
+          "bis": 194,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 195,
+          "bis": 202,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 203,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 218,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 219,
+          "bis": 226,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 227,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe / Speed / Sound Sensitivity": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        }
+      ]
+    },
+    "Red All Zones": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green All Zones": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue All Zones": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Zone 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Zone 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Zone 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Zone 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Zone 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Zone 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Zone 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Zone 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Zone 1": {
+      "typ": "blau",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Red All Zones",
+        "Green All Zones",
+        "Blue All Zones"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Red All Zones",
+        "Green All Zones",
+        "Blue All Zones",
+        "Dimmer",
+        "Strobe",
+        "Dimmer Speed"
+      ]
+    },
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Red All Zones",
+        "Green All Zones",
+        "Blue All Zones",
+        "Color Macros",
+        "Strobe / Speed / Sound Sensitivity",
+        "RGB / Auto Mode",
+        "Dimmer",
+        "Dimmer Speed"
+      ]
+    },
+    {
+      "name": "9-channel",
+      "kanaele": [
+        "Red Zone 3",
+        "Green Zone 3",
+        "Blue Zone 3",
+        "Red Zone 2",
+        "Green Zone 2",
+        "Blue Zone 2",
+        "Red Zone 1",
+        "Green Zone 1",
+        "Blue Zone 1"
+      ]
+    },
+    {
+      "name": "14-channel",
+      "kanaele": [
+        "Red Zone 3",
+        "Green Zone 3",
+        "Blue Zone 3",
+        "Red Zone 2",
+        "Green Zone 2",
+        "Blue Zone 2",
+        "Red Zone 1",
+        "Green Zone 1",
+        "Blue Zone 1",
+        "Color Macros",
+        "Strobe / Speed / Sound Sensitivity",
+        "RGB / Auto Mode",
+        "Dimmer",
+        "Dimmer Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

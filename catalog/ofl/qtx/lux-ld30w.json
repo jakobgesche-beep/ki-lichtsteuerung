@@ -1,0 +1,240 @@
+{
+  "id": "qtx/lux-ld30w",
+  "hersteller": "QTX",
+  "name": "LUX-LD30W",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.8,
+    "abstrahlwinkel_grad": 12
+  },
+  "kanaele": {
+    "Color Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 192,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 193,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 62,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 63,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 192,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 193,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo rotation": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer / Strobe": {
+      "typ": "strobo",
+      "standard": 244,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "zu"
+        },
+        {
+          "von": 1,
+          "bis": 115,
+          "typ": "dimmer"
+        },
+        {
+          "von": 116,
+          "bis": 243,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 244,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Pan": {
+      "typ": "pan",
+      "standard": 127
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Reset": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 149,
+          "typ": "aus"
+        },
+        {
+          "von": 150,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Color Wheel",
+        "Gobo Wheel",
+        "Gobo rotation",
+        "Dimmer / Strobe",
+        "Pan",
+        "Tilt",
+        "Pan/Tilt Speed",
+        "Pan fine",
+        "Tilt fine",
+        "Reset"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,553 @@
+{
+  "id": "jb-lighting/jbled-a7",
+  "hersteller": "JB-Lighting",
+  "name": "JBLED A7",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8.9,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 430.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 300.0
+    },
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 207,
+          "typ": "aus"
+        },
+        {
+          "von": 208,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "aus"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 16,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "zu"
+        },
+        {
+          "von": 16,
+          "bis": 95,
+          "typ": "offen"
+        },
+        {
+          "von": 96,
+          "bis": 110,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 111,
+          "bis": 111,
+          "typ": "offen"
+        },
+        {
+          "von": 112,
+          "bis": 125,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 126,
+          "bis": 126,
+          "typ": "offen"
+        },
+        {
+          "von": 127,
+          "bis": 127,
+          "typ": "zu"
+        },
+        {
+          "von": 128,
+          "bis": 142,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 143,
+          "bis": 143,
+          "typ": "offen"
+        },
+        {
+          "von": 144,
+          "bis": 158,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 159,
+          "bis": 159,
+          "typ": "zu"
+        },
+        {
+          "von": 160,
+          "bis": 174,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 175,
+          "bis": 175,
+          "typ": "offen"
+        },
+        {
+          "von": 176,
+          "bis": 190,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 191,
+          "bis": 191,
+          "typ": "zu"
+        },
+        {
+          "von": 192,
+          "bis": 206,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 207,
+          "bis": 207,
+          "typ": "offen"
+        },
+        {
+          "von": 208,
+          "bis": 222,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 223,
+          "bis": 223,
+          "typ": "zu"
+        },
+        {
+          "von": 224,
+          "bis": 238,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 239,
+          "bis": 239,
+          "typ": "offen"
+        },
+        {
+          "von": 240,
+          "bis": 254,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 25
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "CTC": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Virtual Color Wheel": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "aus"
+        },
+        {
+          "von": 2,
+          "bis": 3,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 4,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 27,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 28,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 43,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 44,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 222,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 223,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 3,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 4,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Effects Delay": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 3,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 4,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Blackout Move": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 95,
+          "typ": "aus"
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 223,
+          "typ": "aus"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "Standard 8bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Control",
+        "Shutter",
+        "Dimmer",
+        "Zoom",
+        "Red",
+        "Green",
+        "Blue",
+        "CTC",
+        "Virtual Color Wheel",
+        "Pan/Tilt Speed",
+        "Effects Delay",
+        "Blackout Move"
+      ]
+    },
+    {
+      "name": "Standard 16bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Control",
+        "Shutter",
+        "Dimmer",
+        "Zoom",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "CTC",
+        "Virtual Color Wheel",
+        "Pan/Tilt Speed",
+        "Effects Delay",
+        "Blackout Move"
+      ]
+    },
+    {
+      "name": "Compressed 8bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Control",
+        "Shutter",
+        "Dimmer",
+        "Zoom",
+        "Red",
+        "Green",
+        "Blue",
+        "CTC"
+      ]
+    },
+    {
+      "name": "Compressed 16bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Control",
+        "Shutter",
+        "Dimmer",
+        "Zoom",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "CTC"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

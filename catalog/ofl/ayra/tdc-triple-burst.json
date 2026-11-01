@@ -1,0 +1,380 @@
+{
+  "id": "ayra/tdc-triple-burst",
+  "hersteller": "Ayra",
+  "name": "TDC Triple Burst",
+  "kategorien": [
+    "Color Changer",
+    "Effect"
+  ],
+  "physik": {
+    "gewicht_kg": 3,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Show": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 217,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 218,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color chase": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 52,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 53,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 82,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 83,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 142,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 143,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 172,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 173,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 202,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 203,
+          "bis": 217,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 218,
+          "bis": 232,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 233,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 247,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Red 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 3": {
+      "typ": "amber",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "1 channel",
+      "kanaele": [
+        "Show"
+      ]
+    },
+    {
+      "name": "3 channel",
+      "kanaele": [
+        "Color chase",
+        "Dimmer",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "9 channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "Dimmer",
+        "Strobe",
+        "Color chase",
+        "Speed"
+      ]
+    },
+    {
+      "name": "15 channel",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "White 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "White 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "White 3",
+        "Amber 3"
+      ]
+    },
+    {
+      "name": "19 channel",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "White 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "White 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "White 3",
+        "Amber 3",
+        "Dimmer",
+        "Strobe",
+        "Color chase",
+        "Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

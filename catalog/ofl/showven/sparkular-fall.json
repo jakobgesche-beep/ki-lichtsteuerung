@@ -1,0 +1,92 @@
+{
+  "id": "showven/sparkular-fall",
+  "hersteller": "Showven",
+  "name": "Sparkular Fall (BT04)",
+  "kategorien": [
+    "Effect"
+  ],
+  "physik": {
+    "gewicht_kg": 6,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Fountain": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 19,
+          "typ": "aus"
+        },
+        {
+          "von": 20,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 59,
+          "typ": "aus"
+        },
+        {
+          "von": 60,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 239,
+          "typ": "aus"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Default",
+      "kanaele": [
+        "Fountain",
+        "Control"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

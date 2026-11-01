@@ -1,0 +1,159 @@
+{
+  "id": "cameo/ts-100-ww",
+  "hersteller": "cameo",
+  "name": "TS 100 WW",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 7.4,
+    "abstrahlwinkel_grad": 38
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Shutter / Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "offen"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        }
+      ]
+    },
+    "Dimmer Curve": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Device Settings": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 208,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 209,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Shutter / Strobe"
+      ]
+    },
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Shutter / Strobe",
+        "Dimmer Curve",
+        "Device Settings"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

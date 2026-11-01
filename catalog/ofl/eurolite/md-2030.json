@@ -1,0 +1,55 @@
+{
+  "id": "eurolite/md-2030",
+  "hersteller": "Eurolite",
+  "name": "MD-2030",
+  "kategorien": [
+    "Other"
+  ],
+  "physik": {
+    "gewicht_kg": 3,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Rotation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Rotation"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

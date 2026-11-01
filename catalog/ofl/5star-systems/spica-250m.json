@@ -1,0 +1,490 @@
+{
+  "id": "5star-systems/spica-250m",
+  "hersteller": "5Star Systems",
+  "name": "Spica 250M",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 18,
+    "abstrahlwinkel_grad": 18
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 255,
+      "grad": 530.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 255,
+      "grad": 280.0
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Reset": {
+      "typ": "makro",
+      "standard": 170,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 179,
+          "typ": "aus"
+        },
+        {
+          "von": 180,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 229,
+          "typ": "aus"
+        },
+        {
+          "von": 230,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Color Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 6,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 7,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 27,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 28,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 48,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 49,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 62,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 63,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 76,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 77,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Prism": {
+      "typ": "prisma",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 95,
+          "typ": "aus"
+        },
+        {
+          "von": 96,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 183,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 184,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Prism rotation": {
+      "typ": "prisma",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 126,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 127,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo rotation": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 192,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 193,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Focus": {
+      "typ": "fokus",
+      "standard": 0
+    },
+    "Shutter / Strobe": {
+      "typ": "strobo",
+      "standard": 32,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "zu"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "offen"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "offen"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "offen"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "16bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Reset",
+        "Color Wheel",
+        null,
+        "Prism",
+        "Prism rotation",
+        "Gobo Wheel",
+        "Gobo rotation",
+        null,
+        "Focus",
+        "Shutter / Strobe",
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "8bit",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Pan/Tilt Speed",
+        "Reset",
+        "Color Wheel",
+        null,
+        "Prism",
+        "Prism rotation",
+        "Gobo Wheel",
+        "Gobo rotation",
+        null,
+        "Focus",
+        "Shutter / Strobe",
+        "Dimmer"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

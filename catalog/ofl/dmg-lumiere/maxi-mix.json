@@ -1,0 +1,619 @@
+{
+  "id": "dmg-lumiere/maxi-mix",
+  "hersteller": "DMG Lumière",
+  "name": "MAXI MIX",
+  "kategorien": [
+    "Dimmer",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 242,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 243,
+          "bis": 243,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 244,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Green-Magenta Point": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 114,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 115,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "White Base Color": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Memory # Hundreds": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Memory # Tens": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Memory # Singles": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 218,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 218,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Saturation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Hue Gel": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Saturation Gel": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Colorspace X Position": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Colorspace Y Position": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Lime": {
+      "typ": "limette",
+      "standard": 0
+    },
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 60,
+          "typ": "aus"
+        },
+        {
+          "von": 61,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 90,
+          "typ": "aus"
+        },
+        {
+          "von": 91,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 120,
+          "typ": "aus"
+        },
+        {
+          "von": 121,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Effects Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Cross Fade to Color": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 16,
+          "typ": "offen"
+        },
+        {
+          "von": 17,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 17.8
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Hue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Hue",
+      "stufe": 1
+    },
+    "Colorspace X Position fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Colorspace X Position",
+      "stufe": 1
+    },
+    "Colorspace Y Position fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Colorspace Y Position",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "1: White 8-bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point"
+      ]
+    },
+    {
+      "name": "2: Color 8-bit",
+      "kanaele": [
+        "Dimmer",
+        "White Base Color",
+        "Hue",
+        "Saturation"
+      ]
+    },
+    {
+      "name": "3: Gel 8-bit",
+      "kanaele": [
+        "Dimmer",
+        "Memory # Hundreds",
+        "Memory # Tens",
+        "Memory # Singles",
+        "White Base Color",
+        "Hue Gel",
+        "Saturation Gel"
+      ]
+    },
+    {
+      "name": "4: Pro 8-bit",
+      "kanaele": [
+        "Dimmer",
+        "Memory # Hundreds",
+        "Memory # Tens",
+        "Memory # Singles",
+        "Color Temperature",
+        "Green-Magenta Point",
+        "Hue",
+        "Saturation",
+        "White Base Color",
+        "Hue Gel",
+        "Saturation Gel",
+        "Effects Speed",
+        "Colorspace X Position",
+        "Colorspace Y Position",
+        "Strobe",
+        "Control"
+      ]
+    },
+    {
+      "name": "5: Pro 16-bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Memory # Hundreds",
+        "Memory # Tens",
+        "Memory # Singles",
+        "Color Temperature",
+        "Green-Magenta Point",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "White Base Color",
+        "Hue Gel",
+        "Saturation Gel",
+        "Effects Speed",
+        "Colorspace X Position",
+        "Colorspace X Position fine",
+        "Colorspace Y Position",
+        "Colorspace Y Position fine",
+        "Strobe",
+        "Control"
+      ]
+    },
+    {
+      "name": "6: Full 8-bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point",
+        "Cross Fade to Color",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "Lime",
+        "Strobe",
+        "Control"
+      ]
+    },
+    {
+      "name": "7: Full 16-bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Green-Magenta Point",
+        "Cross Fade to Color",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "Lime",
+        "Strobe",
+        "Control"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

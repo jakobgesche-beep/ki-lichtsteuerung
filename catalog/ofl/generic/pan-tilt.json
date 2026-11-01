@@ -1,0 +1,104 @@
+{
+  "id": "generic/pan-tilt",
+  "hersteller": "Generic",
+  "name": "Pan/Tilt Fader",
+  "kategorien": [
+    "Moving Head"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 127,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127,
+      "grad": 180.0
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Pan fine^2": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 2
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Tilt fine^2": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 2
+    }
+  },
+  "modi": [
+    {
+      "name": "8 bit",
+      "kanaele": [
+        "Pan",
+        "Tilt"
+      ]
+    },
+    {
+      "name": "16 bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine"
+      ]
+    },
+    {
+      "name": "16 bit (alternate)",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Pan fine",
+        "Tilt fine"
+      ]
+    },
+    {
+      "name": "24 bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Pan fine^2",
+        "Tilt",
+        "Tilt fine",
+        "Tilt fine^2"
+      ]
+    },
+    {
+      "name": "24 bit (alternate)",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Pan fine",
+        "Tilt fine",
+        "Pan fine^2",
+        "Tilt fine^2"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

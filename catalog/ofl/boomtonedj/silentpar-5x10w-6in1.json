@@ -1,0 +1,137 @@
+{
+  "id": "boomtonedj/silentpar-5x10w-6in1",
+  "hersteller": "BoomToneDJ",
+  "name": "SilentPAR 5x10W 6in1",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 3,
+    "abstrahlwinkel_grad": 45
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "UV"
+      ]
+    },
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Intensity",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "UV",
+        "Strobe",
+        "Program Speed",
+        "Mode"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,471 @@
+{
+  "id": "martin/mania-scx500",
+  "hersteller": "Martin",
+  "name": "Mania SCX500",
+  "kategorien": [
+    "Scanner",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.7,
+    "abstrahlwinkel_grad": 15
+  },
+  "kanaele": {
+    "Effects": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 68,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 69,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 136,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 137,
+          "bis": 148,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 149,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 172,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 173,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 196,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 197,
+          "bis": 208,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 209,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 232,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 233,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 53,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 54,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 113,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 114,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 131,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 132,
+          "bis": 137,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 138,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 161,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 162,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 173,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 174,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 197,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 198,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 131,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 132,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan": {
+      "typ": "pan",
+      "standard": 127,
+      "grad": 180.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127,
+      "grad": 72.0
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "aus"
+        },
+        {
+          "von": 2,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color/Gobo Wheel Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "aus"
+        },
+        {
+          "von": 2,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Effects",
+        "Intensity",
+        "Color Wheel",
+        "Gobo Wheel",
+        "Pan",
+        "Tilt"
+      ]
+    },
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Effects",
+        "Intensity",
+        "Color Wheel",
+        "Gobo Wheel",
+        "Pan",
+        "Tilt",
+        "Pan/Tilt Speed",
+        "Color/Gobo Wheel Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

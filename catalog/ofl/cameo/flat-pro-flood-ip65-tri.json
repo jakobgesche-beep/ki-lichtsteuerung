@@ -1,0 +1,196 @@
+{
+  "id": "cameo/flat-pro-flood-ip65-tri",
+  "hersteller": "cameo",
+  "name": "Flat Pro Flood IP65 Tri",
+  "kategorien": [
+    "Blinder",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.6,
+    "abstrahlwinkel_grad": 120
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Macros Simple": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 20.0
+        }
+      ]
+    },
+    "Color Macros Extended": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 48,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 49,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Dimmer",
+        "Color Macros Simple"
+      ]
+    },
+    {
+      "name": "3-channel 1",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Color Macros Extended"
+      ]
+    },
+    {
+      "name": "3-channel 2",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Red",
+        "Green",
+        "Blue",
+        "Color Macros Extended"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

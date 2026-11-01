@@ -1,0 +1,314 @@
+{
+  "id": "ape-labs/lightcan",
+  "hersteller": "Ape Labs",
+  "name": "LightCan",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 0.39,
+    "abstrahlwinkel_grad": 65
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 53,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 54,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 113,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 114,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 151,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 152,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 163,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 164,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 211,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 212,
+          "bis": 217,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 218,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 241,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 242,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "3-Channel",
+      "kanaele": [
+        "Dimmer",
+        "Programs",
+        "Program Speed"
+      ]
+    },
+    {
+      "name": "4-Channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "8-Channel",
+      "kanaele": [
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

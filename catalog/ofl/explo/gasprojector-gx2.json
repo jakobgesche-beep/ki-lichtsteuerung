@@ -1,0 +1,87 @@
+{
+  "id": "explo/gasprojector-gx2",
+  "hersteller": "Explo",
+  "name": "Gasprojector GX2",
+  "kategorien": [
+    "Effect"
+  ],
+  "physik": {
+    "gewicht_kg": 6.8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Ignition": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 252,
+          "typ": "aus"
+        },
+        {
+          "von": 253,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Valve Opening Time": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 250,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Standard",
+      "kanaele": [
+        "Ignition",
+        "Valve Opening Time"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

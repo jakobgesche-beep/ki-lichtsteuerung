@@ -1,0 +1,194 @@
+{
+  "id": "eyourlife/led-rgbw-54x3-par64",
+  "hersteller": "Eyourlife",
+  "name": "LED RGBW 54x3 Par64",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 4.5,
+    "abstrahlwinkel_grad": 25
+  },
+  "kanaele": {
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Color Macros/Effects": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 75,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 76,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Speed": {
+      "typ": "tempo",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Strobe",
+        "Color Macros/Effects",
+        "Speed"
+      ]
+    },
+    {
+      "name": "EYL2 variant 8-channel",
+      "kanaele": [
+        "Strobe",
+        "Color Macros/Effects",
+        "Speed",
+        "Master Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

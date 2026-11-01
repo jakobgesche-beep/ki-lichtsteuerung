@@ -1,0 +1,545 @@
+{
+  "id": "martin/mac-250-wash",
+  "hersteller": "Martin",
+  "name": "MAC 250 Wash",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 22.9,
+    "abstrahlwinkel_grad": 48.8
+  },
+  "kanaele": {
+    "Shutter / Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 19,
+          "typ": "zu"
+        },
+        {
+          "von": 20,
+          "bis": 49,
+          "typ": "offen"
+        },
+        {
+          "von": 50,
+          "bis": 72,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 73,
+          "bis": 79,
+          "typ": "offen"
+        },
+        {
+          "von": 80,
+          "bis": 99,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 100,
+          "bis": 119,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "offen"
+        },
+        {
+          "von": 128,
+          "bis": 147,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 148,
+          "bis": 167,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 168,
+          "bis": 187,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 188,
+          "bis": 190,
+          "typ": "offen"
+        },
+        {
+          "von": 191,
+          "bis": 193,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 194,
+          "bis": 196,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 197,
+          "bis": 199,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 200,
+          "bis": 202,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 203,
+          "bis": 207,
+          "typ": "offen"
+        },
+        {
+          "von": 208,
+          "bis": 217,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 218,
+          "bis": 227,
+          "typ": "offen"
+        },
+        {
+          "von": 228,
+          "bis": 237,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 238,
+          "bis": 247,
+          "typ": "offen"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Cyan Intensity": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Random Cyan": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Magenta Intensity": {
+      "typ": "magenta",
+      "standard": 0
+    },
+    "Random Magenta": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Yellow Intensity": {
+      "typ": "gelb",
+      "standard": 0
+    },
+    "Random Yellow": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Color Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 102,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 103,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 183,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 184,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 226,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 227,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 248,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 249,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Frost": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 257.0
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 2,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 3,
+          "bis": 242,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 243,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 248,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 249,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Effect Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 2,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 3,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 248,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 249,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Cyan Intensity fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cyan Intensity",
+      "stufe": 1
+    },
+    "Magenta Intensity fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Magenta Intensity",
+      "stufe": 1
+    },
+    "Yellow Intensity fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Yellow Intensity",
+      "stufe": 1
+    },
+    "Color Wheel fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Color Wheel",
+      "stufe": 1
+    },
+    "Frost fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Frost",
+      "stufe": 1
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Cyan": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Magenta": {
+      "typ": "magenta",
+      "standard": 0
+    },
+    "Yellow": {
+      "typ": "gelb",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "16-Bit",
+      "kanaele": [
+        "Shutter / Strobe",
+        "Dimmer",
+        "Cyan",
+        "Magenta",
+        "Yellow",
+        "Color Wheel",
+        "Frost",
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Effect Speed"
+      ]
+    },
+    {
+      "name": "16-Bit Extendend",
+      "kanaele": [
+        "Shutter / Strobe",
+        "Dimmer",
+        "Dimmer fine",
+        "Cyan",
+        "Cyan Intensity fine",
+        "Magenta",
+        "Magenta Intensity fine",
+        "Yellow",
+        "Yellow Intensity fine",
+        "Color Wheel",
+        "Color Wheel fine",
+        "Frost",
+        "Frost fine",
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Effect Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

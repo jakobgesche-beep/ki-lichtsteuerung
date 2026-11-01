@@ -1,0 +1,183 @@
+{
+  "id": "chauvet-dj/corepar-uv-usb",
+  "hersteller": "Chauvet DJ",
+  "name": "COREpar UV USB",
+  "kategorien": [
+    "Other"
+  ],
+  "physik": {
+    "gewicht_kg": 2.1,
+    "abstrahlwinkel_grad": 100
+  },
+  "kanaele": {
+    "UV": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 33.0
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Programs": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus"
+        },
+        {
+          "von": 32,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 159,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 160,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer Speed": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 51,
+          "typ": "aus"
+        },
+        {
+          "von": 52,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe / Program Speed / Sound Sensitivity": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 33.0
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "UV",
+        "Strobe / Program Speed / Sound Sensitivity",
+        "Programs",
+        "Dimmer",
+        "Dimmer Speed"
+      ]
+    },
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "UV"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

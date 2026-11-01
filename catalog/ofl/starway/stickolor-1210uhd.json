@@ -1,0 +1,730 @@
+{
+  "id": "starway/stickolor-1210uhd",
+  "hersteller": "Starway",
+  "name": "SticKolor 1210UHD",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.2,
+    "abstrahlwinkel_grad": 50
+  },
+  "kanaele": {
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 57,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 58,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 81,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 82,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 113,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 114,
+          "bis": 121,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 122,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 137,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 138,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 153,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 154,
+          "bis": 161,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 162,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 177,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 178,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 201,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 202,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 217,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 218,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 233,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 234,
+          "bis": 241,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 242,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Macro Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Macro Speed / Sound Sensitivity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber Master": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV Master": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 1": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 2": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 3": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 3": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 4": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 5": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 5": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 6": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 6": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 6": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 6": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 6": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 7": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 7": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 7": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 7": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 7": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 7": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 8": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 8": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 9": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 9": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 9": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 9": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 9": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 9": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 10": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 10": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 10": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 10": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 10": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 10": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 11": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 11": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 11": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 11": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 11": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 11": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red 12": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 12": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 12": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 12": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 12": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV 12": {
+      "typ": "uv",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Amber Master",
+        "UV Master"
+      ]
+    },
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Strobe",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Amber Master",
+        "UV Master"
+      ]
+    },
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Strobe",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Amber Master",
+        "UV Master",
+        "Color Macros",
+        "Macro Speed / Sound Sensitivity"
+      ]
+    },
+    {
+      "name": "72-channel",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "White 1",
+        "Amber 1",
+        "UV 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "White 2",
+        "Amber 2",
+        "UV 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "White 3",
+        "Amber 3",
+        "UV 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "White 4",
+        "Amber 4",
+        "UV 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "White 5",
+        "Amber 5",
+        "UV 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "White 6",
+        "Amber 6",
+        "UV 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "White 7",
+        "Amber 7",
+        "UV 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "White 8",
+        "Amber 8",
+        "UV 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "White 9",
+        "Amber 9",
+        "UV 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "White 10",
+        "Amber 10",
+        "UV 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "White 11",
+        "Amber 11",
+        "UV 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "White 12",
+        "Amber 12",
+        "UV 12"
+      ]
+    },
+    {
+      "name": "76-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Strobe",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "White 1",
+        "Amber 1",
+        "UV 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "White 2",
+        "Amber 2",
+        "UV 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "White 3",
+        "Amber 3",
+        "UV 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "White 4",
+        "Amber 4",
+        "UV 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "White 5",
+        "Amber 5",
+        "UV 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "White 6",
+        "Amber 6",
+        "UV 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "White 7",
+        "Amber 7",
+        "UV 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "White 8",
+        "Amber 8",
+        "UV 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "White 9",
+        "Amber 9",
+        "UV 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "White 10",
+        "Amber 10",
+        "UV 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "White 11",
+        "Amber 11",
+        "UV 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "White 12",
+        "Amber 12",
+        "UV 12",
+        "Color Macros",
+        "Macro Speed / Sound Sensitivity"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

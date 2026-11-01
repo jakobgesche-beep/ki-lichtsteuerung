@@ -1,0 +1,78 @@
+{
+  "id": "studio-due/light-deflector",
+  "hersteller": "Studio Due",
+  "name": "Light Deflector",
+  "kategorien": [
+    "Scanner"
+  ],
+  "physik": {
+    "gewicht_kg": 5.0,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 360.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 360.0
+    },
+    "Tilt Spin": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Reset": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "8 bit 4-channel",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Tilt Spin",
+        "Pan/Tilt Speed"
+      ]
+    },
+    {
+      "name": "16 bit 7-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Tilt Spin",
+        "Pan/Tilt Speed",
+        "Reset"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

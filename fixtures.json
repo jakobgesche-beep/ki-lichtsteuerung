@@ -1,0 +1,108 @@
+{
+  "_hinweis": "PLATZHALTER: Variante B angenommen (1 Hero Spot 60 und Hazer). Modi und Startadressen sind Vorschläge, bis die Geräte da sind.",
+  "geraete": [
+    {
+      "id": "par-1",
+      "name": "PAR 1",
+      "typ": "stairville/quad-par-profile-5x8w-rgbw",
+      "modus": "8-Kanal",
+      "adresse": 1,
+      "gruppen": [
+        "Farb-PARs"
+      ]
+    },
+    {
+      "id": "par-2",
+      "name": "PAR 2",
+      "typ": "stairville/quad-par-profile-5x8w-rgbw",
+      "modus": "8-Kanal",
+      "adresse": 9,
+      "gruppen": [
+        "Farb-PARs"
+      ]
+    },
+    {
+      "id": "par-3",
+      "name": "PAR 3",
+      "typ": "stairville/quad-par-profile-5x8w-rgbw",
+      "modus": "8-Kanal",
+      "adresse": 17,
+      "gruppen": [
+        "Farb-PARs"
+      ]
+    },
+    {
+      "id": "par-4",
+      "name": "PAR 4",
+      "typ": "stairville/quad-par-profile-5x8w-rgbw",
+      "modus": "8-Kanal",
+      "adresse": 25,
+      "gruppen": [
+        "Farb-PARs"
+      ]
+    },
+    {
+      "id": "par-5",
+      "name": "PAR 5",
+      "typ": "stairville/quad-par-profile-5x8w-rgbw",
+      "modus": "8-Kanal",
+      "adresse": 33,
+      "gruppen": [
+        "Farb-PARs"
+      ]
+    },
+    {
+      "id": "par-6",
+      "name": "PAR 6",
+      "typ": "stairville/quad-par-profile-5x8w-rgbw",
+      "modus": "8-Kanal",
+      "adresse": 41,
+      "gruppen": [
+        "Farb-PARs"
+      ]
+    },
+    {
+      "id": "front-1",
+      "name": "Front 1",
+      "typ": "stairville/mh-x25",
+      "modus": "12-channel",
+      "adresse": 49,
+      "gruppen": [
+        "Frontlicht",
+        "Spots"
+      ]
+    },
+    {
+      "id": "front-2",
+      "name": "Front 2",
+      "typ": "stairville/mh-x25",
+      "modus": "12-channel",
+      "adresse": 61,
+      "gruppen": [
+        "Frontlicht",
+        "Spots"
+      ]
+    },
+    {
+      "id": "effekt",
+      "name": "Effekt",
+      "typ": "varytec/hero-spot-60",
+      "modus": "14-Kanal",
+      "adresse": 73,
+      "gruppen": [
+        "Effektlicht",
+        "Spots"
+      ]
+    },
+    {
+      "id": "hazer",
+      "name": "Hazer",
+      "typ": "stairville/hz-200-compact-hazer",
+      "modus": "2-channel",
+      "adresse": 87,
+      "gruppen": [
+        "Dunst"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "fovitec/600xb",
+  "hersteller": "Fovitec",
+  "name": "600XB",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": 45
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Intensity",
+        "Color Temperature"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

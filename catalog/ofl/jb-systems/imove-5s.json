@@ -1,0 +1,364 @@
+{
+  "id": "jb-systems/imove-5s",
+  "hersteller": "JB Systems",
+  "name": "iMove 5S",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 12,
+    "abstrahlwinkel_grad": 16
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 270.0
+    },
+    "Shutter / Shaking": {
+      "typ": "strobo",
+      "standard": 8,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "zu"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "offen"
+        },
+        {
+          "von": 16,
+          "bis": 131,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 132,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 8,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 9,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 43,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 44,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 68,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 69,
+          "bis": 76,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 77,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 93,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 94,
+          "bis": 102,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 103,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 21,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 22,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 53,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 54,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 106,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 107,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 118,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Wheel Split": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "platz",
+          "name": "Green",
+          "farbe": "#00c200"
+        },
+        {
+          "von": 16,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 30,
+          "typ": "platz",
+          "name": "Magenta",
+          "farbe": "#ff00ff"
+        },
+        {
+          "von": 31,
+          "bis": 37,
+          "typ": "platz",
+          "name": "Light Blue",
+          "farbe": "#99ccff"
+        },
+        {
+          "von": 38,
+          "bis": 45,
+          "typ": "platz",
+          "name": "Amber",
+          "farbe": "#ffbf00"
+        },
+        {
+          "von": 46,
+          "bis": 52,
+          "typ": "platz",
+          "name": "Red",
+          "farbe": "#ff0000"
+        },
+        {
+          "von": 53,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 67,
+          "typ": "platz",
+          "name": "Blue",
+          "farbe": "#0000ff"
+        },
+        {
+          "von": 68,
+          "bis": 75,
+          "typ": "platz",
+          "name": "UV Purple",
+          "farbe": "#8800ff"
+        },
+        {
+          "von": 76,
+          "bis": 82,
+          "typ": "platz",
+          "name": "Light Green",
+          "farbe": "#8aff8a"
+        },
+        {
+          "von": 83,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 97,
+          "typ": "platz",
+          "name": "Orange",
+          "farbe": "#ff8800"
+        },
+        {
+          "von": 98,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 112,
+          "typ": "platz",
+          "name": "Yellow",
+          "farbe": "#ffff00"
+        },
+        {
+          "von": 113,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 127,
+          "typ": "platz",
+          "name": "Pink",
+          "farbe": "#ff88ff"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Normal",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Shutter / Shaking",
+        "Gobo Wheel",
+        "Color Wheel"
+      ]
+    },
+    {
+      "name": "Split Color",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Shutter / Shaking",
+        "Gobo Wheel",
+        "Color Wheel Split"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

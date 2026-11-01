@@ -1,0 +1,531 @@
+{
+  "id": "eurolite/led-b-40",
+  "hersteller": "Eurolite",
+  "name": "LED B-40",
+  "kategorien": [
+    "Laser",
+    "Flower",
+    "Effect",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 4,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Color Presets": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 48,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 49,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 81,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 82,
+          "bis": 92,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 93,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 114,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 115,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 136,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 137,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 158,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 159,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 202,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 203,
+          "bis": 213,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 214,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 246,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 247,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Laser": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 46,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 47,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 76,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 77,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 148,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 149,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Programs Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 250,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Rotation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "LED Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 250,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Laser Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 250,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "LED Group 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED Group 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED Group 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED Group 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED Group 1 Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 250,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "LED Group 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED Group 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED Group 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED Group 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED Group 2 Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 250,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "LED Group 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED Group 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED Group 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED Group 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED Group 3 Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 250,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Auto Programs",
+        "Auto Programs Speed",
+        "Rotation"
+      ]
+    },
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "LED Red",
+        "LED Green",
+        "LED Blue",
+        "LED White",
+        "Color Presets",
+        "Master Dimmer",
+        "LED Strobe",
+        "Laser",
+        "Laser Strobe",
+        "Rotation"
+      ]
+    },
+    {
+      "name": "22 Channel",
+      "kanaele": [
+        "LED Group 1 Red",
+        "LED Group 1 Green",
+        "LED Group 1 Blue",
+        "LED Group 1 White",
+        "LED Group 1 Strobe",
+        "LED Group 2 Red",
+        "LED Group 2 Green",
+        "LED Group 2 Blue",
+        "LED Group 2 White",
+        "LED Group 2 Strobe",
+        "LED Group 3 Red",
+        "LED Group 3 Green",
+        "LED Group 3 Blue",
+        "LED Group 3 White",
+        "LED Group 3 Strobe",
+        "Color Presets",
+        "Master Dimmer",
+        "Laser",
+        "Laser Strobe",
+        "Auto Programs",
+        "Auto Programs Speed",
+        "Rotation"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

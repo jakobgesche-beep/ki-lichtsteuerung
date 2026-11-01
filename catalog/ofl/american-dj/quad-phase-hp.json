@@ -1,0 +1,184 @@
+{
+  "id": "american-dj/quad-phase-hp",
+  "hersteller": "American DJ",
+  "name": "Quad Phase HP",
+  "kategorien": [
+    "Flower",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 4,
+    "abstrahlwinkel_grad": 65
+  },
+  "kanaele": {
+    "Color": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 16,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 186,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 187,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 237,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 238,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Rotation": {
+      "typ": "makro",
+      "standard": 128,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 134,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 135,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 16,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "zu"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Color",
+        "Rotation",
+        "Strobe",
+        "Shutter"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

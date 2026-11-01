@@ -1,0 +1,754 @@
+{
+  "id": "briteq/bt-ledrotor",
+  "hersteller": "Briteq",
+  "name": "BT-LEDROTOR",
+  "kategorien": [
+    "Fan",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 18,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Segment Effects": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 44,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 45,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 66,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 67,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 88,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 89,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 121,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 122,
+          "bis": 132,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 133,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 176,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 177,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 198,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 199,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Effect Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Blades": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Fan Rotation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "RGB Segment Effects": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 78,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 79,
+          "bis": 93,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 94,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 161,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 162,
+          "bis": 178,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 179,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 212,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 213,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "RGB Segment Effect Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "UV Dimmer": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "UV Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Segment Effect Control": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Segment 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Segment 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Segment 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Segment 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Segment 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Blade A Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Blade A Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Blade B Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Blade B Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Blade C Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Blade C Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Blade D Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Blade D Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Blade E Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Blade E Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Blade F Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Blade F Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Easy",
+      "kanaele": [
+        "Master Dimmer",
+        "Segment Effects",
+        "Segment Effect Control",
+        "Blades",
+        "Fan Rotation"
+      ]
+    },
+    {
+      "name": "12-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Strobe",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "RGB Segment Effects",
+        "RGB Segment Effect Speed",
+        "Blades",
+        "UV Dimmer",
+        "UV Strobe",
+        "Fan Rotation",
+        "Control"
+      ]
+    },
+    {
+      "name": "33-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Strobe",
+        "Red Segment 1",
+        "Green Segment 1",
+        "Blue Segment 1",
+        "Red Segment 2",
+        "Green Segment 2",
+        "Blue Segment 2",
+        "Red Segment 3",
+        "Green Segment 3",
+        "Blue Segment 3",
+        "Red Segment 4",
+        "Green Segment 4",
+        "Blue Segment 4",
+        "Red Segment 5",
+        "Green Segment 5",
+        "Blue Segment 5",
+        "Blade A Dimmer",
+        "Blade A Strobe",
+        "Blade B Dimmer",
+        "Blade B Strobe",
+        "Blade C Dimmer",
+        "Blade C Strobe",
+        "Blade D Dimmer",
+        "Blade D Strobe",
+        "Blade E Dimmer",
+        "Blade E Strobe",
+        "Blade F Dimmer",
+        "Blade F Strobe",
+        "UV Dimmer",
+        "UV Strobe",
+        "Fan Rotation",
+        "Control"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,223 @@
+{
+  "id": "varytec/easy-move-xs-hp-wash-7x8w-rgbw",
+  "hersteller": "Varytec",
+  "name": " Easy Move XS HP Wash 7x8W RGBW",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 180.0
+    },
+    "Dimmer & Strobe": {
+      "typ": "strobo",
+      "standard": 240,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "zu"
+        },
+        {
+          "von": 8,
+          "bis": 134,
+          "typ": "dimmer"
+        },
+        {
+          "von": 135,
+          "bis": 239,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 40.0
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Color Presets": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 237,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 238,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 3,
+          "typ": "aus"
+        },
+        {
+          "von": 4,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Reset": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 254,
+          "typ": "aus"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Dimmer & Strobe",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Pan/Tilt Speed"
+      ]
+    },
+    {
+      "name": "13-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Dimmer & Strobe",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Color Presets",
+        "Auto Programs",
+        "Reset"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

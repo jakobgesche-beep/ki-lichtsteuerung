@@ -1,0 +1,207 @@
+{
+  "id": "glx/gls-4-led-stage-4",
+  "hersteller": "GLX",
+  "name": "GLS-4 LED Stage 4",
+  "kategorien": [
+    "Stand",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8,
+    "abstrahlwinkel_grad": 25
+  },
+  "kanaele": {
+    "Auto Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 69,
+          "typ": "aus"
+        },
+        {
+          "von": 70,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "dimmer"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Spot 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Spot 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Spot 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Spot 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Spot 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Spot 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Spot 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Spot 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Spot 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Spot 4 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Spot 4 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Spot 4 Blue": {
+      "typ": "blau",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "15-channel",
+      "kanaele": [
+        "Auto Programs",
+        "Dimmer",
+        "Strobe",
+        "Spot 1 Red",
+        "Spot 1 Green",
+        "Spot 1 Blue",
+        "Spot 2 Red",
+        "Spot 2 Green",
+        "Spot 2 Blue",
+        "Spot 3 Red",
+        "Spot 3 Green",
+        "Spot 3 Blue",
+        "Spot 4 Red",
+        "Spot 4 Green",
+        "Spot 4 Blue"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

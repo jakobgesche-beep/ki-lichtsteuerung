@@ -1,0 +1,106 @@
+{
+  "id": "showtec/led-blinder-2-cob",
+  "hersteller": "Showtec",
+  "name": "LED Blinder 2 COB",
+  "kategorien": [
+    "Blinder",
+    "Dimmer",
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": 4.14,
+    "abstrahlwinkel_grad": 35
+  },
+  "kanaele": {
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Dimmer Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer L": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer R": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Dimmer Master"
+      ]
+    },
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Dimmer L",
+        "Dimmer R"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Dimmer L",
+        "Dimmer R",
+        "Dimmer Master"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Dimmer L",
+        "Dimmer R",
+        "Strobe",
+        "Dimmer Master"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

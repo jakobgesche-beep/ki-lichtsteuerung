@@ -1,0 +1,292 @@
+{
+  "id": "chauvet-dj/washfx",
+  "hersteller": "Chauvet DJ",
+  "name": "WashFX",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 2.2,
+    "abstrahlwinkel_grad": 90
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 20.0
+        }
+      ]
+    },
+    "Auto Program": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 230,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 231,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Auto or Sound Program": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 6": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 6": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1": {
+      "typ": "blau",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "7ch",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "Strobe",
+        "Auto Program",
+        "Auto Program Speed",
+        "Auto or Sound Program"
+      ]
+    },
+    {
+      "name": "23ch",
+      "kanaele": [
+        "Master Dimmer",
+        "Auto Program",
+        "Auto Program Speed",
+        "Strobe",
+        "Auto or Sound Program",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 1",
+        "Green 1",
+        "Blue 1"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

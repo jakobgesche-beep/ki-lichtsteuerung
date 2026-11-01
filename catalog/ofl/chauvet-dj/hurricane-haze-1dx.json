@@ -1,0 +1,45 @@
+{
+  "id": "chauvet-dj/hurricane-haze-1dx",
+  "hersteller": "Chauvet DJ",
+  "name": "Hurricane Haze 1DX",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.3,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Haze": {
+      "typ": "nebel",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1 Channel",
+      "kanaele": [
+        "Haze"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

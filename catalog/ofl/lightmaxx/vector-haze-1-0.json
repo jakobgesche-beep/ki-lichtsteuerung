@@ -1,0 +1,38 @@
+{
+  "id": "lightmaxx/vector-haze-1-0",
+  "hersteller": "lightmaXX",
+  "name": "Vector Haze 1.0",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 16.7,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Fan Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Haze Output": {
+      "typ": "nebel",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Fan Speed",
+        "Haze Output"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

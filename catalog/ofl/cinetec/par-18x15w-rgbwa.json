@@ -1,0 +1,104 @@
+{
+  "id": "cinetec/par-18x15w-rgbwa",
+  "hersteller": "Cinetec",
+  "name": "PAR 18x15W RGBWA",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.6,
+    "abstrahlwinkel_grad": 45
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 10
+    },
+    "Color Macros 2": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "9-channel",
+      "kanaele": [
+        "Intensity",
+        "Strobe",
+        "Color Macros",
+        "Color Macros 2",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber"
+      ]
+    },
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

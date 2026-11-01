@@ -1,0 +1,67 @@
+{
+  "id": "mdg/atme",
+  "hersteller": "MDG",
+  "name": "ATMe",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 16.8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Unit control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Haze output": {
+      "typ": "nebel",
+      "standard": 0
+    },
+    "Haze control": {
+      "typ": "nebel",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Unit control",
+        "Haze output",
+        "Haze control"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

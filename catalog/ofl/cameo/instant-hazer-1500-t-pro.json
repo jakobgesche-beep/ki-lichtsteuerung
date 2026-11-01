@@ -1,0 +1,50 @@
+{
+  "id": "cameo/instant-hazer-1500-t-pro",
+  "hersteller": "cameo",
+  "name": "Instant Hazer 1500 T Pro",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 17.9,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Haze": {
+      "typ": "nebel",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Fan": {
+      "typ": "tempo",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2ch",
+      "kanaele": [
+        "Haze",
+        "Fan"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

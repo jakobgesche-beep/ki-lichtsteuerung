@@ -1,0 +1,370 @@
+{
+  "id": "stairville/z120m-par-64-led-rgbw-120w",
+  "hersteller": "Stairville",
+  "name": "Z120M Par 64 LED RGBW 120W",
+  "kategorien": [
+    "Dimmer",
+    "Strobe",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.24,
+    "abstrahlwinkel_grad": 43
+  },
+  "kanaele": {
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 18,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 53,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 54,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 113,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 114,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 137,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 138,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 161,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 162,
+          "bis": 173,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 174,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 35,
+          "typ": "aus"
+        },
+        {
+          "von": 36,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 75,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 76,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 16,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "zu"
+        },
+        {
+          "von": 16,
+          "bis": 30,
+          "typ": "offen"
+        },
+        {
+          "von": 31,
+          "bis": 90,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 91,
+          "bis": 105,
+          "typ": "offen"
+        },
+        {
+          "von": 106,
+          "bis": 165,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        },
+        {
+          "von": 166,
+          "bis": 180,
+          "typ": "offen"
+        },
+        {
+          "von": 181,
+          "bis": 240,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Auto Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 175,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 176,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed / Sound Control": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 250,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Color Macros",
+        "Color Temperature"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Color Macros",
+        "Color Temperature",
+        "Auto Programs",
+        "Program Speed / Sound Control"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

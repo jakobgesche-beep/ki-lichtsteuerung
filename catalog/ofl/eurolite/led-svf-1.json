@@ -1,0 +1,137 @@
+{
+  "id": "eurolite/led-svf-1",
+  "hersteller": "Eurolite",
+  "name": "LED SVF-1",
+  "kategorien": [
+    "Flower"
+  ],
+  "physik": {
+    "gewicht_kg": 6,
+    "abstrahlwinkel_grad": 25
+  },
+  "kanaele": {
+    "Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 38,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 39,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 116,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 117,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 142,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 143,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 168,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 169,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 194,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 195,
+          "bis": 214,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 215,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 132,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "zu"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "2-Channel",
+      "kanaele": [
+        "Programs",
+        "Program Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

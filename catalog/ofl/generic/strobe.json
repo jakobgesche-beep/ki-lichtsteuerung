@@ -1,0 +1,61 @@
+{
+  "id": "generic/strobe",
+  "hersteller": "Generic",
+  "name": "Strobe",
+  "kategorien": [
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Frequency": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Frequency + Dimmer",
+      "kanaele": [
+        "Frequency",
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "Dimmer + Frequency",
+      "kanaele": [
+        "Dimmer",
+        "Frequency"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

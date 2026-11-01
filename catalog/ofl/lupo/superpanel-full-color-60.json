@@ -1,0 +1,338 @@
+{
+  "id": "lupo/superpanel-full-color-60",
+  "hersteller": "Lupo",
+  "name": "Superpanel Full Color 60",
+  "kategorien": [
+    "Dimmer",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 9,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "CCT": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "G/M Point 8bit": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "G/M Point 16bit": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Strobe 16bit": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "CCT fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "CCT",
+      "stufe": 1
+    },
+    "G/M Point 16bit fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "G/M Point 16bit",
+      "stufe": 1
+    },
+    "Hue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Hue",
+      "stufe": 1
+    },
+    "Saturation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Saturation",
+      "stufe": 1
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    },
+    "Strobe 16bit fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Strobe 16bit",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "CCT 8bit",
+      "kanaele": [
+        "Dimmer",
+        "G/M Point 8bit",
+        "CCT"
+      ]
+    },
+    {
+      "name": "CCT + Strobe 8bit",
+      "kanaele": [
+        "Dimmer",
+        "CCT",
+        "G/M Point 8bit",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "CCT 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "CCT",
+        "CCT fine",
+        "G/M Point 16bit",
+        "G/M Point 16bit fine"
+      ]
+    },
+    {
+      "name": "CCT + Strobe 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "CCT",
+        "CCT fine",
+        "G/M Point 16bit",
+        "G/M Point 16bit fine",
+        "Strobe 16bit",
+        "Strobe 16bit fine"
+      ]
+    },
+    {
+      "name": "HSI 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Hue",
+        "Saturation"
+      ]
+    },
+    {
+      "name": "HSI + Strobe 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Hue",
+        "Saturation",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "HSI 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine"
+      ]
+    },
+    {
+      "name": "HSI + Strobe 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine",
+        "Strobe 16bit",
+        "Strobe 16bit fine"
+      ]
+    },
+    {
+      "name": "RGBW 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "CCT",
+        "G/M Point 8bit"
+      ]
+    },
+    {
+      "name": "RGBW + Strobe 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "CCT",
+        "G/M Point 8bit",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "RGBW 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "CCT",
+        "CCT fine",
+        "G/M Point 16bit",
+        "G/M Point 16bit fine"
+      ]
+    },
+    {
+      "name": "RGBW + Strobe 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "CCT",
+        "CCT fine",
+        "G/M Point 16bit",
+        "G/M Point 16bit fine",
+        "Strobe 16bit",
+        "Strobe 16bit fine"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

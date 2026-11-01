@@ -1,0 +1,144 @@
+{
+  "id": "ledj/slimline-12q5-rgbw",
+  "hersteller": "LEDJ",
+  "name": "Slimline 12Q5 RGBW",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 2.2,
+    "abstrahlwinkel_grad": 25
+  },
+  "kanaele": {
+    "Dimmer / Strobe": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 240,
+          "typ": "dimmer"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Dimmer / Strobe",
+        "Color Macros"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master"
+      ]
+    },
+    {
+      "name": "7-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Color Macros"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

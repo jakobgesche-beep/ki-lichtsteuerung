@@ -1,0 +1,90 @@
+{
+  "id": "mdg/theone-atmospheric-generator",
+  "hersteller": "MDG",
+  "name": "theONE Atmospheric Generator",
+  "kategorien": [
+    "Hazer",
+    "Smoke"
+  ],
+  "physik": {
+    "gewicht_kg": 23,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Power": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Haze / Fog": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Fog output": {
+      "typ": "nebel",
+      "standard": 0
+    },
+    "Fog on/off": {
+      "typ": "nebel",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "aus"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "External Fan": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Power",
+        "Haze / Fog",
+        "Fog output",
+        "Fog on/off",
+        "External Fan"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

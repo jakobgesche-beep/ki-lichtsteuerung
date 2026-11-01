@@ -1,0 +1,366 @@
+{
+  "id": "epsilon/duo-q-beam-bar",
+  "hersteller": "Epsilon",
+  "name": "Duo Q-Beam Bar",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8.7,
+    "abstrahlwinkel_grad": 3
+  },
+  "kanaele": {
+    "Internal Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 19,
+          "typ": "aus"
+        },
+        {
+          "von": 20,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 139,
+          "typ": "aus"
+        },
+        {
+          "von": 140,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "aus"
+        },
+        {
+          "von": 15,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Left Bar Tilt": {
+      "typ": "tilt",
+      "standard": 180,
+      "grad": 180.0
+    },
+    "Left Bar Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Right Bar Tilt": {
+      "typ": "tilt",
+      "standard": 180,
+      "grad": 180.0
+    },
+    "Right Bar Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "LED 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED 4 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 4 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 4 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 4 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED 5 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 5 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 5 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 5 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED 6 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 6 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 6 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 6 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED 7 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 7 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 7 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 7 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "LED 8 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "LED 8 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "LED 8 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "LED 8 White": {
+      "typ": "weiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Internal Programs"
+      ]
+    },
+    {
+      "name": "36-channel",
+      "kanaele": [
+        "Left Bar Tilt",
+        "Left Bar Speed",
+        "Right Bar Tilt",
+        "Right Bar Speed",
+        "LED 1 Red",
+        "LED 1 Green",
+        "LED 1 Blue",
+        "LED 1 White",
+        "LED 2 Red",
+        "LED 2 Green",
+        "LED 2 Blue",
+        "LED 2 White",
+        "LED 3 Red",
+        "LED 3 Green",
+        "LED 3 Blue",
+        "LED 3 White",
+        "LED 4 Red",
+        "LED 4 Green",
+        "LED 4 Blue",
+        "LED 4 White",
+        "LED 5 Red",
+        "LED 5 Green",
+        "LED 5 Blue",
+        "LED 5 White",
+        "LED 6 Red",
+        "LED 6 Green",
+        "LED 6 Blue",
+        "LED 6 White",
+        "LED 7 Red",
+        "LED 7 Green",
+        "LED 7 Blue",
+        "LED 7 White",
+        "LED 8 Red",
+        "LED 8 Green",
+        "LED 8 Blue",
+        "LED 8 White"
+      ]
+    },
+    {
+      "name": "40-channel",
+      "kanaele": [
+        "Left Bar Tilt",
+        "Left Bar Speed",
+        "Right Bar Tilt",
+        "Right Bar Speed",
+        "Master Dimmer",
+        "Internal Programs",
+        "Program Speed",
+        "Strobe",
+        "LED 1 Red",
+        "LED 1 Green",
+        "LED 1 Blue",
+        "LED 1 White",
+        "LED 2 Red",
+        "LED 2 Green",
+        "LED 2 Blue",
+        "LED 2 White",
+        "LED 3 Red",
+        "LED 3 Green",
+        "LED 3 Blue",
+        "LED 3 White",
+        "LED 4 Red",
+        "LED 4 Green",
+        "LED 4 Blue",
+        "LED 4 White",
+        "LED 5 Red",
+        "LED 5 Green",
+        "LED 5 Blue",
+        "LED 5 White",
+        "LED 6 Red",
+        "LED 6 Green",
+        "LED 6 Blue",
+        "LED 6 White",
+        "LED 7 Red",
+        "LED 7 Green",
+        "LED 7 Blue",
+        "LED 7 White",
+        "LED 8 Red",
+        "LED 8 Green",
+        "LED 8 Blue",
+        "LED 8 White"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

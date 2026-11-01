@@ -1,0 +1,235 @@
+{
+  "id": "blizzard/hotbox-exa",
+  "hersteller": "Blizzard",
+  "name": "HotBox EXA",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 2.7,
+    "abstrahlwinkel_grad": 26
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "UV": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "aus"
+        },
+        {
+          "von": 15,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Fade, Color Change, Sound Active": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 128,
+          "bis": 164,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 165,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Fade Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dimmer Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "11-channel",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "Amber",
+        "White",
+        "UV",
+        "Strobe",
+        "Fade, Color Change, Sound Active",
+        "Fade Speed",
+        "Dimmer Control"
+      ]
+    },
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "Amber",
+        "White",
+        "UV",
+        "Strobe",
+        "Fade, Color Change, Sound Active",
+        "Fade Speed"
+      ]
+    },
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "Amber",
+        "White",
+        "UV",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "Amber",
+        "White",
+        "UV"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Hue",
+        "White",
+        "Dimmer"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

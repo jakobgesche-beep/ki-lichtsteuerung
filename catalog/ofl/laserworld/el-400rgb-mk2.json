@@ -1,0 +1,347 @@
+{
+  "id": "laserworld/el-400rgb-mk2",
+  "hersteller": "Laserworld",
+  "name": "EL-400RGB MK2",
+  "kategorien": [
+    "Laser",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.1,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 49,
+          "typ": "aus"
+        },
+        {
+          "von": 50,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pattern Selection": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Horizontal Angle": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Vertical Angle": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Scanning Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dynamic Pattern Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Color": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 2,
+          "bis": 3,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 4,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 21,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 22,
+          "bis": 27,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 28,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 57,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 58,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 118,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 137,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 138,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 177,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 178,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 197,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 198,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 227,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 228,
+          "bis": 233,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 234,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 241,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 242,
+          "bis": 243,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 244,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 253,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 254,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Segment": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "9-channel",
+      "kanaele": [
+        "Mode",
+        "Pattern Selection",
+        "Horizontal Angle",
+        "Vertical Angle",
+        "Scanning Speed",
+        "Dynamic Pattern Speed",
+        "Zoom",
+        "Color",
+        "Color Segment"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

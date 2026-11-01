@@ -1,0 +1,94 @@
+{
+  "id": "adb/europe-105",
+  "hersteller": "ADB",
+  "name": "Europe 105",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 1,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "DW 105 1000W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DW 105 1200W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DVW 105 1000W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DVW 105 1200W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DS 105 1000W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DS 105 1200W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DSN 105 1000W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DSN 105 1200W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DN 105 1000W",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "DN 105 1200W",
+      "kanaele": [
+        "Intensity"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

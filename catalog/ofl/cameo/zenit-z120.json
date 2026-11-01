@@ -1,0 +1,421 @@
+{
+  "id": "cameo/zenit-z120",
+  "hersteller": "cameo",
+  "name": "Zenit Z120",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8.3,
+    "abstrahlwinkel_grad": 55
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "offen"
+        },
+        {
+          "von": 6,
+          "bis": 10,
+          "typ": "zu"
+        },
+        {
+          "von": 11,
+          "bis": 33,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 34,
+          "bis": 56,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 57,
+          "bis": 79,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 80,
+          "bis": 102,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 103,
+          "bis": 127,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 128,
+          "bis": 250,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 21,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 22,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 53,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 54,
+          "bis": 61,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 62,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 77,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 78,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 93,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 94,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 118,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Settings": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer Curve": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    },
+    "Zoom fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Zoom",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Zoom"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Color Macros",
+        "Zoom"
+      ]
+    },
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Zoom"
+      ]
+    },
+    {
+      "name": "9-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Color Macros",
+        "Zoom",
+        "Settings"
+      ]
+    },
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "Zoom",
+        "Zoom fine"
+      ]
+    },
+    {
+      "name": "11-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Color Macros",
+        "Color Temperature",
+        "Zoom",
+        "Dimmer Curve",
+        "Settings"
+      ]
+    },
+    {
+      "name": "17-channel",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Strobe",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "Color Macros",
+        "Color Temperature",
+        "Zoom",
+        "Zoom fine",
+        "Dimmer Curve",
+        "Settings"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

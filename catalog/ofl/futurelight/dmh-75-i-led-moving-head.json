@@ -1,0 +1,1233 @@
+{
+  "id": "futurelight/dmh-75-i-led-moving-head",
+  "hersteller": "Futurelight",
+  "name": "DMH-75.i LED Moving Head",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8.5,
+    "abstrahlwinkel_grad": 18
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128
+    },
+    "Pan / Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Pan / Tilt function": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Shutter / Strobe function": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 16,
+          "bis": 31,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 32,
+          "bis": 47,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 48,
+          "bis": 63,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 64,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Shutter / Strobe": {
+      "typ": "strobo",
+      "standard": 224,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "zu"
+        },
+        {
+          "von": 32,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Shutter / Strobe basic": {
+      "typ": "strobo",
+      "standard": 32,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "zu"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "offen"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "offen"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "offen"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color wheel function": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Color wheel: Color selection": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 27,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 28,
+          "bis": 55,
+          "typ": "platz",
+          "name": "Platz 2"
+        },
+        {
+          "von": 56,
+          "bis": 83,
+          "typ": "platz",
+          "name": "Platz 3"
+        },
+        {
+          "von": 84,
+          "bis": 111,
+          "typ": "platz",
+          "name": "Platz 4"
+        },
+        {
+          "von": 112,
+          "bis": 139,
+          "typ": "platz",
+          "name": "Platz 5"
+        },
+        {
+          "von": 140,
+          "bis": 167,
+          "typ": "platz",
+          "name": "Platz 6"
+        },
+        {
+          "von": 168,
+          "bis": 195,
+          "typ": "platz",
+          "name": "Platz 7"
+        },
+        {
+          "von": 196,
+          "bis": 223,
+          "typ": "platz",
+          "name": "Platz 8"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "platz",
+          "name": "Platz 9"
+        }
+      ]
+    },
+    "Color wheel speed CW": {
+      "typ": "farbrad",
+      "standard": 0
+    },
+    "Color wheel speed CCW": {
+      "typ": "farbrad",
+      "standard": 0
+    },
+    "Color wheel position": {
+      "typ": "farbrad",
+      "standard": 0
+    },
+    "Color wheel basic": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 6,
+          "bis": 11,
+          "typ": "platz",
+          "name": "Platz 2"
+        },
+        {
+          "von": 12,
+          "bis": 17,
+          "typ": "platz",
+          "name": "Platz 3"
+        },
+        {
+          "von": 18,
+          "bis": 23,
+          "typ": "platz",
+          "name": "Platz 4"
+        },
+        {
+          "von": 24,
+          "bis": 29,
+          "typ": "platz",
+          "name": "Platz 5"
+        },
+        {
+          "von": 30,
+          "bis": 35,
+          "typ": "platz",
+          "name": "Platz 6"
+        },
+        {
+          "von": 36,
+          "bis": 41,
+          "typ": "platz",
+          "name": "Platz 7"
+        },
+        {
+          "von": 42,
+          "bis": 47,
+          "typ": "platz",
+          "name": "Platz 8"
+        },
+        {
+          "von": 48,
+          "bis": 53,
+          "typ": "platz",
+          "name": "Platz 9"
+        },
+        {
+          "von": 54,
+          "bis": 59,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 60,
+          "bis": 65,
+          "typ": "platz",
+          "name": "Platz 2"
+        },
+        {
+          "von": 66,
+          "bis": 71,
+          "typ": "platz",
+          "name": "Platz 3"
+        },
+        {
+          "von": 72,
+          "bis": 77,
+          "typ": "platz",
+          "name": "Platz 4"
+        },
+        {
+          "von": 78,
+          "bis": 83,
+          "typ": "platz",
+          "name": "Platz 5"
+        },
+        {
+          "von": 84,
+          "bis": 89,
+          "typ": "platz",
+          "name": "Platz 6"
+        },
+        {
+          "von": 90,
+          "bis": 95,
+          "typ": "platz",
+          "name": "Platz 7"
+        },
+        {
+          "von": 96,
+          "bis": 101,
+          "typ": "platz",
+          "name": "Platz 8"
+        },
+        {
+          "von": 102,
+          "bis": 106,
+          "typ": "platz",
+          "name": "Platz 9"
+        },
+        {
+          "von": 107,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 132,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 133,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 158,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 159,
+          "bis": 171,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 172,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 197,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 198,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo wheel function": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Gobo wheel: Gobo selection": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "platz",
+          "name": "Gobo 2"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "platz",
+          "name": "Gobo 3"
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "platz",
+          "name": "Gobo 4"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "platz",
+          "name": "Gobo 5"
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "platz",
+          "name": "Gobo 6"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "platz",
+          "name": "Gobo 7"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "platz",
+          "name": "Gobo 8"
+        }
+      ]
+    },
+    "Gobo wheel speed CW": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo wheel speed CCW": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo wheel position": {
+      "typ": "gobo",
+      "standard": 0
+    },
+    "Gobo wheel basic": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 6,
+          "bis": 11,
+          "typ": "platz",
+          "name": "Gobo 2"
+        },
+        {
+          "von": 12,
+          "bis": 17,
+          "typ": "platz",
+          "name": "Gobo 3"
+        },
+        {
+          "von": 18,
+          "bis": 23,
+          "typ": "platz",
+          "name": "Gobo 4"
+        },
+        {
+          "von": 24,
+          "bis": 29,
+          "typ": "platz",
+          "name": "Gobo 5"
+        },
+        {
+          "von": 30,
+          "bis": 35,
+          "typ": "platz",
+          "name": "Gobo 6"
+        },
+        {
+          "von": 36,
+          "bis": 41,
+          "typ": "platz",
+          "name": "Gobo 7"
+        },
+        {
+          "von": 42,
+          "bis": 47,
+          "typ": "platz",
+          "name": "Gobo 8"
+        },
+        {
+          "von": 48,
+          "bis": 53,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 54,
+          "bis": 59,
+          "typ": "platz",
+          "name": "Gobo 2"
+        },
+        {
+          "von": 60,
+          "bis": 65,
+          "typ": "platz",
+          "name": "Gobo 3"
+        },
+        {
+          "von": 66,
+          "bis": 71,
+          "typ": "platz",
+          "name": "Gobo 4"
+        },
+        {
+          "von": 72,
+          "bis": 77,
+          "typ": "platz",
+          "name": "Gobo 5"
+        },
+        {
+          "von": 78,
+          "bis": 83,
+          "typ": "platz",
+          "name": "Gobo 6"
+        },
+        {
+          "von": 84,
+          "bis": 89,
+          "typ": "platz",
+          "name": "Gobo 7"
+        },
+        {
+          "von": 90,
+          "bis": 95,
+          "typ": "platz",
+          "name": "Gobo 8"
+        },
+        {
+          "von": 96,
+          "bis": 97,
+          "typ": "aus"
+        },
+        {
+          "von": 98,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 151,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 152,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo rotation function": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Gobo indexing": {
+      "typ": "gobo_rotation",
+      "standard": 0
+    },
+    "Gobo rotation speed CW": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo rotation speed CCW": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Motion macro speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Gobo rotation basic": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Prism": {
+      "typ": "prisma",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 3,
+          "typ": "aus"
+        },
+        {
+          "von": 4,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Focus": {
+      "typ": "fokus",
+      "standard": 0
+    },
+    "Reset, display control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 47,
+          "typ": "aus"
+        },
+        {
+          "von": 48,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 87,
+          "typ": "aus"
+        },
+        {
+          "von": 88,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Color wheel": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 27,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 28,
+          "bis": 55,
+          "typ": "platz",
+          "name": "Platz 2"
+        },
+        {
+          "von": 56,
+          "bis": 83,
+          "typ": "platz",
+          "name": "Platz 3"
+        },
+        {
+          "von": 84,
+          "bis": 111,
+          "typ": "platz",
+          "name": "Platz 4"
+        },
+        {
+          "von": 112,
+          "bis": 139,
+          "typ": "platz",
+          "name": "Platz 5"
+        },
+        {
+          "von": 140,
+          "bis": 167,
+          "typ": "platz",
+          "name": "Platz 6"
+        },
+        {
+          "von": 168,
+          "bis": 195,
+          "typ": "platz",
+          "name": "Platz 7"
+        },
+        {
+          "von": 196,
+          "bis": 223,
+          "typ": "platz",
+          "name": "Platz 8"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "platz",
+          "name": "Platz 9"
+        }
+      ]
+    },
+    "Gobo wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "platz",
+          "name": "Gobo 2"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "platz",
+          "name": "Gobo 3"
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "platz",
+          "name": "Gobo 4"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "platz",
+          "name": "Gobo 5"
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "platz",
+          "name": "Gobo 6"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "platz",
+          "name": "Gobo 7"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "platz",
+          "name": "Gobo 8"
+        }
+      ]
+    },
+    "Gobo rotation": {
+      "typ": "gobo_rotation",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "Standard",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Pan / Tilt Speed",
+        "Pan / Tilt function",
+        "Shutter / Strobe function",
+        "Shutter / Strobe",
+        "Dimmer intensity",
+        "Color wheel function",
+        "Color wheel",
+        "Gobo wheel function",
+        "Gobo wheel",
+        "Gobo rotation function",
+        "Gobo rotation",
+        "Prism",
+        "Focus",
+        "Reset, display control"
+      ]
+    },
+    {
+      "name": "Extended",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan / Tilt Speed",
+        "Pan / Tilt function",
+        "Shutter / Strobe function",
+        "Shutter / Strobe",
+        "Dimmer intensity",
+        "Color wheel function",
+        "Color wheel",
+        "Gobo wheel function",
+        "Gobo wheel",
+        "Gobo rotation function",
+        "Gobo rotation",
+        "Prism",
+        "Focus",
+        "Reset, display control"
+      ]
+    },
+    {
+      "name": "Basic 8 bit",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Pan / Tilt Speed",
+        "Pan / Tilt function",
+        "Shutter / Strobe basic",
+        "Dimmer intensity",
+        "Color wheel basic",
+        "Gobo wheel basic",
+        "Gobo rotation basic",
+        "Prism",
+        "Focus",
+        "Reset, display control"
+      ]
+    },
+    {
+      "name": "Basic 16 bit",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan / Tilt Speed",
+        "Pan / Tilt function",
+        "Shutter / Strobe basic",
+        "Dimmer intensity",
+        "Color wheel basic",
+        "Gobo wheel basic",
+        "Gobo rotation basic",
+        "Prism",
+        "Focus",
+        "Reset, display control"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

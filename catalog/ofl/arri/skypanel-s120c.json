@@ -1,0 +1,641 @@
+{
+  "id": "arri/skypanel-s120c",
+  "hersteller": "ARRI",
+  "name": "Skypanel S120C",
+  "kategorien": [
+    "Dimmer",
+    "Color Changer",
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": 13.7,
+    "abstrahlwinkel_grad": 110
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Green-Magenta Point 8bit": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 244,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 245,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Green-Magenta Point 16bit": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 17,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 38,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 117,
+          "bis": 156,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 235,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Cross Fade to Color": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Fan Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 57,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 58,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 153,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 154,
+          "bis": 201,
+          "typ": "aus"
+        },
+        {
+          "von": 202,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 250,
+          "typ": "aus"
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Presets": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "aus"
+        },
+        {
+          "von": 12,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 131,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 132,
+          "bis": 143,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 144,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 227,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 228,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 19,
+          "typ": "aus"
+        },
+        {
+          "von": 20,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Reserved for future use": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Color Temperature fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Color Temperature",
+      "stufe": 1
+    },
+    "Green-Magenta Point 16bit fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green-Magenta Point 16bit",
+      "stufe": 1
+    },
+    "Cross Fade to Color fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cross Fade to Color",
+      "stufe": 1
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    },
+    "Hue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Hue",
+      "stufe": 1
+    },
+    "Saturation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Saturation",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "P01: CCT & RGBW 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P02: CCT 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point 8bit",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P03: CCT & HSI 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Hue",
+        "Saturation",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P04: RGBW 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P05: HSI 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Hue",
+        "Saturation",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P06: CCT & RGBW 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 16bit",
+        "Green-Magenta Point 16bit fine",
+        "Cross Fade to Color",
+        "Cross Fade to Color fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P07: CCT 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 16bit",
+        "Green-Magenta Point 16bit fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P08: CCT & HSI 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 16bit",
+        "Green-Magenta Point 16bit fine",
+        "Cross Fade to Color",
+        "Cross Fade to Color fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P09: RGBW 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P10: HSI 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P11: CCT & RGBW 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P12: CCT 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 8bit",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P13: CCT & HSI 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P14: RGBW 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    },
+    {
+      "name": "P15: HSI 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine",
+        "Fan Control",
+        "Presets",
+        "Strobe",
+        "Reserved for future use"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

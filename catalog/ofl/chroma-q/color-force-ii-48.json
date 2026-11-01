@@ -1,0 +1,5699 @@
+{
+  "id": "chroma-q/color-force-ii-48",
+  "hersteller": "Chroma-Q",
+  "name": "Color Force II 48",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 18,
+    "abstrahlwinkel_grad": 22
+  },
+  "kanaele": {
+    "Look Select": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 8,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 9,
+          "bis": 16,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 75,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 76,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 92,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 93,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 118,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 141,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 142,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 182,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 183,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe Frequency": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Strobe Density": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Strobe Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Strobe Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Strobe Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Strobe Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1/2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1/2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1/2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2/2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2/2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2/2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 3/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 4/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 3/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 4/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 5/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 6/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 6/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 6/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 7/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 7/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 7/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 8/8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 8/8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 8/8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 6": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 6": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 7": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 7": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 7": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 9": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 9": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 9": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 10": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 10": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 10": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 11": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 11": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 11": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 12": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 12": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 12": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 13": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 13": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 13": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 14": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 14": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 14": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 15": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 15": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 15": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 16": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 16": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 16": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Odd": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Odd": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Odd": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Even": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Even": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Even": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every fourth": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every fourth": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every fourth": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every fourth +1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every fourth +1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every fourth +1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every fourth +2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every fourth +2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every fourth +2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every fourth +3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every fourth +3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every fourth +3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth +1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth +1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth +1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth +2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth +2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth +2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth +3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth +3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth +3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth +4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth +4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth +4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth +5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth +5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth +5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth +6": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth +6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth +6": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Every eighth +7": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Every eighth +7": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Every eighth +7": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber Master": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 1/2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 2/2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 1/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 2/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 3/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 4/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 1/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 2/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 3/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 4/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 5/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 6/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 7/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 8/8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 3": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 5": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 6": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 7": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 9": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 10": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 11": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 12": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 13": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 14": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 15": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 16": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Odd": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Even": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every fourth": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every fourth +1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every fourth +2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every fourth +3": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth +1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth +2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth +3": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth +4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth +5": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth +6": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Every eighth +7": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Hue Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 2/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 2/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 2/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 1/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 1/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 1/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 2/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 2/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 2/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 3/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 3/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 3/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 4/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 4/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 4/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 1/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 1/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 1/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 2/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 2/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 2/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 3/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 3/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 3/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 4/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 4/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 4/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 5/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 5/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 5/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 6/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 6/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 6/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 7/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 7/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 7/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 8/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 8/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 8/8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 9": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 9": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 9": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 10": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 10": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 10": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 11": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 11": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 11": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 12": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 12": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 12": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 13": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 13": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 13": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 14": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 14": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 14": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 15": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 15": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 15": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 16": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 16": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 16": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Odd": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Odd": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Odd": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Even": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Even": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Even": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every fourth": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every fourth": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every fourth": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every fourth +1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every fourth +1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every fourth +1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every fourth +2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every fourth +2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every fourth +2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every fourth +3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every fourth +3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every fourth +3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth +1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth +1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth +1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth +2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth +2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth +2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth +3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth +3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth +3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth +4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth +4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth +4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth +5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth +5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth +5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth +6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth +6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth +6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Every eighth +7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Every eighth +7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Every eighth +7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Look",
+      "kanaele": [
+        "Look Select"
+      ]
+    },
+    {
+      "name": "Master RGB",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB",
+      "kanaele": [
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGB",
+      "kanaele": [
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGB",
+      "kanaele": [
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGB",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB",
+      "kanaele": [
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGB",
+      "kanaele": [
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGB",
+      "kanaele": [
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGBA",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA",
+      "kanaele": [
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGBA",
+      "kanaele": [
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGBA",
+      "kanaele": [
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Amber 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Amber 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Amber 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Amber 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Amber 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Amber 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Amber 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8",
+        "Amber 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGBA",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Amber 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Amber 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Amber 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Amber 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Amber 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Amber 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Amber 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Amber 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Amber 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Amber 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Amber 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "Amber 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA",
+      "kanaele": [
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGBA",
+      "kanaele": [
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Amber Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Amber Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Amber Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3",
+        "Amber Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGBA",
+      "kanaele": [
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Amber Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Amber Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Amber Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Amber Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Amber Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Amber Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Amber Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7",
+        "Amber Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master HSI",
+      "kanaele": [
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI",
+      "kanaele": [
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Fourths HSI",
+      "kanaele": [
+        "Hue 1/4",
+        "Saturation 1/4",
+        "Intensity 1/4",
+        "Hue 2/4",
+        "Saturation 2/4",
+        "Intensity 2/4",
+        "Hue 3/4",
+        "Saturation 3/4",
+        "Intensity 3/4",
+        "Hue 4/4",
+        "Saturation 4/4",
+        "Intensity 4/4"
+      ]
+    },
+    {
+      "name": "Eighths HSI",
+      "kanaele": [
+        "Hue 1/8",
+        "Saturation 1/8",
+        "Intensity 1/8",
+        "Hue 2/8",
+        "Saturation 2/8",
+        "Intensity 2/8",
+        "Hue 3/8",
+        "Saturation 3/8",
+        "Intensity 3/8",
+        "Hue 4/8",
+        "Saturation 4/8",
+        "Intensity 4/8",
+        "Hue 5/8",
+        "Saturation 5/8",
+        "Intensity 5/8",
+        "Hue 6/8",
+        "Saturation 6/8",
+        "Intensity 6/8",
+        "Hue 7/8",
+        "Saturation 7/8",
+        "Intensity 7/8",
+        "Hue 8/8",
+        "Saturation 8/8",
+        "Intensity 8/8"
+      ]
+    },
+    {
+      "name": "Individual HSI",
+      "kanaele": [
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4",
+        "Hue 5",
+        "Saturation 5",
+        "Intensity 5",
+        "Hue 6",
+        "Saturation 6",
+        "Intensity 6",
+        "Hue 7",
+        "Saturation 7",
+        "Intensity 7",
+        "Hue 8",
+        "Saturation 8",
+        "Intensity 8",
+        "Hue 9",
+        "Saturation 9",
+        "Intensity 9",
+        "Hue 10",
+        "Saturation 10",
+        "Intensity 10",
+        "Hue 11",
+        "Saturation 11",
+        "Intensity 11",
+        "Hue 12",
+        "Saturation 12",
+        "Intensity 12",
+        "Hue 13",
+        "Saturation 13",
+        "Intensity 13",
+        "Hue 14",
+        "Saturation 14",
+        "Intensity 14",
+        "Hue 15",
+        "Saturation 15",
+        "Intensity 15",
+        "Hue 16",
+        "Saturation 16",
+        "Intensity 16"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI",
+      "kanaele": [
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Every fourth HSI",
+      "kanaele": [
+        "Hue Every fourth",
+        "Saturation Every fourth",
+        "Intensity Every fourth",
+        "Hue Every fourth +1",
+        "Saturation Every fourth +1",
+        "Intensity Every fourth +1",
+        "Hue Every fourth +2",
+        "Saturation Every fourth +2",
+        "Intensity Every fourth +2",
+        "Hue Every fourth +3",
+        "Saturation Every fourth +3",
+        "Intensity Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth HSI",
+      "kanaele": [
+        "Hue Every eighth",
+        "Saturation Every eighth",
+        "Intensity Every eighth",
+        "Hue Every eighth +1",
+        "Saturation Every eighth +1",
+        "Intensity Every eighth +1",
+        "Hue Every eighth +2",
+        "Saturation Every eighth +2",
+        "Intensity Every eighth +2",
+        "Hue Every eighth +3",
+        "Saturation Every eighth +3",
+        "Intensity Every eighth +3",
+        "Hue Every eighth +4",
+        "Saturation Every eighth +4",
+        "Intensity Every eighth +4",
+        "Hue Every eighth +5",
+        "Saturation Every eighth +5",
+        "Intensity Every eighth +5",
+        "Hue Every eighth +6",
+        "Saturation Every eighth +6",
+        "Intensity Every eighth +6",
+        "Hue Every eighth +7",
+        "Saturation Every eighth +7",
+        "Intensity Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Amber 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Amber 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Amber 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Amber 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Amber 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Amber 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Amber 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8",
+        "Amber 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Amber 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Amber 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Amber 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Amber 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Amber 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Amber 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Amber 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Amber 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Amber 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Amber 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Amber 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "Amber 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Amber Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Amber Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Amber Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3",
+        "Amber Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Amber Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Amber Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Amber Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Amber Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Amber Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Amber Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Amber Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7",
+        "Amber Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Fourths HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue 1/4",
+        "Saturation 1/4",
+        "Intensity 1/4",
+        "Hue 2/4",
+        "Saturation 2/4",
+        "Intensity 2/4",
+        "Hue 3/4",
+        "Saturation 3/4",
+        "Intensity 3/4",
+        "Hue 4/4",
+        "Saturation 4/4",
+        "Intensity 4/4"
+      ]
+    },
+    {
+      "name": "Eighths HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue 1/8",
+        "Saturation 1/8",
+        "Intensity 1/8",
+        "Hue 2/8",
+        "Saturation 2/8",
+        "Intensity 2/8",
+        "Hue 3/8",
+        "Saturation 3/8",
+        "Intensity 3/8",
+        "Hue 4/8",
+        "Saturation 4/8",
+        "Intensity 4/8",
+        "Hue 5/8",
+        "Saturation 5/8",
+        "Intensity 5/8",
+        "Hue 6/8",
+        "Saturation 6/8",
+        "Intensity 6/8",
+        "Hue 7/8",
+        "Saturation 7/8",
+        "Intensity 7/8",
+        "Hue 8/8",
+        "Saturation 8/8",
+        "Intensity 8/8"
+      ]
+    },
+    {
+      "name": "Individual HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4",
+        "Hue 5",
+        "Saturation 5",
+        "Intensity 5",
+        "Hue 6",
+        "Saturation 6",
+        "Intensity 6",
+        "Hue 7",
+        "Saturation 7",
+        "Intensity 7",
+        "Hue 8",
+        "Saturation 8",
+        "Intensity 8",
+        "Hue 9",
+        "Saturation 9",
+        "Intensity 9",
+        "Hue 10",
+        "Saturation 10",
+        "Intensity 10",
+        "Hue 11",
+        "Saturation 11",
+        "Intensity 11",
+        "Hue 12",
+        "Saturation 12",
+        "Intensity 12",
+        "Hue 13",
+        "Saturation 13",
+        "Intensity 13",
+        "Hue 14",
+        "Saturation 14",
+        "Intensity 14",
+        "Hue 15",
+        "Saturation 15",
+        "Intensity 15",
+        "Hue 16",
+        "Saturation 16",
+        "Intensity 16"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Every fourth HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue Every fourth",
+        "Saturation Every fourth",
+        "Intensity Every fourth",
+        "Hue Every fourth +1",
+        "Saturation Every fourth +1",
+        "Intensity Every fourth +1",
+        "Hue Every fourth +2",
+        "Saturation Every fourth +2",
+        "Intensity Every fourth +2",
+        "Hue Every fourth +3",
+        "Saturation Every fourth +3",
+        "Intensity Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue Every eighth",
+        "Saturation Every eighth",
+        "Intensity Every eighth",
+        "Hue Every eighth +1",
+        "Saturation Every eighth +1",
+        "Intensity Every eighth +1",
+        "Hue Every eighth +2",
+        "Saturation Every eighth +2",
+        "Intensity Every eighth +2",
+        "Hue Every eighth +3",
+        "Saturation Every eighth +3",
+        "Intensity Every eighth +3",
+        "Hue Every eighth +4",
+        "Saturation Every eighth +4",
+        "Intensity Every eighth +4",
+        "Hue Every eighth +5",
+        "Saturation Every eighth +5",
+        "Intensity Every eighth +5",
+        "Hue Every eighth +6",
+        "Saturation Every eighth +6",
+        "Intensity Every eighth +6",
+        "Hue Every eighth +7",
+        "Saturation Every eighth +7",
+        "Intensity Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Amber 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Amber 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Amber 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Amber 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Amber 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Amber 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Amber 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8",
+        "Amber 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Amber 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Amber 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Amber 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Amber 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Amber 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Amber 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Amber 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Amber 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Amber 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Amber 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Amber 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "Amber 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Amber Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Amber Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Amber Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3",
+        "Amber Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Amber Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Amber Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Amber Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Amber Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Amber Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Amber Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Amber Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7",
+        "Amber Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Fourths HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue 1/4",
+        "Saturation 1/4",
+        "Intensity 1/4",
+        "Hue 2/4",
+        "Saturation 2/4",
+        "Intensity 2/4",
+        "Hue 3/4",
+        "Saturation 3/4",
+        "Intensity 3/4",
+        "Hue 4/4",
+        "Saturation 4/4",
+        "Intensity 4/4"
+      ]
+    },
+    {
+      "name": "Eighths HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue 1/8",
+        "Saturation 1/8",
+        "Intensity 1/8",
+        "Hue 2/8",
+        "Saturation 2/8",
+        "Intensity 2/8",
+        "Hue 3/8",
+        "Saturation 3/8",
+        "Intensity 3/8",
+        "Hue 4/8",
+        "Saturation 4/8",
+        "Intensity 4/8",
+        "Hue 5/8",
+        "Saturation 5/8",
+        "Intensity 5/8",
+        "Hue 6/8",
+        "Saturation 6/8",
+        "Intensity 6/8",
+        "Hue 7/8",
+        "Saturation 7/8",
+        "Intensity 7/8",
+        "Hue 8/8",
+        "Saturation 8/8",
+        "Intensity 8/8"
+      ]
+    },
+    {
+      "name": "Individual HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4",
+        "Hue 5",
+        "Saturation 5",
+        "Intensity 5",
+        "Hue 6",
+        "Saturation 6",
+        "Intensity 6",
+        "Hue 7",
+        "Saturation 7",
+        "Intensity 7",
+        "Hue 8",
+        "Saturation 8",
+        "Intensity 8",
+        "Hue 9",
+        "Saturation 9",
+        "Intensity 9",
+        "Hue 10",
+        "Saturation 10",
+        "Intensity 10",
+        "Hue 11",
+        "Saturation 11",
+        "Intensity 11",
+        "Hue 12",
+        "Saturation 12",
+        "Intensity 12",
+        "Hue 13",
+        "Saturation 13",
+        "Intensity 13",
+        "Hue 14",
+        "Saturation 14",
+        "Intensity 14",
+        "Hue 15",
+        "Saturation 15",
+        "Intensity 15",
+        "Hue 16",
+        "Saturation 16",
+        "Intensity 16"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Every fourth HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue Every fourth",
+        "Saturation Every fourth",
+        "Intensity Every fourth",
+        "Hue Every fourth +1",
+        "Saturation Every fourth +1",
+        "Intensity Every fourth +1",
+        "Hue Every fourth +2",
+        "Saturation Every fourth +2",
+        "Intensity Every fourth +2",
+        "Hue Every fourth +3",
+        "Saturation Every fourth +3",
+        "Intensity Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue Every eighth",
+        "Saturation Every eighth",
+        "Intensity Every eighth",
+        "Hue Every eighth +1",
+        "Saturation Every eighth +1",
+        "Intensity Every eighth +1",
+        "Hue Every eighth +2",
+        "Saturation Every eighth +2",
+        "Intensity Every eighth +2",
+        "Hue Every eighth +3",
+        "Saturation Every eighth +3",
+        "Intensity Every eighth +3",
+        "Hue Every eighth +4",
+        "Saturation Every eighth +4",
+        "Intensity Every eighth +4",
+        "Hue Every eighth +5",
+        "Saturation Every eighth +5",
+        "Intensity Every eighth +5",
+        "Hue Every eighth +6",
+        "Saturation Every eighth +6",
+        "Intensity Every eighth +6",
+        "Hue Every eighth +7",
+        "Saturation Every eighth +7",
+        "Intensity Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Amber 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Amber 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Amber 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Amber 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Amber 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Amber 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Amber 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8",
+        "Amber 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Amber 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Amber 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Amber 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Amber 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Amber 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Amber 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Amber 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Amber 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Amber 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Amber 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Amber 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "Amber 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Amber Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Amber Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Amber Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3",
+        "Amber Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Amber Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Amber Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Amber Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Amber Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Amber Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Amber Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Amber Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7",
+        "Amber Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Fourths HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/4",
+        "Saturation 1/4",
+        "Intensity 1/4",
+        "Hue 2/4",
+        "Saturation 2/4",
+        "Intensity 2/4",
+        "Hue 3/4",
+        "Saturation 3/4",
+        "Intensity 3/4",
+        "Hue 4/4",
+        "Saturation 4/4",
+        "Intensity 4/4"
+      ]
+    },
+    {
+      "name": "Eighths HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/8",
+        "Saturation 1/8",
+        "Intensity 1/8",
+        "Hue 2/8",
+        "Saturation 2/8",
+        "Intensity 2/8",
+        "Hue 3/8",
+        "Saturation 3/8",
+        "Intensity 3/8",
+        "Hue 4/8",
+        "Saturation 4/8",
+        "Intensity 4/8",
+        "Hue 5/8",
+        "Saturation 5/8",
+        "Intensity 5/8",
+        "Hue 6/8",
+        "Saturation 6/8",
+        "Intensity 6/8",
+        "Hue 7/8",
+        "Saturation 7/8",
+        "Intensity 7/8",
+        "Hue 8/8",
+        "Saturation 8/8",
+        "Intensity 8/8"
+      ]
+    },
+    {
+      "name": "Individual HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4",
+        "Hue 5",
+        "Saturation 5",
+        "Intensity 5",
+        "Hue 6",
+        "Saturation 6",
+        "Intensity 6",
+        "Hue 7",
+        "Saturation 7",
+        "Intensity 7",
+        "Hue 8",
+        "Saturation 8",
+        "Intensity 8",
+        "Hue 9",
+        "Saturation 9",
+        "Intensity 9",
+        "Hue 10",
+        "Saturation 10",
+        "Intensity 10",
+        "Hue 11",
+        "Saturation 11",
+        "Intensity 11",
+        "Hue 12",
+        "Saturation 12",
+        "Intensity 12",
+        "Hue 13",
+        "Saturation 13",
+        "Intensity 13",
+        "Hue 14",
+        "Saturation 14",
+        "Intensity 14",
+        "Hue 15",
+        "Saturation 15",
+        "Intensity 15",
+        "Hue 16",
+        "Saturation 16",
+        "Intensity 16"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Every fourth HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Every fourth",
+        "Saturation Every fourth",
+        "Intensity Every fourth",
+        "Hue Every fourth +1",
+        "Saturation Every fourth +1",
+        "Intensity Every fourth +1",
+        "Hue Every fourth +2",
+        "Saturation Every fourth +2",
+        "Intensity Every fourth +2",
+        "Hue Every fourth +3",
+        "Saturation Every fourth +3",
+        "Intensity Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Every eighth",
+        "Saturation Every eighth",
+        "Intensity Every eighth",
+        "Hue Every eighth +1",
+        "Saturation Every eighth +1",
+        "Intensity Every eighth +1",
+        "Hue Every eighth +2",
+        "Saturation Every eighth +2",
+        "Intensity Every eighth +2",
+        "Hue Every eighth +3",
+        "Saturation Every eighth +3",
+        "Intensity Every eighth +3",
+        "Hue Every eighth +4",
+        "Saturation Every eighth +4",
+        "Intensity Every eighth +4",
+        "Hue Every eighth +5",
+        "Saturation Every eighth +5",
+        "Intensity Every eighth +5",
+        "Hue Every eighth +6",
+        "Saturation Every eighth +6",
+        "Intensity Every eighth +6",
+        "Hue Every eighth +7",
+        "Saturation Every eighth +7",
+        "Intensity Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Fourths RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4"
+      ]
+    },
+    {
+      "name": "Eighths RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/8",
+        "Green 1/8",
+        "Blue 1/8",
+        "Amber 1/8",
+        "Red 2/8",
+        "Green 2/8",
+        "Blue 2/8",
+        "Amber 2/8",
+        "Red 3/8",
+        "Green 3/8",
+        "Blue 3/8",
+        "Amber 3/8",
+        "Red 4/8",
+        "Green 4/8",
+        "Blue 4/8",
+        "Amber 4/8",
+        "Red 5/8",
+        "Green 5/8",
+        "Blue 5/8",
+        "Amber 5/8",
+        "Red 6/8",
+        "Green 6/8",
+        "Blue 6/8",
+        "Amber 6/8",
+        "Red 7/8",
+        "Green 7/8",
+        "Blue 7/8",
+        "Amber 7/8",
+        "Red 8/8",
+        "Green 8/8",
+        "Blue 8/8",
+        "Amber 8/8"
+      ]
+    },
+    {
+      "name": "Individual RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Amber 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Amber 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Amber 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Amber 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Amber 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Amber 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Amber 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Amber 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Amber 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Amber 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Amber 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "Amber 16"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Every fourth RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Every fourth",
+        "Green Every fourth",
+        "Blue Every fourth",
+        "Amber Every fourth",
+        "Red Every fourth +1",
+        "Green Every fourth +1",
+        "Blue Every fourth +1",
+        "Amber Every fourth +1",
+        "Red Every fourth +2",
+        "Green Every fourth +2",
+        "Blue Every fourth +2",
+        "Amber Every fourth +2",
+        "Red Every fourth +3",
+        "Green Every fourth +3",
+        "Blue Every fourth +3",
+        "Amber Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Every eighth",
+        "Green Every eighth",
+        "Blue Every eighth",
+        "Amber Every eighth",
+        "Red Every eighth +1",
+        "Green Every eighth +1",
+        "Blue Every eighth +1",
+        "Amber Every eighth +1",
+        "Red Every eighth +2",
+        "Green Every eighth +2",
+        "Blue Every eighth +2",
+        "Amber Every eighth +2",
+        "Red Every eighth +3",
+        "Green Every eighth +3",
+        "Blue Every eighth +3",
+        "Amber Every eighth +3",
+        "Red Every eighth +4",
+        "Green Every eighth +4",
+        "Blue Every eighth +4",
+        "Amber Every eighth +4",
+        "Red Every eighth +5",
+        "Green Every eighth +5",
+        "Blue Every eighth +5",
+        "Amber Every eighth +5",
+        "Red Every eighth +6",
+        "Green Every eighth +6",
+        "Blue Every eighth +6",
+        "Amber Every eighth +6",
+        "Red Every eighth +7",
+        "Green Every eighth +7",
+        "Blue Every eighth +7",
+        "Amber Every eighth +7"
+      ]
+    },
+    {
+      "name": "Master HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Fourths HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/4",
+        "Saturation 1/4",
+        "Intensity 1/4",
+        "Hue 2/4",
+        "Saturation 2/4",
+        "Intensity 2/4",
+        "Hue 3/4",
+        "Saturation 3/4",
+        "Intensity 3/4",
+        "Hue 4/4",
+        "Saturation 4/4",
+        "Intensity 4/4"
+      ]
+    },
+    {
+      "name": "Eighths HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/8",
+        "Saturation 1/8",
+        "Intensity 1/8",
+        "Hue 2/8",
+        "Saturation 2/8",
+        "Intensity 2/8",
+        "Hue 3/8",
+        "Saturation 3/8",
+        "Intensity 3/8",
+        "Hue 4/8",
+        "Saturation 4/8",
+        "Intensity 4/8",
+        "Hue 5/8",
+        "Saturation 5/8",
+        "Intensity 5/8",
+        "Hue 6/8",
+        "Saturation 6/8",
+        "Intensity 6/8",
+        "Hue 7/8",
+        "Saturation 7/8",
+        "Intensity 7/8",
+        "Hue 8/8",
+        "Saturation 8/8",
+        "Intensity 8/8"
+      ]
+    },
+    {
+      "name": "Individual HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4",
+        "Hue 5",
+        "Saturation 5",
+        "Intensity 5",
+        "Hue 6",
+        "Saturation 6",
+        "Intensity 6",
+        "Hue 7",
+        "Saturation 7",
+        "Intensity 7",
+        "Hue 8",
+        "Saturation 8",
+        "Intensity 8",
+        "Hue 9",
+        "Saturation 9",
+        "Intensity 9",
+        "Hue 10",
+        "Saturation 10",
+        "Intensity 10",
+        "Hue 11",
+        "Saturation 11",
+        "Intensity 11",
+        "Hue 12",
+        "Saturation 12",
+        "Intensity 12",
+        "Hue 13",
+        "Saturation 13",
+        "Intensity 13",
+        "Hue 14",
+        "Saturation 14",
+        "Intensity 14",
+        "Hue 15",
+        "Saturation 15",
+        "Intensity 15",
+        "Hue 16",
+        "Saturation 16",
+        "Intensity 16"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Every fourth HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Every fourth",
+        "Saturation Every fourth",
+        "Intensity Every fourth",
+        "Hue Every fourth +1",
+        "Saturation Every fourth +1",
+        "Intensity Every fourth +1",
+        "Hue Every fourth +2",
+        "Saturation Every fourth +2",
+        "Intensity Every fourth +2",
+        "Hue Every fourth +3",
+        "Saturation Every fourth +3",
+        "Intensity Every fourth +3"
+      ]
+    },
+    {
+      "name": "Every eighth HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Every eighth",
+        "Saturation Every eighth",
+        "Intensity Every eighth",
+        "Hue Every eighth +1",
+        "Saturation Every eighth +1",
+        "Intensity Every eighth +1",
+        "Hue Every eighth +2",
+        "Saturation Every eighth +2",
+        "Intensity Every eighth +2",
+        "Hue Every eighth +3",
+        "Saturation Every eighth +3",
+        "Intensity Every eighth +3",
+        "Hue Every eighth +4",
+        "Saturation Every eighth +4",
+        "Intensity Every eighth +4",
+        "Hue Every eighth +5",
+        "Saturation Every eighth +5",
+        "Intensity Every eighth +5",
+        "Hue Every eighth +6",
+        "Saturation Every eighth +6",
+        "Intensity Every eighth +6",
+        "Hue Every eighth +7",
+        "Saturation Every eighth +7",
+        "Intensity Every eighth +7"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

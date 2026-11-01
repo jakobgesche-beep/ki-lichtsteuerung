@@ -1,0 +1,308 @@
+{
+  "id": "etc/source-four-led-series-2-lustr",
+  "hersteller": "ETC",
+  "name": "Source Four LED Series 2 Lustr",
+  "kategorien": [
+    "Dimmer",
+    "Color Changer",
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": 8.3,
+    "abstrahlwinkel_grad": 90
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Lime": {
+      "typ": "limette",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Cyan": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Indigo": {
+      "typ": "indigo",
+      "standard": 0
+    },
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Fan Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Color Point": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 2,
+          "bis": 253,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 254,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Red Emulated": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Emulated": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Emulated": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Tint": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 2,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Plus 7 Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Hue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Hue",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "Direct",
+      "kanaele": [
+        "Red",
+        "Lime",
+        "Amber",
+        "Green",
+        "Cyan",
+        "Blue",
+        "Indigo",
+        "Intensity",
+        "Strobe",
+        "Fan Control"
+      ]
+    },
+    {
+      "name": "HSI",
+      "kanaele": [
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Intensity",
+        "Strobe",
+        "Fan Control"
+      ]
+    },
+    {
+      "name": "HSIC",
+      "kanaele": [
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Intensity",
+        "Strobe",
+        "Fan Control",
+        "Color Point"
+      ]
+    },
+    {
+      "name": "RGB",
+      "kanaele": [
+        "Red Emulated",
+        "Green Emulated",
+        "Blue Emulated",
+        null,
+        "Strobe",
+        "Fan Control"
+      ]
+    },
+    {
+      "name": "Studio",
+      "kanaele": [
+        "Intensity",
+        "Color Point",
+        "Tint",
+        null,
+        "Strobe",
+        "Fan Control"
+      ]
+    },
+    {
+      "name": "HSI Plus 7",
+      "kanaele": [
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Intensity",
+        "Strobe",
+        "Fan Control",
+        null,
+        "Plus 7 Control",
+        "Red",
+        "Lime",
+        "Amber",
+        "Green",
+        "Cyan",
+        "Blue",
+        "Indigo"
+      ]
+    },
+    {
+      "name": "HSIC Plus 7",
+      "kanaele": [
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Intensity",
+        "Strobe",
+        "Fan Control",
+        "Color Point",
+        null,
+        "Plus 7 Control",
+        "Red",
+        "Lime",
+        "Amber",
+        "Green",
+        "Cyan",
+        "Blue",
+        "Indigo"
+      ]
+    },
+    {
+      "name": "RGB Plus 7",
+      "kanaele": [
+        "Red Emulated",
+        "Green Emulated",
+        "Blue Emulated",
+        null,
+        "Strobe",
+        "Fan Control",
+        null,
+        "Plus 7 Control",
+        "Red",
+        "Lime",
+        "Amber",
+        "Green",
+        "Cyan",
+        "Blue",
+        "Indigo"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

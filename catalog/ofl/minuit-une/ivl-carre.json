@@ -1,0 +1,635 @@
+{
+  "id": "minuit-une/ivl-carre",
+  "hersteller": "Minuit Une",
+  "name": "IVL Carré",
+  "kategorien": [
+    "Laser",
+    "Effect",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 13,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Control": {
+      "typ": "makro",
+      "standard": 191,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Blade": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "offen"
+        },
+        {
+          "von": 15,
+          "bis": 27,
+          "typ": "zu"
+        },
+        {
+          "von": 28,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 24.0
+        },
+        {
+          "von": 228,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Tilt All": {
+      "typ": "tilt",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "aus"
+        },
+        {
+          "von": 13,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ],
+      "grad": 360.0
+    },
+    "Tilt 1": {
+      "typ": "tilt",
+      "standard": 0,
+      "grad": 360.0
+    },
+    "Tilt 2": {
+      "typ": "tilt",
+      "standard": 0,
+      "grad": 360.0
+    },
+    "Tilt 3": {
+      "typ": "tilt",
+      "standard": 0,
+      "grad": 360.0
+    },
+    "Tilt 4": {
+      "typ": "tilt",
+      "standard": 0,
+      "grad": 360.0
+    },
+    "Gobo All": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Index": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Rotation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "aus"
+        },
+        {
+          "von": 13,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 242,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 243,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Gobo Beam Angle all": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Red Gobo": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Index Red": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Green Gobo": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Rotation Red": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "aus"
+        },
+        {
+          "von": 13,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 242,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 243,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Index Green": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Rotation Green": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "aus"
+        },
+        {
+          "von": 13,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 242,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 243,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Blue Gobo": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Index Blue": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Rotation Blue": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "aus"
+        },
+        {
+          "von": 13,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 242,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 243,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Gobo Beam Angle Red": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Gobo Beam Angle Green": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Gobo Beam Angle Blue": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Blade fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blade",
+      "stufe": 1
+    },
+    "Tilt All fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt All",
+      "stufe": 1
+    },
+    "Tilt 1 fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt 1",
+      "stufe": 1
+    },
+    "Tilt 2 fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt 2",
+      "stufe": 1
+    },
+    "Tilt 3 fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt 3",
+      "stufe": 1
+    },
+    "Tilt 4 fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt 4",
+      "stufe": 1
+    },
+    "Index fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Index",
+      "stufe": 1
+    },
+    "Gobo Beam Angle all fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Gobo Beam Angle all",
+      "stufe": 1
+    },
+    "Index Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Index Red",
+      "stufe": 1
+    },
+    "Rotation Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Rotation Red",
+      "stufe": 1
+    },
+    "Index Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Index Green",
+      "stufe": 1
+    },
+    "Rotation Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Rotation Green",
+      "stufe": 1
+    },
+    "Index Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Index Blue",
+      "stufe": 1
+    },
+    "Rotation Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Rotation Blue",
+      "stufe": 1
+    },
+    "Gobo Beam Angle Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Gobo Beam Angle Red",
+      "stufe": 1
+    },
+    "Gobo Beam Angle Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Gobo Beam Angle Green",
+      "stufe": 1
+    },
+    "Gobo Beam Angle Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Gobo Beam Angle Blue",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "25 channel",
+      "kanaele": [
+        "Control",
+        "Dimmer",
+        "Blade",
+        "Blade fine",
+        "Red",
+        "Green",
+        "Blue",
+        "Shutter",
+        "Tilt All",
+        "Tilt All fine",
+        "Tilt 1",
+        "Tilt 1 fine",
+        "Tilt 2",
+        "Tilt 2 fine",
+        "Tilt 3",
+        "Tilt 3 fine",
+        "Tilt 4",
+        "Tilt 4 fine",
+        "Gobo All",
+        "Index",
+        "Index fine",
+        "Rotation",
+        "Gobo Beam Angle all",
+        "Gobo Beam Angle all fine",
+        null
+      ]
+    },
+    {
+      "name": "45 channel",
+      "kanaele": [
+        "Control",
+        "Dimmer",
+        "Blade",
+        "Blade fine",
+        "Red",
+        "Green",
+        "Blue",
+        "Shutter",
+        "Tilt All",
+        "Tilt All fine",
+        "Tilt 1",
+        "Tilt 1 fine",
+        "Tilt 2",
+        "Tilt 2 fine",
+        "Tilt 3",
+        "Tilt 3 fine",
+        "Tilt 4",
+        "Tilt 4 fine",
+        "Red Gobo",
+        "Index Red",
+        "Index Red fine",
+        "Rotation Red",
+        "Rotation Red fine",
+        "Gobo Beam Angle Red",
+        "Gobo Beam Angle Red fine",
+        "Green Gobo",
+        "Index Green",
+        "Index Green fine",
+        "Rotation Green",
+        "Rotation Green fine",
+        "Gobo Beam Angle Green",
+        "Gobo Beam Angle Green fine",
+        "Blue Gobo",
+        "Index Blue",
+        "Index Blue fine",
+        "Rotation Blue",
+        "Rotation Blue fine",
+        "Gobo Beam Angle Blue",
+        "Gobo Beam Angle Blue fine",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

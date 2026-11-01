@@ -1,0 +1,33 @@
+{
+  "id": "stairville/vf-1200-dmx-vertifog-co2-fx",
+  "hersteller": "Stairville",
+  "name": "VF-1200 DMX VertiFog CO2 FX",
+  "kategorien": [
+    "Smoke"
+  ],
+  "physik": {
+    "gewicht_kg": 6.6,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Fog": {
+      "typ": "nebel",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "1ch",
+      "kanaele": [
+        "Fog"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

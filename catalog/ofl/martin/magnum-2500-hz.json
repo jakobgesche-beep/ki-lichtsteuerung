@@ -1,0 +1,45 @@
+{
+  "id": "martin/magnum-2500-hz",
+  "hersteller": "Martin",
+  "name": "Magnum 2500 HZ",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 15.7,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Fog": {
+      "typ": "nebel",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 29,
+          "typ": "aus"
+        },
+        {
+          "von": 30,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Standard",
+      "kanaele": [
+        "Fog"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

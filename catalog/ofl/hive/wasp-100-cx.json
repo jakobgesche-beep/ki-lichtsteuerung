@@ -1,0 +1,55 @@
+{
+  "id": "hive/wasp-100-cx",
+  "hersteller": "Hive Lighting",
+  "name": "Wasp 100-CX",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 0.9,
+    "abstrahlwinkel_grad": 180
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "CCT": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "HSI",
+      "kanaele": [
+        "Intensity",
+        "CCT",
+        "Saturation",
+        "Hue"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

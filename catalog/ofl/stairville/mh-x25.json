@@ -1,0 +1,556 @@
+{
+  "id": "stairville/mh-x25",
+  "hersteller": "Stairville",
+  "name": "MH-X25",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 10.3,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 127,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127,
+      "grad": 270.0
+    },
+    "Color": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 5,
+          "bis": 9,
+          "typ": "platz",
+          "name": "Yellow",
+          "farbe": "#ffff00"
+        },
+        {
+          "von": 10,
+          "bis": 14,
+          "typ": "platz",
+          "name": "Pink",
+          "farbe": "#ff00ff"
+        },
+        {
+          "von": 15,
+          "bis": 19,
+          "typ": "platz",
+          "name": "Green",
+          "farbe": "#00ff00"
+        },
+        {
+          "von": 20,
+          "bis": 24,
+          "typ": "platz",
+          "name": "Peachblow",
+          "farbe": "#d7735b"
+        },
+        {
+          "von": 25,
+          "bis": 29,
+          "typ": "platz",
+          "name": "Light Blue",
+          "farbe": "#add8e6"
+        },
+        {
+          "von": 30,
+          "bis": 34,
+          "typ": "platz",
+          "name": "Yellow-Green",
+          "farbe": "#ccfe50"
+        },
+        {
+          "von": 35,
+          "bis": 39,
+          "typ": "platz",
+          "name": "Red",
+          "farbe": "#ff0000"
+        },
+        {
+          "von": 40,
+          "bis": 44,
+          "typ": "platz",
+          "name": "Blue",
+          "farbe": "#0000ff"
+        },
+        {
+          "von": 45,
+          "bis": 54,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 55,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 92,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 93,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 4,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 3,
+          "typ": "zu"
+        },
+        {
+          "von": 4,
+          "bis": 7,
+          "typ": "offen"
+        },
+        {
+          "von": 8,
+          "bis": 215,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 216,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Gobo": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "platz",
+          "name": "Gobo 2"
+        },
+        {
+          "von": 16,
+          "bis": 23,
+          "typ": "platz",
+          "name": "Gobo 3"
+        },
+        {
+          "von": 24,
+          "bis": 31,
+          "typ": "platz",
+          "name": "Gobo 4"
+        },
+        {
+          "von": 32,
+          "bis": 39,
+          "typ": "platz",
+          "name": "Gobo 5"
+        },
+        {
+          "von": 40,
+          "bis": 47,
+          "typ": "platz",
+          "name": "Gobo 6"
+        },
+        {
+          "von": 48,
+          "bis": 55,
+          "typ": "platz",
+          "name": "Gobo 7"
+        },
+        {
+          "von": 56,
+          "bis": 63,
+          "typ": "platz",
+          "name": "Gobo 8"
+        },
+        {
+          "von": 64,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo rotation": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 147,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 148,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Special functions": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 87,
+          "typ": "aus"
+        },
+        {
+          "von": 88,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 111,
+          "typ": "aus"
+        },
+        {
+          "von": 112,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 151,
+          "typ": "aus"
+        },
+        {
+          "von": 152,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Color",
+        "Shutter",
+        "Gobo",
+        "Gobo rotation"
+      ]
+    },
+    {
+      "name": "12-channel",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Pan fine",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Color",
+        "Shutter",
+        "Dimmer",
+        "Gobo",
+        "Gobo rotation",
+        "Special functions",
+        "Programs"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

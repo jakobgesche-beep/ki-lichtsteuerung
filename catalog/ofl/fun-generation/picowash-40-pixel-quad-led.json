@@ -1,0 +1,361 @@
+{
+  "id": "fun-generation/picowash-40-pixel-quad-led",
+  "hersteller": "Fun Generation",
+  "name": "PicoWash 40 Pixel Quad LED",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 2.8,
+    "abstrahlwinkel_grad": 28
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 180.0
+    },
+    "Motor Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "offen"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Function": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 49,
+          "typ": "aus"
+        },
+        {
+          "von": 50,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 139,
+          "typ": "aus"
+        },
+        {
+          "von": 140,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 219,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 220,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 233,
+          "typ": "aus"
+        },
+        {
+          "von": 234,
+          "bis": 236,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 237,
+          "bis": 249,
+          "typ": "aus"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Program Speed / Sound Sensitivity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red LED 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green LED 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue LED 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White LED 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red LED 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green LED 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue LED 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White LED 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red LED 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green LED 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue LED 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White LED 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red LED 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green LED 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue LED 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White LED 4": {
+      "typ": "weiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Master Dimmer"
+      ]
+    },
+    {
+      "name": "8-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Motor Speed",
+        "Master Dimmer",
+        "Function",
+        "Program Speed / Sound Sensitivity"
+      ]
+    },
+    {
+      "name": "13-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Motor Speed",
+        "Master Dimmer",
+        "Strobe",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Function",
+        "Program Speed / Sound Sensitivity"
+      ]
+    },
+    {
+      "name": "25-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Motor Speed",
+        "Master Dimmer",
+        "Strobe",
+        "Red LED 1",
+        "Green LED 1",
+        "Blue LED 1",
+        "White LED 1",
+        "Red LED 2",
+        "Green LED 2",
+        "Blue LED 2",
+        "White LED 2",
+        "Red LED 3",
+        "Green LED 3",
+        "Blue LED 3",
+        "White LED 3",
+        "Red LED 4",
+        "Green LED 4",
+        "Blue LED 4",
+        "White LED 4",
+        "Function",
+        "Program Speed / Sound Sensitivity"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

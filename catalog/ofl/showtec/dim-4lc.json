@@ -1,0 +1,256 @@
+{
+  "id": "showtec/dim-4lc",
+  "hersteller": "Showtec",
+  "name": "DIM-4LC",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Switch Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer 3/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Switch 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Switch 3/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Switch 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Switch 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Switch 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Switch 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel Dimmer",
+      "kanaele": [
+        "Dimmer Master"
+      ]
+    },
+    {
+      "name": "1-channel Switch",
+      "kanaele": [
+        "Switch Master"
+      ]
+    },
+    {
+      "name": "2-channel Dimmer",
+      "kanaele": [
+        "Dimmer 1/2",
+        "Dimmer 3/4"
+      ]
+    },
+    {
+      "name": "2-channel Switch",
+      "kanaele": [
+        "Switch 1/2",
+        "Switch 3/4"
+      ]
+    },
+    {
+      "name": "4-channel Dimmer",
+      "kanaele": [
+        "Dimmer 1",
+        "Dimmer 2",
+        "Dimmer 3",
+        "Dimmer 4"
+      ]
+    },
+    {
+      "name": "4-channel Switch",
+      "kanaele": [
+        "Switch 1",
+        "Switch 2",
+        "Switch 3",
+        "Switch 4"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

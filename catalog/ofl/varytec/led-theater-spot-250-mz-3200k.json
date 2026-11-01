@@ -1,0 +1,76 @@
+{
+  "id": "varytec/led-theater-spot-250-mz-3200k",
+  "hersteller": "Varytec",
+  "name": "LED Theater Spot 250 MZ 3200K",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 10.2,
+    "abstrahlwinkel_grad": 52
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe effect": {
+      "typ": "strobo",
+      "standard": 246,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "zu"
+        },
+        {
+          "von": 1,
+          "bis": 110,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 111,
+          "bis": 245,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 246,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Beam Angle": {
+      "typ": "zoom",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe effect",
+        "Beam Angle"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

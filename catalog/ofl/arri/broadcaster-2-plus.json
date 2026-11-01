@@ -1,0 +1,62 @@
+{
+  "id": "arri/broadcaster-2-plus",
+  "hersteller": "ARRI",
+  "name": "Broadcaster 2 Plus",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 0.96,
+    "abstrahlwinkel_grad": 63
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Plus/Minus Green": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Reserved": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Intensity",
+        "Color Temperature",
+        "Plus/Minus Green",
+        "Reserved"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

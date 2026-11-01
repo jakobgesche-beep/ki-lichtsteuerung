@@ -1,0 +1,628 @@
+{
+  "id": "briteq/pro-beamer-zoom-indoor",
+  "hersteller": "Briteq",
+  "name": "PRO BEAMER ZOOM INDOOR",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.6,
+    "abstrahlwinkel_grad": 40
+  },
+  "kanaele": {
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Macro": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 230,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 231,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 250,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 20.0
+        }
+      ]
+    },
+    "Auto Programs": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 40,
+          "typ": "aus"
+        },
+        {
+          "von": 41,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 230,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 231,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Step Time": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Fade Time": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Auto Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dimmer Speed": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Reset": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 200,
+          "typ": "aus"
+        },
+        {
+          "von": 201,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Value": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Master Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Master Dimmer",
+      "stufe": 1
+    },
+    "Red Master / Step Time": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Green Master / Fade Time": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Red Master fine": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Green Master fine": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master fine": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master fine": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red Center": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Red Center fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Red Center"
+    },
+    "Green Center": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Green Center fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Green Center"
+    },
+    "Blue Center": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Blue Center fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Blue Center"
+    },
+    "White Center": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "White Center fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "White Center"
+    },
+    "Red Outer": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Red Outer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Red Outer"
+    },
+    "Green Outer": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Green Outer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Green Outer"
+    },
+    "Blue Outer": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Blue Outer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Blue Outer"
+    },
+    "White Outer": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "White Outer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "White Outer"
+    }
+  },
+  "modi": [
+    {
+      "name": "Tour 8bit",
+      "kanaele": [
+        "Master Dimmer",
+        "Red Master / Step Time",
+        "Green Master / Fade Time",
+        "Blue Master",
+        "White Master",
+        "Color Macro",
+        "Strobe",
+        "Auto Programs",
+        "Auto Program Speed",
+        "Dimmer Speed",
+        "Zoom",
+        "Reset"
+      ]
+    },
+    {
+      "name": "Tour 16bit",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Red Master",
+        "Red Master fine",
+        "Green Master",
+        "Green Master fine",
+        "Blue Master",
+        "Blue Master fine",
+        "White Master",
+        "White Master fine",
+        "Color Macro",
+        "Strobe",
+        "Auto Programs",
+        "Auto Program Speed",
+        "Dimmer Speed",
+        "Zoom",
+        "Reset"
+      ]
+    },
+    {
+      "name": "RGB",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "DRGB",
+      "kanaele": [
+        "Master Dimmer",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "RGBW",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master"
+      ]
+    },
+    {
+      "name": "DRGBW",
+      "kanaele": [
+        "Master Dimmer",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master"
+      ]
+    },
+    {
+      "name": "DRGBW + Strobe",
+      "kanaele": [
+        "Master Dimmer",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "HSV",
+      "kanaele": [
+        "Hue",
+        "Saturation",
+        "Value"
+      ]
+    },
+    {
+      "name": "DRGBW + Zoom",
+      "kanaele": [
+        "Master Dimmer",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Zoom",
+        "Reset"
+      ]
+    },
+    {
+      "name": "Full",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Red Center",
+        "Red Center fine",
+        "Green Center",
+        "Green Center fine",
+        "Blue Center",
+        "Blue Center fine",
+        "White Center",
+        "White Center fine",
+        "Red Outer",
+        "Red Outer fine",
+        "Green Outer",
+        "Green Outer fine",
+        "Blue Outer",
+        "Blue Outer fine",
+        "White Outer",
+        "White Outer fine",
+        "Color Macro",
+        "Strobe",
+        "Auto Programs",
+        "Auto Program Speed",
+        "Dimmer Speed",
+        "Zoom",
+        "Reset"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

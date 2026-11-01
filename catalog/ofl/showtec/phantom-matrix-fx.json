@@ -1,0 +1,1521 @@
+{
+  "id": "showtec/phantom-matrix-fx",
+  "hersteller": "Showtec",
+  "name": "Phantom Matrix FX",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 9.8,
+    "abstrahlwinkel_grad": 45
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 270.0
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 128,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 10.0
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 10.0
+        }
+      ]
+    },
+    "Linear Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 10.0
+        }
+      ]
+    },
+    "FX Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 10.0
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 27,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 28,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 48,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 49,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 62,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 63,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 76,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 77,
+          "bis": 83,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 84,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 132,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 133,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 146,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 147,
+          "bis": 153,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 154,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 188,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 189,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 202,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 203,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 216,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 217,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 230,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 231,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Effect Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "aus"
+        },
+        {
+          "von": 13,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 48,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 49,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 72,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 73,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 96,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 97,
+          "bis": 108,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 109,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 132,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 133,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 156,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 157,
+          "bis": 168,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 169,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 192,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 193,
+          "bis": 204,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 205,
+          "bis": 216,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 217,
+          "bis": 228,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 229,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Effect Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Pattern": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 16,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 28,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 29,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 43,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 44,
+          "bis": 46,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 47,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 52,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 53,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 58,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 59,
+          "bis": 61,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 62,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 76,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 77,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 82,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 83,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 88,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 89,
+          "bis": 91,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 92,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 97,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 98,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 106,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 107,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 121,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 122,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 136,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 137,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 142,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 143,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 148,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 149,
+          "bis": 151,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 152,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 163,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 164,
+          "bis": 166,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 167,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 172,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 173,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 178,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 179,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 187,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 188,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 196,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 197,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 202,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 203,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 208,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 209,
+          "bis": 211,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 212,
+          "bis": 214,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 215,
+          "bis": 217,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 218,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 226,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 227,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 232,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 233,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 238,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 239,
+          "bis": 241,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 242,
+          "bis": 244,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 245,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 250,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 251,
+          "bis": 253,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 254,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pattern Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Function": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 96,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 97,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 1 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 2 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 3 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 4 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 5 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 1 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 2 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 3 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 4 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 5 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 1 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 2 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 3 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 4 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 5 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 1 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 2 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 3 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 4 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 5 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 1 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1 5": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 2 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2 5": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 3 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3 5": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 4 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4 5": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 5 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5 5": {
+      "typ": "weiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "10-Channel",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Dimmer",
+        "Strobe",
+        "Color Macros",
+        "Effect Macros",
+        "Effect Speed",
+        "Pattern",
+        "Pattern Speed",
+        "Function"
+      ]
+    },
+    {
+      "name": "18-Channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Dimmer",
+        "Linear Strobe",
+        "FX Strobe",
+        "Color Macros",
+        "Effect Macros",
+        "Effect Speed",
+        "Pattern",
+        "Pattern Speed",
+        "Function",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master"
+      ]
+    },
+    {
+      "name": "118-Channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Dimmer",
+        "Linear Strobe",
+        "FX Strobe",
+        "Color Macros",
+        "Effect Macros",
+        "Effect Speed",
+        "Pattern",
+        "Pattern Speed",
+        "Function",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Red 1 1",
+        "Green 1 1",
+        "Blue 1 1",
+        "White 1 1",
+        "Red 2 1",
+        "Green 2 1",
+        "Blue 2 1",
+        "White 2 1",
+        "Red 3 1",
+        "Green 3 1",
+        "Blue 3 1",
+        "White 3 1",
+        "Red 4 1",
+        "Green 4 1",
+        "Blue 4 1",
+        "White 4 1",
+        "Red 5 1",
+        "Green 5 1",
+        "Blue 5 1",
+        "White 5 1",
+        "Red 1 2",
+        "Green 1 2",
+        "Blue 1 2",
+        "White 1 2",
+        "Red 2 2",
+        "Green 2 2",
+        "Blue 2 2",
+        "White 2 2",
+        "Red 3 2",
+        "Green 3 2",
+        "Blue 3 2",
+        "White 3 2",
+        "Red 4 2",
+        "Green 4 2",
+        "Blue 4 2",
+        "White 4 2",
+        "Red 5 2",
+        "Green 5 2",
+        "Blue 5 2",
+        "White 5 2",
+        "Red 1 3",
+        "Green 1 3",
+        "Blue 1 3",
+        "White 1 3",
+        "Red 2 3",
+        "Green 2 3",
+        "Blue 2 3",
+        "White 2 3",
+        "Red 3 3",
+        "Green 3 3",
+        "Blue 3 3",
+        "White 3 3",
+        "Red 4 3",
+        "Green 4 3",
+        "Blue 4 3",
+        "White 4 3",
+        "Red 5 3",
+        "Green 5 3",
+        "Blue 5 3",
+        "White 5 3",
+        "Red 1 4",
+        "Green 1 4",
+        "Blue 1 4",
+        "White 1 4",
+        "Red 2 4",
+        "Green 2 4",
+        "Blue 2 4",
+        "White 2 4",
+        "Red 3 4",
+        "Green 3 4",
+        "Blue 3 4",
+        "White 3 4",
+        "Red 4 4",
+        "Green 4 4",
+        "Blue 4 4",
+        "White 4 4",
+        "Red 5 4",
+        "Green 5 4",
+        "Blue 5 4",
+        "White 5 4",
+        "Red 1 5",
+        "Green 1 5",
+        "Blue 1 5",
+        "White 1 5",
+        "Red 2 5",
+        "Green 2 5",
+        "Blue 2 5",
+        "White 2 5",
+        "Red 3 5",
+        "Green 3 5",
+        "Blue 3 5",
+        "White 3 5",
+        "Red 4 5",
+        "Green 4 5",
+        "Blue 4 5",
+        "White 4 5",
+        "Red 5 5",
+        "Green 5 5",
+        "Blue 5 5",
+        "White 5 5"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

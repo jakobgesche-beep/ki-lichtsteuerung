@@ -1,0 +1,2005 @@
+{
+  "id": "mega-lite/pan-t-bot",
+  "hersteller": "MegaLite",
+  "name": "Pan T Bot",
+  "kategorien": [
+    "Strobe",
+    "Moving Head",
+    "Color Changer",
+    "Matrix"
+  ],
+  "physik": {
+    "gewicht_kg": 16.3,
+    "abstrahlwinkel_grad": 89
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 255,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 255,
+      "grad": 270.0
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Shutter Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "aus"
+        },
+        {
+          "von": 2,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 56,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 57,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 78,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 79,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 166,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 167,
+          "bis": 177,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 178,
+          "bis": 188,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 189,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 232,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 233,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Shutter Macro Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "aus"
+        },
+        {
+          "von": 2,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 23,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 24,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 56,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 57,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 78,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 79,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 166,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 167,
+          "bis": 177,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 178,
+          "bis": 188,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 189,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 221,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 222,
+          "bis": 232,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 233,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Macro Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Alpha Numeric Display": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "aus"
+        },
+        {
+          "von": 2,
+          "bis": 6,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 7,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 18,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 19,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 48,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 49,
+          "bis": 54,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 55,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 66,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 67,
+          "bis": 72,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 73,
+          "bis": 78,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 79,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 96,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 97,
+          "bis": 102,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 103,
+          "bis": 108,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 109,
+          "bis": 114,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 115,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 126,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 127,
+          "bis": 132,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 133,
+          "bis": 138,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 139,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 156,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 157,
+          "bis": 162,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 163,
+          "bis": 168,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 169,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 186,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 187,
+          "bis": 192,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 193,
+          "bis": 198,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 199,
+          "bis": 204,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 205,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 216,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 217,
+          "bis": 222,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 223,
+          "bis": 228,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 229,
+          "bis": 234,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 235,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Background Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Background Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Background Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "aus"
+        },
+        {
+          "von": 2,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "White Macro Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "aus"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "RGB Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "RGB Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "RGB Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "RGB Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "zu"
+        },
+        {
+          "von": 2,
+          "bis": 127,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 128,
+          "bis": 170,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 171,
+          "bis": 213,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 214,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "White Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "White Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 1,
+          "typ": "zu"
+        },
+        {
+          "von": 2,
+          "bis": 127,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 128,
+          "bis": 170,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 171,
+          "bis": 213,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 214,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "W1 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W2 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W3 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W4 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W5 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W6 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W7 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W8 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W9 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "W10 Intensity": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "C1 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C1 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C1 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C2 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C2 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C2 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C3 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C3 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C3 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C4 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C4 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C4 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C5 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C5 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C5 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C6 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C6 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C6 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C7 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C7 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C7 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C8 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C8 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C8 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C9 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C9 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C9 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C10 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C10 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C10 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C11 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C11 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C11 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C12 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C12 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C12 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C13 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C13 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C13 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C14 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C14 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C14 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C15 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C15 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C15 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C16 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C16 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C16 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C17 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C17 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C17 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C18 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C18 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C18 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C19 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C19 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C19 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C20 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C20 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C20 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C21 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C21 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C21 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C22 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C22 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C22 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C23 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C23 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C23 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C24 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C24 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C24 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C25 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C25 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C25 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C26 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C26 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C26 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C27 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C27 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C27 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C28 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C28 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C28 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C29 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C29 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C29 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C30 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C30 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C30 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C31 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C31 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C31 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C32 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C32 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C32 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C33 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C33 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C33 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C34 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C34 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C34 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C35 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C35 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C35 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C36 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C36 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C36 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C37 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C37 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C37 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C38 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C38 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C38 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C39 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C39 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C39 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C40 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C40 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C40 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C41 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C41 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C41 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C42 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C42 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C42 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C43 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C43 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C43 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C44 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C44 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C44 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C45 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C45 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C45 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C46 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C46 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C46 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C47 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C47 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C47 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C48 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C48 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C48 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C49 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C49 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C49 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C50 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C50 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C50 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C51 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C51 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C51 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C52 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C52 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C52 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C53 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C53 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C53 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C54 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C54 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C54 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C55 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C55 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C55 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C56 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C56 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C56 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C57 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C57 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C57 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C58 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C58 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C58 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C59 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C59 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C59 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C60 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C60 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C60 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C61 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C61 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C61 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C62 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C62 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C62 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C63 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C63 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C63 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C64 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C64 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C64 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C65 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C65 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C65 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C66 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C66 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C66 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C67 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C67 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C67 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C68 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C68 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C68 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C69 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C69 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C69 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C70 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C70 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C70 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C71 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C71 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C71 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C72 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C72 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C72 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C73 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C73 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C73 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C74 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C74 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C74 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C75 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C75 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C75 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C76 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C76 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C76 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C77 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C77 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C77 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C78 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C78 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C78 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C79 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C79 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C79 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "C80 Red Intensity": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "C80 Green Intensity": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "C80 Blue Intensity": {
+      "typ": "blau",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "23-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Dimmer",
+        "RGB Red Intensity",
+        "RGB Green Intensity",
+        "RGB Blue Intensity",
+        "RGB Strobe",
+        "Shutter Macros",
+        "Shutter Macro Speed",
+        "Color Macros",
+        "Color Macro Speed",
+        "Alpha Numeric Display",
+        "Background Red",
+        "Background Green",
+        "Background Blue",
+        "White Intensity",
+        "White Strobe",
+        "White Macros",
+        "White Macro Speed",
+        "Control"
+      ]
+    },
+    {
+      "name": "256-channel",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Control",
+        "W1 Intensity",
+        "W2 Intensity",
+        "W3 Intensity",
+        "W4 Intensity",
+        "W5 Intensity",
+        "W6 Intensity",
+        "W7 Intensity",
+        "W8 Intensity",
+        "W9 Intensity",
+        "W10 Intensity",
+        "C1 Red Intensity",
+        "C1 Green Intensity",
+        "C1 Blue Intensity",
+        "C2 Red Intensity",
+        "C2 Green Intensity",
+        "C2 Blue Intensity",
+        "C3 Red Intensity",
+        "C3 Green Intensity",
+        "C3 Blue Intensity",
+        "C4 Red Intensity",
+        "C4 Green Intensity",
+        "C4 Blue Intensity",
+        "C5 Red Intensity",
+        "C5 Green Intensity",
+        "C5 Blue Intensity",
+        "C6 Red Intensity",
+        "C6 Green Intensity",
+        "C6 Blue Intensity",
+        "C7 Red Intensity",
+        "C7 Green Intensity",
+        "C7 Blue Intensity",
+        "C8 Red Intensity",
+        "C8 Green Intensity",
+        "C8 Blue Intensity",
+        "C9 Red Intensity",
+        "C9 Green Intensity",
+        "C9 Blue Intensity",
+        "C10 Red Intensity",
+        "C10 Green Intensity",
+        "C10 Blue Intensity",
+        "C11 Red Intensity",
+        "C11 Green Intensity",
+        "C11 Blue Intensity",
+        "C12 Red Intensity",
+        "C12 Green Intensity",
+        "C12 Blue Intensity",
+        "C13 Red Intensity",
+        "C13 Green Intensity",
+        "C13 Blue Intensity",
+        "C14 Red Intensity",
+        "C14 Green Intensity",
+        "C14 Blue Intensity",
+        "C15 Red Intensity",
+        "C15 Green Intensity",
+        "C15 Blue Intensity",
+        "C16 Red Intensity",
+        "C16 Green Intensity",
+        "C16 Blue Intensity",
+        "C17 Red Intensity",
+        "C17 Green Intensity",
+        "C17 Blue Intensity",
+        "C18 Red Intensity",
+        "C18 Green Intensity",
+        "C18 Blue Intensity",
+        "C19 Red Intensity",
+        "C19 Green Intensity",
+        "C19 Blue Intensity",
+        "C20 Red Intensity",
+        "C20 Green Intensity",
+        "C20 Blue Intensity",
+        "C21 Red Intensity",
+        "C21 Green Intensity",
+        "C21 Blue Intensity",
+        "C22 Red Intensity",
+        "C22 Green Intensity",
+        "C22 Blue Intensity",
+        "C23 Red Intensity",
+        "C23 Green Intensity",
+        "C23 Blue Intensity",
+        "C24 Red Intensity",
+        "C24 Green Intensity",
+        "C24 Blue Intensity",
+        "C25 Red Intensity",
+        "C25 Green Intensity",
+        "C25 Blue Intensity",
+        "C26 Red Intensity",
+        "C26 Green Intensity",
+        "C26 Blue Intensity",
+        "C27 Red Intensity",
+        "C27 Green Intensity",
+        "C27 Blue Intensity",
+        "C28 Red Intensity",
+        "C28 Green Intensity",
+        "C28 Blue Intensity",
+        "C29 Red Intensity",
+        "C29 Green Intensity",
+        "C29 Blue Intensity",
+        "C30 Red Intensity",
+        "C30 Green Intensity",
+        "C30 Blue Intensity",
+        "C31 Red Intensity",
+        "C31 Green Intensity",
+        "C31 Blue Intensity",
+        "C32 Red Intensity",
+        "C32 Green Intensity",
+        "C32 Blue Intensity",
+        "C33 Red Intensity",
+        "C33 Green Intensity",
+        "C33 Blue Intensity",
+        "C34 Red Intensity",
+        "C34 Green Intensity",
+        "C34 Blue Intensity",
+        "C35 Red Intensity",
+        "C35 Green Intensity",
+        "C35 Blue Intensity",
+        "C36 Red Intensity",
+        "C36 Green Intensity",
+        "C36 Blue Intensity",
+        "C37 Red Intensity",
+        "C37 Green Intensity",
+        "C37 Blue Intensity",
+        "C38 Red Intensity",
+        "C38 Green Intensity",
+        "C38 Blue Intensity",
+        "C39 Red Intensity",
+        "C39 Green Intensity",
+        "C39 Blue Intensity",
+        "C40 Red Intensity",
+        "C40 Green Intensity",
+        "C40 Blue Intensity",
+        "C41 Red Intensity",
+        "C41 Green Intensity",
+        "C41 Blue Intensity",
+        "C42 Red Intensity",
+        "C42 Green Intensity",
+        "C42 Blue Intensity",
+        "C43 Red Intensity",
+        "C43 Green Intensity",
+        "C43 Blue Intensity",
+        "C44 Red Intensity",
+        "C44 Green Intensity",
+        "C44 Blue Intensity",
+        "C45 Red Intensity",
+        "C45 Green Intensity",
+        "C45 Blue Intensity",
+        "C46 Red Intensity",
+        "C46 Green Intensity",
+        "C46 Blue Intensity",
+        "C47 Red Intensity",
+        "C47 Green Intensity",
+        "C47 Blue Intensity",
+        "C48 Red Intensity",
+        "C48 Green Intensity",
+        "C48 Blue Intensity",
+        "C49 Red Intensity",
+        "C49 Green Intensity",
+        "C49 Blue Intensity",
+        "C50 Red Intensity",
+        "C50 Green Intensity",
+        "C50 Blue Intensity",
+        "C51 Red Intensity",
+        "C51 Green Intensity",
+        "C51 Blue Intensity",
+        "C52 Red Intensity",
+        "C52 Green Intensity",
+        "C52 Blue Intensity",
+        "C53 Red Intensity",
+        "C53 Green Intensity",
+        "C53 Blue Intensity",
+        "C54 Red Intensity",
+        "C54 Green Intensity",
+        "C54 Blue Intensity",
+        "C55 Red Intensity",
+        "C55 Green Intensity",
+        "C55 Blue Intensity",
+        "C56 Red Intensity",
+        "C56 Green Intensity",
+        "C56 Blue Intensity",
+        "C57 Red Intensity",
+        "C57 Green Intensity",
+        "C57 Blue Intensity",
+        "C58 Red Intensity",
+        "C58 Green Intensity",
+        "C58 Blue Intensity",
+        "C59 Red Intensity",
+        "C59 Green Intensity",
+        "C59 Blue Intensity",
+        "C60 Red Intensity",
+        "C60 Green Intensity",
+        "C60 Blue Intensity",
+        "C61 Red Intensity",
+        "C61 Green Intensity",
+        "C61 Blue Intensity",
+        "C62 Red Intensity",
+        "C62 Green Intensity",
+        "C62 Blue Intensity",
+        "C63 Red Intensity",
+        "C63 Green Intensity",
+        "C63 Blue Intensity",
+        "C64 Red Intensity",
+        "C64 Green Intensity",
+        "C64 Blue Intensity",
+        "C65 Red Intensity",
+        "C65 Green Intensity",
+        "C65 Blue Intensity",
+        "C66 Red Intensity",
+        "C66 Green Intensity",
+        "C66 Blue Intensity",
+        "C67 Red Intensity",
+        "C67 Green Intensity",
+        "C67 Blue Intensity",
+        "C68 Red Intensity",
+        "C68 Green Intensity",
+        "C68 Blue Intensity",
+        "C69 Red Intensity",
+        "C69 Green Intensity",
+        "C69 Blue Intensity",
+        "C70 Red Intensity",
+        "C70 Green Intensity",
+        "C70 Blue Intensity",
+        "C71 Red Intensity",
+        "C71 Green Intensity",
+        "C71 Blue Intensity",
+        "C72 Red Intensity",
+        "C72 Green Intensity",
+        "C72 Blue Intensity",
+        "C73 Red Intensity",
+        "C73 Green Intensity",
+        "C73 Blue Intensity",
+        "C74 Red Intensity",
+        "C74 Green Intensity",
+        "C74 Blue Intensity",
+        "C75 Red Intensity",
+        "C75 Green Intensity",
+        "C75 Blue Intensity",
+        "C76 Red Intensity",
+        "C76 Green Intensity",
+        "C76 Blue Intensity",
+        "C77 Red Intensity",
+        "C77 Green Intensity",
+        "C77 Blue Intensity",
+        "C78 Red Intensity",
+        "C78 Green Intensity",
+        "C78 Blue Intensity",
+        "C79 Red Intensity",
+        "C79 Green Intensity",
+        "C79 Blue Intensity",
+        "C80 Red Intensity",
+        "C80 Green Intensity",
+        "C80 Blue Intensity"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

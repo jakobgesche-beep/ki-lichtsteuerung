@@ -1,0 +1,373 @@
+{
+  "id": "american-dj/auto-spot-150",
+  "hersteller": "American DJ",
+  "name": "Auto Spot 150",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 13,
+    "abstrahlwinkel_grad": 13
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 127,
+      "grad": 540.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127,
+      "grad": 270.0
+    },
+    "Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 111,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 112,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo Rotation": {
+      "typ": "gobo_rotation",
+      "standard": 127,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 134,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 135,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Split Colors": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 6,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 7,
+          "bis": 13,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 14,
+          "bis": 20,
+          "typ": "platz",
+          "name": "Blue",
+          "farbe": "#0000ff"
+        },
+        {
+          "von": 21,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 33,
+          "typ": "platz",
+          "name": "Yellow",
+          "farbe": "#ffff00"
+        },
+        {
+          "von": 34,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 46,
+          "typ": "platz",
+          "name": "Green",
+          "farbe": "#00ff00"
+        },
+        {
+          "von": 47,
+          "bis": 53,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 54,
+          "bis": 60,
+          "typ": "platz",
+          "name": "Light Blue",
+          "farbe": "#aaddff"
+        },
+        {
+          "von": 61,
+          "bis": 66,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 67,
+          "bis": 73,
+          "typ": "platz",
+          "name": "Orange",
+          "farbe": "#ff7f00"
+        },
+        {
+          "von": 74,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 87,
+          "typ": "platz",
+          "name": "Pink",
+          "farbe": "#ffaaaa"
+        },
+        {
+          "von": 88,
+          "bis": 93,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 94,
+          "bis": 100,
+          "typ": "platz",
+          "name": "Magenta",
+          "farbe": "#ff00ff"
+        },
+        {
+          "von": 101,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 113,
+          "typ": "platz",
+          "name": "Amber",
+          "farbe": "#ffbf00"
+        },
+        {
+          "von": 114,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 127,
+          "typ": "platz",
+          "name": "Light Green",
+          "farbe": "#aaffaa"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Shutter / Dimmer": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "zu"
+        },
+        {
+          "von": 5,
+          "bis": 131,
+          "typ": "dimmer"
+        },
+        {
+          "von": 132,
+          "bis": 252,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 253,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Full Colors": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 12,
+          "typ": "platz",
+          "name": "Offen",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 13,
+          "bis": 25,
+          "typ": "platz",
+          "name": "Blue",
+          "farbe": "#0000ff"
+        },
+        {
+          "von": 26,
+          "bis": 38,
+          "typ": "platz",
+          "name": "Yellow",
+          "farbe": "#ffff00"
+        },
+        {
+          "von": 39,
+          "bis": 51,
+          "typ": "platz",
+          "name": "Green",
+          "farbe": "#00ff00"
+        },
+        {
+          "von": 52,
+          "bis": 63,
+          "typ": "platz",
+          "name": "Light Blue",
+          "farbe": "#aaddff"
+        },
+        {
+          "von": 64,
+          "bis": 76,
+          "typ": "platz",
+          "name": "Orange",
+          "farbe": "#ff7f00"
+        },
+        {
+          "von": 77,
+          "bis": 89,
+          "typ": "platz",
+          "name": "Pink",
+          "farbe": "#ffaaaa"
+        },
+        {
+          "von": 90,
+          "bis": 102,
+          "typ": "platz",
+          "name": "Magenta",
+          "farbe": "#ff00ff"
+        },
+        {
+          "von": 103,
+          "bis": 115,
+          "typ": "platz",
+          "name": "Amber",
+          "farbe": "#ffbf00"
+        },
+        {
+          "von": 116,
+          "bis": 127,
+          "typ": "platz",
+          "name": "Light Green",
+          "farbe": "#aaffaa"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Full Color",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Gobo Wheel",
+        "Gobo Rotation",
+        "Full Colors",
+        "Shutter / Dimmer"
+      ]
+    },
+    {
+      "name": "Split Color",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Gobo Wheel",
+        "Gobo Rotation",
+        "Split Colors",
+        "Shutter / Dimmer"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

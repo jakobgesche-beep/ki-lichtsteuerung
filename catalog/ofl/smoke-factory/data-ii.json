@@ -1,0 +1,38 @@
+{
+  "id": "smoke-factory/data-ii",
+  "hersteller": "Smoke Factory",
+  "name": "Data II",
+  "kategorien": [
+    "Smoke"
+  ],
+  "physik": {
+    "gewicht_kg": 12.8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Pump": {
+      "typ": "nebel",
+      "standard": 0
+    },
+    "Fan": {
+      "typ": "tempo",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2ch",
+      "kanaele": [
+        "Pump",
+        "Fan"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

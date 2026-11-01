@@ -1,0 +1,1635 @@
+{
+  "id": "chroma-q/color-force-ii-12",
+  "hersteller": "Chroma-Q",
+  "name": "Color Force II 12",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 5,
+    "abstrahlwinkel_grad": 22
+  },
+  "kanaele": {
+    "Look Select": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 8,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 9,
+          "bis": 16,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 33,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 34,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 51,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 52,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 75,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 76,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 92,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 93,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 118,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 141,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 142,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 182,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 183,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 223,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 224,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe Frequency": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Strobe Density": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Strobe Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Strobe Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Strobe Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Strobe Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Strobe Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1/2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1/2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1/2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2/2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2/2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2/2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Odd": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Odd": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Odd": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red Even": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Even": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Even": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber Master": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 1/2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 2/2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 3": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Odd": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Even": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Hue Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 1/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 2/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 2/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 2/2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Odd": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Odd": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Odd": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Hue Even": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Saturation Even": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity Even": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Look",
+      "kanaele": [
+        "Look Select"
+      ]
+    },
+    {
+      "name": "Master RGB",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB",
+      "kanaele": [
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGB",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB",
+      "kanaele": [
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Master RGBA",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA",
+      "kanaele": [
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGBA",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA",
+      "kanaele": [
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Master HSI",
+      "kanaele": [
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI",
+      "kanaele": [
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Individual HSI",
+      "kanaele": [
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI",
+      "kanaele": [
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Master RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Master RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Master HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Individual HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI Strobe",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Master RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Master RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Master HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Individual HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI Random",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Master RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Master RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Master HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Individual HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI Random+OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Density",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    },
+    {
+      "name": "Master RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "Halves RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGB OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even"
+      ]
+    },
+    {
+      "name": "Master RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "Halves RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1/2",
+        "Green 1/2",
+        "Blue 1/2",
+        "Amber 1/2",
+        "Red 2/2",
+        "Green 2/2",
+        "Blue 2/2",
+        "Amber 2/2"
+      ]
+    },
+    {
+      "name": "Individual RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Amber 4"
+      ]
+    },
+    {
+      "name": "Odd/Even RGBA OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Red",
+        "Strobe Green",
+        "Strobe Blue",
+        "Strobe Amber",
+        "Red Odd",
+        "Green Odd",
+        "Blue Odd",
+        "Amber Odd",
+        "Red Even",
+        "Green Even",
+        "Blue Even",
+        "Amber Even"
+      ]
+    },
+    {
+      "name": "Master HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Master",
+        "Saturation Master",
+        "Intensity Master"
+      ]
+    },
+    {
+      "name": "Halves HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1/2",
+        "Saturation 1/2",
+        "Intensity 1/2",
+        "Hue 2/2",
+        "Saturation 2/2",
+        "Intensity 2/2"
+      ]
+    },
+    {
+      "name": "Individual HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue 1",
+        "Saturation 1",
+        "Intensity 1",
+        "Hue 2",
+        "Saturation 2",
+        "Intensity 2",
+        "Hue 3",
+        "Saturation 3",
+        "Intensity 3",
+        "Hue 4",
+        "Saturation 4",
+        "Intensity 4"
+      ]
+    },
+    {
+      "name": "Odd/Even HSI OnTop",
+      "kanaele": [
+        "Strobe Frequency",
+        "Strobe Duration",
+        "Strobe Hue",
+        "Strobe Saturation",
+        "Strobe Intensity",
+        "Hue Odd",
+        "Saturation Odd",
+        "Intensity Odd",
+        "Hue Even",
+        "Saturation Even",
+        "Intensity Even"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

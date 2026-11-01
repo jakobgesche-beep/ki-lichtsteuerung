@@ -1,0 +1,895 @@
+{
+  "id": "elation/platinum-seven",
+  "hersteller": "Elation",
+  "name": "Platinum Seven",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 21.3,
+    "abstrahlwinkel_grad": 50
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 127
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Cyan": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "UV": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 71,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 72,
+          "bis": 103,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 104,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 167,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 168,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Presets": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 14,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 15,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 44,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 45,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 54,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 55,
+          "bis": 59,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 60,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 69,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 70,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 114,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 115,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 134,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 135,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 164,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 165,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Color Presets Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 32,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "zu"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "offen"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 25.0
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "offen"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "offen"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer Mode": {
+      "typ": "makro",
+      "standard": 255,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Chase Patterns": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "aus"
+        },
+        {
+          "von": 15,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 46,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 47,
+          "bis": 62,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 63,
+          "bis": 78,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 79,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 126,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 127,
+          "bis": 142,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 143,
+          "bis": 158,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 159,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 206,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 207,
+          "bis": 222,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 223,
+          "bis": 238,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 239,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Chase Pattern Speed": {
+      "typ": "tempo",
+      "standard": 128,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Chase Fade": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "White Balance": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 189,
+          "typ": "aus"
+        },
+        {
+          "von": 190,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 255,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Special Functions": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 93,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 94,
+          "bis": 96,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 97,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 159,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 160,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 219,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 220,
+          "bis": 239,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    },
+    "Cyan fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cyan",
+      "stufe": 1
+    },
+    "Amber fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Amber",
+      "stufe": 1
+    },
+    "UV fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "UV",
+      "stufe": 1
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Zoom fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Zoom",
+      "stufe": 1
+    },
+    "Red Center": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Center": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Center": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Center": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber Center": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Cyan Center": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "UV Center": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red Middle": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Middle": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Middle": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Middle": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber Middle": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Cyan Middle": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "UV Middle": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red Outer": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Outer": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Outer": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Outer": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber Outer": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Cyan Outer": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "UV Outer": {
+      "typ": "uv",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "Basic",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Amber",
+        "Cyan",
+        "UV",
+        "Color Macros",
+        "Color Presets",
+        "Color Presets Dimmer",
+        "Shutter",
+        "Dimmer",
+        "Dimmer Mode",
+        "Zoom",
+        "Chase Patterns",
+        "Chase Pattern Speed",
+        "Chase Fade",
+        "White Balance",
+        "Pan/Tilt Speed",
+        "Special Functions"
+      ]
+    },
+    {
+      "name": "Standard",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine",
+        "Amber",
+        "Amber fine",
+        "Cyan",
+        "Cyan fine",
+        "UV",
+        "UV fine",
+        "Color Macros",
+        "Color Presets",
+        "Color Presets Dimmer",
+        "Shutter",
+        "Dimmer",
+        "Dimmer Mode",
+        "Zoom",
+        "Chase Patterns",
+        "Chase Pattern Speed",
+        "Chase Fade",
+        "White Balance",
+        "Pan/Tilt Speed",
+        "Special Functions"
+      ]
+    },
+    {
+      "name": "Extended",
+      "kanaele": [
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Red Center",
+        "Green Center",
+        "Blue Center",
+        "White Center",
+        "Amber Center",
+        "Cyan Center",
+        "UV Center",
+        "Red Middle",
+        "Green Middle",
+        "Blue Middle",
+        "White Middle",
+        "Amber Middle",
+        "Cyan Middle",
+        "UV Middle",
+        "Red Outer",
+        "Green Outer",
+        "Blue Outer",
+        "White Outer",
+        "Amber Outer",
+        "Cyan Outer",
+        "UV Outer",
+        "Color Macros",
+        "Color Presets",
+        "Color Presets Dimmer",
+        "Shutter",
+        "Dimmer",
+        "Dimmer fine",
+        "Dimmer Mode",
+        "Zoom",
+        "Zoom fine",
+        "Chase Patterns",
+        "Chase Pattern Speed",
+        "Chase Fade",
+        "White Balance",
+        "Pan/Tilt Speed",
+        "Special Functions"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

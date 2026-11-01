@@ -1,0 +1,708 @@
+{
+  "id": "cameo/auro-beam-150",
+  "hersteller": "cameo",
+  "name": "Auro Beam 150",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 5.5,
+    "abstrahlwinkel_grad": 12
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 127,
+      "grad": 360.0
+    },
+    "Pan Continuous": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 8,
+          "typ": "aus"
+        },
+        {
+          "von": 9,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 127,
+      "grad": 360.0
+    },
+    "Tilt Continuous": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 8,
+          "typ": "aus"
+        },
+        {
+          "von": 9,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan/Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "offen"
+        },
+        {
+          "von": 6,
+          "bis": 10,
+          "typ": "zu"
+        },
+        {
+          "von": 11,
+          "bis": 33,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 34,
+          "bis": 56,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 57,
+          "bis": 79,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 80,
+          "bis": 102,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 103,
+          "bis": 127,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 128,
+          "bis": 249,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 30.0
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Strobe Simple": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "offen"
+        },
+        {
+          "von": 6,
+          "bis": 10,
+          "typ": "zu"
+        },
+        {
+          "von": 11,
+          "bis": 249,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 30.0
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 8,
+          "typ": "aus"
+        },
+        {
+          "von": 9,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 32,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 33,
+          "bis": 44,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 45,
+          "bis": 56,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 57,
+          "bis": 68,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 69,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 92,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 93,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 116,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 117,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 164,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 165,
+          "bis": 176,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 177,
+          "bis": 188,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 189,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 232,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 233,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Macro Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Color Macro Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Auto Program": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 8,
+          "typ": "aus"
+        },
+        {
+          "von": 9,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 56,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 57,
+          "bis": 72,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 73,
+          "bis": 88,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 89,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 136,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 137,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 168,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 169,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 216,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 217,
+          "bis": 232,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 233,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Auto Program Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Auto Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 8,
+          "typ": "aus"
+        },
+        {
+          "von": 9,
+          "bis": 23,
+          "typ": "zu"
+        },
+        {
+          "von": 24,
+          "bis": 81,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 82,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 197,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 198,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Mode Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Auto Mode Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Reset": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 149,
+          "typ": "aus"
+        },
+        {
+          "von": 150,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Color Macro Speed / Sound Sensitivity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Auto Program Speed / Sound Sensitivity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Auto Mode Speed / Sound Sensitivity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 7": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 7": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 7": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 7": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 6": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 6": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 6": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5": {
+      "typ": "weiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Dimmer",
+        "Color Macros",
+        "Color Macro Speed / Sound Sensitivity",
+        "Auto Mode",
+        "Auto Mode Speed / Sound Sensitivity"
+      ]
+    },
+    {
+      "name": "11-channel",
+      "kanaele": [
+        "Pan",
+        "Pan Continuous",
+        "Tilt",
+        "Tilt Continuous",
+        "Pan/Tilt Speed",
+        "Dimmer",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Strobe Simple"
+      ]
+    },
+    {
+      "name": "19-channel",
+      "kanaele": [
+        "Pan",
+        "Pan Continuous",
+        "Tilt",
+        "Tilt Continuous",
+        "Pan fine",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Dimmer",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Strobe",
+        "Color Macros",
+        "Auto Program",
+        "Auto Program Speed / Sound Sensitivity",
+        "Auto Mode",
+        "Auto Mode Speed / Sound Sensitivity",
+        "Reset"
+      ]
+    },
+    {
+      "name": "41-channel",
+      "kanaele": [
+        "Pan",
+        "Pan Continuous",
+        "Tilt",
+        "Tilt Continuous",
+        "Pan fine",
+        "Tilt fine",
+        "Pan/Tilt Speed",
+        "Dimmer",
+        "Strobe",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "White 2",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "White 7",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "White 3",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "White 1",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "White 6",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "White 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "White 5",
+        "Color Macros",
+        "Auto Program",
+        "Auto Program Speed / Sound Sensitivity",
+        "Reset"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

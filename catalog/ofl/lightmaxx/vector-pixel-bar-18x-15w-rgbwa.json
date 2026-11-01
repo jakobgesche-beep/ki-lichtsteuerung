@@ -1,0 +1,1467 @@
+{
+  "id": "lightmaxx/vector-pixel-bar-18x-15w-rgbwa",
+  "hersteller": "lightmaXX",
+  "name": "Vector Pixel BAR 18x 15W RGBWA",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8,
+    "abstrahlwinkel_grad": 45
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Function": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 17,
+          "typ": "aus"
+        },
+        {
+          "von": 18,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 27,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 28,
+          "bis": 32,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 33,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 47,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 48,
+          "bis": 251,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 252,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Running Effects": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 75,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 76,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 230,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 231,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Running Effect Direction": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Function Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Running Effects / Color Running Effect Direction": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 5,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 6,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 35,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 36,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 75,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 76,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 95,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 96,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 185,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 186,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 215,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 216,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 230,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 231,
+          "bis": 235,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 236,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber Master": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "RGBWA Dimmer 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 9": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 10": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 11": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 12": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 13": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 14": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 15": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 16": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 17": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "RGBWA Dimmer 18": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 3": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 5": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 5": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 6": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 6": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 6": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 6": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 7": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 7": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 7": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 7": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 7": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 8": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 8": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 9": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 9": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 9": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 9": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 9": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 10": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 10": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 10": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 10": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 10": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 11": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 11": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 11": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 11": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 11": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 12": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 12": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 12": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 12": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 12": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 13": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 13": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 13": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 13": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 13": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 14": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 14": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 14": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 14": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 14": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 15": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 15": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 15": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 15": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 15": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 16": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 16": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 16": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 16": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 16": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 17": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 17": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 17": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 17": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 17": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Red 18": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 18": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 18": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White 18": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Amber 18": {
+      "typ": "amber",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Function",
+        "Running Effects / Color Running Effect Direction",
+        "Function Speed",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "28-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Function",
+        "Running Effects / Color Running Effect Direction",
+        "Function Speed",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Amber Master",
+        "RGBWA Dimmer 1",
+        "RGBWA Dimmer 2",
+        "RGBWA Dimmer 3",
+        "RGBWA Dimmer 4",
+        "RGBWA Dimmer 5",
+        "RGBWA Dimmer 6",
+        "RGBWA Dimmer 7",
+        "RGBWA Dimmer 8",
+        "RGBWA Dimmer 9",
+        "RGBWA Dimmer 10",
+        "RGBWA Dimmer 11",
+        "RGBWA Dimmer 12",
+        "RGBWA Dimmer 13",
+        "RGBWA Dimmer 14",
+        "RGBWA Dimmer 15",
+        "RGBWA Dimmer 16",
+        "RGBWA Dimmer 17",
+        "RGBWA Dimmer 18"
+      ]
+    },
+    {
+      "name": "90-channel",
+      "kanaele": [
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "White 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "White 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "White 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "White 4",
+        "Amber 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "White 5",
+        "Amber 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "White 6",
+        "Amber 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "White 7",
+        "Amber 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "White 8",
+        "Amber 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "White 9",
+        "Amber 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "White 10",
+        "Amber 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "White 11",
+        "Amber 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "White 12",
+        "Amber 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "White 13",
+        "Amber 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "White 14",
+        "Amber 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "White 15",
+        "Amber 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "White 16",
+        "Amber 16",
+        "Red 17",
+        "Green 17",
+        "Blue 17",
+        "White 17",
+        "Amber 17",
+        "Red 18",
+        "Green 18",
+        "Blue 18",
+        "White 18",
+        "Amber 18"
+      ]
+    },
+    {
+      "name": "100-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Function",
+        "Running Effects / Color Running Effect Direction",
+        "Function Speed",
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "White Master",
+        "Amber Master",
+        "Red 1",
+        "Green 1",
+        "Blue 1",
+        "White 1",
+        "Amber 1",
+        "Red 2",
+        "Green 2",
+        "Blue 2",
+        "White 2",
+        "Amber 2",
+        "Red 3",
+        "Green 3",
+        "Blue 3",
+        "White 3",
+        "Amber 3",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "White 4",
+        "Amber 4",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "White 5",
+        "Amber 5",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "White 6",
+        "Amber 6",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "White 7",
+        "Amber 7",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "White 8",
+        "Amber 8",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "White 9",
+        "Amber 9",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "White 10",
+        "Amber 10",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "White 11",
+        "Amber 11",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "White 12",
+        "Amber 12",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "White 13",
+        "Amber 13",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "White 14",
+        "Amber 14",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "White 15",
+        "Amber 15",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "White 16",
+        "Amber 16",
+        "Red 17",
+        "Green 17",
+        "Blue 17",
+        "White 17",
+        "Amber 17",
+        "Red 18",
+        "Green 18",
+        "Blue 18",
+        "White 18",
+        "Amber 18"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

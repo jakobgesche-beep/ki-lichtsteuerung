@@ -1,0 +1,38 @@
+{
+  "id": "stairville/hz-200-compact-hazer",
+  "hersteller": "Stairville",
+  "name": "Hz-200 Compact Hazer",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 7.5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Haze": {
+      "typ": "nebel",
+      "standard": 0
+    },
+    "Fan Speed": {
+      "typ": "tempo",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Haze",
+        "Fan Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,399 @@
+{
+  "id": "stairville/octagon-theater-20x6w-cw-ww-a",
+  "hersteller": "Stairville",
+  "name": "Octagon Theater 20x6W CW/WW/A",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 6.9,
+    "abstrahlwinkel_grad": 36
+  },
+  "kanaele": {
+    "IntensityColdWhite": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "SoundControlColdWhite": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "SoundControl2ColdWhite": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "ProgramSelColdWhite": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "FadeSpeedColdWhite": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "StrobeColdWhite": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "ProgramsColdWhite": {
+      "typ": "strobo",
+      "standard": 31,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 30,
+          "typ": "aus"
+        },
+        {
+          "von": 31,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 150,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 151,
+          "bis": 190,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 191,
+          "bis": 230,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 231,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "IntensityWarmWhite": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "SoundControlWarmWhite": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "SoundControl2WarmWhite": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "ProgramSelWarmWhite": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "FadeSpeedWarmWhite": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "StrobeWarmWhite": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "ProgramsWarmWhite": {
+      "typ": "strobo",
+      "standard": 31,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 30,
+          "typ": "aus"
+        },
+        {
+          "von": 31,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 150,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 151,
+          "bis": 190,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 191,
+          "bis": 230,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 231,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "IntensityAmber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "SoundControlAmber": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "SoundControl2Amber": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "ProgramSelAmber": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "FadeSpeedAmber": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "StrobeAmber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "ProgramsAmber": {
+      "typ": "strobo",
+      "standard": 31,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 30,
+          "typ": "aus"
+        },
+        {
+          "von": 31,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 150,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 151,
+          "bis": 190,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 191,
+          "bis": 230,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 231,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Strobe Speed": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Sound Control Mode 1": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Programs": {
+      "typ": "makro",
+      "standard": 11,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "aus"
+        },
+        {
+          "von": 11,
+          "bis": 50,
+          "typ": "dimmer"
+        },
+        {
+          "von": 51,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Cold White Intensity / Sound Control": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "Cold White Fade Speed / Strobe Intensity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Warm White Intensity / Sound Control": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Warm White Fade Speed / Strobe Intensity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Amber Intensity / Sound Control": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber Fade Speed / Strobe Intensity": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Warm White": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Cold White": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "Amber": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Sound Control Mode 1 / Hue": {
+      "typ": "makro",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "4-Channel",
+      "kanaele": [
+        "IntensityColdWhite",
+        "IntensityWarmWhite",
+        "IntensityAmber",
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "6-Channel",
+      "kanaele": [
+        "Cold White",
+        "Warm White",
+        "Amber",
+        "Speed",
+        "Sound Control Mode 1 / Hue",
+        "Programs"
+      ]
+    },
+    {
+      "name": "9-Channel",
+      "kanaele": [
+        "Cold White Intensity / Sound Control",
+        "Cold White Fade Speed / Strobe Intensity",
+        "ProgramsColdWhite",
+        "Warm White Intensity / Sound Control",
+        "Warm White Fade Speed / Strobe Intensity",
+        "ProgramsWarmWhite",
+        "Amber Intensity / Sound Control",
+        "Amber Fade Speed / Strobe Intensity",
+        "ProgramsAmber"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

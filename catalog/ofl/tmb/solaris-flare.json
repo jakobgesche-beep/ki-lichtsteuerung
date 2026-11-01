@@ -1,0 +1,1311 @@
+{
+  "id": "tmb/solaris-flare",
+  "hersteller": "TMB",
+  "name": "Solaris Flare",
+  "kategorien": [
+    "Strobe",
+    "Blinder",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 9.5,
+    "abstrahlwinkel_grad": 36
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Flash intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "dimmer"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Flash duration": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Flash rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "zu"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 25.0
+        }
+      ]
+    },
+    "Flash effects": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 42,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 43,
+          "bis": 85,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 86,
+          "bis": 128,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 129,
+          "bis": 171,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 172,
+          "bis": 214,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 215,
+          "bis": 240,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 241,
+          "bis": 245,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 246,
+          "bis": 250,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Red Strobe": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Strobe": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Strobe": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Strobe": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    },
+    "1-Pixel Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "1-Pixel Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "1-Pixel Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "2V-Pixel 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "2V-Pixel 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "2V-Pixel 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "2V-Pixel 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "2V-Pixel 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "2V-Pixel 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "2H-Pixel 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "2H-Pixel 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "2H-Pixel 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "2H-Pixel 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "2H-Pixel 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "2H-Pixel 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "3-Pixel 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "3-Pixel 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "3-Pixel 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "3-Pixel 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "3-Pixel 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "3-Pixel 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "3-Pixel 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "3-Pixel 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "3-Pixel 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "4-Pixel 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "4-Pixel 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "4-Pixel 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "4-Pixel 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "4-Pixel 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "4-Pixel 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "4-Pixel 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "4-Pixel 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "4-Pixel 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "4-Pixel 4 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "4-Pixel 4 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "4-Pixel 4 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6V-Pixel 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6V-Pixel 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6V-Pixel 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6V-Pixel 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6V-Pixel 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6V-Pixel 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6V-Pixel 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6V-Pixel 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6V-Pixel 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6V-Pixel 4 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6V-Pixel 4 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6V-Pixel 4 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6V-Pixel 5 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6V-Pixel 5 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6V-Pixel 5 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6V-Pixel 6 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6V-Pixel 6 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6V-Pixel 6 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6H-Pixel 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6H-Pixel 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6H-Pixel 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6H-Pixel 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6H-Pixel 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6H-Pixel 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6H-Pixel 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6H-Pixel 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6H-Pixel 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6H-Pixel 4 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6H-Pixel 4 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6H-Pixel 4 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6H-Pixel 5 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6H-Pixel 5 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6H-Pixel 5 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "6H-Pixel 6 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "6H-Pixel 6 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "6H-Pixel 6 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 4 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 4 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 4 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 5 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 5 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 5 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 6 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 6 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 6 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 7 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 7 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 7 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 8 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 8 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 8 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 9 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 9 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 9 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 10 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 10 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 10 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 11 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 11 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 11 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "12-Pixel 12 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "12-Pixel 12 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "12-Pixel 12 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "1-Pixel White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "2V-Pixel 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "2V-Pixel 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "2H-Pixel 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "2H-Pixel 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "3-Pixel 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "3-Pixel 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "3-Pixel 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "4-Pixel 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "4-Pixel 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "4-Pixel 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "4-Pixel 4 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6V-Pixel 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6V-Pixel 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6V-Pixel 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6V-Pixel 4 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6V-Pixel 5 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6V-Pixel 6 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6H-Pixel 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6H-Pixel 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6H-Pixel 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6H-Pixel 4 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6H-Pixel 5 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "6H-Pixel 6 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 4 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 5 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 6 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 7 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 8 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 9 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 10 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 11 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "12-Pixel 12 White": {
+      "typ": "weiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "Basic RGB 8bit",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue"
+      ]
+    },
+    {
+      "name": "Basic RGB 16bit",
+      "kanaele": [
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine"
+      ]
+    },
+    {
+      "name": "Basic RGBW 8bit",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "Basic RGBW 16bit",
+      "kanaele": [
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine"
+      ]
+    },
+    {
+      "name": "Strobe Only",
+      "kanaele": [
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects"
+      ]
+    },
+    {
+      "name": "RGB Strobe",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects"
+      ]
+    },
+    {
+      "name": "RGBW Strobe",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 1-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "1-Pixel Red",
+        "1-Pixel Green",
+        "1-Pixel Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 2V-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "2V-Pixel 1 Red",
+        "2V-Pixel 1 Green",
+        "2V-Pixel 1 Blue",
+        "2V-Pixel 2 Red",
+        "2V-Pixel 2 Green",
+        "2V-Pixel 2 Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 2H-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "2H-Pixel 1 Red",
+        "2H-Pixel 1 Green",
+        "2H-Pixel 1 Blue",
+        "2H-Pixel 2 Red",
+        "2H-Pixel 2 Green",
+        "2H-Pixel 2 Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 3-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "3-Pixel 1 Red",
+        "3-Pixel 1 Green",
+        "3-Pixel 1 Blue",
+        "3-Pixel 2 Red",
+        "3-Pixel 2 Green",
+        "3-Pixel 2 Blue",
+        "3-Pixel 3 Red",
+        "3-Pixel 3 Green",
+        "3-Pixel 3 Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 4-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "4-Pixel 1 Red",
+        "4-Pixel 1 Green",
+        "4-Pixel 1 Blue",
+        "4-Pixel 2 Red",
+        "4-Pixel 2 Green",
+        "4-Pixel 2 Blue",
+        "4-Pixel 3 Red",
+        "4-Pixel 3 Green",
+        "4-Pixel 3 Blue",
+        "4-Pixel 4 Red",
+        "4-Pixel 4 Green",
+        "4-Pixel 4 Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 6V-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "6V-Pixel 1 Red",
+        "6V-Pixel 1 Green",
+        "6V-Pixel 1 Blue",
+        "6V-Pixel 2 Red",
+        "6V-Pixel 2 Green",
+        "6V-Pixel 2 Blue",
+        "6V-Pixel 3 Red",
+        "6V-Pixel 3 Green",
+        "6V-Pixel 3 Blue",
+        "6V-Pixel 4 Red",
+        "6V-Pixel 4 Green",
+        "6V-Pixel 4 Blue",
+        "6V-Pixel 5 Red",
+        "6V-Pixel 5 Green",
+        "6V-Pixel 5 Blue",
+        "6V-Pixel 6 Red",
+        "6V-Pixel 6 Green",
+        "6V-Pixel 6 Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 6H-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "6H-Pixel 1 Red",
+        "6H-Pixel 1 Green",
+        "6H-Pixel 1 Blue",
+        "6H-Pixel 2 Red",
+        "6H-Pixel 2 Green",
+        "6H-Pixel 2 Blue",
+        "6H-Pixel 3 Red",
+        "6H-Pixel 3 Green",
+        "6H-Pixel 3 Blue",
+        "6H-Pixel 4 Red",
+        "6H-Pixel 4 Green",
+        "6H-Pixel 4 Blue",
+        "6H-Pixel 5 Red",
+        "6H-Pixel 5 Green",
+        "6H-Pixel 5 Blue",
+        "6H-Pixel 6 Red",
+        "6H-Pixel 6 Green",
+        "6H-Pixel 6 Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGB Strobe 12-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "12-Pixel 1 Red",
+        "12-Pixel 1 Green",
+        "12-Pixel 1 Blue",
+        "12-Pixel 2 Red",
+        "12-Pixel 2 Green",
+        "12-Pixel 2 Blue",
+        "12-Pixel 3 Red",
+        "12-Pixel 3 Green",
+        "12-Pixel 3 Blue",
+        "12-Pixel 4 Red",
+        "12-Pixel 4 Green",
+        "12-Pixel 4 Blue",
+        "12-Pixel 5 Red",
+        "12-Pixel 5 Green",
+        "12-Pixel 5 Blue",
+        "12-Pixel 6 Red",
+        "12-Pixel 6 Green",
+        "12-Pixel 6 Blue",
+        "12-Pixel 7 Red",
+        "12-Pixel 7 Green",
+        "12-Pixel 7 Blue",
+        "12-Pixel 8 Red",
+        "12-Pixel 8 Green",
+        "12-Pixel 8 Blue",
+        "12-Pixel 9 Red",
+        "12-Pixel 9 Green",
+        "12-Pixel 9 Blue",
+        "12-Pixel 10 Red",
+        "12-Pixel 10 Green",
+        "12-Pixel 10 Blue",
+        "12-Pixel 11 Red",
+        "12-Pixel 11 Green",
+        "12-Pixel 11 Blue",
+        "12-Pixel 12 Red",
+        "12-Pixel 12 Green",
+        "12-Pixel 12 Blue"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 1-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "1-Pixel Red",
+        "1-Pixel Green",
+        "1-Pixel Blue",
+        "1-Pixel White"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 2V-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "2V-Pixel 1 Red",
+        "2V-Pixel 1 Green",
+        "2V-Pixel 1 Blue",
+        "2V-Pixel 1 White",
+        "2V-Pixel 2 Red",
+        "2V-Pixel 2 Green",
+        "2V-Pixel 2 Blue",
+        "2V-Pixel 2 White"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 2H-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "2H-Pixel 1 Red",
+        "2H-Pixel 1 Green",
+        "2H-Pixel 1 Blue",
+        "2H-Pixel 1 White",
+        "2H-Pixel 2 Red",
+        "2H-Pixel 2 Green",
+        "2H-Pixel 2 Blue",
+        "2H-Pixel 2 White"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 3-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "3-Pixel 1 Red",
+        "3-Pixel 1 Green",
+        "3-Pixel 1 Blue",
+        "3-Pixel 1 White",
+        "3-Pixel 2 Red",
+        "3-Pixel 2 Green",
+        "3-Pixel 2 Blue",
+        "3-Pixel 2 White",
+        "3-Pixel 3 Red",
+        "3-Pixel 3 Green",
+        "3-Pixel 3 Blue",
+        "3-Pixel 3 White"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 4-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "4-Pixel 1 Red",
+        "4-Pixel 1 Green",
+        "4-Pixel 1 Blue",
+        "4-Pixel 1 White",
+        "4-Pixel 2 Red",
+        "4-Pixel 2 Green",
+        "4-Pixel 2 Blue",
+        "4-Pixel 2 White",
+        "4-Pixel 3 Red",
+        "4-Pixel 3 Green",
+        "4-Pixel 3 Blue",
+        "4-Pixel 3 White",
+        "4-Pixel 4 Red",
+        "4-Pixel 4 Green",
+        "4-Pixel 4 Blue",
+        "4-Pixel 4 White"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 6V-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "6V-Pixel 1 Red",
+        "6V-Pixel 1 Green",
+        "6V-Pixel 1 Blue",
+        "6V-Pixel 1 White",
+        "6V-Pixel 2 Red",
+        "6V-Pixel 2 Green",
+        "6V-Pixel 2 Blue",
+        "6V-Pixel 2 White",
+        "6V-Pixel 3 Red",
+        "6V-Pixel 3 Green",
+        "6V-Pixel 3 Blue",
+        "6V-Pixel 3 White",
+        "6V-Pixel 4 Red",
+        "6V-Pixel 4 Green",
+        "6V-Pixel 4 Blue",
+        "6V-Pixel 4 White",
+        "6V-Pixel 5 Red",
+        "6V-Pixel 5 Green",
+        "6V-Pixel 5 Blue",
+        "6V-Pixel 5 White",
+        "6V-Pixel 6 Red",
+        "6V-Pixel 6 Green",
+        "6V-Pixel 6 Blue",
+        "6V-Pixel 6 White"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 6H-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "6H-Pixel 1 Red",
+        "6H-Pixel 1 Green",
+        "6H-Pixel 1 Blue",
+        "6H-Pixel 1 White",
+        "6H-Pixel 2 Red",
+        "6H-Pixel 2 Green",
+        "6H-Pixel 2 Blue",
+        "6H-Pixel 2 White",
+        "6H-Pixel 3 Red",
+        "6H-Pixel 3 Green",
+        "6H-Pixel 3 Blue",
+        "6H-Pixel 3 White",
+        "6H-Pixel 4 Red",
+        "6H-Pixel 4 Green",
+        "6H-Pixel 4 Blue",
+        "6H-Pixel 4 White",
+        "6H-Pixel 5 Red",
+        "6H-Pixel 5 Green",
+        "6H-Pixel 5 Blue",
+        "6H-Pixel 5 White",
+        "6H-Pixel 6 Red",
+        "6H-Pixel 6 Green",
+        "6H-Pixel 6 Blue",
+        "6H-Pixel 6 White"
+      ]
+    },
+    {
+      "name": "Advanced RGBW Strobe 12-Pixel",
+      "kanaele": [
+        "Red Strobe",
+        "Green Strobe",
+        "Blue Strobe",
+        "White Strobe",
+        "Flash intensity",
+        "Flash duration",
+        "Flash rate",
+        "Flash effects",
+        "12-Pixel 1 Red",
+        "12-Pixel 1 Green",
+        "12-Pixel 1 Blue",
+        "12-Pixel 1 White",
+        "12-Pixel 2 Red",
+        "12-Pixel 2 Green",
+        "12-Pixel 2 Blue",
+        "12-Pixel 2 White",
+        "12-Pixel 3 Red",
+        "12-Pixel 3 Green",
+        "12-Pixel 3 Blue",
+        "12-Pixel 3 White",
+        "12-Pixel 4 Red",
+        "12-Pixel 4 Green",
+        "12-Pixel 4 Blue",
+        "12-Pixel 4 White",
+        "12-Pixel 5 Red",
+        "12-Pixel 5 Green",
+        "12-Pixel 5 Blue",
+        "12-Pixel 5 White",
+        "12-Pixel 6 Red",
+        "12-Pixel 6 Green",
+        "12-Pixel 6 Blue",
+        "12-Pixel 6 White",
+        "12-Pixel 7 Red",
+        "12-Pixel 7 Green",
+        "12-Pixel 7 Blue",
+        "12-Pixel 7 White",
+        "12-Pixel 8 Red",
+        "12-Pixel 8 Green",
+        "12-Pixel 8 Blue",
+        "12-Pixel 8 White",
+        "12-Pixel 9 Red",
+        "12-Pixel 9 Green",
+        "12-Pixel 9 Blue",
+        "12-Pixel 9 White",
+        "12-Pixel 10 Red",
+        "12-Pixel 10 Green",
+        "12-Pixel 10 Blue",
+        "12-Pixel 10 White",
+        "12-Pixel 11 Red",
+        "12-Pixel 11 Green",
+        "12-Pixel 11 Blue",
+        "12-Pixel 11 White",
+        "12-Pixel 12 Red",
+        "12-Pixel 12 Green",
+        "12-Pixel 12 Blue",
+        "12-Pixel 12 White"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

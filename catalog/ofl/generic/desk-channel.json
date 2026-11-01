@@ -1,0 +1,67 @@
+{
+  "id": "generic/desk-channel",
+  "hersteller": "Generic",
+  "name": "Desk Channel",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Intensity",
+      "stufe": 1
+    },
+    "Intensity fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Intensity",
+      "stufe": 2
+    }
+  },
+  "modi": [
+    {
+      "name": "8 bit",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "16 bit",
+      "kanaele": [
+        "Intensity",
+        "Intensity fine"
+      ]
+    },
+    {
+      "name": "24 bit",
+      "kanaele": [
+        "Intensity",
+        "Intensity fine",
+        "Intensity fine^2"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

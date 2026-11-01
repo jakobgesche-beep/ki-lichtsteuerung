@@ -1,0 +1,3928 @@
+{
+  "id": "showline/sl-nitro-510c",
+  "hersteller": "Showline",
+  "name": "SL NITRO 510C",
+  "kategorien": [
+    "Strobe",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8,
+    "abstrahlwinkel_grad": 120
+  },
+  "kanaele": {
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 6,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 7,
+          "bis": 8,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 9,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 12,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 13,
+          "bis": 14,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 15,
+          "bis": 16,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 17,
+          "bis": 18,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 19,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 26,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 27,
+          "bis": 28,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 29,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 32,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 33,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 36,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 37,
+          "bis": 38,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 39,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 44,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 45,
+          "bis": 46,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 47,
+          "bis": 48,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 49,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 52,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 53,
+          "bis": 54,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 55,
+          "bis": 56,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 57,
+          "bis": 58,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 59,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 62,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 63,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 66,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 67,
+          "bis": 68,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 69,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 72,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 73,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 76,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 77,
+          "bis": 78,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 79,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 82,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 83,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 86,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 87,
+          "bis": 88,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 89,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 92,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 93,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 96,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 97,
+          "bis": 98,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 99,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 102,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 103,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 106,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 107,
+          "bis": 108,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 109,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 114,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 115,
+          "bis": 116,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 117,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 120,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 121,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 126,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 127,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 132,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 133,
+          "bis": 134,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 135,
+          "bis": 136,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 137,
+          "bis": 138,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 139,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 142,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 143,
+          "bis": 144,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 145,
+          "bis": 146,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 147,
+          "bis": 148,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 149,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 156,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 157,
+          "bis": 171,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 172,
+          "bis": 186,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 187,
+          "bis": 201,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 202,
+          "bis": 204,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 205,
+          "bis": 207,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 208,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 213,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 214,
+          "bis": 216,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 217,
+          "bis": 219,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 220,
+          "bis": 222,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 223,
+          "bis": 225,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 226,
+          "bis": 228,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 229,
+          "bis": 231,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 232,
+          "bis": 234,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 235,
+          "bis": 237,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 238,
+          "bis": 240,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 241,
+          "bis": 243,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 244,
+          "bis": 246,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 247,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 252,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 253,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 42,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 43,
+          "bis": 85,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 86,
+          "bis": 128,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 129,
+          "bis": 171,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 172,
+          "bis": 173,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 174,
+          "bis": 175,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 176,
+          "bis": 178,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 179,
+          "bis": 180,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 181,
+          "bis": 182,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 183,
+          "bis": 184,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 185,
+          "bis": 186,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 187,
+          "bis": 214,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 215,
+          "bis": 235,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 236,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Intensity Timing": {
+      "typ": "tempo",
+      "standard": 255
+    },
+    "Color Timing": {
+      "typ": "tempo",
+      "standard": 255
+    },
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 4,
+          "typ": "aus"
+        },
+        {
+          "von": 5,
+          "bis": 29,
+          "typ": "aus"
+        },
+        {
+          "von": 30,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 44,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 45,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 69,
+          "typ": "aus"
+        },
+        {
+          "von": 70,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 99,
+          "typ": "aus"
+        },
+        {
+          "von": 100,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 108,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 109,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Master Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Master Dimmer",
+      "stufe": 1
+    },
+    "All Zones Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "All Zones Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "All Zones Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "All Zones Red"
+    },
+    "All Zones Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "All Zones Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "All Zones Green"
+    },
+    "All Zones Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "All Zones Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "All Zones Blue"
+    },
+    "All Zones White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "All Zones White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "All Zones White"
+    },
+    "All Zones Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "All Zones Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "All Zones Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "All Zones Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "All Zones Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "All Zones Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "All Zones White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "All Zones White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Top Row Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Top Row Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Top Row Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Top Row Red"
+    },
+    "Top Row Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Top Row Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Top Row Green"
+    },
+    "Top Row Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Top Row Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Top Row Blue"
+    },
+    "Top Row White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Top Row White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Top Row White"
+    },
+    "Top Row Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Top Row Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Top Row Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Top Row Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Top Row Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Top Row Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Top Row White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Top Row White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Bottom Row Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Bottom Row Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Bottom Row Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Bottom Row Red"
+    },
+    "Bottom Row Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Bottom Row Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Bottom Row Green"
+    },
+    "Bottom Row Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Bottom Row Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Bottom Row Blue"
+    },
+    "Bottom Row White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Bottom Row White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Bottom Row White"
+    },
+    "Bottom Row Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Bottom Row Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Bottom Row Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Bottom Row Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Bottom Row Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Bottom Row Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Bottom Row White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Bottom Row White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Left Zone Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Left Zone Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Left Zone Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Left Zone Red"
+    },
+    "Left Zone Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Left Zone Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Left Zone Green"
+    },
+    "Left Zone Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Left Zone Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Left Zone Blue"
+    },
+    "Left Zone White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Left Zone White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Left Zone White"
+    },
+    "Left Zone Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Left Zone Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Left Zone Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Left Zone Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Left Zone Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Left Zone Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Left Zone White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Left Zone White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Center Zone Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Center Zone Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Center Zone Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Center Zone Red"
+    },
+    "Center Zone Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Center Zone Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Center Zone Green"
+    },
+    "Center Zone Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Center Zone Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Center Zone Blue"
+    },
+    "Center Zone White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Center Zone White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Center Zone White"
+    },
+    "Center Zone Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Center Zone Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Center Zone Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Center Zone Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Center Zone Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Center Zone Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Center Zone White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Center Zone White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Right Zone Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Right Zone Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Right Zone Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Right Zone Red"
+    },
+    "Right Zone Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Right Zone Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Right Zone Green"
+    },
+    "Right Zone Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Right Zone Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Right Zone Blue"
+    },
+    "Right Zone White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Right Zone White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Right Zone White"
+    },
+    "Right Zone Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Right Zone Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Right Zone Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Right Zone Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Right Zone Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Right Zone Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Right Zone White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Right Zone White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 1 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Zone 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Zone 1 Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 1 Red"
+    },
+    "Zone 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Zone 1 Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 1 Green"
+    },
+    "Zone 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Zone 1 Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 1 Blue"
+    },
+    "Zone 1 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Zone 1 White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 1 White"
+    },
+    "Zone 1 Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 1 Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 1 Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 1 Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 1 Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 1 Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 1 White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 1 White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 2 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Zone 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Zone 2 Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 2 Red"
+    },
+    "Zone 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Zone 2 Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 2 Green"
+    },
+    "Zone 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Zone 2 Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 2 Blue"
+    },
+    "Zone 2 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Zone 2 White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 2 White"
+    },
+    "Zone 2 Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 2 Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 2 Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 2 Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 2 Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 2 Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 2 White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 2 White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 3 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Zone 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Zone 3 Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 3 Red"
+    },
+    "Zone 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Zone 3 Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 3 Green"
+    },
+    "Zone 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Zone 3 Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 3 Blue"
+    },
+    "Zone 3 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Zone 3 White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 3 White"
+    },
+    "Zone 3 Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 3 Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 3 Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 3 Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 3 Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 3 Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 3 White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 3 White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 4 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Zone 4 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Zone 4 Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 4 Red"
+    },
+    "Zone 4 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Zone 4 Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 4 Green"
+    },
+    "Zone 4 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Zone 4 Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 4 Blue"
+    },
+    "Zone 4 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Zone 4 White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 4 White"
+    },
+    "Zone 4 Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 4 Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 4 Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 4 Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 4 Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 4 Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 4 White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 4 White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 5 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Zone 5 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Zone 5 Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 5 Red"
+    },
+    "Zone 5 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Zone 5 Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 5 Green"
+    },
+    "Zone 5 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Zone 5 Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 5 Blue"
+    },
+    "Zone 5 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Zone 5 White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 5 White"
+    },
+    "Zone 5 Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 5 Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 5 Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 5 Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 5 Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 5 Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 5 White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 5 White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 6 Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Zone 6 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Zone 6 Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 6 Red"
+    },
+    "Zone 6 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Zone 6 Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 6 Green"
+    },
+    "Zone 6 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Zone 6 Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 6 Blue"
+    },
+    "Zone 6 White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Zone 6 White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "stufe": 1,
+      "grob": "Zone 6 White"
+    },
+    "Zone 6 Red Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 6 Red Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 6 Green Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 6 Green Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 6 Blue Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 6 Blue Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 6 White Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 6 White Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "All Zones RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "All Zones RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Top Row RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Top Row RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Bottom Row RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Bottom Row RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Left Zone RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Left Zone RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Center Zone RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Center Zone RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Right Zone RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Right Zone RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 1 RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 1 RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 2 RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 2 RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 3 RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 3 RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 4 RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 4 RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 5 RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 5 RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 6 RGB Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 6 RGB Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "All Zones Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "All Zones Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Top Row Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Top Row Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Bottom Row Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Bottom Row Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Left Zone Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Left Zone Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Center Zone Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Center Zone Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Right Zone Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Right Zone Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 1 Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 1 Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 2 Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 2 Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 3 Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 3 Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 4 Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 4 Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 5 Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 5 Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    },
+    "Zone 6 Strobe Duration": {
+      "typ": "strobo",
+      "standard": 0
+    },
+    "Zone 6 Strobe Rate": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.5,
+          "hz_bis": 30.488
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "RGBW Full 1-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "All Zones Intensity",
+        "All Zones Red",
+        "All Zones Red fine",
+        "All Zones Green",
+        "All Zones Green fine",
+        "All Zones Blue",
+        "All Zones Blue fine",
+        "All Zones White",
+        "All Zones White fine",
+        "All Zones Red Strobe Duration",
+        "All Zones Red Strobe Rate",
+        "All Zones Green Strobe Duration",
+        "All Zones Green Strobe Rate",
+        "All Zones Blue Strobe Duration",
+        "All Zones Blue Strobe Rate",
+        "All Zones White Strobe Duration",
+        "All Zones White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW Full 2-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Top Row Intensity",
+        "Top Row Red",
+        "Top Row Red fine",
+        "Top Row Green",
+        "Top Row Green fine",
+        "Top Row Blue",
+        "Top Row Blue fine",
+        "Top Row White",
+        "Top Row White fine",
+        "Top Row Red Strobe Duration",
+        "Top Row Red Strobe Rate",
+        "Top Row Green Strobe Duration",
+        "Top Row Green Strobe Rate",
+        "Top Row Blue Strobe Duration",
+        "Top Row Blue Strobe Rate",
+        "Top Row White Strobe Duration",
+        "Top Row White Strobe Rate",
+        "Bottom Row Intensity",
+        "Bottom Row Red",
+        "Bottom Row Red fine",
+        "Bottom Row Green",
+        "Bottom Row Green fine",
+        "Bottom Row Blue",
+        "Bottom Row Blue fine",
+        "Bottom Row White",
+        "Bottom Row White fine",
+        "Bottom Row Red Strobe Duration",
+        "Bottom Row Red Strobe Rate",
+        "Bottom Row Green Strobe Duration",
+        "Bottom Row Green Strobe Rate",
+        "Bottom Row Blue Strobe Duration",
+        "Bottom Row Blue Strobe Rate",
+        "Bottom Row White Strobe Duration",
+        "Bottom Row White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW Full 3-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Left Zone Intensity",
+        "Left Zone Red",
+        "Left Zone Red fine",
+        "Left Zone Green",
+        "Left Zone Green fine",
+        "Left Zone Blue",
+        "Left Zone Blue fine",
+        "Left Zone White",
+        "Left Zone White fine",
+        "Left Zone Red Strobe Duration",
+        "Left Zone Red Strobe Rate",
+        "Left Zone Green Strobe Duration",
+        "Left Zone Green Strobe Rate",
+        "Left Zone Blue Strobe Duration",
+        "Left Zone Blue Strobe Rate",
+        "Left Zone White Strobe Duration",
+        "Left Zone White Strobe Rate",
+        "Center Zone Intensity",
+        "Center Zone Red",
+        "Center Zone Red fine",
+        "Center Zone Green",
+        "Center Zone Green fine",
+        "Center Zone Blue",
+        "Center Zone Blue fine",
+        "Center Zone White",
+        "Center Zone White fine",
+        "Center Zone Red Strobe Duration",
+        "Center Zone Red Strobe Rate",
+        "Center Zone Green Strobe Duration",
+        "Center Zone Green Strobe Rate",
+        "Center Zone Blue Strobe Duration",
+        "Center Zone Blue Strobe Rate",
+        "Center Zone White Strobe Duration",
+        "Center Zone White Strobe Rate",
+        "Right Zone Intensity",
+        "Right Zone Red",
+        "Right Zone Red fine",
+        "Right Zone Green",
+        "Right Zone Green fine",
+        "Right Zone Blue",
+        "Right Zone Blue fine",
+        "Right Zone White",
+        "Right Zone White fine",
+        "Right Zone Red Strobe Duration",
+        "Right Zone Red Strobe Rate",
+        "Right Zone Green Strobe Duration",
+        "Right Zone Green Strobe Rate",
+        "Right Zone Blue Strobe Duration",
+        "Right Zone Blue Strobe Rate",
+        "Right Zone White Strobe Duration",
+        "Right Zone White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW Full 6-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Zone 1 Intensity",
+        "Zone 1 Red",
+        "Zone 1 Red fine",
+        "Zone 1 Green",
+        "Zone 1 Green fine",
+        "Zone 1 Blue",
+        "Zone 1 Blue fine",
+        "Zone 1 White",
+        "Zone 1 White fine",
+        "Zone 1 Red Strobe Duration",
+        "Zone 1 Red Strobe Rate",
+        "Zone 1 Green Strobe Duration",
+        "Zone 1 Green Strobe Rate",
+        "Zone 1 Blue Strobe Duration",
+        "Zone 1 Blue Strobe Rate",
+        "Zone 1 White Strobe Duration",
+        "Zone 1 White Strobe Rate",
+        "Zone 2 Intensity",
+        "Zone 2 Red",
+        "Zone 2 Red fine",
+        "Zone 2 Green",
+        "Zone 2 Green fine",
+        "Zone 2 Blue",
+        "Zone 2 Blue fine",
+        "Zone 2 White",
+        "Zone 2 White fine",
+        "Zone 2 Red Strobe Duration",
+        "Zone 2 Red Strobe Rate",
+        "Zone 2 Green Strobe Duration",
+        "Zone 2 Green Strobe Rate",
+        "Zone 2 Blue Strobe Duration",
+        "Zone 2 Blue Strobe Rate",
+        "Zone 2 White Strobe Duration",
+        "Zone 2 White Strobe Rate",
+        "Zone 3 Intensity",
+        "Zone 3 Red",
+        "Zone 3 Red fine",
+        "Zone 3 Green",
+        "Zone 3 Green fine",
+        "Zone 3 Blue",
+        "Zone 3 Blue fine",
+        "Zone 3 White",
+        "Zone 3 White fine",
+        "Zone 3 Red Strobe Duration",
+        "Zone 3 Red Strobe Rate",
+        "Zone 3 Green Strobe Duration",
+        "Zone 3 Green Strobe Rate",
+        "Zone 3 Blue Strobe Duration",
+        "Zone 3 Blue Strobe Rate",
+        "Zone 3 White Strobe Duration",
+        "Zone 3 White Strobe Rate",
+        "Zone 4 Intensity",
+        "Zone 4 Red",
+        "Zone 4 Red fine",
+        "Zone 4 Green",
+        "Zone 4 Green fine",
+        "Zone 4 Blue",
+        "Zone 4 Blue fine",
+        "Zone 4 White",
+        "Zone 4 White fine",
+        "Zone 4 Red Strobe Duration",
+        "Zone 4 Red Strobe Rate",
+        "Zone 4 Green Strobe Duration",
+        "Zone 4 Green Strobe Rate",
+        "Zone 4 Blue Strobe Duration",
+        "Zone 4 Blue Strobe Rate",
+        "Zone 4 White Strobe Duration",
+        "Zone 4 White Strobe Rate",
+        "Zone 5 Intensity",
+        "Zone 5 Red",
+        "Zone 5 Red fine",
+        "Zone 5 Green",
+        "Zone 5 Green fine",
+        "Zone 5 Blue",
+        "Zone 5 Blue fine",
+        "Zone 5 White",
+        "Zone 5 White fine",
+        "Zone 5 Red Strobe Duration",
+        "Zone 5 Red Strobe Rate",
+        "Zone 5 Green Strobe Duration",
+        "Zone 5 Green Strobe Rate",
+        "Zone 5 Blue Strobe Duration",
+        "Zone 5 Blue Strobe Rate",
+        "Zone 5 White Strobe Duration",
+        "Zone 5 White Strobe Rate",
+        "Zone 6 Intensity",
+        "Zone 6 Red",
+        "Zone 6 Red fine",
+        "Zone 6 Green",
+        "Zone 6 Green fine",
+        "Zone 6 Blue",
+        "Zone 6 Blue fine",
+        "Zone 6 White",
+        "Zone 6 White fine",
+        "Zone 6 Red Strobe Duration",
+        "Zone 6 Red Strobe Rate",
+        "Zone 6 Green Strobe Duration",
+        "Zone 6 Green Strobe Rate",
+        "Zone 6 Blue Strobe Duration",
+        "Zone 6 Blue Strobe Rate",
+        "Zone 6 White Strobe Duration",
+        "Zone 6 White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW Expanded 1-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "All Zones Intensity",
+        "All Zones Red",
+        "All Zones Red fine",
+        "All Zones Green",
+        "All Zones Green fine",
+        "All Zones Blue",
+        "All Zones Blue fine",
+        "All Zones White",
+        "All Zones White fine",
+        "All Zones RGB Strobe Duration",
+        "All Zones RGB Strobe Rate",
+        "All Zones White Strobe Duration",
+        "All Zones White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW Expanded 2-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Top Row Intensity",
+        "Top Row Red",
+        "Top Row Red fine",
+        "Top Row Green",
+        "Top Row Green fine",
+        "Top Row Blue",
+        "Top Row Blue fine",
+        "Top Row White",
+        "Top Row White fine",
+        "Top Row RGB Strobe Duration",
+        "Top Row RGB Strobe Rate",
+        "Top Row White Strobe Duration",
+        "Top Row White Strobe Rate",
+        "Bottom Row Intensity",
+        "Bottom Row Red",
+        "Bottom Row Red fine",
+        "Bottom Row Green",
+        "Bottom Row Green fine",
+        "Bottom Row Blue",
+        "Bottom Row Blue fine",
+        "Bottom Row White",
+        "Bottom Row White fine",
+        "Bottom Row RGB Strobe Duration",
+        "Bottom Row RGB Strobe Rate",
+        "Bottom Row White Strobe Duration",
+        "Bottom Row White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW Expanded 3-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Left Zone Intensity",
+        "Left Zone Red",
+        "Left Zone Red fine",
+        "Left Zone Green",
+        "Left Zone Green fine",
+        "Left Zone Blue",
+        "Left Zone Blue fine",
+        "Left Zone White",
+        "Left Zone White fine",
+        "Left Zone RGB Strobe Duration",
+        "Left Zone RGB Strobe Rate",
+        "Left Zone White Strobe Duration",
+        "Left Zone White Strobe Rate",
+        "Center Zone Intensity",
+        "Center Zone Red",
+        "Center Zone Red fine",
+        "Center Zone Green",
+        "Center Zone Green fine",
+        "Center Zone Blue",
+        "Center Zone Blue fine",
+        "Center Zone White",
+        "Center Zone White fine",
+        "Center Zone RGB Strobe Duration",
+        "Center Zone RGB Strobe Rate",
+        "Center Zone White Strobe Duration",
+        "Center Zone White Strobe Rate",
+        "Right Zone Intensity",
+        "Right Zone Red",
+        "Right Zone Red fine",
+        "Right Zone Green",
+        "Right Zone Green fine",
+        "Right Zone Blue",
+        "Right Zone Blue fine",
+        "Right Zone White",
+        "Right Zone White fine",
+        "Right Zone RGB Strobe Duration",
+        "Right Zone RGB Strobe Rate",
+        "Right Zone White Strobe Duration",
+        "Right Zone White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW Expanded 6-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Zone 1 Intensity",
+        "Zone 1 Red",
+        "Zone 1 Red fine",
+        "Zone 1 Green",
+        "Zone 1 Green fine",
+        "Zone 1 Blue",
+        "Zone 1 Blue fine",
+        "Zone 1 White",
+        "Zone 1 White fine",
+        "Zone 1 RGB Strobe Duration",
+        "Zone 1 RGB Strobe Rate",
+        "Zone 1 White Strobe Duration",
+        "Zone 1 White Strobe Rate",
+        "Zone 2 Intensity",
+        "Zone 2 Red",
+        "Zone 2 Red fine",
+        "Zone 2 Green",
+        "Zone 2 Green fine",
+        "Zone 2 Blue",
+        "Zone 2 Blue fine",
+        "Zone 2 White",
+        "Zone 2 White fine",
+        "Zone 2 RGB Strobe Duration",
+        "Zone 2 RGB Strobe Rate",
+        "Zone 2 White Strobe Duration",
+        "Zone 2 White Strobe Rate",
+        "Zone 3 Intensity",
+        "Zone 3 Red",
+        "Zone 3 Red fine",
+        "Zone 3 Green",
+        "Zone 3 Green fine",
+        "Zone 3 Blue",
+        "Zone 3 Blue fine",
+        "Zone 3 White",
+        "Zone 3 White fine",
+        "Zone 3 RGB Strobe Duration",
+        "Zone 3 RGB Strobe Rate",
+        "Zone 3 White Strobe Duration",
+        "Zone 3 White Strobe Rate",
+        "Zone 4 Intensity",
+        "Zone 4 Red",
+        "Zone 4 Red fine",
+        "Zone 4 Green",
+        "Zone 4 Green fine",
+        "Zone 4 Blue",
+        "Zone 4 Blue fine",
+        "Zone 4 White",
+        "Zone 4 White fine",
+        "Zone 4 RGB Strobe Duration",
+        "Zone 4 RGB Strobe Rate",
+        "Zone 4 White Strobe Duration",
+        "Zone 4 White Strobe Rate",
+        "Zone 5 Intensity",
+        "Zone 5 Red",
+        "Zone 5 Red fine",
+        "Zone 5 Green",
+        "Zone 5 Green fine",
+        "Zone 5 Blue",
+        "Zone 5 Blue fine",
+        "Zone 5 White",
+        "Zone 5 White fine",
+        "Zone 5 RGB Strobe Duration",
+        "Zone 5 RGB Strobe Rate",
+        "Zone 5 White Strobe Duration",
+        "Zone 5 White Strobe Rate",
+        "Zone 6 Intensity",
+        "Zone 6 Red",
+        "Zone 6 Red fine",
+        "Zone 6 Green",
+        "Zone 6 Green fine",
+        "Zone 6 Blue",
+        "Zone 6 Blue fine",
+        "Zone 6 White",
+        "Zone 6 White fine",
+        "Zone 6 RGB Strobe Duration",
+        "Zone 6 RGB Strobe Rate",
+        "Zone 6 White Strobe Duration",
+        "Zone 6 White Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 16-Bit 1-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "All Zones Intensity",
+        "All Zones Red",
+        "All Zones Red fine",
+        "All Zones Green",
+        "All Zones Green fine",
+        "All Zones Blue",
+        "All Zones Blue fine",
+        "All Zones White",
+        "All Zones White fine",
+        "All Zones Strobe Duration",
+        "All Zones Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 16-Bit 2-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Top Row Intensity",
+        "Top Row Red",
+        "Top Row Red fine",
+        "Top Row Green",
+        "Top Row Green fine",
+        "Top Row Blue",
+        "Top Row Blue fine",
+        "Top Row White",
+        "Top Row White fine",
+        "Top Row Strobe Duration",
+        "Top Row Strobe Rate",
+        "Bottom Row Intensity",
+        "Bottom Row Red",
+        "Bottom Row Red fine",
+        "Bottom Row Green",
+        "Bottom Row Green fine",
+        "Bottom Row Blue",
+        "Bottom Row Blue fine",
+        "Bottom Row White",
+        "Bottom Row White fine",
+        "Bottom Row Strobe Duration",
+        "Bottom Row Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 16-Bit 3-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Left Zone Intensity",
+        "Left Zone Red",
+        "Left Zone Red fine",
+        "Left Zone Green",
+        "Left Zone Green fine",
+        "Left Zone Blue",
+        "Left Zone Blue fine",
+        "Left Zone White",
+        "Left Zone White fine",
+        "Left Zone Strobe Duration",
+        "Left Zone Strobe Rate",
+        "Center Zone Intensity",
+        "Center Zone Red",
+        "Center Zone Red fine",
+        "Center Zone Green",
+        "Center Zone Green fine",
+        "Center Zone Blue",
+        "Center Zone Blue fine",
+        "Center Zone White",
+        "Center Zone White fine",
+        "Center Zone Strobe Duration",
+        "Center Zone Strobe Rate",
+        "Right Zone Intensity",
+        "Right Zone Red",
+        "Right Zone Red fine",
+        "Right Zone Green",
+        "Right Zone Green fine",
+        "Right Zone Blue",
+        "Right Zone Blue fine",
+        "Right Zone White",
+        "Right Zone White fine",
+        "Right Zone Strobe Duration",
+        "Right Zone Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 16-Bit 6-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Master Dimmer fine",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Color Timing",
+        "Control",
+        "Zone 1 Intensity",
+        "Zone 1 Red",
+        "Zone 1 Red fine",
+        "Zone 1 Green",
+        "Zone 1 Green fine",
+        "Zone 1 Blue",
+        "Zone 1 Blue fine",
+        "Zone 1 White",
+        "Zone 1 White fine",
+        "Zone 1 Strobe Duration",
+        "Zone 1 Strobe Rate",
+        "Zone 2 Intensity",
+        "Zone 2 Red",
+        "Zone 2 Red fine",
+        "Zone 2 Green",
+        "Zone 2 Green fine",
+        "Zone 2 Blue",
+        "Zone 2 Blue fine",
+        "Zone 2 White",
+        "Zone 2 White fine",
+        "Zone 2 Strobe Duration",
+        "Zone 2 Strobe Rate",
+        "Zone 3 Intensity",
+        "Zone 3 Red",
+        "Zone 3 Red fine",
+        "Zone 3 Green",
+        "Zone 3 Green fine",
+        "Zone 3 Blue",
+        "Zone 3 Blue fine",
+        "Zone 3 White",
+        "Zone 3 White fine",
+        "Zone 3 Strobe Duration",
+        "Zone 3 Strobe Rate",
+        "Zone 4 Intensity",
+        "Zone 4 Red",
+        "Zone 4 Red fine",
+        "Zone 4 Green",
+        "Zone 4 Green fine",
+        "Zone 4 Blue",
+        "Zone 4 Blue fine",
+        "Zone 4 White",
+        "Zone 4 White fine",
+        "Zone 4 Strobe Duration",
+        "Zone 4 Strobe Rate",
+        "Zone 5 Intensity",
+        "Zone 5 Red",
+        "Zone 5 Red fine",
+        "Zone 5 Green",
+        "Zone 5 Green fine",
+        "Zone 5 Blue",
+        "Zone 5 Blue fine",
+        "Zone 5 White",
+        "Zone 5 White fine",
+        "Zone 5 Strobe Duration",
+        "Zone 5 Strobe Rate",
+        "Zone 6 Intensity",
+        "Zone 6 Red",
+        "Zone 6 Red fine",
+        "Zone 6 Green",
+        "Zone 6 Green fine",
+        "Zone 6 Blue",
+        "Zone 6 Blue fine",
+        "Zone 6 White",
+        "Zone 6 White fine",
+        "Zone 6 Strobe Duration",
+        "Zone 6 Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 8-Bit 1-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Control",
+        "All Zones Intensity",
+        "All Zones Red",
+        "All Zones Green",
+        "All Zones Blue",
+        "All Zones White",
+        "All Zones Strobe Duration",
+        "All Zones Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 8-Bit 2-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Control",
+        "Top Row Intensity",
+        "Top Row Red",
+        "Top Row Green",
+        "Top Row Blue",
+        "Top Row White",
+        "Top Row Strobe Duration",
+        "Top Row Strobe Rate",
+        "Bottom Row Intensity",
+        "Bottom Row Red",
+        "Bottom Row Green",
+        "Bottom Row Blue",
+        "Bottom Row White",
+        "Bottom Row Strobe Duration",
+        "Bottom Row Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 8-Bit 3-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Control",
+        "Left Zone Intensity",
+        "Left Zone Red",
+        "Left Zone Green",
+        "Left Zone Blue",
+        "Left Zone White",
+        "Left Zone Strobe Duration",
+        "Left Zone Strobe Rate",
+        "Center Zone Intensity",
+        "Center Zone Red",
+        "Center Zone Green",
+        "Center Zone Blue",
+        "Center Zone White",
+        "Center Zone Strobe Duration",
+        "Center Zone Strobe Rate",
+        "Right Zone Intensity",
+        "Right Zone Red",
+        "Right Zone Green",
+        "Right Zone Blue",
+        "Right Zone White",
+        "Right Zone Strobe Duration",
+        "Right Zone Strobe Rate"
+      ]
+    },
+    {
+      "name": "RGBW 8-Bit 6-zone",
+      "kanaele": [
+        "Master Dimmer",
+        "Color Macros",
+        "Strobe",
+        "Intensity Timing",
+        "Control",
+        "Zone 1 Intensity",
+        "Zone 1 Red",
+        "Zone 1 Green",
+        "Zone 1 Blue",
+        "Zone 1 White",
+        "Zone 1 Strobe Duration",
+        "Zone 1 Strobe Rate",
+        "Zone 2 Intensity",
+        "Zone 2 Red",
+        "Zone 2 Green",
+        "Zone 2 Blue",
+        "Zone 2 White",
+        "Zone 2 Strobe Duration",
+        "Zone 2 Strobe Rate",
+        "Zone 3 Intensity",
+        "Zone 3 Red",
+        "Zone 3 Green",
+        "Zone 3 Blue",
+        "Zone 3 White",
+        "Zone 3 Strobe Duration",
+        "Zone 3 Strobe Rate",
+        "Zone 4 Intensity",
+        "Zone 4 Red",
+        "Zone 4 Green",
+        "Zone 4 Blue",
+        "Zone 4 White",
+        "Zone 4 Strobe Duration",
+        "Zone 4 Strobe Rate",
+        "Zone 5 Intensity",
+        "Zone 5 Red",
+        "Zone 5 Green",
+        "Zone 5 Blue",
+        "Zone 5 White",
+        "Zone 5 Strobe Duration",
+        "Zone 5 Strobe Rate",
+        "Zone 6 Intensity",
+        "Zone 6 Red",
+        "Zone 6 Green",
+        "Zone 6 Blue",
+        "Zone 6 White",
+        "Zone 6 Strobe Duration",
+        "Zone 6 Strobe Rate"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Master Dimmer",
+        "Color Macros",
+        "Strobe Duration",
+        "Strobe Rate",
+        "Strobe",
+        "Control"
+      ]
+    },
+    {
+      "name": "Mapping 16-Bit",
+      "kanaele": [
+        "Zone 1 Red",
+        "Zone 1 Red fine",
+        "Zone 1 Green",
+        "Zone 1 Green fine",
+        "Zone 1 Blue",
+        "Zone 1 Blue fine",
+        "Zone 1 White",
+        "Zone 1 White fine",
+        "Zone 2 Red",
+        "Zone 2 Red fine",
+        "Zone 2 Green",
+        "Zone 2 Green fine",
+        "Zone 2 Blue",
+        "Zone 2 Blue fine",
+        "Zone 2 White",
+        "Zone 2 White fine",
+        "Zone 3 Red",
+        "Zone 3 Red fine",
+        "Zone 3 Green",
+        "Zone 3 Green fine",
+        "Zone 3 Blue",
+        "Zone 3 Blue fine",
+        "Zone 3 White",
+        "Zone 3 White fine",
+        "Zone 4 Red",
+        "Zone 4 Red fine",
+        "Zone 4 Green",
+        "Zone 4 Green fine",
+        "Zone 4 Blue",
+        "Zone 4 Blue fine",
+        "Zone 4 White",
+        "Zone 4 White fine",
+        "Zone 5 Red",
+        "Zone 5 Red fine",
+        "Zone 5 Green",
+        "Zone 5 Green fine",
+        "Zone 5 Blue",
+        "Zone 5 Blue fine",
+        "Zone 5 White",
+        "Zone 5 White fine",
+        "Zone 6 Red",
+        "Zone 6 Red fine",
+        "Zone 6 Green",
+        "Zone 6 Green fine",
+        "Zone 6 Blue",
+        "Zone 6 Blue fine",
+        "Zone 6 White",
+        "Zone 6 White fine"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

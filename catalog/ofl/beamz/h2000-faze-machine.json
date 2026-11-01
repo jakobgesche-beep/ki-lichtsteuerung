@@ -1,0 +1,39 @@
+{
+  "id": "beamz/h2000-faze-machine",
+  "hersteller": "BeamZ",
+  "name": "H2000 Faze Machine",
+  "kategorien": [
+    "Hazer",
+    "Smoke"
+  ],
+  "physik": {
+    "gewicht_kg": 6.8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Smoke": {
+      "typ": "nebel",
+      "standard": 0
+    },
+    "Fan": {
+      "typ": "tempo",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Smoke",
+        "Fan"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

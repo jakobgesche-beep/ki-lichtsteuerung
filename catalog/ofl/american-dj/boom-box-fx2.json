@@ -1,0 +1,406 @@
+{
+  "id": "american-dj/boom-box-fx2",
+  "hersteller": "American DJ",
+  "name": "Boom Box Fx2",
+  "kategorien": [
+    "Laser",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Show mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 69,
+          "typ": "aus"
+        },
+        {
+          "von": 70,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 89,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 90,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Show speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Special Functions": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 139,
+          "typ": "aus"
+        },
+        {
+          "von": 140,
+          "bis": 209,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 210,
+          "bis": 249,
+          "typ": "aus"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Center LED": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Red Laser": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "aus"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Green Laser": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "aus"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Laser Patterns": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Red Beam": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Beam": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Beam": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Beam": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Beam Strobe": {
+      "typ": "strobo",
+      "standard": 255,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "zu"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "offen"
+        },
+        {
+          "von": 16,
+          "bis": 131,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 132,
+          "bis": 139,
+          "typ": "offen"
+        },
+        {
+          "von": 140,
+          "bis": 181,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 182,
+          "bis": 189,
+          "typ": "offen"
+        },
+        {
+          "von": 190,
+          "bis": 231,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "offen"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Beam Rotation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Beam Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red Gobo Effect": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Green Gobo Effect": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Blue Gobo Effect": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "White Gobo Effect": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Gobo Rotation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 189,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 190,
+          "bis": 193,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 194,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Show mode",
+        "Show speed",
+        "Special Functions"
+      ]
+    },
+    {
+      "name": "19-channel",
+      "kanaele": [
+        "Center LED",
+        "Red Laser",
+        "Green Laser",
+        "Laser Patterns",
+        "Red Beam",
+        "Green Beam",
+        "Blue Beam",
+        "White Beam",
+        "Beam Strobe",
+        "Beam Dimmer",
+        "Beam Rotation",
+        "Red Gobo Effect",
+        "Green Gobo Effect",
+        "Blue Gobo Effect",
+        "White Gobo Effect",
+        "Gobo Rotation",
+        "Show mode",
+        "Show speed",
+        "Special Functions"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

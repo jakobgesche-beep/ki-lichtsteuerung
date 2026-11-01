@@ -1,0 +1,496 @@
+{
+  "id": "adb/warp-m",
+  "hersteller": "ADB",
+  "name": "WARP/M",
+  "kategorien": [
+    "Moving Head"
+  ],
+  "physik": {
+    "gewicht_kg": 32,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 30,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 31,
+          "bis": 35,
+          "typ": "aus"
+        },
+        {
+          "von": 36,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 45,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 46,
+          "bis": 50,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 51,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 60,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 61,
+          "bis": 65,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 66,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 75,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 76,
+          "bis": 80,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 81,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 95,
+          "typ": "aus"
+        },
+        {
+          "von": 96,
+          "bis": 100,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 101,
+          "bis": 105,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 106,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 120,
+          "typ": "aus"
+        },
+        {
+          "von": 121,
+          "bis": 125,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 126,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 135,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 136,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 150,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 151,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 180,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 181,
+          "bis": 185,
+          "typ": "aus"
+        },
+        {
+          "von": 186,
+          "bis": 190,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 191,
+          "bis": 195,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 196,
+          "bis": 200,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 201,
+          "bis": 205,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 206,
+          "bis": 210,
+          "typ": "aus"
+        },
+        {
+          "von": 211,
+          "bis": 215,
+          "typ": "aus"
+        },
+        {
+          "von": 216,
+          "bis": 220,
+          "typ": "aus"
+        },
+        {
+          "von": 221,
+          "bis": 225,
+          "typ": "aus"
+        },
+        {
+          "von": 226,
+          "bis": 230,
+          "typ": "aus"
+        },
+        {
+          "von": 231,
+          "bis": 235,
+          "typ": "aus"
+        },
+        {
+          "von": 236,
+          "bis": 240,
+          "typ": "aus"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pan": {
+      "typ": "pan",
+      "standard": 255,
+      "grad": 400.0
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 255,
+      "grad": 275.0
+    },
+    "Zoom": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Focus": {
+      "typ": "fokus",
+      "standard": 0
+    },
+    "Shutter A Rotation": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Shutter A Insertion": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Shutter B Rotation": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Shutter B Insertion": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Shutter C Rotation": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Shutter C Insertion": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Shutter D Rotation": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Shutter D Insertion": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Shutters all rotation offset": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Gobo 1 rotation": {
+      "typ": "sonstiges",
+      "standard": 255
+    },
+    "Iris": {
+      "typ": "iris",
+      "standard": 0
+    },
+    "External dimmer (optional)": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "External DMX output 1": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "External DMX output 2": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "External DMX output 3": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "External DMX output 4": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "External DMX output 5": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "External DMX output 6": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "External DMX output 7": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "External DMX output 8": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Pan fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Shutter A Rotation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Shutter A Rotation",
+      "stufe": 1
+    },
+    "Shutter B Rotation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Shutter B Rotation",
+      "stufe": 1
+    },
+    "Shutter C Rotation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Shutter C Rotation",
+      "stufe": 1
+    },
+    "Shutter D Rotation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Shutter D Rotation",
+      "stufe": 1
+    },
+    "Shutters all rotation offset fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Shutters all rotation offset",
+      "stufe": 1
+    },
+    "Gobo 1 rotation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Gobo 1 rotation",
+      "stufe": 1
+    },
+    "Iris fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Iris",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "12-30",
+      "kanaele": [
+        "Control",
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Zoom",
+        "Focus",
+        "Shutter A Rotation",
+        "Shutter A Rotation fine",
+        "Shutter A Insertion",
+        "Shutter B Rotation",
+        "Shutter B Rotation fine",
+        "Shutter B Insertion",
+        "Shutter C Rotation",
+        "Shutter C Rotation fine",
+        "Shutter C Insertion",
+        "Shutter D Rotation",
+        "Shutter D Rotation fine",
+        "Shutter D Insertion",
+        "Shutters all rotation offset",
+        "Shutters all rotation offset fine",
+        "Gobo 1 rotation",
+        "Gobo 1 rotation fine",
+        "Iris",
+        "Iris fine",
+        "External dimmer (optional)",
+        "External DMX output 1",
+        "External DMX output 2",
+        "External DMX output 3",
+        "External DMX output 4",
+        "External DMX output 5",
+        "External DMX output 6",
+        "External DMX output 7",
+        "External DMX output 8"
+      ]
+    },
+    {
+      "name": "22-50",
+      "kanaele": [
+        "Control",
+        "Pan",
+        "Pan fine",
+        "Tilt",
+        "Tilt fine",
+        "Zoom",
+        "Focus",
+        "Shutter A Rotation",
+        "Shutter A Rotation fine",
+        "Shutter A Insertion",
+        "Shutter B Rotation",
+        "Shutter B Rotation fine",
+        "Shutter B Insertion",
+        "Shutter C Rotation",
+        "Shutter C Rotation fine",
+        "Shutter C Insertion",
+        "Shutter D Rotation",
+        "Shutter D Rotation fine",
+        "Shutter D Insertion",
+        "Shutters all rotation offset",
+        "Shutters all rotation offset fine",
+        "Gobo 1 rotation",
+        "Gobo 1 rotation fine",
+        "Iris",
+        "Iris fine",
+        "External dimmer (optional)",
+        "External DMX output 1",
+        "External DMX output 2",
+        "External DMX output 3",
+        "External DMX output 4",
+        "External DMX output 5",
+        "External DMX output 6",
+        "External DMX output 7",
+        "External DMX output 8"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

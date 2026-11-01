@@ -1,0 +1,183 @@
+{
+  "id": "abstract/twister-4",
+  "hersteller": "Abstract",
+  "name": "Twister 4",
+  "kategorien": [
+    "Flower",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Rotation": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 11,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 12,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 140,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 141,
+          "bis": 244,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 245,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color / Gobo Wheel": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "zu"
+        },
+        {
+          "von": 10,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 58,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 59,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 107,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 108,
+          "bis": 123,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 124,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 172,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 173,
+          "bis": 188,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 189,
+          "bis": 220,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 221,
+          "bis": 237,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 238,
+          "bis": 253,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 254,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 24,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 23,
+          "typ": "zu"
+        },
+        {
+          "von": 24,
+          "bis": 225,
+          "typ": "offen"
+        },
+        {
+          "von": 226,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1 CE (2ch)",
+      "kanaele": [
+        "Rotation",
+        "Color / Gobo Wheel"
+      ]
+    },
+    {
+      "name": "HP (3ch)",
+      "kanaele": [
+        "Rotation",
+        "Color / Gobo Wheel",
+        "Shutter"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

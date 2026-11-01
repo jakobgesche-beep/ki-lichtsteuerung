@@ -1,0 +1,45 @@
+{
+  "id": "ikan/stryder-sfb150",
+  "hersteller": "Ikan",
+  "name": "Stryder SFB150",
+  "kategorien": [
+    "Other"
+  ],
+  "physik": {
+    "gewicht_kg": 4.8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "CCT": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "Default",
+      "kanaele": [
+        "Intensity",
+        "CCT"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

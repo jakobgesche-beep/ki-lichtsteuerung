@@ -1,0 +1,338 @@
+{
+  "id": "etc/fos4PD24",
+  "hersteller": "ETC",
+  "name": "fos/4 PD24",
+  "kategorien": [
+    "Dimmer",
+    "Color Changer",
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": 35.8,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Deep Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Mint": {
+      "typ": "limette",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Cyan": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Indigo": {
+      "typ": "indigo",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 40,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 40.0
+        },
+        {
+          "von": 41,
+          "bis": 80,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 40.0
+        },
+        {
+          "von": 81,
+          "bis": 120,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 121,
+          "bis": 160,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 161,
+          "bis": 200,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 201,
+          "bis": 240,
+          "typ": "offen"
+        },
+        {
+          "von": 241,
+          "bis": 254,
+          "typ": "zu"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer Curve": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 40,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Fan": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 10,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Mix": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 165,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 166,
+          "bis": 254,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Tint": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 1,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 128,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Tuning": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Direct",
+      "kanaele": [
+        "Intensity",
+        "Deep Red",
+        "Red",
+        "Mint",
+        "Cyan",
+        "Blue",
+        "Indigo",
+        "Strobe",
+        "Dimmer Curve",
+        "Fan"
+      ]
+    },
+    {
+      "name": "Expanded",
+      "kanaele": [
+        "Intensity",
+        "Color Temperature",
+        "Tint",
+        "Tuning",
+        "Mix",
+        "Red",
+        "Green",
+        "Blue",
+        "Strobe",
+        "Dimmer Curve",
+        "Fan"
+      ]
+    },
+    {
+      "name": "Studio",
+      "kanaele": [
+        "Intensity",
+        "Color Temperature",
+        "Tint",
+        "Tuning",
+        "Strobe",
+        "Dimmer Curve",
+        "Fan"
+      ]
+    },
+    {
+      "name": "3 Ch RGB",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue"
+      ]
+    },
+    {
+      "name": "Intensity",
+      "kanaele": [
+        "Intensity"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,67 @@
+{
+  "id": "oase/varionaut-400",
+  "hersteller": "Oase",
+  "name": "Varionaut 400",
+  "kategorien": [
+    "Other"
+  ],
+  "physik": {
+    "gewicht_kg": 14.59,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Maintenance": {
+      "typ": "makro",
+      "standard": 80,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 90,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 91,
+          "bis": 254,
+          "typ": "aus"
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Standard",
+      "kanaele": [
+        "Maintenance",
+        "Dimmer"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,230 @@
+{
+  "id": "varytec/hero-spot-60",
+  "hersteller": "Varytec",
+  "name": "Hero Spot 60",
+  "kategorien": [
+    "Moving Head",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 4.6,
+    "abstrahlwinkel_grad": 15
+  },
+  "_hinweis": "PLATZHALTER: Die Kanalbelegung ist geschätzt, das Handbuch lag nicht vor. Beim ersten Patch mit dem Handbuch abgleichen, dann handbuch_geprueft auf true setzen. Sicher bekannt sind nur: 8 oder 14 Kanäle, Pan 540°, Tilt 190°, Strobo 0-20 Hz, 7 Farben + Weiß, 5 Gobos + offen.",
+  "platzhalter": true,
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 540
+    },
+    "Pan fein": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 190
+    },
+    "Tilt fein": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Tempo": {
+      "typ": "tempo",
+      "standard": 0,
+      "schnell_bei": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0
+    },
+    "Strobo": {
+      "typ": "strobo",
+      "standard": 8,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "zu"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "offen"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1,
+          "hz_bis": 20
+        }
+      ]
+    },
+    "Farbrad": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "platz",
+          "name": "Weiß",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 15,
+          "bis": 29,
+          "typ": "platz",
+          "name": "Rot",
+          "farbe": "#ff0000"
+        },
+        {
+          "von": 30,
+          "bis": 44,
+          "typ": "platz",
+          "name": "Grün",
+          "farbe": "#00ff00"
+        },
+        {
+          "von": 45,
+          "bis": 59,
+          "typ": "platz",
+          "name": "Blau",
+          "farbe": "#0000ff"
+        },
+        {
+          "von": 60,
+          "bis": 74,
+          "typ": "platz",
+          "name": "Gelb",
+          "farbe": "#ffff00"
+        },
+        {
+          "von": 75,
+          "bis": 89,
+          "typ": "platz",
+          "name": "Orange",
+          "farbe": "#ff8000"
+        },
+        {
+          "von": 90,
+          "bis": 104,
+          "typ": "platz",
+          "name": "Pink",
+          "farbe": "#ff00ff"
+        },
+        {
+          "von": 105,
+          "bis": 119,
+          "typ": "platz",
+          "name": "Hellblau",
+          "farbe": "#add8e6"
+        }
+      ]
+    },
+    "Gobo": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 20,
+          "typ": "platz",
+          "name": "Offen"
+        },
+        {
+          "von": 21,
+          "bis": 41,
+          "typ": "platz",
+          "name": "Gobo 1"
+        },
+        {
+          "von": 42,
+          "bis": 62,
+          "typ": "platz",
+          "name": "Gobo 2"
+        },
+        {
+          "von": 63,
+          "bis": 83,
+          "typ": "platz",
+          "name": "Gobo 3"
+        },
+        {
+          "von": 84,
+          "bis": 104,
+          "typ": "platz",
+          "name": "Gobo 4"
+        },
+        {
+          "von": 105,
+          "bis": 125,
+          "typ": "platz",
+          "name": "Gobo 5"
+        }
+      ]
+    },
+    "Gobo-Drehung": {
+      "typ": "gobo_rotation",
+      "standard": 0
+    },
+    "Prisma": {
+      "typ": "prisma",
+      "standard": 0
+    },
+    "Programm": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Reset": {
+      "typ": "makro",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "8-Kanal",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Tempo",
+        "Dimmer",
+        "Strobo",
+        "Farbrad",
+        "Gobo",
+        "Programm"
+      ]
+    },
+    {
+      "name": "14-Kanal",
+      "kanaele": [
+        "Pan",
+        "Pan fein",
+        "Tilt",
+        "Tilt fein",
+        "Tempo",
+        "Dimmer",
+        "Strobo",
+        "Farbrad",
+        "Gobo",
+        "Gobo-Drehung",
+        "Prisma",
+        null,
+        "Programm",
+        "Reset"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "eigener Eintrag",
+    "name": "Technik-AG, nach Thomann-Datenblatt"
+  },
+  "handbuch_geprueft": false
+}

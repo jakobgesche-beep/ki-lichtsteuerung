@@ -1,0 +1,394 @@
+{
+  "id": "arri/l10-c",
+  "hersteller": "ARRI",
+  "name": "L10-C",
+  "kategorien": [
+    "Dimmer",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 19,
+    "abstrahlwinkel_grad": 50
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Green-Magenta Point 8bit": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 20,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 21,
+          "bis": 119,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 120,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 244,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 245,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Green-Magenta Point 16bit": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 19,
+          "bis": 39,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 39,
+          "bis": 117,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 117,
+          "bis": 156,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 234,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 234,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Cross Fade to Color": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Hue": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Saturation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Color Temperature fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Color Temperature",
+      "stufe": 1
+    },
+    "Green-Magenta Point 16bit fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green-Magenta Point 16bit",
+      "stufe": 1
+    },
+    "Cross Fade to Color fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cross Fade to Color",
+      "stufe": 1
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    },
+    "Hue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Hue",
+      "stufe": 1
+    },
+    "Saturation fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Saturation",
+      "stufe": 1
+    }
+  },
+  "modi": [
+    {
+      "name": "P01: CCT & RGBW 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "P02: CCT 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point 8bit"
+      ]
+    },
+    {
+      "name": "P03: CCT & HSI 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Hue",
+        "Saturation"
+      ]
+    },
+    {
+      "name": "P04: RGBW 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "P05: HSI 8bit",
+      "kanaele": [
+        "Dimmer",
+        "Hue",
+        "Saturation"
+      ]
+    },
+    {
+      "name": "P06: CCT & RGBW 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 16bit",
+        "Green-Magenta Point 16bit fine",
+        "Cross Fade to Color",
+        "Cross Fade to Color fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine"
+      ]
+    },
+    {
+      "name": "P07: CCT 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 16bit",
+        "Green-Magenta Point 16bit fine"
+      ]
+    },
+    {
+      "name": "P08: CCT & HSI 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 16bit",
+        "Green-Magenta Point 16bit fine",
+        "Cross Fade to Color",
+        "Cross Fade to Color fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine"
+      ]
+    },
+    {
+      "name": "P09: RGBW 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine"
+      ]
+    },
+    {
+      "name": "P10: HSI 16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine"
+      ]
+    },
+    {
+      "name": "P11: CCT & RGBW 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine"
+      ]
+    },
+    {
+      "name": "P12: CCT 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 8bit"
+      ]
+    },
+    {
+      "name": "P13: CCT & HSI 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Color Temperature",
+        "Color Temperature fine",
+        "Green-Magenta Point 8bit",
+        "Cross Fade to Color",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine"
+      ]
+    },
+    {
+      "name": "P14: RGBW 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine"
+      ]
+    },
+    {
+      "name": "P15: HSI 8/16bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Hue",
+        "Hue fine",
+        "Saturation",
+        "Saturation fine"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

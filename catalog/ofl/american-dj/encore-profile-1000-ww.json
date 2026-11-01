@@ -1,0 +1,78 @@
+{
+  "id": "american-dj/encore-profile-1000-ww",
+  "hersteller": "American DJ",
+  "name": "Encore Profile 1000 WW",
+  "kategorien": [
+    "Blinder",
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 8.5,
+    "abstrahlwinkel_grad": 30
+  },
+  "kanaele": {
+    "Warm White": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "aus"
+        },
+        {
+          "von": 15,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Warm White"
+      ]
+    },
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Warm White",
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Warm White",
+        "Dimmer",
+        "Strobe"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

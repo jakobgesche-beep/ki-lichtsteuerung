@@ -1,0 +1,219 @@
+{
+  "id": "empire-lighting/8x-3w-led-spider-effect",
+  "hersteller": "EMPiRE Lighting",
+  "name": "8x 3W LED Spider Effect",
+  "kategorien": [
+    "Effect",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Tilt Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "zu"
+        },
+        {
+          "von": 8,
+          "bis": 15,
+          "typ": "offen"
+        },
+        {
+          "von": 16,
+          "bis": 131,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 132,
+          "bis": 139,
+          "typ": "offen"
+        },
+        {
+          "von": 140,
+          "bis": 181,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 182,
+          "bis": 189,
+          "typ": "offen"
+        },
+        {
+          "von": 190,
+          "bis": 231,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 232,
+          "bis": 239,
+          "typ": "offen"
+        },
+        {
+          "von": 240,
+          "bis": 247,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 248,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus"
+        },
+        {
+          "von": 8,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Tilt Head 1": {
+      "typ": "tilt",
+      "standard": 127
+    },
+    "Tilt Head 2": {
+      "typ": "tilt",
+      "standard": 127
+    },
+    "Red Left": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Middle-Left": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Middle-Right": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White Right": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red LED 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green LED 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue LED 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White LED 4": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Red LED 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green LED 6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue LED 7": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White LED 8": {
+      "typ": "weiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "10-channel",
+      "kanaele": [
+        "Tilt Head 1",
+        "Tilt Head 2",
+        "Tilt Speed",
+        "Master Dimmer",
+        "Strobe",
+        "Red Left",
+        "Green Middle-Left",
+        "Blue Middle-Right",
+        "White Right",
+        "Mode"
+      ]
+    },
+    {
+      "name": "14-channel",
+      "kanaele": [
+        "Tilt Head 1",
+        "Tilt Head 2",
+        "Tilt Speed",
+        "Master Dimmer",
+        "Strobe",
+        "Red LED 1",
+        "Green LED 2",
+        "Blue LED 3",
+        "White LED 4",
+        "Red LED 5",
+        "Green LED 6",
+        "Blue LED 7",
+        "White LED 8",
+        "Mode"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,195 @@
+{
+  "id": "magicfx/psyco2jet",
+  "hersteller": "MagicFX",
+  "name": "PSYCO2JET",
+  "kategorien": [
+    "Effect"
+  ],
+  "physik": {
+    "gewicht_kg": 9,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Safety": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 155,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 156,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Angle": {
+      "typ": "tilt",
+      "standard": 127,
+      "grad": 180.0
+    },
+    "Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Output": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 199,
+          "typ": "aus"
+        },
+        {
+          "von": 200,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Preset": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 24,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 25,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 74,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 75,
+          "bis": 99,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 100,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 149,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 150,
+          "bis": 174,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 175,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 224,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 225,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Direction": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Go": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 249,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Safety",
+      "kanaele": [
+        "Safety"
+      ]
+    },
+    {
+      "name": "Raw",
+      "kanaele": [
+        "Angle",
+        "Speed",
+        "Output"
+      ]
+    },
+    {
+      "name": "Preset",
+      "kanaele": [
+        "Preset",
+        "Speed",
+        "Direction",
+        "Go"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

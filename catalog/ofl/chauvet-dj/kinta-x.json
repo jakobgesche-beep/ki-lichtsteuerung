@@ -1,0 +1,72 @@
+{
+  "id": "chauvet-dj/kinta-x",
+  "hersteller": "Chauvet DJ",
+  "name": "Kinta X",
+  "kategorien": [
+    "Flower"
+  ],
+  "physik": {
+    "gewicht_kg": 2.7,
+    "abstrahlwinkel_grad": 135
+  },
+  "kanaele": {
+    "Mode": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "dimmer"
+        },
+        {
+          "von": 15,
+          "bis": 100,
+          "typ": "dimmer"
+        },
+        {
+          "von": 101,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Rotation": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Mode",
+        "Rotation"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

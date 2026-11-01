@@ -1,0 +1,33 @@
+{
+  "id": "showtec/atmos-2000",
+  "hersteller": "Showtec",
+  "name": "Atmos 2000",
+  "kategorien": [
+    "Smoke"
+  ],
+  "physik": {
+    "gewicht_kg": 7.04,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Fog": {
+      "typ": "nebel",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Fog"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

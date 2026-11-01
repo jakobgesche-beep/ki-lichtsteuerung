@@ -1,0 +1,86 @@
+{
+  "id": "eurolite/led-sls-6-uv-floor",
+  "hersteller": "Eurolite",
+  "name": "LED SLS-6 UV Floor",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 1,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "UV": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 199,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 200,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 128
+    }
+  },
+  "modi": [
+    {
+      "name": "2 channel",
+      "kanaele": [
+        "UV",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "4 channel",
+      "kanaele": [
+        "UV",
+        "Strobe",
+        "Programs",
+        "Program Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

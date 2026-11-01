@@ -1,0 +1,84 @@
+{
+  "id": "laserworld/cs-1000rgb",
+  "hersteller": "Laserworld",
+  "name": "CS-1000RGB",
+  "kategorien": [
+    "Laser",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.15,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Mode": {
+      "typ": "makro",
+      "standard": 0
+    },
+    "Pattern": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Circular Movement": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Y Rotation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "X Rotation": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Horizontal Movement": {
+      "typ": "sonstiges",
+      "standard": 127
+    },
+    "Vertical Movement": {
+      "typ": "sonstiges",
+      "standard": 127
+    },
+    "Manual Zoom": {
+      "typ": "zoom",
+      "standard": 0
+    },
+    "Pattern Buildup": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Dot Effect with Strobe": {
+      "typ": "sonstiges",
+      "standard": 0
+    },
+    "Color": {
+      "typ": "makro",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "11-channel",
+      "kanaele": [
+        "Mode",
+        "Pattern",
+        "Circular Movement",
+        "Y Rotation",
+        "X Rotation",
+        "Horizontal Movement",
+        "Vertical Movement",
+        "Manual Zoom",
+        "Pattern Buildup",
+        "Dot Effect with Strobe",
+        "Color"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

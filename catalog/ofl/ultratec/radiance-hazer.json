@@ -1,0 +1,38 @@
+{
+  "id": "ultratec/radiance-hazer",
+  "hersteller": "Ultratec",
+  "name": "Radiance Hazer",
+  "kategorien": [
+    "Hazer"
+  ],
+  "physik": {
+    "gewicht_kg": 13,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Haze": {
+      "typ": "nebel",
+      "standard": 0
+    },
+    "Fan": {
+      "typ": "sonstiges",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Haze",
+        "Fan"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,178 @@
+{
+  "id": "generic/drgbw-fader",
+  "hersteller": "Generic",
+  "name": "DRGBW Fader",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Dimmer fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 1
+    },
+    "Dimmer fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Dimmer",
+      "stufe": 2
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Red fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 2
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Green fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 2
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "Blue fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 2
+    },
+    "White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 1
+    },
+    "White fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "White",
+      "stufe": 2
+    }
+  },
+  "modi": [
+    {
+      "name": "8 bit",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "16 bit Dimmer",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "16 bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "White",
+        "White fine"
+      ]
+    },
+    {
+      "name": "24 bit Dimmer",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Dimmer fine^2",
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "24 bit",
+      "kanaele": [
+        "Dimmer",
+        "Dimmer fine",
+        "Dimmer fine^2",
+        "Red",
+        "Red fine",
+        "Red fine^2",
+        "Green",
+        "Green fine",
+        "Green fine^2",
+        "Blue",
+        "Blue fine",
+        "Blue fine^2",
+        "White",
+        "White fine",
+        "White fine^2"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

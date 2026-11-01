@@ -1,0 +1,113 @@
+{
+  "id": "stairville/revueled-120-cob-true-white",
+  "hersteller": "Stairville",
+  "name": "RevueLED 120 COB True White",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 5.5,
+    "abstrahlwinkel_grad": 50
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Intensity Warm White": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Intensity Cold White": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "offen"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 30.0
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "2-channel 1",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature"
+      ]
+    },
+    {
+      "name": "2-channel 2",
+      "kanaele": [
+        "Intensity Warm White",
+        "Intensity Cold White"
+      ]
+    },
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Color Temperature"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Dimmer",
+        "Strobe",
+        "Intensity Warm White",
+        "Intensity Cold White"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

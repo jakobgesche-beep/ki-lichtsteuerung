@@ -1,0 +1,110 @@
+{
+  "id": "griven/kolorado-4000",
+  "hersteller": "Griven",
+  "name": "Kolorado 4000",
+  "kategorien": [
+    "Color Changer",
+    "Blinder",
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 53,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Lamp On/Off": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 126,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 127,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "strobo",
+      "standard": 128,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "zu"
+        },
+        {
+          "von": 6,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "offen"
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 192,
+          "bis": 239,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 20.0
+        },
+        {
+          "von": 240,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Yellow": {
+      "typ": "gelb",
+      "standard": 0
+    },
+    "Cyan": {
+      "typ": "cyan",
+      "standard": 0
+    },
+    "Magenta": {
+      "typ": "magenta",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Lamp On/Off",
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Lamp On/Off",
+        "Dimmer",
+        "Yellow",
+        "Cyan",
+        "Magenta"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,1291 @@
+{
+  "id": "gruft/pixel-tube",
+  "hersteller": "Gruft",
+  "name": "Pixel Tube",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": 270
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Color Temperature": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 29,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 30,
+          "bis": 54,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 55,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 104,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 105,
+          "bis": 129,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 130,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 179,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 180,
+          "bis": 204,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 205,
+          "bis": 229,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 230,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Pixel Control": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 63,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 64,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 191,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 192,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Auto Programs": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "aus"
+        },
+        {
+          "von": 10,
+          "bis": 19,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 20,
+          "bis": 22,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 23,
+          "bis": 25,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 26,
+          "bis": 28,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 29,
+          "bis": 31,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 32,
+          "bis": 34,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 35,
+          "bis": 37,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 38,
+          "bis": 40,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 41,
+          "bis": 43,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 44,
+          "bis": 46,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 47,
+          "bis": 49,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 50,
+          "bis": 52,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 53,
+          "bis": 55,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 56,
+          "bis": 58,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 59,
+          "bis": 61,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 62,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 67,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 68,
+          "bis": 70,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 71,
+          "bis": 73,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 74,
+          "bis": 76,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 77,
+          "bis": 79,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 80,
+          "bis": 82,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 83,
+          "bis": 85,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 86,
+          "bis": 88,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 89,
+          "bis": 91,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 92,
+          "bis": 94,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 95,
+          "bis": 97,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 98,
+          "bis": 100,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 101,
+          "bis": 103,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 104,
+          "bis": 106,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 107,
+          "bis": 109,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 110,
+          "bis": 112,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 113,
+          "bis": 115,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 116,
+          "bis": 118,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 119,
+          "bis": 121,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 122,
+          "bis": 124,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 125,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 133,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 134,
+          "bis": 136,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 137,
+          "bis": 139,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 140,
+          "bis": 142,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 143,
+          "bis": 145,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 146,
+          "bis": 148,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 149,
+          "bis": 151,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 152,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 157,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 158,
+          "bis": 160,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 161,
+          "bis": 163,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 164,
+          "bis": 166,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 167,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 172,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 173,
+          "bis": 175,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 176,
+          "bis": 178,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 179,
+          "bis": 181,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 182,
+          "bis": 184,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 185,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Program Speed": {
+      "typ": "tempo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 245,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 246,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Effect Color 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Effect Color 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Effect Color 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Effect Color 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Effect Color 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Effect Color 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Effect Color 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Effect Color 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Effect Color 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 1 / Effect Color 1 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1 / Effect Color 1 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1 / Effect Color 1 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2 / Effect Color 2 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2 / Effect Color 2 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2 / Effect Color 2 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 3 / Effect Color 3 Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3 / Effect Color 3 Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3 / Effect Color 3 Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 1": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 2": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 3": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Intensity 4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 5": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 5": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 5": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 5": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 6": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 6": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 6": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 6": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 7": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 7": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 7": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 7": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 8": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 8": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 8": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 8": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 9": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 9": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 9": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 9": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 10": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 10": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 10": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 10": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 11": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 11": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 11": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 11": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 12": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 12": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 12": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 12": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 13": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 13": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 13": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 13": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 14": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 14": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 14": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 14": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 15": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 15": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 15": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 15": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 16": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 16": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 16": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 16": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 17": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 17": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 17": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 17": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 18": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 18": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 18": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 18": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 19": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 19": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 19": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 19": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 20": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 20": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 20": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 20": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 21": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 21": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 21": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 21": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 22": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 22": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 22": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 22": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 23": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 23": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 23": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 23": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 24": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 24": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 24": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 24": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 25": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 25": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 25": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 25": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 26": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 26": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 26": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 26": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 27": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 27": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 27": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 27": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 28": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 28": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 28": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 28": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 29": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 29": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 29": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 29": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Intensity 30": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red 30": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 30": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 30": {
+      "typ": "blau",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "Pixel",
+      "kanaele": [
+        "Dimmer",
+        "Color Temperature",
+        "Pixel Control",
+        "Auto Programs",
+        "Program Speed",
+        "Intensity 1",
+        "Red 1 / Effect Color 1 Red",
+        "Green 1 / Effect Color 1 Green",
+        "Blue 1 / Effect Color 1 Blue",
+        "Intensity 2",
+        "Red 2 / Effect Color 2 Red",
+        "Green 2 / Effect Color 2 Green",
+        "Blue 2 / Effect Color 2 Blue",
+        "Intensity 3",
+        "Red 3 / Effect Color 3 Red",
+        "Green 3 / Effect Color 3 Green",
+        "Blue 3 / Effect Color 3 Blue",
+        "Intensity 4",
+        "Red 4",
+        "Green 4",
+        "Blue 4",
+        "Intensity 5",
+        "Red 5",
+        "Green 5",
+        "Blue 5",
+        "Intensity 6",
+        "Red 6",
+        "Green 6",
+        "Blue 6",
+        "Intensity 7",
+        "Red 7",
+        "Green 7",
+        "Blue 7",
+        "Intensity 8",
+        "Red 8",
+        "Green 8",
+        "Blue 8",
+        "Intensity 9",
+        "Red 9",
+        "Green 9",
+        "Blue 9",
+        "Intensity 10",
+        "Red 10",
+        "Green 10",
+        "Blue 10",
+        "Intensity 11",
+        "Red 11",
+        "Green 11",
+        "Blue 11",
+        "Intensity 12",
+        "Red 12",
+        "Green 12",
+        "Blue 12",
+        "Intensity 13",
+        "Red 13",
+        "Green 13",
+        "Blue 13",
+        "Intensity 14",
+        "Red 14",
+        "Green 14",
+        "Blue 14",
+        "Intensity 15",
+        "Red 15",
+        "Green 15",
+        "Blue 15",
+        "Intensity 16",
+        "Red 16",
+        "Green 16",
+        "Blue 16",
+        "Intensity 17",
+        "Red 17",
+        "Green 17",
+        "Blue 17",
+        "Intensity 18",
+        "Red 18",
+        "Green 18",
+        "Blue 18",
+        "Intensity 19",
+        "Red 19",
+        "Green 19",
+        "Blue 19",
+        "Intensity 20",
+        "Red 20",
+        "Green 20",
+        "Blue 20",
+        "Intensity 21",
+        "Red 21",
+        "Green 21",
+        "Blue 21",
+        "Intensity 22",
+        "Red 22",
+        "Green 22",
+        "Blue 22",
+        "Intensity 23",
+        "Red 23",
+        "Green 23",
+        "Blue 23",
+        "Intensity 24",
+        "Red 24",
+        "Green 24",
+        "Blue 24",
+        "Intensity 25",
+        "Red 25",
+        "Green 25",
+        "Blue 25",
+        "Intensity 26",
+        "Red 26",
+        "Green 26",
+        "Blue 26",
+        "Intensity 27",
+        "Red 27",
+        "Green 27",
+        "Blue 27",
+        "Intensity 28",
+        "Red 28",
+        "Green 28",
+        "Blue 28",
+        "Intensity 29",
+        "Red 29",
+        "Green 29",
+        "Blue 29",
+        "Intensity 30",
+        "Red 30",
+        "Green 30",
+        "Blue 30"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

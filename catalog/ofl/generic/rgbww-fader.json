@@ -1,0 +1,148 @@
+{
+  "id": "generic/rgbww-fader",
+  "hersteller": "Generic",
+  "name": "RGBWW Fader",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Warm White": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Cold White": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "Red fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 1
+    },
+    "Red fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Red",
+      "stufe": 2
+    },
+    "Green fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 1
+    },
+    "Green fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Green",
+      "stufe": 2
+    },
+    "Blue fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 1
+    },
+    "Blue fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Blue",
+      "stufe": 2
+    },
+    "Warm White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Warm White",
+      "stufe": 1
+    },
+    "Warm White fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Warm White",
+      "stufe": 2
+    },
+    "Cold White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cold White",
+      "stufe": 1
+    },
+    "Cold White fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cold White",
+      "stufe": 2
+    }
+  },
+  "modi": [
+    {
+      "name": "8 bit",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "Warm White",
+        "Cold White"
+      ]
+    },
+    {
+      "name": "16 Bit",
+      "kanaele": [
+        "Red",
+        "Red fine",
+        "Green",
+        "Green fine",
+        "Blue",
+        "Blue fine",
+        "Warm White",
+        "Warm White fine",
+        "Cold White",
+        "Cold White fine"
+      ]
+    },
+    {
+      "name": "24 Bit",
+      "kanaele": [
+        "Red",
+        "Red fine",
+        "Red fine^2",
+        "Green",
+        "Green fine",
+        "Green fine^2",
+        "Blue",
+        "Blue fine",
+        "Blue fine^2",
+        "Warm White",
+        "Warm White fine",
+        "Warm White fine^2",
+        "Cold White",
+        "Cold White fine",
+        "Cold White fine^2"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

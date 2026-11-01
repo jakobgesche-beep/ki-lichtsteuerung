@@ -1,0 +1,108 @@
+{
+  "id": "etc/colorsource-par-deep-blue",
+  "hersteller": "ETC",
+  "name": "ColorSource PAR Deep Blue",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.77,
+    "abstrahlwinkel_grad": 14.5
+  },
+  "kanaele": {
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Indigo": {
+      "typ": "indigo",
+      "standard": 0
+    },
+    "Lime": {
+      "typ": "limette",
+      "standard": 0
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "aus"
+        },
+        {
+          "von": 1,
+          "bis": 254,
+          "typ": "strobo",
+          "hz_von": 1.0,
+          "hz_bis": 33.0
+        },
+        {
+          "von": 255,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "5 Channel (Default)",
+      "kanaele": [
+        "Intensity",
+        "Red",
+        "Green",
+        "Indigo",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "Direct",
+      "kanaele": [
+        "Intensity",
+        "Red",
+        "Green",
+        "Indigo",
+        "Lime",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "1 Channel",
+      "kanaele": [
+        "Intensity"
+      ]
+    },
+    {
+      "name": "RGB",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Indigo"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

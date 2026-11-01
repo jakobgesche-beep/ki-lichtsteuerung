@@ -1,0 +1,45 @@
+{
+  "id": "cameo/instant-air-2000-pro",
+  "hersteller": "cameo",
+  "name": "Instant Air 2000 Pro",
+  "kategorien": [
+    "Fan"
+  ],
+  "physik": {
+    "gewicht_kg": 8.6,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Fan": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 5,
+          "typ": "aus"
+        },
+        {
+          "von": 6,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Fan"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

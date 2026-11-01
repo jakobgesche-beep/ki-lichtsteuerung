@@ -1,0 +1,433 @@
+{
+  "id": "showpro/litebar-h9",
+  "hersteller": "ShowPRO",
+  "name": "Litebar H9",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.2,
+    "abstrahlwinkel_grad": 29
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Dimmer Speed": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 51,
+          "typ": "aus"
+        },
+        {
+          "von": 52,
+          "bis": 101,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 102,
+          "bis": 152,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 153,
+          "bis": 203,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 204,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Color Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 14,
+          "typ": "aus"
+        },
+        {
+          "von": 15,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Effects": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 114,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 115,
+          "bis": 122,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 123,
+          "bis": 130,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 131,
+          "bis": 138,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 139,
+          "bis": 146,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 147,
+          "bis": 154,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 155,
+          "bis": 162,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 163,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 178,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 179,
+          "bis": 186,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 187,
+          "bis": 194,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 195,
+          "bis": 202,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 203,
+          "bis": 210,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 211,
+          "bis": 218,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 219,
+          "bis": 226,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 227,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 30.0
+        }
+      ]
+    },
+    "Effect Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Sound Sensitivity": {
+      "typ": "sonstiges",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 11,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Strobe / Speed / Sound Sensitivity": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "aus"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 30.0
+        }
+      ]
+    },
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber Master": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "White Master": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "UV Master": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red Segment 1": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 1": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 1": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber Segment 1": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "White Segment 1": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "UV Segment 1": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red Segment 2": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 2": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 2": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber Segment 2": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "White Segment 2": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "UV Segment 2": {
+      "typ": "uv",
+      "standard": 0
+    },
+    "Red Segment 3": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Segment 3": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Segment 3": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber Segment 3": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "White Segment 3": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "UV Segment 3": {
+      "typ": "uv",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master",
+        "White Master",
+        "UV Master"
+      ]
+    },
+    {
+      "name": "9-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master",
+        "White Master",
+        "UV Master",
+        "Dimmer",
+        "Strobe",
+        "Dimmer Speed"
+      ]
+    },
+    {
+      "name": "11-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master",
+        "White Master",
+        "UV Master",
+        "Color Macros",
+        "Strobe / Speed / Sound Sensitivity",
+        "Effects",
+        "Dimmer",
+        "Dimmer Speed"
+      ]
+    },
+    {
+      "name": "18-channel",
+      "kanaele": [
+        "Red Segment 1",
+        "Green Segment 1",
+        "Blue Segment 1",
+        "Amber Segment 1",
+        "White Segment 1",
+        "UV Segment 1",
+        "Red Segment 2",
+        "Green Segment 2",
+        "Blue Segment 2",
+        "Amber Segment 2",
+        "White Segment 2",
+        "UV Segment 2",
+        "Red Segment 3",
+        "Green Segment 3",
+        "Blue Segment 3",
+        "Amber Segment 3",
+        "White Segment 3",
+        "UV Segment 3"
+      ]
+    },
+    {
+      "name": "23-channel",
+      "kanaele": [
+        "Red Segment 1",
+        "Green Segment 1",
+        "Blue Segment 1",
+        "Amber Segment 1",
+        "White Segment 1",
+        "UV Segment 1",
+        "Red Segment 2",
+        "Green Segment 2",
+        "Blue Segment 2",
+        "Amber Segment 2",
+        "White Segment 2",
+        "UV Segment 2",
+        "Red Segment 3",
+        "Green Segment 3",
+        "Blue Segment 3",
+        "Amber Segment 3",
+        "White Segment 3",
+        "UV Segment 3",
+        "Color Macros",
+        "Strobe / Speed / Sound Sensitivity",
+        "Effects",
+        "Dimmer",
+        "Dimmer Speed"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

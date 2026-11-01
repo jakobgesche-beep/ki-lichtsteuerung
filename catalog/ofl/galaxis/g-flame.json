@@ -1,0 +1,67 @@
+{
+  "id": "galaxis/g-flame",
+  "hersteller": "Galaxis",
+  "name": "G-Flame",
+  "kategorien": [
+    "Effect"
+  ],
+  "physik": {
+    "gewicht_kg": 10.5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Flame": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 228,
+          "typ": "aus"
+        },
+        {
+          "von": 229,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Safety": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "Flame Channel",
+      "kanaele": [
+        "Flame"
+      ]
+    },
+    {
+      "name": "Safety Channel",
+      "kanaele": [
+        "Safety"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

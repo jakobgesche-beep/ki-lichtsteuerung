@@ -1,0 +1,72 @@
+{
+  "id": "litecraft/washx-432-sw",
+  "hersteller": "Litecraft",
+  "name": "WashX.432 sw",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": 3.5,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Color Temperature": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 204,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 205,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Intensity": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Cold White": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "Warm White": {
+      "typ": "warmweiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2-channel Macro + Dimmer",
+      "kanaele": [
+        "Color Temperature",
+        "Intensity"
+      ]
+    },
+    {
+      "name": "2-channel Cold White + Warm White",
+      "kanaele": [
+        "Cold White",
+        "Warm White"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

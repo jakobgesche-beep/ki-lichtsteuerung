@@ -1,0 +1,262 @@
+{
+  "id": "elation/cuepix-blinder-ww4",
+  "hersteller": "Elation",
+  "name": "CUEPIX Blinder WW4",
+  "kategorien": [
+    "Blinder",
+    "Matrix",
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": 5.1,
+    "abstrahlwinkel_grad": 60
+  },
+  "kanaele": {
+    "Internal Macros": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 20,
+          "typ": "aus"
+        },
+        {
+          "von": 21,
+          "bis": 42,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 43,
+          "bis": 64,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 65,
+          "bis": 87,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 88,
+          "bis": 110,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 111,
+          "bis": 123,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 124,
+          "bis": 146,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 147,
+          "bis": 169,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 170,
+          "bis": 192,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 193,
+          "bis": 255,
+          "typ": "aus"
+        }
+      ]
+    },
+    "Macro Speed": {
+      "typ": "tempo",
+      "standard": 0
+    },
+    "Master Dimmer": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 32,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "zu"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "offen"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "offen"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "offen"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimming Curve": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 41,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 42,
+          "bis": 84,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 85,
+          "bis": 127,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 128,
+          "bis": 170,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 171,
+          "bis": 213,
+          "typ": "sonstiges"
+        },
+        {
+          "von": 214,
+          "bis": 255,
+          "typ": "sonstiges"
+        }
+      ]
+    },
+    "Warm White Master": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Warm White Top-Left": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Warm White Top-Right": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Warm White Bottom-Left": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Warm White Bottom-Right": {
+      "typ": "warmweiss",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "1-channel",
+      "kanaele": [
+        "Warm White Master"
+      ]
+    },
+    {
+      "name": "2-channel",
+      "kanaele": [
+        "Warm White Master",
+        "Master Dimmer"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Warm White Top-Left",
+        "Warm White Top-Right",
+        "Warm White Bottom-Left",
+        "Warm White Bottom-Right"
+      ]
+    },
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Warm White Top-Left",
+        "Warm White Top-Right",
+        "Warm White Bottom-Left",
+        "Warm White Bottom-Right",
+        "Master Dimmer"
+      ]
+    },
+    {
+      "name": "7-channel",
+      "kanaele": [
+        "Warm White Top-Left",
+        "Warm White Top-Right",
+        "Warm White Bottom-Left",
+        "Warm White Bottom-Right",
+        "Master Dimmer",
+        "Strobe",
+        "Dimming Curve"
+      ]
+    },
+    {
+      "name": "9-channel",
+      "kanaele": [
+        "Warm White Top-Left",
+        "Warm White Top-Right",
+        "Warm White Bottom-Left",
+        "Warm White Bottom-Right",
+        "Internal Macros",
+        "Macro Speed",
+        "Master Dimmer",
+        "Strobe",
+        "Dimming Curve"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

@@ -1,0 +1,109 @@
+{
+  "id": "generic/cw-ww-fader",
+  "hersteller": "Generic",
+  "name": "CW/WW Fader",
+  "kategorien": [
+    "Dimmer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": null
+  },
+  "kanaele": {
+    "Warm White": {
+      "typ": "warmweiss",
+      "standard": 0
+    },
+    "Cold White": {
+      "typ": "kaltweiss",
+      "standard": 0
+    },
+    "Warm White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Warm White",
+      "stufe": 1
+    },
+    "Warm White fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Warm White",
+      "stufe": 2
+    },
+    "Cold White fine": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cold White",
+      "stufe": 1
+    },
+    "Cold White fine^2": {
+      "typ": "fein",
+      "standard": 0,
+      "grob": "Cold White",
+      "stufe": 2
+    }
+  },
+  "modi": [
+    {
+      "name": "8 bit W/C",
+      "kanaele": [
+        "Warm White",
+        "Cold White"
+      ]
+    },
+    {
+      "name": "8 bit C/W",
+      "kanaele": [
+        "Cold White",
+        "Warm White"
+      ]
+    },
+    {
+      "name": "16 bit W/C",
+      "kanaele": [
+        "Warm White",
+        "Warm White fine",
+        "Cold White",
+        "Cold White fine"
+      ]
+    },
+    {
+      "name": "16 bit C/W",
+      "kanaele": [
+        "Cold White",
+        "Cold White fine",
+        "Warm White",
+        "Warm White fine"
+      ]
+    },
+    {
+      "name": "24 bit W/C",
+      "kanaele": [
+        "Warm White",
+        "Warm White fine",
+        "Warm White fine^2",
+        "Cold White",
+        "Cold White fine",
+        "Cold White fine^2"
+      ]
+    },
+    {
+      "name": "24 bit C/W",
+      "kanaele": [
+        "Cold White",
+        "Cold White fine",
+        "Cold White fine^2",
+        "Warm White",
+        "Warm White fine",
+        "Warm White fine^2"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}

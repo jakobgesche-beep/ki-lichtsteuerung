@@ -1,0 +1,529 @@
+{
+  "id": "venue/tetra-bar",
+  "hersteller": "Venue",
+  "name": "Tetra Bar",
+  "kategorien": [
+    "Pixel Bar",
+    "Color Changer",
+    "Dimmer",
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": 3.6,
+    "abstrahlwinkel_grad": 15
+  },
+  "kanaele": {
+    "Red Master": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green Master": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue Master": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber Master": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Dimmer / Strobe Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        },
+        {
+          "von": 228,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer Master": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe Master": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        }
+      ]
+    },
+    "Red 1/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 1/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 1/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 2/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 2/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 2/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 3/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 3/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 3/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Red 4/4": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green 4/4": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue 4/4": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Amber 1/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 2/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 3/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Amber 4/4": {
+      "typ": "amber",
+      "standard": 0
+    },
+    "Dimmer / Strobe 1/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        },
+        {
+          "von": 228,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer / Strobe 2/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        },
+        {
+          "von": 228,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer / Strobe 3/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        },
+        {
+          "von": 228,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer / Strobe 4/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 127,
+          "typ": "dimmer"
+        },
+        {
+          "von": 128,
+          "bis": 227,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        },
+        {
+          "von": 228,
+          "bis": 255,
+          "typ": "offen"
+        }
+      ]
+    },
+    "Dimmer 1/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe 1/4": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        }
+      ]
+    },
+    "Dimmer 2/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe 2/4": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        }
+      ]
+    },
+    "Dimmer 3/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe 3/4": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        }
+      ]
+    },
+    "Dimmer 4/4": {
+      "typ": "dimmer",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 255,
+          "typ": "dimmer"
+        }
+      ]
+    },
+    "Strobe 4/4": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": 0.0,
+          "hz_bis": 23.0
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "3-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master"
+      ]
+    },
+    {
+      "name": "4-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master"
+      ]
+    },
+    {
+      "name": "5-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master",
+        "Dimmer / Strobe Master"
+      ]
+    },
+    {
+      "name": "6-channel",
+      "kanaele": [
+        "Red Master",
+        "Green Master",
+        "Blue Master",
+        "Amber Master",
+        "Dimmer Master",
+        "Strobe Master"
+      ]
+    },
+    {
+      "name": "12-channel",
+      "kanaele": [
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4"
+      ]
+    },
+    {
+      "name": "16-channel",
+      "kanaele": [
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4"
+      ]
+    },
+    {
+      "name": "20-channel",
+      "kanaele": [
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Dimmer / Strobe 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Dimmer / Strobe 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Dimmer / Strobe 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4",
+        "Dimmer / Strobe 4/4"
+      ]
+    },
+    {
+      "name": "24-channel",
+      "kanaele": [
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        "Dimmer 1/4",
+        "Strobe 1/4",
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        "Dimmer 2/4",
+        "Strobe 2/4",
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        "Dimmer 3/4",
+        "Strobe 3/4",
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4",
+        "Dimmer 4/4",
+        "Strobe 4/4"
+      ]
+    },
+    {
+      "name": "Tetra Control 28-channel",
+      "kanaele": [
+        "Red 1/4",
+        "Green 1/4",
+        "Blue 1/4",
+        "Amber 1/4",
+        null,
+        null,
+        null,
+        "Red 2/4",
+        "Green 2/4",
+        "Blue 2/4",
+        "Amber 2/4",
+        null,
+        null,
+        null,
+        "Red 3/4",
+        "Green 3/4",
+        "Blue 3/4",
+        "Amber 3/4",
+        null,
+        null,
+        null,
+        "Red 4/4",
+        "Green 4/4",
+        "Blue 4/4",
+        "Amber 4/4",
+        null,
+        null,
+        null
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "ofl",
+    "name": "Open Fixture Library",
+    "url": "https://github.com/OpenLightingProject/open-fixture-library",
+    "lizenz": "MIT"
+  },
+  "handbuch_geprueft": false
+}
