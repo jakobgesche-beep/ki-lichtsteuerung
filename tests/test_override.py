@@ -199,3 +199,40 @@ def test_tasten_ueber_den_server(pfade):
         assert client.post("/api/override/blackout").json()["blackout"] is True
         assert client.post("/api/override/blackout").json()["blackout"] is False
         assert client.post("/api/override/unsinn").status_code == 400
+
+
+def test_warmweiss_richtet_spots_auf_die_mitte(show):
+    show.overrides.warmweiss = True
+    bild = show.baue_bild(0.0)
+    kopf = next(g for g in show.simulator.lies(bild) if g["id"] == "kopf")
+    assert kopf["hell"] == pytest.approx(0.7, abs=0.01) and kopf["richtung"][2] < -0.3
+
+
+def test_patch_aenderung_setzt_die_strobo_dauer_nicht_zurueck(show):
+    show.pruefer.strobo.start = 1.0
+    show.pruefer.strobo.gesperrt_bis = 99.0
+    show.aufbauen()
+    assert show.pruefer.strobo.gesperrt_bis == 99.0
+
+
+def test_vergessener_dmx_test_endet_von_selbst(show):
+    import time
+    show.test_setzen("par-1", {})
+    show.test_seit = time.monotonic() - 1000
+    show.baue_bild(0.0)
+    assert show.test_geraet is None and not show._test_laeuft()
+
+
+def test_blitzwaechter_gilt_auch_im_bild(show):
+    """Eine Cue-Ebene, die Hell und Dunkel im 20-Hz-Takt wechselt, wird gebremst."""
+    show.audio.werte = None
+    spruenge, vorher = 0, 0
+    for i in range(80):
+        show.zustand_test = None
+        show._automatik = lambda _j, h=(255 if i % 2 else 0): {
+            "par-1": __import__("lichtsteuerung.render", fromlist=["x"]).Eigenschaften(helligkeit=h / 255)}
+        wert = show.baue_bild(i * 0.025)[DIMMER]
+        if wert - vorher > 100:
+            spruenge += 1
+        vorher = wert
+    assert spruenge <= 7       # 2 Sekunden lang höchstens 3 pro Sekunde

@@ -40,6 +40,7 @@ export function tastenLeiste(leiste) {
     weiter.title = live.cues.naechster ?? "Keine weiteren Cues";
     const texte = [];
     if (live.blitzt) texte.push(["rot", "Strobo läuft"]);
+    if (live.test_laeuft) texte.push(["gelb", "DMX-Test läuft: Die Automatik ruht, solange der Test läuft."]);
     if (live.strobo_erlaubt) texte.push(["gelb", "Dieses Profil erlaubt Strobo: Hinweisschild am Eingang aufhängen."]);
     if (live.hazer_erlaubt) texte.push(["gelb", "Hazer erlaubt: vorher mit dem Hausmeister klären (Brandmelder)."]);
     const inhalt = texte.map(([art, text]) => `<div class="meldung ${art}">${text}</div>`).join("");

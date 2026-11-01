@@ -4,8 +4,8 @@
     {
       "id": "par-1",
       "name": "PAR 1",
-      "typ": "stairville/quad-par-profile-5x8w-rgbw",
-      "modus": "8-Kanal",
+      "typ": "stairville/quad-par-profile-rgbw-5x8w",
+      "modus": "8ch",
       "adresse": 1,
       "gruppen": [
         "Farb-PARs"
@@ -14,8 +14,8 @@
     {
       "id": "par-2",
       "name": "PAR 2",
-      "typ": "stairville/quad-par-profile-5x8w-rgbw",
-      "modus": "8-Kanal",
+      "typ": "stairville/quad-par-profile-rgbw-5x8w",
+      "modus": "8ch",
       "adresse": 9,
       "gruppen": [
         "Farb-PARs"
@@ -24,8 +24,8 @@
     {
       "id": "par-3",
       "name": "PAR 3",
-      "typ": "stairville/quad-par-profile-5x8w-rgbw",
-      "modus": "8-Kanal",
+      "typ": "stairville/quad-par-profile-rgbw-5x8w",
+      "modus": "8ch",
       "adresse": 17,
       "gruppen": [
         "Farb-PARs"
@@ -34,8 +34,8 @@
     {
       "id": "par-4",
       "name": "PAR 4",
-      "typ": "stairville/quad-par-profile-5x8w-rgbw",
-      "modus": "8-Kanal",
+      "typ": "stairville/quad-par-profile-rgbw-5x8w",
+      "modus": "8ch",
       "adresse": 25,
       "gruppen": [
         "Farb-PARs"
@@ -44,8 +44,8 @@
     {
       "id": "par-5",
       "name": "PAR 5",
-      "typ": "stairville/quad-par-profile-5x8w-rgbw",
-      "modus": "8-Kanal",
+      "typ": "stairville/quad-par-profile-rgbw-5x8w",
+      "modus": "8ch",
       "adresse": 33,
       "gruppen": [
         "Farb-PARs"
@@ -54,8 +54,8 @@
     {
       "id": "par-6",
       "name": "PAR 6",
-      "typ": "stairville/quad-par-profile-5x8w-rgbw",
-      "modus": "8-Kanal",
+      "typ": "stairville/quad-par-profile-rgbw-5x8w",
+      "modus": "8ch",
       "adresse": 41,
       "gruppen": [
         "Farb-PARs"
@@ -87,7 +87,7 @@
       "id": "effekt",
       "name": "Effekt",
       "typ": "varytec/hero-spot-60",
-      "modus": "14-Kanal",
+      "modus": "14 Channel",
       "adresse": 73,
       "gruppen": [
         "Effektlicht",

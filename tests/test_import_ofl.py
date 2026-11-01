@@ -73,5 +73,5 @@ def test_der_echte_katalog_enthaelt_unsere_geraete():
     katalog = Katalog(PROJEKT / "catalog")
     assert len(katalog.typen) > 600
     for typ_id in ("stairville/mh-x25", "stairville/hz-200-compact-hazer",
-                   "stairville/quad-par-profile-5x8w-rgbw", "varytec/hero-spot-60"):
+                   "stairville/quad-par-profile-rgbw-5x8w", "varytec/hero-spot-60"):
         assert pruefe_eintrag(katalog.typ(typ_id).daten) == []

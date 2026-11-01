@@ -85,13 +85,26 @@ def test_hohe_energie_bewegt_die_spots(engine):
 
 
 def test_wenig_energie_bewegt_nichts(engine):
-    zustand, _ = einschwingen(engine, PARTY, Messwerte(**{**MUSIK, "energie": 0.2}))
-    assert zustand["kopf"].pan is None
+    werte = Messwerte(**{**MUSIK, "energie": 0.2})
+    a, zeit = einschwingen(engine, PARTY, werte)
+    b, _ = einschwingen(engine, PARTY, werte, von=zeit, dauer=0.5)
+    assert a["kopf"].pan == b["kopf"].pan
 
 
 def test_profil_ohne_bewegung(engine):
-    zustand, _ = einschwingen(engine, {**PARTY, "bewegung": "aus"}, Messwerte(**{**MUSIK, "energie": 0.9}))
-    assert zustand["kopf"].pan is None
+    profil = {**PARTY, "bewegung": "aus"}
+    werte = Messwerte(**{**MUSIK, "energie": 0.9})
+    a, zeit = einschwingen(engine, profil, werte)
+    b, _ = einschwingen(engine, profil, werte, von=zeit, dauer=0.5)
+    assert a["kopf"].pan == b["kopf"].pan
+
+
+def test_ruhende_spots_zeigen_auf_die_buehne_und_nicht_nach_oben(engine):
+    from lichtsteuerung.pantilt import Montage, richtung
+    zustand, _ = einschwingen(engine, PARTY, Messwerte(**{**MUSIK, "energie": 0.2}))
+    e = zustand["kopf"]
+    strahl = richtung(Montage.aus_buehne(engine.buehne.geraet("kopf")), e.pan, e.tilt)
+    assert strahl[2] < 0
 
 
 def test_leise_stelle_blendet_zum_grundlicht(engine):

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import time
+import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
@@ -20,6 +21,8 @@ from .cues import pruefe_cueliste
 from .daten import PROJEKT
 from .dmx_ausgabe import EnttecFehler
 from .farben import FARBNAMEN
+from .importe import gdtf, qxf
+from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
@@ -85,6 +88,24 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def katalog_speichern(eintrag: dict = Body(...)):
         return show.katalog.speichere_eigenen(eintrag).kurzinfo()
 
+    @app.post("/api/katalog/importieren")
+    async def katalog_importieren(anfrage: Request, name: str):
+        """Nimmt eine .qxf- oder .gdtf-Datei entgegen."""
+        endung = Path(name).suffix.lower()
+        inhalt = await anfrage.body()
+        try:
+            if endung == ".qxf":
+                eintrag = qxf.wandle(inhalt)
+            elif endung == ".gdtf":
+                eintrag = gdtf.wandle(inhalt)
+            else:
+                raise ValueError("Bitte eine .qxf- oder .gdtf-Datei wählen.")
+        except ElementTree.ParseError as fehler:
+            raise ValueError(f"Die Datei lässt sich nicht lesen: {fehler}") from fehler
+        typ_id = speichere_import(eintrag, show.pfade.katalog)
+        show.katalog.neu_laden()
+        return {"id": typ_id}
+
     # --- Patch -----------------------------------------------------------
 
     @app.get("/api/patch")
@@ -144,8 +165,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         geraet = auftrag.get("geraet")
         if geraet is not None:
             show.patch.geraet(geraet)
-        with show.sperre:
-            show.test_geraet, show.test_kanaele = geraet, kanaele
+        show.test_setzen(geraet, kanaele)
         return {"bild": list(show.baue_bild()), "meldungen": show.meldungen}
 
     @app.get("/api/dmx")

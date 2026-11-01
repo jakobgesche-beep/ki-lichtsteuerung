@@ -1,0 +1,276 @@
+{
+  "id": "stairville/quad-par-profile-rgbw-5x8w",
+  "hersteller": "Stairville",
+  "name": "Quad Par Profile RGBW 5x8W",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": 2.1,
+    "abstrahlwinkel_grad": 25.0
+  },
+  "kanaele": {
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0
+    },
+    "Red": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Green": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blue": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "White": {
+      "typ": "weiss",
+      "standard": 0
+    },
+    "Macro": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "sonstiges",
+          "name": "Manual mode"
+        },
+        {
+          "von": 1,
+          "bis": 24,
+          "typ": "sonstiges",
+          "name": "Constant color controlled by Ch. 7"
+        },
+        {
+          "von": 25,
+          "bis": 49,
+          "typ": "sonstiges",
+          "name": "Automatic show 1"
+        },
+        {
+          "von": 50,
+          "bis": 74,
+          "typ": "sonstiges",
+          "name": "Automatic show 2"
+        },
+        {
+          "von": 75,
+          "bis": 99,
+          "typ": "sonstiges",
+          "name": "Automatic show 3"
+        },
+        {
+          "von": 100,
+          "bis": 124,
+          "typ": "sonstiges",
+          "name": "Automatic show 4"
+        },
+        {
+          "von": 125,
+          "bis": 149,
+          "typ": "sonstiges",
+          "name": "Automatic show 5"
+        },
+        {
+          "von": 150,
+          "bis": 174,
+          "typ": "sonstiges",
+          "name": "Automatic show 6"
+        },
+        {
+          "von": 175,
+          "bis": 199,
+          "typ": "sonstiges",
+          "name": "Automatic show 7"
+        },
+        {
+          "von": 200,
+          "bis": 224,
+          "typ": "sonstiges",
+          "name": "Automatic show 8"
+        },
+        {
+          "von": 225,
+          "bis": 249,
+          "typ": "sonstiges",
+          "name": "Automatic show 9"
+        },
+        {
+          "von": 250,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Sound show"
+        }
+      ]
+    },
+    "Constant Color/Chasespeed Ch. 6": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 18,
+          "typ": "platz",
+          "name": "Black",
+          "farbe": "#000000"
+        },
+        {
+          "von": 19,
+          "bis": 37,
+          "typ": "platz",
+          "name": "Red",
+          "farbe": "#ff0000"
+        },
+        {
+          "von": 38,
+          "bis": 56,
+          "typ": "platz",
+          "name": "Orange",
+          "farbe": "#ff8600"
+        },
+        {
+          "von": 57,
+          "bis": 75,
+          "typ": "platz",
+          "name": "Yellow",
+          "farbe": "#ffff14"
+        },
+        {
+          "von": 76,
+          "bis": 94,
+          "typ": "platz",
+          "name": "Green",
+          "farbe": "#00ff00"
+        },
+        {
+          "von": 95,
+          "bis": 113,
+          "typ": "platz",
+          "name": "Light blue",
+          "farbe": "#5ecdff"
+        },
+        {
+          "von": 114,
+          "bis": 132,
+          "typ": "platz",
+          "name": "Blue",
+          "farbe": "#0000ff"
+        },
+        {
+          "von": 133,
+          "bis": 151,
+          "typ": "platz",
+          "name": "Violet",
+          "farbe": "#ee82ee"
+        },
+        {
+          "von": 152,
+          "bis": 170,
+          "typ": "platz",
+          "name": "Pink",
+          "farbe": "#ff3270"
+        },
+        {
+          "von": 171,
+          "bis": 189,
+          "typ": "platz",
+          "name": "White",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 190,
+          "bis": 208,
+          "typ": "platz",
+          "name": "Red + white",
+          "farbe": "#ffb0b2"
+        },
+        {
+          "von": 209,
+          "bis": 227,
+          "typ": "platz",
+          "name": "Green + white",
+          "farbe": "#9dffa8"
+        },
+        {
+          "von": 228,
+          "bis": 246,
+          "typ": "platz",
+          "name": "Blue + white",
+          "farbe": "#85d0ff"
+        },
+        {
+          "von": 247,
+          "bis": 255,
+          "typ": "platz",
+          "name": "Red + green + blue + white",
+          "farbe": "#ffffff"
+        }
+      ]
+    },
+    "Strobe": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "4ch",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White"
+      ]
+    },
+    {
+      "name": "6ch",
+      "kanaele": [
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Dimmer",
+        "Strobe"
+      ]
+    },
+    {
+      "name": "8ch",
+      "kanaele": [
+        "Dimmer",
+        "Red",
+        "Green",
+        "Blue",
+        "White",
+        "Macro",
+        "Constant Color/Chasespeed Ch. 6",
+        "Strobe"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "qlc+",
+    "name": "QLC+ Gerätebibliothek",
+    "lizenz": "Apache-2.0",
+    "url": "https://github.com/mcallegari/qlcplus"
+  },
+  "handbuch_geprueft": false
+}

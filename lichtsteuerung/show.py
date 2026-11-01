@@ -22,7 +22,7 @@ from .audio.betrieb import AudioBetrieb
 from .buehne import Buehne
 from .cues import CueSpieler, FaderBank, Sammlung, pruefe_cueliste
 from .dmx_ausgabe import BILDER_PRO_SEKUNDE, DmxAusgabe
-from .engine import Engine
+from .engine import Engine, GRUPPE_BEWEGUNG
 from .katalog import Katalog
 from .overrides import Overrides
 from .patch import Patch
@@ -31,7 +31,12 @@ from .pruefung import Pruefer, Vorgaben
 from .render import Eigenschaften, Renderer
 from .sicherheit import BlitzWaechter, Grenzen
 from .simulator import Simulator
+from .szenen import loese_auf
 from .vorschau import Vorschau
+
+
+WARM_POSITION = "Mitte"     # dorthin zeigen die Spots bei Warmweiß
+TEST_MAX_S = 120.0          # Ein vergessener DMX-Test endet von selbst.
 
 
 class Show:
@@ -58,6 +63,8 @@ class Show:
         self.sperre = threading.RLock()     # Oberfläche und Show-Schleife wechseln sich ab
         self.test_geraet: Optional[str] = None
         self.test_kanaele = {}              # DMX-Kanal (ab 1) -> Wert
+        self.test_seit: Optional[float] = None
+        self.pruefer: Optional[Pruefer] = None
         self.meldungen = []
         self.letztes_bild = bytes(512)
         self._stopp = threading.Event()
@@ -69,31 +76,48 @@ class Show:
         """Muss nach jeder Änderung am Patch oder an der Bühne laufen."""
         with self.sperre:
             self.renderer = Renderer(self.patch)
+            alter_waechter = self.pruefer.strobo if self.pruefer else None
             self.pruefer = Pruefer(self.patch, self.buehne, self.grenzen)
+            if alter_waechter:
+                # Eine Patch-Änderung darf die Strobo-Dauer nicht zurücksetzen.
+                self.pruefer.strobo = alter_waechter
             self.simulator = Simulator(self.patch, self.buehne)
             self.engine = Engine(self.patch, self.buehne, self.positionen, self.grenzen)
             liste = self.cues.liste if self.cues else None
             self.cues = CueSpieler(self.patch, self.buehne, self.positionen, self.szenen)
             if liste:
                 self.cues.laden(liste)
+            ziel, _ = loese_auf([{"gruppe": GRUPPE_BEWEGUNG, "position": WARM_POSITION}],
+                                self.patch, self.buehne, self.positionen)
+            self.warm_stellung = {i: (e.pan, e.tilt) for i, e in ziel.items() if e.pan is not None}
 
     # --- Ein Bild bauen ---------------------------------------------------
 
     def baue_bild(self, jetzt: Optional[float] = None) -> bytes:
         jetzt = time.monotonic() if jetzt is None else jetzt
         with self.sperre:
+            self._test_pruefen(jetzt)
             zustand = self._automatik(jetzt)
             if not self._test_laeuft():
                 zustand = self.cues.ueberlagern(zustand, jetzt)
                 zustand = self.fader.anwenden(zustand, self.patch, self.buehne, self.positionen, self.szenen)
             zustand = self._profil_grenzen(zustand, jetzt)
-            zustand = self.overrides.anwenden(zustand, self.patch.geraete)
+            zustand = self.overrides.anwenden(zustand, self.patch.geraete, self.warm_stellung)
             bild = self.renderer.bild(zustand)
             self._test_einmischen(bild)
             bild, meldungen, self.blitzt = self.pruefer.pruefe(bild, self._vorgaben(), jetzt)
             self.meldungen = meldungen + self.cues.meldungen
             self.letztes_bild = bytes(bild)
             return self.letztes_bild
+
+    def test_setzen(self, geraet: Optional[str], kanaele: dict) -> None:
+        with self.sperre:
+            self.test_geraet, self.test_kanaele = geraet, kanaele
+            self.test_seit = time.monotonic()
+
+    def _test_pruefen(self, jetzt: float) -> None:
+        if self.test_seit is not None and time.monotonic() - self.test_seit > TEST_MAX_S:
+            self.test_geraet, self.test_kanaele, self.test_seit = None, {}, None
 
     def _test_laeuft(self) -> bool:
         return self.test_geraet is not None or bool(self.test_kanaele)
@@ -184,6 +208,7 @@ class Show:
                     "dmx_ein": self.ausgabe.eingeschaltet, "meldungen": sorted(set(self.meldungen)),
                     "profil": self.profil["name"], "engine": self.engine.zustand_text,
                     "overrides": vars(self.overrides), "blitzt": self.blitzt,
+                    "test_laeuft": self._test_laeuft(),
                     "cues": self.cues.status(), "fader": self.fader.status(),
                     "vorschau": {"art": self.vorschau.art, "geraete": self.vorschau.geraete,
                                  "meldungen": self.vorschau.meldungen},

@@ -17,7 +17,9 @@ export function katalogSeite(wurzel) {
         <h2>Katalog <span class="leise" id="gesamt"></span></h2>
         <label>Suchen <input id="suche"></label>
         <div class="liste" id="treffer" style="max-height:60vh"></div>
-        <button id="neu">Neuen Gerätetyp anlegen</button>
+        <p class="zeile"><button id="neu">Neuen Gerätetyp anlegen</button>
+        <button id="importieren">.qxf / .gdtf importieren</button></p>
+        <input id="importdatei" type="file" accept=".qxf,.gdtf" hidden>
       </div>
       <div id="detail"></div>
     </div>`;
@@ -119,5 +121,13 @@ export function katalogSeite(wurzel) {
 
   feld("suche").oninput = suchen;
   feld("neu").onclick = () => editor(structuredClone(LEER));
+  feld("importieren").onclick = () => feld("importdatei").click();
+  feld("importdatei").onchange = async () => {
+    const datei = feld("importdatei").files[0];
+    if (!datei) return;
+    const { id } = await api("/katalog/importieren?name=" + encodeURIComponent(datei.name), { method: "POST", body: datei });
+    await suchen();
+    anzeigen(id);
+  };
   suchen();
 }

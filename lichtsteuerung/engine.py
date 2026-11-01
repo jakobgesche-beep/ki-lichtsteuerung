@@ -122,8 +122,21 @@ class Engine:
                 self._bewegen(geraet, nummer, profil["bewegung"], jetzt, e)
             elif geraet["id"] in self.winkel:
                 e.pan, e.tilt = self.winkel[geraet["id"]]
+            else:
+                self._ruhelage(geraet, e)
             ergebnis[geraet["id"]] = e
         return ergebnis
+
+    def _ruhelage(self, geraet: dict, e: Eigenschaften) -> None:
+        """Ohne Bewegung zeigen Spots auf die Bühnenmitte, nicht einfach nach oben."""
+        if bereiche_von(self.patch, geraet) is None:
+            return
+        masse = self.buehne.daten["buehne"]
+        try:
+            e.pan, e.tilt = zeige_auf(geraet, (0.0, masse["tiefe_m"] / 2, ZIEL_HOEHE_M),
+                                      self.patch, self.buehne)
+        except ZielAusserhalb:
+            pass
 
     def _bewegen(self, geraet: dict, nummer: int, bewegung: str, jetzt: float, e: Eigenschaften) -> None:
         """Die Spots wandern in einer ruhigen Acht über die Bühne, nie ins Publikum."""

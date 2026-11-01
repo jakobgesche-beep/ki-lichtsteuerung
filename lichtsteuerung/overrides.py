@@ -6,6 +6,7 @@ Blackout schlägt alles, danach kommt Warmweiß.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
 
 from .farben import farbe
 from .render import Eigenschaften
@@ -26,7 +27,9 @@ class Overrides:
             raise ValueError(f"Unbekannte Taste: {taste}")
         setattr(self, taste, not getattr(self, taste))
 
-    def anwenden(self, zustand: dict, alle_geraete: list) -> dict:
+    def anwenden(self, zustand: dict, alle_geraete: list, warm_stellung: Optional[dict] = None) -> dict:
+        """warm_stellung: wohin Moving Heads bei Warmweiß zeigen, falls sie kein Ziel haben."""
+        warm_stellung = warm_stellung or {}
         ergebnis = {}
         warm = farbe("warmweiss")
         for geraet in alle_geraete:
@@ -35,6 +38,8 @@ class Overrides:
                 e = e.kopie(strobo_hz=0.0)
             if self.warmweiss:
                 e = e.kopie(helligkeit=WARMWEISS_HELLIGKEIT, farbe=warm, strobo_hz=0.0, gobo=None)
+                if e.pan is None and geraet["id"] in warm_stellung:
+                    e = e.kopie(pan=warm_stellung[geraet["id"]][0], tilt=warm_stellung[geraet["id"]][1])
             if self.blackout:
                 e = e.kopie(helligkeit=0.0, strobo_hz=0.0, nebel=0.0)
             ergebnis[geraet["id"]] = e

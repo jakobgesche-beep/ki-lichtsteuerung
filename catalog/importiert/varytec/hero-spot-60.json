@@ -1,0 +1,514 @@
+{
+  "id": "varytec/hero-spot-60",
+  "hersteller": "Varytec",
+  "name": "Hero Spot 60",
+  "kategorien": [
+    "Moving Head"
+  ],
+  "physik": {
+    "gewicht_kg": 4.6,
+    "abstrahlwinkel_grad": 15.0
+  },
+  "kanaele": {
+    "Pan": {
+      "typ": "pan",
+      "standard": 128,
+      "grad": 540.0
+    },
+    "Pan Fine": {
+      "typ": "pan_fein",
+      "standard": 0,
+      "grob": "Pan",
+      "stufe": 1
+    },
+    "Tilt": {
+      "typ": "tilt",
+      "standard": 128,
+      "grad": 190.0
+    },
+    "Tilt Fine": {
+      "typ": "tilt_fein",
+      "standard": 0,
+      "grob": "Tilt",
+      "stufe": 1
+    },
+    "Shutter": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "offen",
+          "name": "Open"
+        },
+        {
+          "von": 10,
+          "bis": 250,
+          "typ": "strobo",
+          "name": "Strobe (slow to fast)",
+          "hz_von": null,
+          "hz_bis": null
+        },
+        {
+          "von": 251,
+          "bis": 255,
+          "typ": "offen",
+          "name": "Open"
+        }
+      ]
+    },
+    "Automatic Shows": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges",
+          "name": "No function"
+        },
+        {
+          "von": 11,
+          "bis": 20,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 1"
+        },
+        {
+          "von": 21,
+          "bis": 30,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 2"
+        },
+        {
+          "von": 31,
+          "bis": 40,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 3"
+        },
+        {
+          "von": 41,
+          "bis": 50,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 4"
+        },
+        {
+          "von": 51,
+          "bis": 60,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 5"
+        },
+        {
+          "von": 61,
+          "bis": 70,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 6"
+        },
+        {
+          "von": 71,
+          "bis": 80,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 7"
+        },
+        {
+          "von": 81,
+          "bis": 90,
+          "typ": "sonstiges",
+          "name": "Preprogrammed automatic show 8"
+        },
+        {
+          "von": 91,
+          "bis": 230,
+          "typ": "sonstiges",
+          "name": "Music Control (off to high sensitivity)"
+        },
+        {
+          "von": 231,
+          "bis": 240,
+          "typ": "sonstiges",
+          "name": "Reset (when held for 3 seconds)"
+        },
+        {
+          "von": 241,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "No function"
+        }
+      ]
+    },
+    "Moving Programs (Open Shutter)": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 10,
+          "typ": "sonstiges",
+          "name": "No function"
+        },
+        {
+          "von": 11,
+          "bis": 20,
+          "typ": "sonstiges",
+          "name": "White, Open"
+        },
+        {
+          "von": 21,
+          "bis": 30,
+          "typ": "sonstiges",
+          "name": "Blue, Gobo 1"
+        },
+        {
+          "von": 31,
+          "bis": 40,
+          "typ": "sonstiges",
+          "name": "Violett, Gobo 2"
+        },
+        {
+          "von": 41,
+          "bis": 50,
+          "typ": "sonstiges",
+          "name": "Orange, Gobo 3"
+        },
+        {
+          "von": 51,
+          "bis": 60,
+          "typ": "sonstiges",
+          "name": "White, Gobo 4"
+        },
+        {
+          "von": 61,
+          "bis": 70,
+          "typ": "sonstiges",
+          "name": "White, Gobo 5"
+        },
+        {
+          "von": 71,
+          "bis": 80,
+          "typ": "sonstiges",
+          "name": "White, Open, Prism"
+        },
+        {
+          "von": 81,
+          "bis": 90,
+          "typ": "sonstiges",
+          "name": "Blue, Gobo 1, medium speed, Prism"
+        },
+        {
+          "von": 91,
+          "bis": 100,
+          "typ": "sonstiges",
+          "name": "Violett, Gobo 2, medium speed, Prism"
+        },
+        {
+          "von": 101,
+          "bis": 110,
+          "typ": "sonstiges",
+          "name": "Orange, Gobo 3, medium speed, Prism"
+        },
+        {
+          "von": 111,
+          "bis": 120,
+          "typ": "sonstiges",
+          "name": "White, Gobo 4, medium speed, Prism"
+        },
+        {
+          "von": 121,
+          "bis": 130,
+          "typ": "sonstiges",
+          "name": "White, Gobo 5, medium speed, Prism"
+        },
+        {
+          "von": 131,
+          "bis": 140,
+          "typ": "sonstiges",
+          "name": "Automatic color, Prism, Gobo 1"
+        },
+        {
+          "von": 141,
+          "bis": 150,
+          "typ": "sonstiges",
+          "name": "Automatic color, Prism, Gobo 2"
+        },
+        {
+          "von": 151,
+          "bis": 160,
+          "typ": "sonstiges",
+          "name": "Automatic color, Prism, Gobo 3"
+        },
+        {
+          "von": 161,
+          "bis": 170,
+          "typ": "sonstiges",
+          "name": "Automatic color, Prism, Gobo 4"
+        },
+        {
+          "von": 171,
+          "bis": 180,
+          "typ": "sonstiges",
+          "name": "Automatic color, Prism, Gobo 5"
+        },
+        {
+          "von": 181,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Automatic color, Gobo, music controlled Prism"
+        }
+      ]
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0
+    },
+    "Color": {
+      "typ": "farbrad",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 24,
+          "typ": "platz",
+          "name": "White",
+          "farbe": "#ffffff"
+        },
+        {
+          "von": 25,
+          "bis": 50,
+          "typ": "platz",
+          "name": "Red",
+          "farbe": "#ff0000"
+        },
+        {
+          "von": 51,
+          "bis": 75,
+          "typ": "platz",
+          "name": "Yellow",
+          "farbe": "#ffff00"
+        },
+        {
+          "von": 76,
+          "bis": 100,
+          "typ": "platz",
+          "name": "Light Blue",
+          "farbe": "#add8e6"
+        },
+        {
+          "von": 101,
+          "bis": 125,
+          "typ": "platz",
+          "name": "Green",
+          "farbe": "#00ff00"
+        },
+        {
+          "von": 126,
+          "bis": 150,
+          "typ": "platz",
+          "name": "Amber",
+          "farbe": "#ffaa00"
+        },
+        {
+          "von": 151,
+          "bis": 175,
+          "typ": "platz",
+          "name": "Violet",
+          "farbe": "#ee82ee"
+        },
+        {
+          "von": 176,
+          "bis": 200,
+          "typ": "platz",
+          "name": "Blue",
+          "farbe": "#0000ff"
+        },
+        {
+          "von": 201,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Rainbow Counterclockwise"
+        }
+      ]
+    },
+    "Gobo": {
+      "typ": "gobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "platz",
+          "name": "Offen"
+        },
+        {
+          "von": 10,
+          "bis": 26,
+          "typ": "platz",
+          "name": "Gobo 1"
+        },
+        {
+          "von": 27,
+          "bis": 43,
+          "typ": "platz",
+          "name": "Gobo 2"
+        },
+        {
+          "von": 44,
+          "bis": 60,
+          "typ": "platz",
+          "name": "Gobo 3"
+        },
+        {
+          "von": 61,
+          "bis": 77,
+          "typ": "platz",
+          "name": "Gobo 4"
+        },
+        {
+          "von": 78,
+          "bis": 94,
+          "typ": "platz",
+          "name": "Gobo 5"
+        },
+        {
+          "von": 95,
+          "bis": 114,
+          "typ": "sonstiges",
+          "name": "Gobo 1 Shake, slow to fast"
+        },
+        {
+          "von": 115,
+          "bis": 134,
+          "typ": "sonstiges",
+          "name": "Gobo 2 shake, slow to fast"
+        },
+        {
+          "von": 135,
+          "bis": 154,
+          "typ": "sonstiges",
+          "name": "Gobo 3 shake, slow to fast"
+        },
+        {
+          "von": 155,
+          "bis": 174,
+          "typ": "sonstiges",
+          "name": "Gobo 4 shake, slow to fast"
+        },
+        {
+          "von": 175,
+          "bis": 194,
+          "typ": "sonstiges",
+          "name": "Gobo 5 shake, slow to fast"
+        },
+        {
+          "von": 195,
+          "bis": 224,
+          "typ": "sonstiges",
+          "name": "Rainbow Clockwise"
+        },
+        {
+          "von": 225,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Rainbow Counterclockwise"
+        }
+      ]
+    },
+    "Gobo Rotation": {
+      "typ": "gobo_rotation",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 9,
+          "typ": "sonstiges",
+          "name": "Stop"
+        },
+        {
+          "von": 10,
+          "bis": 129,
+          "typ": "sonstiges",
+          "name": "Clockwise"
+        },
+        {
+          "von": 130,
+          "bis": 134,
+          "typ": "sonstiges",
+          "name": "Stop"
+        },
+        {
+          "von": 135,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Counterclockwise"
+        }
+      ]
+    },
+    "Prism": {
+      "typ": "prisma",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 128,
+          "typ": "sonstiges",
+          "name": "Open"
+        },
+        {
+          "von": 129,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Prism"
+        }
+      ]
+    },
+    "Moving Speed": {
+      "typ": "tempo",
+      "standard": 255,
+      "schnell_bei": 255
+    },
+    "Focus": {
+      "typ": "fokus",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "8 Channel",
+      "kanaele": [
+        "Pan",
+        "Tilt",
+        "Moving Speed",
+        "Dimmer",
+        "Shutter",
+        "Focus",
+        "Automatic Shows",
+        "Moving Programs (Open Shutter)"
+      ]
+    },
+    {
+      "name": "14 Channel",
+      "kanaele": [
+        "Pan",
+        "Pan Fine",
+        "Tilt",
+        "Tilt Fine",
+        "Moving Speed",
+        "Dimmer",
+        "Shutter",
+        "Color",
+        "Gobo",
+        "Gobo Rotation",
+        "Focus",
+        "Prism",
+        "Moving Programs (Open Shutter)",
+        "Automatic Shows"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "qlc+",
+    "name": "QLC+ Gerätebibliothek",
+    "lizenz": "Apache-2.0",
+    "url": "https://github.com/mcallegari/qlcplus"
+  },
+  "handbuch_geprueft": false
+}
