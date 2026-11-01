@@ -4,6 +4,8 @@
 Mit --netz ist die Oberfläche auch vom Tablet aus erreichbar.
 """
 import argparse
+import threading
+import webbrowser
 
 import uvicorn
 
@@ -15,9 +17,13 @@ def main() -> None:
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--netz", action="store_true",
                         help="auch für andere Geräte im Netz erreichbar machen (Tablet)")
+    parser.add_argument("--kein-browser", action="store_true", help="den Browser nicht selbst öffnen")
     args = parser.parse_args()
     host = "0.0.0.0" if args.netz else "127.0.0.1"
-    print(f"Lichtsteuerung läuft: http://localhost:{args.port}  (Beenden mit Strg+C)")
+    adresse = f"http://localhost:{args.port}"
+    print(f"Lichtsteuerung läuft: {adresse}  (Beenden mit Strg+C)")
+    if not args.kein_browser:
+        threading.Timer(1.5, webbrowser.open, [adresse]).start()
     uvicorn.run(erstelle_app(), host=host, port=args.port, log_level="warning")
 
 
