@@ -8,6 +8,7 @@ const TASTEN = [
   { id: "pause", text: "Automatik Pause", taste: "p" },
   { id: "strobo_aus", text: "Strobo aus", taste: "s" },
 ];
+const WEITER = () => senden("/cue/weiter");
 
 export function tastenLeiste(leiste) {
   for (const { id, text, taste } of TASTEN) {
@@ -17,6 +18,12 @@ export function tastenLeiste(leiste) {
     knopf.onclick = () => senden("/override/" + id);
     leiste.append(knopf);
   }
+  const weiter = document.createElement("button");
+  weiter.id = "taste-weiter";
+  weiter.innerHTML = `Nächster Cue <kbd>Leertaste</kbd>`;
+  weiter.onclick = WEITER;
+  leiste.append(weiter);
+
   const hinweis = document.createElement("div");
   hinweis.id = "hinweise";
   leiste.after(hinweis);
@@ -30,6 +37,7 @@ export function tastenLeiste(leiste) {
     for (const { id } of TASTEN) {
       document.getElementById("taste-" + id).classList.toggle("an", live.overrides[id]);
     }
+    weiter.title = live.cues.naechster ?? "Keine weiteren Cues";
     const texte = [];
     if (live.blitzt) texte.push(["rot", "Strobo läuft"]);
     if (live.strobo_erlaubt) texte.push(["gelb", "Dieses Profil erlaubt Strobo: Hinweisschild am Eingang aufhängen."]);
@@ -43,6 +51,11 @@ export function tastenLeiste(leiste) {
 
   document.addEventListener("keydown", (ereignis) => {
     if (ereignis.target.closest("input, textarea, select") || ereignis.metaKey || ereignis.ctrlKey || ereignis.repeat) return;
+    if (ereignis.key === " ") {
+      ereignis.preventDefault();
+      if (!ereignis.target.closest("button")) WEITER();
+      return;
+    }
     const treffer = TASTEN.find(({ taste }) => taste === ereignis.key.toLowerCase());
     if (treffer) {
       ereignis.preventDefault();

@@ -3,6 +3,7 @@
 Hier läuft alles zusammen. Ein Bild entsteht immer in dieser Reihenfolge:
 
     Automatik      -> Engine reagiert auf die Musik, sonst Grundlicht
+    Cues und Fader -> liegen über der Automatik
     Profil-Grenze  -> maximale Helligkeit und Blitz-Wächter
     Override       -> die Tasten haben immer Vorrang
     DMX-Test       -> nur, wenn er gerade läuft
@@ -19,6 +20,7 @@ from typing import Optional
 from . import daten
 from .audio.betrieb import AudioBetrieb
 from .buehne import Buehne
+from .cues import CueSpieler, FaderBank, Sammlung, pruefe_cueliste
 from .dmx_ausgabe import BILDER_PRO_SEKUNDE, DmxAusgabe
 from .engine import Engine
 from .katalog import Katalog
@@ -29,6 +31,7 @@ from .pruefung import Pruefer, Vorgaben
 from .render import Eigenschaften, Renderer
 from .sicherheit import BlitzWaechter, Grenzen
 from .simulator import Simulator
+from .vorschau import Vorschau
 
 
 class Show:
@@ -44,6 +47,11 @@ class Show:
         self.profile = Profile(self.pfade.profile)
         self.profil = RUHE_PROFIL
         self.overrides = Overrides()
+        self.szenen = Sammlung(self.pfade.szenen)
+        self.cuelisten = Sammlung(self.pfade.cuelisten)
+        self.fader = FaderBank(self.pfade.fader)
+        self.cues = None
+        self.vorschau = Vorschau(self)
         self.blitze = BlitzWaechter()
         self.blitzt = False
 
@@ -64,6 +72,10 @@ class Show:
             self.pruefer = Pruefer(self.patch, self.buehne, self.grenzen)
             self.simulator = Simulator(self.patch, self.buehne)
             self.engine = Engine(self.patch, self.buehne, self.positionen, self.grenzen)
+            liste = self.cues.liste if self.cues else None
+            self.cues = CueSpieler(self.patch, self.buehne, self.positionen, self.szenen)
+            if liste:
+                self.cues.laden(liste)
 
     # --- Ein Bild bauen ---------------------------------------------------
 
@@ -71,12 +83,15 @@ class Show:
         jetzt = time.monotonic() if jetzt is None else jetzt
         with self.sperre:
             zustand = self._automatik(jetzt)
+            if not self._test_laeuft():
+                zustand = self.cues.ueberlagern(zustand, jetzt)
+                zustand = self.fader.anwenden(zustand, self.patch, self.buehne, self.positionen, self.szenen)
             zustand = self._profil_grenzen(zustand, jetzt)
             zustand = self.overrides.anwenden(zustand, self.patch.geraete)
             bild = self.renderer.bild(zustand)
             self._test_einmischen(bild)
             bild, meldungen, self.blitzt = self.pruefer.pruefe(bild, self._vorgaben(), jetzt)
-            self.meldungen = meldungen
+            self.meldungen = meldungen + self.cues.meldungen
             self.letztes_bild = bytes(bild)
             return self.letztes_bild
 
@@ -131,26 +146,47 @@ class Show:
             self.profil = profil
         self._sitzung_speichern()
 
+    def cueliste_laden(self, name: str) -> None:
+        liste = self.cuelisten.lesen(name)
+        if liste is None:
+            raise ValueError(f"Cueliste {name!r} gibt es nicht.")
+        fehler = pruefe_cueliste(liste, self.szenen)
+        if fehler:
+            raise ValueError(" ".join(fehler))
+        with self.sperre:
+            self.cues.laden(liste)
+        self._sitzung_speichern()
+
     def _sitzung_speichern(self) -> None:
-        daten.schreibe_json(self.pfade.sitzung, {"profil": self.profil["name"]})
+        daten.schreibe_json(self.pfade.sitzung, {
+            "profil": self.profil["name"],
+            "cueliste": self.cues.liste["name"] if self.cues.liste else None})
 
     def _sitzung_laden(self) -> None:
-        """Nach einem Neustart: letztes Profil wieder laden. DMX bleibt trotzdem aus."""
+        """Nach einem Neustart: Letztes Profil und letzte Cueliste laden. DMX bleibt aus."""
         sitzung = daten.lese_json(self.pfade.sitzung, {})
         if sitzung.get("profil"):
             try:
                 self.profil = self.profile.laden(sitzung["profil"])
             except ValueError:
                 self.profil = RUHE_PROFIL
+        if sitzung.get("cueliste"):
+            try:
+                self.cueliste_laden(sitzung["cueliste"])
+            except ValueError:
+                pass
 
     def live_daten(self) -> dict:
         """Das schickt der Server laufend an die 3D-Vorschau."""
         with self.sperre:
             werte = self.audio.aktuell()
             return {"geraete": self.simulator.lies(self.letztes_bild),
-                    "dmx_ein": self.ausgabe.eingeschaltet, "meldungen": self.meldungen,
+                    "dmx_ein": self.ausgabe.eingeschaltet, "meldungen": sorted(set(self.meldungen)),
                     "profil": self.profil["name"], "engine": self.engine.zustand_text,
                     "overrides": vars(self.overrides), "blitzt": self.blitzt,
+                    "cues": self.cues.status(), "fader": self.fader.status(),
+                    "vorschau": {"art": self.vorschau.art, "geraete": self.vorschau.geraete,
+                                 "meldungen": self.vorschau.meldungen},
                     "strobo_erlaubt": self.profil["strobo"] != "aus",
                     "hazer_erlaubt": self.profil["hazer"],
                     "audio": {"quelle": self.audio.name, "fehler": self.audio.fehler,

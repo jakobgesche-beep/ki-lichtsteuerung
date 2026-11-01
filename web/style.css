@@ -62,3 +62,10 @@ tr.gewaehlt td { background: #2c3c4c; }
 #hinweise .meldung { margin-top: 8px; margin-bottom: 0; }
 kbd { font: inherit; font-size: 12px; font-weight: normal; color: var(--leise); margin-left: 4px; }
 button.an kbd { color: inherit; }
+.drei-d.klein { height: 300px; }
+.fader { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+.fader input { width: 100%; }
+.cues { margin: 0 0 8px; padding-left: 22px; }
+.cues li.aktiv { color: #fff; font-weight: 600; }
+.cues li.aktiv::marker { color: var(--blau); }
+td input[type=number] { width: 70px; }

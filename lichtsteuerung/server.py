@@ -6,6 +6,7 @@ Prüfungen wie alles andere. Es gibt hier keinen Weg an der Prüfung vorbei.
 from __future__ import annotations
 
 import asyncio
+import time
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
@@ -15,8 +16,10 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .audio import quellen
+from .cues import pruefe_cueliste
 from .daten import PROJEKT
 from .dmx_ausgabe import EnttecFehler
+from .farben import FARBNAMEN
 from .katalog import KatalogFehler
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
@@ -194,6 +197,101 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             raise ValueError(" ".join(fehler))
         show.profile.speichern(profil)
         return {"name": profil["name"]}
+
+    # --- Szenen und Vorschau ------------------------------------------------
+
+    @app.get("/api/szenen")
+    def szenen_lesen():
+        gobos = {}
+        for geraet in show.patch.geraete:
+            for _, kanal in show.patch.typ(geraet).kanaele_im_modus(geraet["modus"]):
+                if kanal["typ"] == "gobo":
+                    for bereich in kanal.get("bereiche", []):
+                        if bereich["typ"] == "platz":
+                            gobos[bereich.get("name")] = True
+        return {"namen": show.szenen.namen(), "positionen": list(show.positionen),
+                "gruppen": show.patch.gruppen(), "gobos": list(gobos), "farben": list(FARBNAMEN),
+                "geraete": [{"id": g["id"], "name": g["name"]} for g in show.patch.geraete]}
+
+    @app.get("/api/szenen/{name}")
+    def szene_lesen(name: str):
+        szene = show.szenen.lesen(name)
+        if szene is None:
+            raise ValueError(f"Szene {name!r} gibt es nicht.")
+        return szene
+
+    @app.delete("/api/szenen/{name}")
+    def szene_loeschen(name: str):
+        show.szenen.loeschen(name)
+        return {"namen": show.szenen.namen()}
+
+    @app.post("/api/vorschau")
+    def vorschau_setzen(auftrag: dict = Body(...)):
+        """Zeigt einen Entwurf nur in der 3D-Vorschau. Nichts wird gesendet oder gespeichert."""
+        return {"meldungen": show.vorschau.entwurf_setzen(auftrag["art"], auftrag["inhalt"])}
+
+    @app.delete("/api/vorschau")
+    def vorschau_verwerfen():
+        show.vorschau.verwerfen()
+        return {}
+
+    @app.post("/api/vorschau/uebernehmen")
+    def vorschau_uebernehmen():
+        return {"name": show.vorschau.uebernehmen()}
+
+    # --- Cuelisten ----------------------------------------------------------
+
+    @app.get("/api/cuelisten")
+    def cuelisten_lesen():
+        return {"namen": show.cuelisten.namen()}
+
+    @app.get("/api/cuelisten/{name}")
+    def cueliste_lesen(name: str):
+        liste = show.cuelisten.lesen(name)
+        if liste is None:
+            raise ValueError(f"Cueliste {name!r} gibt es nicht.")
+        return liste
+
+    @app.post("/api/cuelisten")
+    def cueliste_speichern(liste: dict = Body(...)):
+        fehler = pruefe_cueliste(liste, show.szenen)
+        if fehler:
+            raise ValueError(" ".join(fehler))
+        show.cuelisten.schreiben(liste)
+        if show.cues.liste and show.cues.liste["name"] == liste["name"]:
+            show.cueliste_laden(liste["name"])
+        return {"name": liste["name"]}
+
+    @app.post("/api/cuelisten/{name}/laden")
+    def cueliste_laden(name: str):
+        show.cueliste_laden(name)
+        return show.cues.status()
+
+    @app.post("/api/cue/weiter")
+    def cue_weiter():
+        with show.sperre:
+            show.cues.weiter(time.monotonic())
+        return show.cues.status()
+
+    @app.post("/api/cue/stopp")
+    def cue_stopp():
+        with show.sperre:
+            show.cues.stopp(time.monotonic())
+        return show.cues.status()
+
+    # --- Fader --------------------------------------------------------------
+
+    @app.post("/api/fader/{nummer}")
+    def fader_setzen(nummer: int, auftrag: dict = Body(...)):
+        with show.sperre:
+            show.fader.setze(nummer, auftrag["wert"])
+        return {}
+
+    @app.post("/api/fader/{nummer}/belegen")
+    def fader_belegen(nummer: int, belegung: dict = Body(...)):
+        with show.sperre:
+            show.fader.belegen(nummer, belegung, show.szenen, show.patch.gruppen())
+        return {"fader": show.fader.status()}
 
     # --- Audio -------------------------------------------------------------
 

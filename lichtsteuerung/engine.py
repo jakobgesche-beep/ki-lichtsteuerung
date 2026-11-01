@@ -17,7 +17,7 @@ from typing import Optional
 from .farben import farbe as lies_farbe
 from .audio.analyse import Messwerte
 from .pantilt import ZielAusserhalb
-from .render import Eigenschaften
+from .render import Eigenschaften, mischen
 from .szenen import bereiche_von, loese_auf, zeige_auf
 
 GRUPPE_FARBE = "Farb-PARs"
@@ -27,22 +27,6 @@ STROBO_ENERGIE = 0.92
 STROBO_NACH_S = 2.0
 UEBERGANG_S = 1.5        # so lange dauert der Wechsel zwischen Musik und Grundlicht
 ZIEL_HOEHE_M = 0.8       # die Spots wandern über den Bühnenboden
-
-
-def mischen(a: Eigenschaften, b: Eigenschaften, anteil: float) -> Eigenschaften:
-    """Überblendung von a nach b. anteil=1 ergibt b."""
-    def zahl(x, y):
-        if x is None or y is None:
-            return y if y is not None else x
-        return x + (y - x) * anteil
-
-    farbe = None
-    if a.farbe is not None and b.farbe is not None:
-        farbe = tuple(zahl(x, y) for x, y in zip(a.farbe, b.farbe))
-    else:
-        farbe = b.farbe or a.farbe
-    return b.kopie(helligkeit=zahl(a.helligkeit, b.helligkeit), farbe=farbe,
-                   pan=zahl(a.pan, b.pan), tilt=zahl(a.tilt, b.tilt))
 
 
 class Engine:

@@ -86,7 +86,7 @@ export function katalogSeite(wurzel) {
         <textarea id="e-modi" rows="4" style="width:100%">${t(eintrag.modi.map((m) => `${m.name}: ${m.kanaele.map((k) => k ?? "-").join(", ")}`).join("\n"))}</textarea>
         <p><button id="e-speichern" class="haupt">Speichern</button></p>
       </div>`;
-    feld("e-kanal").onclick = () => feld("e-kanaele").insertAdjacentHTML("beforeend", kanalZeile("", { typ: "sonstiges" }));
+    feld("e-kanal").onclick = () => feld("e-kanaele").tBodies[0].insertAdjacentHTML("beforeend", kanalZeile("", { typ: "sonstiges" }));
     feld("e-speichern").onclick = async () => {
       const kanaele = {};
       for (const zeile of wurzel.querySelectorAll("#e-kanaele tr:not(:first-child)")) {
