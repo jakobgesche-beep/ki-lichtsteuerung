@@ -5,7 +5,7 @@ from pathlib import Path
 from PyInstaller.utils.hooks import collect_all, collect_submodules
 
 WURZEL = Path(SPECPATH).parent
-VERSION = re.search(r'"(.+)"', (WURZEL / "lichtsteuerung/version.py").read_text()).group(1)
+VERSION = re.search(r'^VERSION = "(.+)"', (WURZEL / "lichtsteuerung/version.py").read_text(), re.M).group(1)
 
 daten = [(str(WURZEL / name), name) for name in ("web", "catalog", "profile", "cues")]
 daten += [(str(WURZEL / name), ".") for name in

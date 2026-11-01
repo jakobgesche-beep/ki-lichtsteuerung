@@ -11,6 +11,7 @@ APP=dist/Lichtsteuerung.app
 # Ohne Apple-Entwicklerkonto: Ad-hoc-Signatur. Apple-Silicon-Macs verlangen sie.
 codesign --force --deep -s - "$APP"
 codesign --verify --deep "$APP"
+plutil -extract CFBundleShortVersionString raw "$APP/Contents/Info.plist" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'
 LICHT_DATEN="$(mktemp -d)" "$APP/Contents/MacOS/Lichtsteuerung" --selbsttest --port 8391
 ditto -c -k --keepParent "$APP" "dist/Lichtsteuerung-$ARCH.zip"
 mkdir dist/dmg
