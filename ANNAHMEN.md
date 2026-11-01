@@ -60,7 +60,7 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Rede-Erkennung** aus dem Ton ist eine grobe Schätzung. Zuverlässig wird das erst mit dem X32 in Schritt 10.
 - **Enttec:** Der Code folgt pyopendmx und ist nur gegen ein nachgebautes Gerät getestet. pyftdi braucht `libusb` (Mac) oder einen WinUSB-Treiber (Windows). Solange der fehlt, meldet das Programm „Kein Enttec gefunden“.
 - **Die Enttec-Suche** erkennt jeden FTDI-Chip mit dieser Kennung, also auch ein USB Pro oder andere USB-Kabel.
-- **Open Fixture Library:** 639 von 645+ Geräten wurden importiert, einige Sonderfälle mit ungewöhnlichem Aufbau fehlen. Schaltbare Kanäle gelten in ihrer ersten Stellung.
+- **Open Fixture Library:** 645 Geräte sind importiert, 8 Sonderfälle mit ungewöhnlichem Aufbau fehlen. Schaltbare Kanäle gelten in ihrer ersten Stellung.
 - **GDTF:** nur gegen eine selbst gebaute Beispieldatei getestet. QLC+-Import gegen die echte Datei des Hero Spot 60.
 - **Die genaue Lage** eines Geräts (x, y, z, Drehung, Neigung) trägt man in `stage.json` ein, solange es die Klick-Oberfläche aus Schritt 11 nicht gibt.
 
