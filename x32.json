@@ -1,0 +1,8 @@
+{
+  "_hinweis": "PLATZHALTER für Schritt 10: Kanäle stehen noch nicht fest. Das Programm liest nur und ändert nie etwas am Mischpult.",
+  "platzhalter": true,
+  "ip": "",
+  "rednerpult_kanaele": [],
+  "band_kanaele": [],
+  "zuspieler_kanaele": []
+}

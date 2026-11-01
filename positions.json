@@ -1,0 +1,10 @@
+{
+  "_hinweis": "PLATZHALTER: Punkte sind geschätzt. Cues und später der Licht-Chat benutzen nur diese Namen.",
+  "platzhalter": true,
+  "positionen": {
+    "Mitte":         { "x": 0.0,  "y": 2.0, "z": 2.4 },
+    "Rednerpult":    { "x": -2.5, "y": 1.0, "z": 2.4 },
+    "Sänger links":  { "x": -1.5, "y": 2.0, "z": 2.4 },
+    "Sänger rechts": { "x": 1.5,  "y": 2.0, "z": 2.4 }
+  }
+}

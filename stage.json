@@ -1,0 +1,27 @@
+{
+  "_hinweis": "PLATZHALTER-BÜHNE: Alle Maße sind geschätzt und müssen ausgemessen werden. Nullpunkt = Bühnenmitte vorne auf dem Boden. x = nach rechts (vom Publikum aus), y = nach hinten in die Bühne (Publikum hat negatives y), z = nach oben. Alles in Metern.",
+  "platzhalter": true,
+  "buehne": {
+    "breite_m": 8.0,
+    "tiefe_m": 5.0,
+    "hoehe_kante_m": 0.8
+  },
+  "publikum": {
+    "x_von_m": -8.0,
+    "x_bis_m": 8.0,
+    "y_von_m": -14.0,
+    "y_bis_m": -2.0,
+    "kopfhoehe_m": 2.0,
+    "sicherheitsabstand_m": 0.5
+  },
+  "traverse": {
+    "x_von_m": -1.5,
+    "x_bis_m": 1.5,
+    "y_m": 2.0,
+    "hoehe_m": 3.9,
+    "max_geraete": 8,
+    "max_gewicht_kg": 60,
+    "_hinweis": "Traverse steht auf der Bühne: 0,8 m Bühnenkante + 3,1 m Stativ."
+  },
+  "geraete": {}
+}

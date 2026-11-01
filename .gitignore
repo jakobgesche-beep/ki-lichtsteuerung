@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# Wird beim Betrieb geschrieben (letztes Profil, letzte Cueliste):
+daten/sitzung.json
+# Lokale Einstellungen, zum Beispiel später der API-Key. Niemals ins Repository!
+lokal.json
+.env
+.DS_Store

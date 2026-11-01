@@ -1,0 +1,7 @@
+{
+  "_hinweis": "Feste Grenzen. Kein Profil und keine KI kann sie überschreiten, das Programm schreibt diese Datei nie. PLATZHALTER: Werte mit der Lehrkraft festlegen (offene Frage). 3 Blitze pro Sekunde ist die übliche Empfehlung zum Schutz von Menschen mit Epilepsie.",
+  "platzhalter": true,
+  "strobo_max_blitze_pro_sekunde": 3.0,
+  "strobo_max_dauer_s": 5.0,
+  "strobo_pause_s": 30.0
+}

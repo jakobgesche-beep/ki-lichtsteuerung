@@ -1,0 +1,7 @@
+# Was das Programm zum Laufen braucht
+numpy>=1.24
+fastapi>=0.110
+uvicorn[standard]>=0.29
+sounddevice>=0.4
+soundfile>=0.12
+pyftdi>=0.55
