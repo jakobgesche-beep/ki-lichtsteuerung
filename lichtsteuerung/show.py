@@ -243,6 +243,7 @@ class Show:
 
     def _schleife(self) -> None:
         abstand = 1.0 / BILDER_PRO_SEKUNDE
+        naechstes = time.monotonic()
         while not self._stopp.is_set():
             beginn = time.monotonic()
             try:
@@ -253,6 +254,10 @@ class Show:
                 self.meldungen = [f"Interner Fehler: {fehler}"]
                 bild = self.notbild()
             self.ausgabe.setze_bild(bild)
-            rest = abstand - (time.monotonic() - beginn)
+            # Fester Takt: Verspätete Bilder verschieben nicht alle folgenden.
+            naechstes += abstand
+            rest = naechstes - time.monotonic()
             if rest > 0:
                 time.sleep(rest)
+            else:
+                naechstes = time.monotonic()
