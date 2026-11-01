@@ -14,6 +14,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .daten import PROJEKT
+from .dmx_ausgabe import EnttecFehler
 from .katalog import KatalogFehler
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .show import Show
@@ -44,6 +45,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     show = show or Show()
     app = FastAPI(title="Lichtsteuerung Technik-AG")
     app.state.show = show
+    app.router.add_event_handler("startup", show.start)
+    app.router.add_event_handler("shutdown", show.stopp)
 
     @app.middleware("http")
     async def nur_eigene_seite(anfrage: Request, weiter):
@@ -121,6 +124,41 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         speichern(show)
         return patch_antwort(show)
 
+    # --- DMX-Test ---------------------------------------------------------
+
+    @app.post("/api/dmxtest")
+    def dmx_test(auftrag: dict = Body(...)):
+        """Ein Gerät einzeln an, oder rohe Kanalwerte setzen. Leer beendet den Test."""
+        kanaele = {int(k): int(v) for k, v in auftrag.get("kanaele", {}).items()}
+        for kanal, wert in kanaele.items():
+            if not 1 <= kanal <= 512 or not 0 <= wert <= 255:
+                raise ValueError("Kanal 1 bis 512, Wert 0 bis 255.")
+        geraet = auftrag.get("geraet")
+        if geraet is not None:
+            show.patch.geraet(geraet)
+        with show.sperre:
+            show.test_geraet, show.test_kanaele = geraet, kanaele
+        return {"bild": list(show.baue_bild()), "meldungen": show.meldungen}
+
+    @app.get("/api/dmx")
+    def dmx_status():
+        return {"eingeschaltet": show.ausgabe.eingeschaltet,
+                "enttec_gefunden": show.ausgabe.enttec_gefunden(),
+                "fehler": show.ausgabe.fehler, "bild": list(show.letztes_bild)}
+
+    @app.post("/api/dmx/ein")
+    def dmx_ein():
+        try:
+            show.ausgabe.einschalten()
+        except EnttecFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        return {"eingeschaltet": True}
+
+    @app.post("/api/dmx/aus")
+    def dmx_aus():
+        show.ausgabe.ausschalten()
+        return {"eingeschaltet": False}
+
     # --- Die Oberfläche ---------------------------------------------------
 
     @app.get("/")
@@ -134,3 +172,4 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 def speichern(show: Show) -> None:
     show.patch.speichern()
     show.buehne.speichern()
+    show.aufbauen()

@@ -609,7 +609,8 @@
     },
     "Pan/Tilt Time": {
       "typ": "tempo",
-      "standard": 0
+      "standard": 0,
+      "schnell_bei": 255
     },
     "Color Wheel Time": {
       "typ": "tempo",

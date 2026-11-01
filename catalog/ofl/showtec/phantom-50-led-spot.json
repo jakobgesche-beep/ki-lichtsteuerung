@@ -23,7 +23,8 @@
     },
     "Pan/Tilt Speed": {
       "typ": "tempo",
-      "standard": 128
+      "standard": 128,
+      "schnell_bei": 0
     },
     "Color Wheel": {
       "typ": "farbrad",

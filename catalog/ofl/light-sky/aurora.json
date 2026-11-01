@@ -40,7 +40,8 @@
           "bis": 255,
           "typ": "sonstiges"
         }
-      ]
+      ],
+      "schnell_bei": 255
     },
     "Control": {
       "typ": "makro",

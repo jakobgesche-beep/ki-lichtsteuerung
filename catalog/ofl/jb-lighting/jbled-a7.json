@@ -379,7 +379,8 @@
           "bis": 255,
           "typ": "sonstiges"
         }
-      ]
+      ],
+      "schnell_bei": 255
     },
     "Effects Delay": {
       "typ": "tempo",

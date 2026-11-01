@@ -35,7 +35,8 @@
           "bis": 255,
           "typ": "sonstiges"
         }
-      ]
+      ],
+      "schnell_bei": 255
     },
     "Power/Special Functions": {
       "typ": "makro",

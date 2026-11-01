@@ -556,7 +556,8 @@
           "bis": 255,
           "typ": "sonstiges"
         }
-      ]
+      ],
+      "schnell_bei": 255
     },
     "Dimmer/Focus/Color/Gobo/Prism Speed": {
       "typ": "tempo",

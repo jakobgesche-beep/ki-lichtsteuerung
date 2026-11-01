@@ -45,7 +45,8 @@
           "bis": 255,
           "typ": "sonstiges"
         }
-      ]
+      ],
+      "schnell_bei": 255
     },
     "Color Wheel": {
       "typ": "farbrad",

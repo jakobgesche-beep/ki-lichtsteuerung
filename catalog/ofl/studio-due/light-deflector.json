@@ -26,7 +26,8 @@
     },
     "Pan/Tilt Speed": {
       "typ": "tempo",
-      "standard": 0
+      "standard": 0,
+      "schnell_bei": 255
     },
     "Reset": {
       "typ": "makro",

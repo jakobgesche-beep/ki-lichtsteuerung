@@ -122,7 +122,8 @@
     },
     "Left Bar Speed": {
       "typ": "tempo",
-      "standard": 0
+      "standard": 0,
+      "schnell_bei": 255
     },
     "Right Bar Tilt": {
       "typ": "tilt",
@@ -131,7 +132,8 @@
     },
     "Right Bar Speed": {
       "typ": "tempo",
-      "standard": 0
+      "standard": 0,
+      "schnell_bei": 255
     },
     "LED 1 Red": {
       "typ": "rot",

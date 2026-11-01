@@ -155,6 +155,8 @@ def wandle_kanal(name: str, kanal: dict, raeder: dict) -> dict:
     ergebnis = {"typ": typ, "standard": standardwert(kanal, bereiche, typ)}
     if any(b["typ"] != "sonstiges" for b in bereiche) or len(bereiche) > 1:
         ergebnis["bereiche"] = bereiche
+    if faehigkeiten[0]["type"] == "PanTiltSpeed":
+        ergebnis["schnell_bei"] = 0 if str(faehigkeiten[0].get("speedStart")).startswith("fast") else 255
     if typ in ("pan", "tilt"):
         for faehigkeit in faehigkeiten:
             start = zahl_aus(faehigkeit.get("angleStart"), "deg")

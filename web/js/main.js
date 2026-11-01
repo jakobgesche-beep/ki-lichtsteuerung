@@ -1,10 +1,12 @@
 // Der Rahmen: Reiter oben, die Seiten liegen jeweils in einer eigenen Datei.
 import { patchSeite } from "./patch.js";
 import { katalogSeite } from "./katalog.js";
+import { dmxTestSeite } from "./dmxtest.js";
 
 const seiten = [
   ["Patch", patchSeite],
   ["Katalog", katalogSeite],
+  ["DMX-Test", dmxTestSeite],
 ];
 
 const inhalt = document.getElementById("inhalt");

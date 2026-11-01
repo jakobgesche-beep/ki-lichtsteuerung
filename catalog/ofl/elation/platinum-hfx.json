@@ -664,7 +664,8 @@
           "bis": 255,
           "typ": "aus"
         }
-      ]
+      ],
+      "schnell_bei": 0
     },
     "Special functions": {
       "typ": "makro",

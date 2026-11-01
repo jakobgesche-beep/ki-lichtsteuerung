@@ -93,7 +93,8 @@
     },
     "Head Speed": {
       "typ": "tempo",
-      "standard": 127
+      "standard": 127,
+      "schnell_bei": 255
     },
     "Strobe": {
       "typ": "strobo",

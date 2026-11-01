@@ -422,7 +422,8 @@
           "bis": 255,
           "typ": "aus"
         }
-      ]
+      ],
+      "schnell_bei": 0
     },
     "Reset & Internal Programs": {
       "typ": "makro",

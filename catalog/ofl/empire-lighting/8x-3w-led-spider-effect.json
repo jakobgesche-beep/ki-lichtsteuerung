@@ -13,7 +13,8 @@
   "kanaele": {
     "Tilt Speed": {
       "typ": "tempo",
-      "standard": 0
+      "standard": 0,
+      "schnell_bei": 0
     },
     "Master Dimmer": {
       "typ": "dimmer",

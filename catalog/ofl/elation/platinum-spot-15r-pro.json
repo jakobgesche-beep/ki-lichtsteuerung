@@ -635,7 +635,8 @@
           "bis": 255,
           "typ": "aus"
         }
-      ]
+      ],
+      "schnell_bei": 0
     },
     "Color Macros": {
       "typ": "makro",

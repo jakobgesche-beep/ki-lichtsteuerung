@@ -837,7 +837,8 @@
           "bis": 255,
           "typ": "sonstiges"
         }
-      ]
+      ],
+      "schnell_bei": 255
     },
     "Effect Speed": {
       "typ": "tempo",
