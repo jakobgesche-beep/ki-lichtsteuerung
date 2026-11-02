@@ -75,3 +75,12 @@ def test_der_echte_katalog_enthaelt_unsere_geraete():
     for typ_id in ("stairville/mh-x25", "stairville/hz-200-compact-hazer",
                    "stairville/quad-par-profile-rgbw-5x8w", "varytec/hero-spot-60"):
         assert pruefe_eintrag(katalog.typ(typ_id).daten) == []
+
+
+def test_gobo_drehung_der_echten_daten():
+    from lichtsteuerung.daten import PROJEKT
+    from lichtsteuerung.render import drehung_wert
+    kanal = Katalog(PROJEKT / "catalog").typ("stairville/mh-x25").daten["kanaele"]["Gobo rotation"]
+    assert 64 <= drehung_wert(kanal, 0.5) <= 147
+    assert 148 <= drehung_wert(kanal, -0.5) <= 231
+    assert drehung_wert(kanal, None) == 0

@@ -34,3 +34,12 @@ def test_fremde_webseite_wird_abgewiesen(client):
     antwort = client.post("/api/patch", headers={"Origin": "http://boese.example"},
                           json={"typ": "test/par", "modus": "6", "name": "A"})
     assert antwort.status_code == 403
+
+
+def test_ort_wechseln_haengt_geraete_an_die_traverse(client):
+    client.post("/api/patch", json={"typ": "test/kopf", "modus": "7", "anzahl": 2, "name": "K 1-2", "ort": "stativ"})
+    client.patch("/api/patch/k-1", json={"ort": "traverse"})
+    antwort = client.patch("/api/patch/k-2", json={"ort": "traverse"}).json()
+    orte = [g["ort"] for g in antwort["geraete"]]
+    assert all(o["ort"] == "traverse" and o["montage"] == "haengend" and o["z"] == 3.9 for o in orte)
+    assert orte[0]["x"] < orte[1]["x"]

@@ -215,12 +215,16 @@
         {
           "von": 8,
           "bis": 119,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": 1,
+          "schnell_am_ende": true
         },
         {
           "von": 120,
           "bis": 231,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": -1,
+          "schnell_am_ende": true
         },
         {
           "von": 232,

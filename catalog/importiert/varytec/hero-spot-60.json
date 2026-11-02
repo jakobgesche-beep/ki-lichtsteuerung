@@ -425,8 +425,10 @@
         {
           "von": 10,
           "bis": 129,
-          "typ": "sonstiges",
-          "name": "Clockwise"
+          "typ": "drehung",
+          "name": "Clockwise",
+          "richtung": 1,
+          "schnell_am_ende": false
         },
         {
           "von": 130,
@@ -437,8 +439,10 @@
         {
           "von": 135,
           "bis": 255,
-          "typ": "sonstiges",
-          "name": "Counterclockwise"
+          "typ": "drehung",
+          "name": "Counterclockwise",
+          "richtung": -1,
+          "schnell_am_ende": true
         }
       ]
     },

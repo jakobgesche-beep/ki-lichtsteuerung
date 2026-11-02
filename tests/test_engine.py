@@ -84,11 +84,10 @@ def test_hohe_energie_bewegt_die_spots(engine):
     assert a["kopf"].pan is not None and a["kopf"].pan != b["kopf"].pan
 
 
-def test_wenig_energie_bewegt_nichts(engine):
-    werte = Messwerte(**{**MUSIK, "energie": 0.2})
-    a, zeit = einschwingen(engine, PARTY, werte)
-    b, _ = einschwingen(engine, PARTY, werte, von=zeit, dauer=0.5)
-    assert a["kopf"].pan == b["kopf"].pan
+def test_viel_energie_bewegt_groesser_als_wenig(engine):
+    engine.beats, engine.phase = 32, 2.0       # Muster "Kreuz", Bewegung ganz außen
+    klein = abs(engine._muster(0, 8, 0.45)[0])
+    assert abs(engine._muster(0, 8, 1.0)[0]) > 2 * klein * 0.99 > 0
 
 
 def test_profil_ohne_bewegung(engine):
@@ -101,7 +100,7 @@ def test_profil_ohne_bewegung(engine):
 
 def test_ruhende_spots_zeigen_auf_die_buehne_und_nicht_nach_oben(engine):
     from lichtsteuerung.pantilt import Montage, richtung
-    zustand, _ = einschwingen(engine, PARTY, Messwerte(**{**MUSIK, "energie": 0.2}))
+    zustand, _ = einschwingen(engine, {**PARTY, "bewegung": "aus"}, Messwerte(**{**MUSIK, "energie": 0.2}))
     e = zustand["kopf"]
     strahl = richtung(Montage.aus_buehne(engine.buehne.geraet("kopf")), e.pan, e.tilt)
     assert strahl[2] < 0
@@ -163,3 +162,67 @@ def test_geraet_ohne_gruppe_zaehlt_nach_seinen_faehigkeiten(pfade, katalog):
     patch.hinzufuegen("test/par", "6", 1, "Par")
     assert [g["id"] for g in patch.in_gruppe("Spots")] == ["kopf"]
     assert [g["id"] for g in patch.in_gruppe("Farb-PARs")] == ["par"]
+
+
+def test_spots_wechseln_sich_auf_dem_beat_ab(nur_spots):
+    _, zeit = einschwingen(nur_spots, PARTY, Messwerte(**{**MUSIK, "energie": 0.1}))
+    a = nur_spots.bewerte(Messwerte(beat=True, **{**MUSIK, "energie": 0.1}), PARTY, zeit)
+    b = nur_spots.bewerte(Messwerte(beat=True, **{**MUSIK, "energie": 0.1}), PARTY, zeit + 0.5)
+    assert (a["front-1"].helligkeit > a["front-2"].helligkeit) != (b["front-1"].helligkeit > b["front-2"].helligkeit)
+
+
+def test_farbe_blendet_weich_ueber(engine):
+    _, zeit = einschwingen(engine, PARTY, Messwerte(**MUSIK))
+    vorher = engine.bewerte(Messwerte(**MUSIK), PARTY, zeit)["par-1"].farbe
+    gleich_danach = engine.bewerte(Messwerte(beat=True, **MUSIK), PARTY, zeit + 0.025)["par-1"].farbe
+    assert gleich_danach != vorher and gleich_danach not in [farbe(f) for f in PARTY["palette"]]
+
+
+def test_bewegung_springt_nicht(nur_spots):
+    werte = Messwerte(**{**MUSIK, "energie": 0.9})
+    letzte, groesster = None, 0.0
+    for i in range(40 * 40):           # 40 Sekunden, also mehrere Musterwechsel
+        m = Messwerte(beat=i % 20 == 0, **{**MUSIK, "energie": 0.9})
+        pan = nur_spots.bewerte(m, PARTY, i / 40).get("front-1").pan
+        if letzte is not None and i > 80:
+            groesster = max(groesster, abs(pan - letzte))
+        letzte = pan
+    assert groesster <= 5.01    # 200 Grad pro Sekunde bei 40 Bildern
+
+
+def test_muster_bleiben_auf_der_buehne(nur_spots):
+    masse = nur_spots.buehne.daten["buehne"]
+    for beats in range(0, 64, 16):
+        nur_spots.beats = beats
+        for i in range(200):
+            nur_spots.phase = i / 10
+            for nummer in (0, 1, 2):
+                x, y = nur_spots._muster(nummer, 8, 1.0)
+                assert abs(x) <= masse["breite_m"] / 2 and 0 <= y <= masse["tiefe_m"]
+
+
+def test_gobos_wechseln_alle_8_beats_und_drehen(pfade, katalog):
+    from lichtsteuerung.importe.gemeinsam import speichere_import
+    from lichtsteuerung.importe import qxf
+    from pathlib import Path
+    speichere_import(qxf.wandle((Path(__file__).parent / "beispiele/Varytec-Hero-Spot-60.qxf").read_bytes()), pfade.katalog)
+    katalog.neu_laden()
+    patch = Patch(pfade.fixtures, katalog)
+    patch.hinzufuegen("varytec/hero-spot-60", "14 Channel", 1, "Spot", gruppen=["Spots"])
+    buehne = Buehne(pfade.stage)
+    buehne.setze_geraet("spot", {"ort": "traverse", "x": 0, "y": 2, "z": 3.9, "montage": "haengend", "drehung_grad": 180})
+    e = Engine(patch, buehne, {}, Grenzen(3, 5, 30))
+    z, _ = einschwingen(e, PARTY, Messwerte(**MUSIK))
+    assert z["spot"].gobo == "Gobo 1" and z["spot"].gobo_drehung
+    e.beats = 8
+    z = e.bewerte(Messwerte(**MUSIK), PARTY, 4.0)
+    assert z["spot"].gobo == "Gobo 2"
+    from lichtsteuerung.render import Renderer
+    bild = Renderer(patch).bild(z)
+    assert 27 <= bild[8] <= 43 and bild[9] >= 10     # Gobo 2, Drehung läuft
+
+
+def test_profil_mit_wenig_reaktion_bleibt_ruhig(nur_spots):
+    ruhig = {**PARTY, "beat_reaktion": 0.15, "bewegung": "langsam"}
+    z, _ = einschwingen(nur_spots, ruhig, Messwerte(beat=True, **MUSIK))
+    assert z["front-1"].gobo is None

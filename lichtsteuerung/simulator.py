@@ -50,7 +50,7 @@ class Simulator:
         typen = eintrag["typen"]
         rot, gruen, blau = self._farbe(typen, eintrag["kanaele"], bild)
         hell = bild[typen["dimmer"][0]] / 255 if "dimmer" in typen else 1.0
-        hz = 0.0
+        hz = drehung = 0.0
         for index, kanal in eintrag["kanaele"]:
             bereich = bereich_von(kanal, bild[index])
             if bereich is None:
@@ -59,11 +59,13 @@ class Simulator:
                 hell = 0.0
             elif bereich["typ"] == "strobo":
                 hz = hz_von(bereich, bild[index]) or 0.0
+            elif bereich["typ"] == "drehung":
+                drehung = float(bereich["richtung"])
         return {
             "id": eintrag["geraet"]["id"], "hell": round(hell, 3),
             "farbe": [round(rot, 3), round(gruen, 3), round(blau, 3)],
             "richtung": [round(w, 4) for w in self._richtung(eintrag, bild)], "strobo_hz": round(hz, 2),
-            "gobo": self._gobo(typen, bild),
+            "gobo": self._gobo(typen, bild), "gobo_drehung": drehung,
         }
 
     @staticmethod

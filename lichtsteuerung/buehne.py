@@ -55,3 +55,11 @@ class Buehne:
         return {"ort": "boden", "x": round(x, 2), "y": 3.0,
                 "z": self.daten["buehne"]["hoehe_kante_m"],
                 "montage": "stehend", "drehung_grad": 0}
+
+    def verteilen(self, ort: str) -> None:
+        """Verteilt alle Geräte an diesem Ort gleichmäßig, Moving Heads außen an die Stative."""
+        ids = [i for i, g in self.daten.get("geraete", {}).items() if g.get("ort") == ort]
+        for nummer, geraet_id in enumerate(ids):
+            eintrag = self.daten["geraete"][geraet_id]
+            eintrag.update({k: v for k, v in self.ort_vorschlag(ort, nummer, len(ids)).items()
+                            if k in ("x", "y", "z")})

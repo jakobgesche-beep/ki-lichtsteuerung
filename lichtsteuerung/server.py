@@ -135,7 +135,14 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         ort = aenderung.pop("ort", None)
         erlaubt = {k: aenderung[k] for k in ("name", "adresse", "modus", "gruppen") if k in aenderung}
         show.patch.aendern(geraet_id, **erlaubt)
-        if ort:
+        if isinstance(ort, str):
+            # Nur der Ort wurde gewählt: Das Programm hängt das Gerät passend hin.
+            alter_ort = (show.buehne.geraet(geraet_id) or {}).get("ort")
+            show.buehne.setze_geraet(geraet_id, show.buehne.ort_vorschlag(ort, 0, 1))
+            show.buehne.verteilen(ort)
+            if alter_ort and alter_ort != ort:
+                show.buehne.verteilen(alter_ort)
+        elif ort:
             show.buehne.setze_geraet(geraet_id, ort)
         speichern(show)
         return patch_antwort(show)

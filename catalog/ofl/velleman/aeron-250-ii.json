@@ -168,12 +168,16 @@
         {
           "von": 16,
           "bis": 135,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": 1,
+          "schnell_am_ende": true
         },
         {
           "von": 136,
           "bis": 255,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": -1,
+          "schnell_am_ende": true
         }
       ]
     },

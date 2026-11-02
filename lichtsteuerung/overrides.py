@@ -37,7 +37,7 @@ class Overrides:
             if self.strobo_aus:
                 e = e.kopie(strobo_hz=0.0)
             if self.warmweiss:
-                e = e.kopie(helligkeit=WARMWEISS_HELLIGKEIT, farbe=warm, strobo_hz=0.0, gobo=None)
+                e = e.kopie(helligkeit=WARMWEISS_HELLIGKEIT, farbe=warm, strobo_hz=0.0, gobo=None, gobo_drehung=None)
                 if e.pan is None and geraet["id"] in warm_stellung:
                     e = e.kopie(pan=warm_stellung[geraet["id"]][0], tilt=warm_stellung[geraet["id"]][1])
             if self.blackout:

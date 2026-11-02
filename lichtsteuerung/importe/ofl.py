@@ -84,6 +84,9 @@ def wandle_bereich(faehigkeit: dict, raeder: dict) -> dict:
         bereich.update(typ="strobo", hz_von=hz_von, hz_bis=hz_bis)
     elif art == "Effect" and "strobe" in str(faehigkeit.get("effectName", "")).lower():
         bereich.update(typ="strobo", hz_von=None, hz_bis=None)
+    elif art == "WheelSlotRotation" and "CW" in str(faehigkeit.get("speedStart", "")):
+        bereich.update(typ="drehung", richtung=-1 if "CCW" in faehigkeit["speedStart"] else 1,
+                       schnell_am_ende="fast" in str(faehigkeit.get("speedEnd", "")))
     elif art == "Intensity":
         bereich["typ"] = "dimmer"
     elif art == "NoFunction":

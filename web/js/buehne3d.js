@@ -23,6 +23,7 @@ export class Buehne3D {
     this.steuerung.update();
     this.szene.add(new THREE.AmbientLight(0xffffff, 1.2));
     this.lichter = new Map();
+    this.goboBilder = [];
     this.masse = aufbau.buehne;
     this.baueBuehne(aufbau);
     for (const geraet of aufbau.geraete) this.baueLicht(geraet);
@@ -123,11 +124,47 @@ export class Buehne3D {
     return Math.abs(x) <= breite_m / 2 && y >= 0 && y <= tiefe_m ? kante : 0;
   }
 
+  // Vier einfache Gobo-Bilder. Das echte Muster steht nicht in den Gerätedaten.
+  goboBild(name) {
+    const nummer = name && name !== "Offen" ? Number(name.replace(/\D/g, "") || 1) % 4 : -1;
+    if (nummer < 0) return null;
+    if (this.goboBilder[nummer]) return this.goboBilder[nummer];
+    const tafel = document.createElement("canvas");
+    tafel.width = tafel.height = 256;
+    const z = tafel.getContext("2d");
+    z.fillStyle = "#fff";
+    z.translate(128, 128);
+    const speichen = [5, 8, 3, 6][nummer];
+    for (let i = 0; i < speichen; i++) {
+      z.rotate((2 * Math.PI) / speichen);
+      z.beginPath();
+      if (nummer % 2) z.arc(0, -78, 26, 0, 2 * Math.PI);
+      else { z.moveTo(0, -18); z.lineTo(-24, -122); z.lineTo(24, -122); }
+      z.fill();
+    }
+    if (nummer % 2) { z.beginPath(); z.arc(0, 0, 22, 0, 2 * Math.PI); z.fill(); }
+    return (this.goboBilder[nummer] = new THREE.CanvasTexture(tafel));
+  }
+
   aktualisiereLichter(zeit) {
     const unten = new THREE.Vector3(0, -1, 0);
     for (const licht of this.lichter.values()) {
-      const wert = licht.wert;
-      if (!wert) continue;
+      const ziel = licht.wert;
+      if (!ziel) continue;
+      // Die Daten kommen 25-mal pro Sekunde, gezeichnet wird öfter: dazwischen weich rechnen.
+      const wert = licht.weich ??= { ...ziel, richtung: [...ziel.richtung], farbe: [...ziel.farbe] };
+      for (const feld of ["richtung", "farbe"]) wert[feld] = wert[feld].map((w, i) => w + (ziel[feld][i] - w) * 0.3);
+      wert.hell += (ziel.hell - wert.hell) * 0.4;
+      wert.strobo_hz = ziel.strobo_hz;
+      const laengeVektor = Math.hypot(...wert.richtung);
+      wert.richtung = wert.richtung.map((w) => w / laengeVektor);
+      const gobo = this.goboBild(ziel.gobo);
+      if (licht.fleck.material.map !== gobo) {
+        licht.fleck.material.map = gobo;
+        licht.fleck.material.needsUpdate = true;
+      }
+      licht.drehung = (licht.drehung ?? 0) + (ziel.gobo_drehung ?? 0) * 0.03;
+      licht.fleck.rotation.z = licht.drehung;
       let hell = wert.hell;
       if (wert.strobo_hz > 0 && (zeit * wert.strobo_hz) % 1 > 0.3) hell = 0;
       const [rx, ry, rz] = wert.richtung;
@@ -143,7 +180,7 @@ export class Buehne3D {
       licht.fleck.position.copy(punkt(licht.ort.x + rx * laenge, licht.ort.y + ry * laenge, boden + 0.02));
       licht.fleck.scale.set(radius, radius, 1);
       licht.fleck.material.color.setRGB(...wert.farbe);
-      licht.fleck.material.opacity = rz < -0.05 ? 0.5 * hell : 0;
+      licht.fleck.material.opacity = rz < -0.05 ? (gobo ? 0.95 : 0.5) * hell : 0;
     }
   }
 

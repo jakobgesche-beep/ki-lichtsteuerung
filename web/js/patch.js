@@ -72,13 +72,19 @@ export function patchSeite(wurzel) {
         <td>${t(g.modus)}</td>
         <td><input type="number" min="1" max="512" value="${g.adresse}" data-adresse="${t(g.id)}"> <span class="leise">bis ${g.letzte_adresse}</span></td>
         <td>${t(g.gruppen.join(", "))}</td>
-        <td>${t(g.ort.ort ?? "")} ${t(g.ort.montage === "haengend" ? "hängend" : g.ort.montage ?? "")}</td>
+        <td><select data-ort="${t(g.id)}">${["traverse", "stativ", "boden"].map((o) =>
+          `<option value="${o}" ${o === g.ort.ort ? "selected" : ""}>${{ traverse: "Traverse (hängend)", stativ: "Stativ", boden: "Boden" }[o]}</option>`).join("")}</select></td>
         <td><button data-tausch="${t(g.id)}">Tauschen</button> <button class="gefahr" data-weg="${t(g.id)}">Entfernen</button></td>
       </tr>`).join("");
     wurzel.querySelectorAll("[data-adresse]").forEach((eingabe) => {
       eingabe.onchange = async () => {
         try { zeigen(await api("/patch/" + eingabe.dataset.adresse, { method: "PATCH", daten: { adresse: Number(eingabe.value) } })); }
         catch { laden(); }
+      };
+    });
+    wurzel.querySelectorAll("[data-ort]").forEach((auswahl) => {
+      auswahl.onchange = async () => {
+        zeigen(await api("/patch/" + auswahl.dataset.ort, { method: "PATCH", daten: { ort: auswahl.value } }));
       };
     });
     wurzel.querySelectorAll("[data-weg]").forEach((knopf) => {

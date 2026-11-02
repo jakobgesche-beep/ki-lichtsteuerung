@@ -61,7 +61,25 @@ class EigeneBeatErkennung:
         self.puffer = np.zeros(FFT_LAENGE // 4)
         self.fenster = np.hanning(len(self.puffer))
         self.seit_beat = 0
-        self.abstaende = deque(maxlen=12)
+        self.sprungverlauf = deque(maxlen=int(8 * ABTASTRATE / BLOCK))
+        self.tempo = 0.0
+        self.bis_rechnung = 0
+
+    def schaetze_tempo(self) -> float:
+        """Sucht im Verlauf der Sprünge den Abstand, der sich am stärksten wiederholt.
+
+        Das ist viel stabiler als einzelne Schläge zu zählen. Tempi um 120 BPM
+        werden leicht bevorzugt, sonst landet man gern beim halben oder doppelten.
+        """
+        verlauf = np.array(self.sprungverlauf)
+        verlauf = verlauf - verlauf.mean()
+        spektrum = np.fft.rfft(verlauf, 2 * len(verlauf))
+        wiederholung = np.fft.irfft(np.abs(spektrum) ** 2)
+        rate = ABTASTRATE / BLOCK
+        lags = np.arange(int(60 * rate / 180), int(60 * rate / 70) + 1)
+        bpm = 60 * rate / lags
+        vorliebe = np.exp(-0.5 * (np.log2(bpm / 120) / 0.8) ** 2)
+        return float(bpm[np.argmax(wiederholung[lags] * vorliebe)])
 
     def verarbeite(self, block: np.ndarray):
         self.puffer = np.concatenate([self.puffer[len(block):], block])
@@ -75,10 +93,13 @@ class EigeneBeatErkennung:
         kleinster_abstand = int(0.28 * ABTASTRATE / BLOCK)      # höchstens gut 210 BPM
         beat = sprung > schwelle and sprung > 1.0 and self.seit_beat >= kleinster_abstand
         if beat:
-            self.abstaende.append(self.seit_beat)
             self.seit_beat = 0
-        tempo = 60.0 * ABTASTRATE / BLOCK / float(np.median(self.abstaende)) if self.abstaende else 0.0
-        return beat, tempo
+        self.sprungverlauf.append(sprung)
+        self.bis_rechnung -= 1
+        if self.bis_rechnung <= 0 and len(self.sprungverlauf) >= 2 * ABTASTRATE / BLOCK:
+            self.tempo = self.schaetze_tempo()
+            self.bis_rechnung = int(ABTASTRATE / BLOCK)     # einmal pro Sekunde reicht
+        return beat, self.tempo
 
 
 def beat_erkennung():

@@ -27,6 +27,7 @@ class Eigenschaften:
     tilt: Optional[float] = None
     tempo: Optional[float] = None       # Bewegungstempo: 0 langsam, 1 schnell
     gobo: Optional[str] = None
+    gobo_drehung: Optional[float] = None   # -1 bis 1, Vorzeichen ist die Richtung
     strobo_hz: float = 0.0
     nebel: float = 0.0
 
@@ -104,6 +105,19 @@ def gobo_wert(kanal: dict, name: Optional[str]) -> int:
     return kanal.get("standard", 0)
 
 
+def drehung_wert(kanal: dict, drehung: Optional[float]) -> int:
+    """Wert für die Gobo-Drehung. Ohne passenden Bereich bleibt der Kanal in Ruhe."""
+    if not drehung:
+        return kanal.get("standard", 0)
+    richtung = 1 if drehung > 0 else -1
+    tempo = min(abs(drehung), 1.0)
+    for bereich in kanal.get("bereiche", []):
+        if bereich["typ"] == "drehung" and bereich.get("richtung") == richtung:
+            anteil = tempo if bereich.get("schnell_am_ende", True) else 1.0 - tempo
+            return round(bereich["von"] + anteil * (bereich["bis"] - bereich["von"]))
+    return kanal.get("standard", 0)
+
+
 def farb_anteile(ziel: Farbe, typen: set) -> dict:
     """Verteilt eine Farbe auf die LED-Farben des Geräts (RGB oder RGBW)."""
     rot, gruen, blau = ziel
@@ -162,6 +176,8 @@ class Renderer:
                 bild[index] = naechster_platz(kanal, ziel)
             elif typ == "gobo":
                 bild[index] = gobo_wert(kanal, e.gobo)
+            elif typ == "gobo_rotation":
+                bild[index] = drehung_wert(kanal, e.gobo_drehung)
             elif typ == "strobo":
                 bild[index] = self._shutter(kanal, hell, e.strobo_hz, hat_dimmer)
             elif typ == "pan" and e.pan is not None:

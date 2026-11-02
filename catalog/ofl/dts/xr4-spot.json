@@ -525,7 +525,9 @@
         {
           "von": 128,
           "bis": 180,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": -1,
+          "schnell_am_ende": false
         },
         {
           "von": 181,
@@ -535,7 +537,9 @@
         {
           "von": 203,
           "bis": 255,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": 1,
+          "schnell_am_ende": true
         }
       ]
     },
@@ -551,7 +555,9 @@
         {
           "von": 10,
           "bis": 127,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": -1,
+          "schnell_am_ende": false
         },
         {
           "von": 128,
@@ -561,7 +567,9 @@
         {
           "von": 138,
           "bis": 255,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": 1,
+          "schnell_am_ende": true
         }
       ]
     },

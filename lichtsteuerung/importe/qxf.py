@@ -54,6 +54,9 @@ def bereich_aus(faehigkeit, typ: str) -> dict:
         elif vorlage == "StrobeFrequency":
             hz_von = hz_bis = float(faehigkeit.get("Res1"))
         bereich.update(typ="strobo", hz_von=hz_von, hz_bis=hz_bis)
+    elif vorlage.startswith(("RotationClockwise", "RotationCounterClockwise")) and typ == "gobo_rotation":
+        bereich.update(typ="drehung", richtung=-1 if "Counter" in vorlage else 1,
+                       schnell_am_ende=vorlage.endswith("SlowToFast"))
     elif vorlage == "ColorMacro":
         bereich.update(typ="platz", farbe=faehigkeit.get("Res1"))
     elif vorlage == "GoboMacro":

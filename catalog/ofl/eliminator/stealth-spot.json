@@ -145,7 +145,9 @@
         {
           "von": 10,
           "bis": 129,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": 1,
+          "schnell_am_ende": false
         },
         {
           "von": 130,
@@ -155,7 +157,9 @@
         {
           "von": 135,
           "bis": 255,
-          "typ": "sonstiges"
+          "typ": "drehung",
+          "richtung": -1,
+          "schnell_am_ende": true
         }
       ]
     },
