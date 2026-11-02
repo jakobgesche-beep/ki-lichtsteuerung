@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import threading
 import time
+from dataclasses import replace
 from typing import Optional
 
 from .analyse import Analyse, Messwerte
@@ -22,6 +23,7 @@ class AudioBetrieb:
         self.messwerte: Optional[Messwerte] = None
         self.zeitpunkt = 0.0
         self.beat_zaehler = 0
+        self.abgeholt = 0
         self.beat_erkennung = None
         self._thread: Optional[threading.Thread] = None
         self._stopp = threading.Event()
@@ -56,6 +58,19 @@ class AudioBetrieb:
                 self.messwerte, self.zeitpunkt = werte, time.monotonic()
         except Exception as fehler:
             self.fehler = str(fehler)
+
+    def abholen(self, jetzt: Optional[float] = None) -> Optional[Messwerte]:
+        """Für die Show: Die Analyse läuft schneller als das Licht.
+
+        Ein Beat steht nur in einem einzigen kurzen Block. Darum merken wir uns,
+        welche Beats die Show schon gesehen hat. So geht keiner verloren.
+        """
+        werte = self.aktuell(jetzt)
+        if werte is None:
+            return None
+        neuer_beat = self.beat_zaehler != self.abgeholt
+        self.abgeholt = self.beat_zaehler
+        return replace(werte, beat=neuer_beat)
 
     def aktuell(self, jetzt: Optional[float] = None) -> Optional[Messwerte]:
         """Die neuesten Messwerte, oder None, wenn nichts Frisches da ist."""

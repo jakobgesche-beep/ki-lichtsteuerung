@@ -29,7 +29,7 @@ from .profile import pruefe_profil
 from .show import Show
 
 WEB_ORDNER = PROJEKT / "web"
-LIVE_BILDER_PRO_SEKUNDE = 25
+LIVE_BILDER_PRO_SEKUNDE = 40
 AUDIO_ENDUNGEN = {".wav", ".flac", ".mp3", ".ogg", ".aiff"}
 
 

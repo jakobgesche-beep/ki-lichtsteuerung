@@ -97,3 +97,27 @@ def test_beatuhr_ueberbrueckt_luecken_und_hoert_wieder_auf():
     for _ in range(int(10 / schritt)):     # danach Stille
         beats += uhr.takt(False, 120.0, schritt)
     assert beats <= 13                     # nach 6 s ist Schluss
+
+
+def test_kein_beat_geht_verloren_auch_wenn_das_licht_langsamer_fragt():
+    """Die Analyse läuft 86-mal pro Sekunde, das Licht 40-mal."""
+    from lichtsteuerung.audio.analyse import Messwerte
+    betrieb = AudioBetrieb()
+    betrieb.zeitpunkt = 100.0
+    gesehen = 0
+    for block in range(860):
+        betrieb.messwerte = Messwerte()
+        if block % 40 == 0:
+            betrieb.beat_zaehler += 1
+            betrieb.messwerte = Messwerte(beat=True)
+        if block % 2 == 1:                   # das Licht fragt nur jeden zweiten Block
+            gesehen += betrieb.abholen(100.0).beat
+    assert gesehen == 22                     # kein einziger fehlt
+
+
+def test_abholen_zaehlt_einen_beat_nur_einmal():
+    from lichtsteuerung.audio.analyse import Messwerte
+    betrieb = AudioBetrieb()
+    betrieb.messwerte, betrieb.zeitpunkt, betrieb.beat_zaehler = Messwerte(beat=True), 100.0, 1
+    assert betrieb.abholen(100.0).beat and not betrieb.abholen(100.0).beat
+    assert betrieb.aktuell(100.0).beat       # die Anzeige verbraucht nichts

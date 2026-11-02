@@ -85,7 +85,7 @@ def test_hohe_energie_bewegt_die_spots(engine):
 
 
 def test_viel_energie_bewegt_groesser_als_wenig(engine):
-    engine.beats, engine.phase = 32, 2.0       # Muster "Kreuz", Bewegung ganz außen
+    engine.beats, engine.phase = 16, 2.0       # Muster "Kreuz", Bewegung ganz außen
     klein = abs(engine._muster(0, 8, 0.45)[0])
     assert abs(engine._muster(0, 8, 1.0)[0]) > 2 * klein * 0.99 > 0
 
@@ -187,7 +187,7 @@ def test_bewegung_springt_nicht(nur_spots):
         if letzte is not None and i > 80:
             groesster = max(groesster, abs(pan - letzte))
         letzte = pan
-    assert groesster <= 5.01    # 200 Grad pro Sekunde bei 40 Bildern
+    assert groesster <= 6.01    # 240 Grad pro Sekunde bei 40 Bildern
 
 
 def test_muster_bleiben_auf_der_buehne(nur_spots):
@@ -214,7 +214,7 @@ def test_gobos_wechseln_alle_8_beats_und_drehen(pfade, katalog):
     e = Engine(patch, buehne, {}, Grenzen(3, 5, 30))
     z, _ = einschwingen(e, PARTY, Messwerte(**MUSIK))
     assert z["spot"].gobo == "Gobo 1" and z["spot"].gobo_drehung
-    e.beats = 8
+    e.beats = 4
     z = e.bewerte(Messwerte(**MUSIK), PARTY, 4.0)
     assert z["spot"].gobo == "Gobo 2"
     from lichtsteuerung.render import Renderer

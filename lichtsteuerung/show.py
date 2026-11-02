@@ -133,7 +133,7 @@ class Show:
                 zustand[self.test_geraet] = Eigenschaften(helligkeit=1.0, farbe=(1.0, 1.0, 1.0))
             return zustand
         try:
-            messwerte = self.audio.aktuell(jetzt)
+            messwerte = self.audio.abholen(jetzt)
             return self.engine.bewerte(messwerte, self.profil, jetzt, self.overrides.pause)
         except Exception:
             # Sicherer Rückfall: Auch ein Fehler in den Regeln führt zum Grundlicht.

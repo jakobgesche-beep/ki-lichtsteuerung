@@ -153,8 +153,8 @@ export class Buehne3D {
       if (!ziel) continue;
       // Die Daten kommen 25-mal pro Sekunde, gezeichnet wird öfter: dazwischen weich rechnen.
       const wert = licht.weich ??= { ...ziel, richtung: [...ziel.richtung], farbe: [...ziel.farbe] };
-      for (const feld of ["richtung", "farbe"]) wert[feld] = wert[feld].map((w, i) => w + (ziel[feld][i] - w) * 0.3);
-      wert.hell += (ziel.hell - wert.hell) * 0.4;
+      for (const feld of ["richtung", "farbe"]) wert[feld] = wert[feld].map((w, i) => w + (ziel[feld][i] - w) * 0.5);
+      wert.hell += (ziel.hell - wert.hell) * 0.7;
       wert.strobo_hz = ziel.strobo_hz;
       const laengeVektor = Math.hypot(...wert.richtung);
       wert.richtung = wert.richtung.map((w) => w / laengeVektor);

@@ -18,7 +18,8 @@ import numpy as np
 
 from .quellen import ABTASTRATE, BLOCK
 
-FFT_LAENGE = 2048
+FFT_LAENGE = 1024         # kurz, damit Bass und Höhen kaum Verzögerung haben
+BEAT_FFT = 512
 BAENDER = {"bass": (20, 150), "mitte": (150, 2000), "hoehe": (2000, 16000)}
 LEISE_PEGEL = 10 ** (-45 / 20)     # unter -45 dB gilt es als Stille
 RUHE_S = 0.8                       # so lange muss es still sein
@@ -56,9 +57,9 @@ class EigeneBeatErkennung:
     name = "eigene"
 
     def __init__(self):
-        self.letztes = np.zeros(FFT_LAENGE // 2 // 4 + 1)
+        self.letztes = np.zeros(BEAT_FFT // 2 + 1)
         self.verlauf = deque(maxlen=int(1.5 * ABTASTRATE / BLOCK))
-        self.puffer = np.zeros(FFT_LAENGE // 4)
+        self.puffer = np.zeros(BEAT_FFT)
         self.fenster = np.hanning(len(self.puffer))
         self.seit_beat = 0
         self.sprungverlauf = deque(maxlen=int(8 * ABTASTRATE / BLOCK))

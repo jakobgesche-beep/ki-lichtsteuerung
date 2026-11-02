@@ -34,7 +34,7 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Passt das Grundlicht zu keinem gepatchten Gerät**, leuchten alle Geräte warmweiß mit 50 %. Die Bühne bleibt nie dunkel, weil Gruppen nicht passen.
 - **Geräte ohne Gruppe** zählen nach ihren Fähigkeiten: Pan oder Tilt als Spots, Nebel als Dunst, alles andere als Farb-PARs.
 - **Moving Heads hängen an der Traverse** (Vorgabe des Nutzers, abweichend von der Projektbeschreibung). Mit 6 PARs, 2 MH-X25 und Hero Spot sind das 9 Geräte, die Traverse trägt 8: Das Programm warnt dann.
-- **Bewegung läuft bei jeder Musik**, die Energie bestimmt nur ihre Größe. Das weicht von „hohe Energie → Bewegung“ ab, weil das Licht sonst zu lange stillsteht.
+- **Bewegung läuft bei jeder Musik**, die Energie bestimmt ihre Größe und ihr Tempo. Das weicht von „hohe Energie → Bewegung“ ab, weil das Licht sonst zu lange stillsteht.
 - **Gobos und Drehung** nutzt die Engine ab `beat_reaktion` 0,5. Die Bilder in der 3D-Ansicht sind Beispiele, die echten Motive stehen nicht in den Gerätedaten.
 - **Sicherer Rückfall:** Keine frischen Messwerte seit 0,5 s, Fehler in der Analyse oder in den Regeln führen zum Grundlicht. Misslingt ein ganzes Bild, bleibt das letzte stehen.
 - **Beim Neustart** kommen letztes Profil und letzte Cueliste zurück. Die Liste wird nur geladen, nicht gestartet, und DMX bleibt aus.

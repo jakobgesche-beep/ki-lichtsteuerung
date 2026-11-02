@@ -3,8 +3,8 @@
     Beat          -> Farbschritt der PARs, Lichtpuls, abwechselnde Akzente
     Bass          -> Helligkeit
     Energie       -> Größe der Bewegung der Moving Heads
-    alle 4 Beats  -> neue Farbe der Spots, alle 8 ein neues Gobo
-    alle 16 Beats -> neues Bewegungsmuster
+    alle 2 Beats  -> neue Farbe der Spots, alle 4 ein neues Gobo
+    alle 8 Beats  -> neues Bewegungsmuster
     leise / Rede  -> ruhiges Grundlicht
 
 Alles läuft weich: Farben blenden, Winkel werden geglättet, der Puls klingt aus.
@@ -29,11 +29,11 @@ GRUPPE_BEWEGUNG = "Spots"
 STANDARD_TEMPO = 120.0
 PULS_ABKLANG = 0.45      # wie schnell der Lichtpuls ausklingt, in Beats
 FARB_BLENDE_S = 0.12     # Überblendung der LED-Farben
-WINKEL_GLAETTUNG_S = 0.2 # so weich laufen Pan und Tilt
-MAX_GRAD_PRO_S = 200     # schneller folgt auch ein echter Kopf nicht sauber
+WINKEL_GLAETTUNG_S = 0.12 # so weich laufen Pan und Tilt
+MAX_GRAD_PRO_S = 240     # schneller folgt auch ein echter Kopf nicht sauber
 BEATS_VOLL = 8           # ein Bewegungs-Durchlauf bei Bewegung "voll"
 BEATS_LANGSAM = 32
-BEATS_PRO_MUSTER = 16
+BEATS_PRO_MUSTER = 8
 STROBO_ENERGIE = 0.92
 STROBO_NACH_S = 2.0
 ERSATZ_HELLIGKEIT = 0.5
@@ -52,6 +52,7 @@ class Engine:
         self.letzter_schritt = -99.0
         self.letzter_beat = -99.0
         self.phase = 0.0
+        self.tanz = 0.0
         self.dauer = 0.0
         self.led_farbe = {}
         self.gobo_listen = {}
@@ -118,7 +119,8 @@ class Engine:
 
     def _beat_schritt(self, messwerte: Messwerte, reaktion: float, tempo: float, jetzt: float) -> None:
         """Ein Farbschritt pro Beat, aber nicht schneller, als es die Grenze erlaubt."""
-        self.phase += self.dauer * tempo / 60.0
+        # Viel Energie heißt doppeltes Tempo. Die Phase läuft dabei ohne Sprung weiter.
+        self.phase += self.dauer * tempo / 60.0 * (1.0 + messwerte.energie)
         if not messwerte.beat:
             return
         self.beats += 1
@@ -159,6 +161,7 @@ class Engine:
         self._beat_schritt(m, reaktion, tempo, jetzt)
         # Der Puls springt auf dem Beat hoch und klingt weich aus.
         puls = math.exp(-(jetzt - self.letzter_beat) / (PULS_ABKLANG * periode))
+        self.tanz = puls if profil["bewegung"] == "voll" else 0.0
         ergebnis = {}
 
         pars = self.patch.in_gruppe(GRUPPE_FARBE)
@@ -174,13 +177,15 @@ class Engine:
         for nummer, geraet in enumerate(spots):
             # Die Lampen wechseln sich auf dem Beat ab, das wirkt auch mit nur zweien lebendig.
             akzent = puls if self.beats % len(spots) == nummer else 0.35 * puls
-            farb_nummer = nummer if reaktion < 0.3 else self.beats // 4 + nummer
-            e = Eigenschaften(helligkeit=grenze * (0.55 + 0.45 * max(akzent, 0.6 * m.energie)),
+            farb_nummer = nummer if reaktion < 0.3 else self.beats // 2 + nummer
+            tiefe_spot = 0.3 + 0.5 * reaktion        # tiefere Pulse, je stärker das Profil reagiert
+            pegel = max(akzent, 0.5 * m.bass, 0.6 * m.energie)
+            e = Eigenschaften(helligkeit=grenze * ((1.0 - tiefe_spot) + tiefe_spot * pegel),
                               farbe=palette[farb_nummer % len(palette)],
                               strobo_hz=strobo if "Effektlicht" in self.patch.gruppen_von(geraet) else 0.0)
             gobos = self._gobos(geraet)
             if gobos and reaktion >= 0.5:
-                e.gobo = gobos[(self.beats // 8 + nummer) % len(gobos)]
+                e.gobo = gobos[(self.beats // 4 + nummer) % len(gobos)]
                 seite = 1 if nummer % 2 == 0 else -1
                 e.gobo_drehung = seite * (0.25 + 0.45 * m.energie)
             if profil["bewegung"] != "aus":
@@ -229,6 +234,7 @@ class Engine:
             return
         zyklus = BEATS_LANGSAM if bewegung == "langsam" else BEATS_VOLL
         x, y = self._muster(nummer, zyklus, 0.45 + 0.55 * energie)
+        y += self.tanz * self.buehne.daten["buehne"]["tiefe_m"] * 0.12    # kleiner Schub auf dem Beat
         alt = self.winkel.get(geraet["id"])
         try:
             pan, tilt = zeige_auf(geraet, (x, y, ZIEL_HOEHE_M), self.patch, self.buehne, alt)

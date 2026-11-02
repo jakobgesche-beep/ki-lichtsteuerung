@@ -31,6 +31,8 @@ class FesterTon:
     def aktuell(self, jetzt=None):
         return self.werte
 
+    abholen = aktuell
+
     def stoppen(self):
         pass
 
