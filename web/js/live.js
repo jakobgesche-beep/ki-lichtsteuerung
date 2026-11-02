@@ -8,12 +8,17 @@ export function liveSeite(wurzel) {
     <div class="live">
       <div class="drei-d" id="drei"></div>
       <div id="seite">
-        <div class="kasten"><h2>Status</h2><div id="status" class="leise"></div></div>
+        <div class="kasten">
+          <h2>Profil</h2>
+          <select id="profil" style="width:100%"></select>
+          <div id="status" class="leise" style="margin-top:8px"></div>
+        </div>
         <div class="kasten">
           <h2>Ton <span id="beat" class="beat"></span></h2>
           <label>Quelle <select id="quelle"></select></label>
           <input id="datei" type="file" accept="audio/*" hidden>
           <div class="leise" id="ton"></div>
+          <div id="ton-hinweis"></div>
           <div class="pegel"><span>Bass</span><i id="m-bass"></i></div>
           <div class="pegel"><span>Energie</span><i id="m-energie"></i></div>
         </div>
@@ -94,10 +99,14 @@ export function liveSeite(wurzel) {
     if (!live) return;
     buehne?.setzeWerte(live.geraete);
     feld("status").innerHTML = `${live.dmx_ein ? "DMX-Ausgabe: eingeschaltet" : "DMX-Ausgabe: aus (Simulator)"}<br>
-      Profil: ${t(live.profil)}<br>${t(live.engine)}<br>Version ${t(live.version)}`;
+      ${t(live.engine)}<br>Version ${t(live.version)}`;
+    if (feld("profil").value !== live.profil && !feld("profil").matches(":focus")) feld("profil").value = live.profil;
+    feld("ton-hinweis").innerHTML = live.audio.werte && !live.reagiert
+      ? `<div class="meldung gelb" style="margin-top:8px">Dieses Profil reagiert nicht auf Musik. Oben ein anderes wählen.</div>` : "";
     cuesZeigen(live.cues);
     faderZeigen(live.fader);
     const ton = live.audio;
+    if (ton.quelle === "Testsignal" && feld("quelle").value === "aus") feld("quelle").value = "test";
     const werte = ton.werte;
     feld("ton").textContent = ton.fehler ?? (werte
       ? `${Math.round(werte.tempo_bpm)} BPM · Beat-Erkennung: ${ton.erkennung}`
@@ -111,6 +120,11 @@ export function liveSeite(wurzel) {
     feld("meldungen").innerHTML = live.meldungen.map((m) => `<div class="meldung gelb">${t(m)}</div>`).join("");
   }
 
+  api("/profile").then(({ namen, aktiv }) => {
+    feld("profil").innerHTML = [...new Set([aktiv, ...namen])].map((n) => `<option>${t(n)}</option>`).join("");
+    feld("profil").value = aktiv;
+  });
+  feld("profil").onchange = () => senden(`/profile/${encodeURIComponent(feld("profil").value)}/laden`);
   feld("quelle").onchange = quelleWaehlen;
   feld("datei").onchange = dateiHochladen;
   feld("cueliste").onchange = () => {

@@ -61,12 +61,31 @@ export class Buehne3D {
     }
   }
 
+  // Name als Schild über dem Gerät, damit man auch dunkle Lichter findet.
+  beschriften(text, ort) {
+    const tafel = document.createElement("canvas");
+    tafel.width = 256;
+    tafel.height = 64;
+    const zeichnen = tafel.getContext("2d");
+    zeichnen.font = "600 34px -apple-system, sans-serif";
+    zeichnen.textAlign = "center";
+    zeichnen.textBaseline = "middle";
+    zeichnen.fillStyle = "#e6e6e6";
+    zeichnen.fillText(text, 128, 32);
+    const schild = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(tafel), depthTest: false, transparent: true }));
+    schild.scale.set(2, 0.5, 1);
+    schild.position.copy(ort);
+    this.szene.add(schild);
+  }
+
   baueLicht(geraet) {
     const { ort, kegel } = geraet;
     const ankerPunkt = punkt(ort.x, ort.y, ort.z);
-    const koerper = this.kasten(0.28, 0.28, 0.28, 0x55585c, ankerPunkt);
+    const groesse = geraet.beweglich ? 0.42 : 0.3;
+    const koerper = this.kasten(groesse, groesse, groesse, geraet.beweglich ? 0xd0d3d6 : 0xa8acb0, ankerPunkt);
+    this.beschriften(geraet.name, punkt(ort.x, ort.y, ort.z + 0.55));
     if (ort.ort === "stativ") {
-      this.kasten(0.05, ort.z, 0.05, 0x55585c, punkt(ort.x, ort.y, ort.z / 2));
+      this.kasten(0.07, ort.z, 0.07, 0x8a8e92, punkt(ort.x, ort.y, ort.z / 2));
     }
     if (!geraet.leuchtet) return;
 

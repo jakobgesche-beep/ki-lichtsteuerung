@@ -25,6 +25,7 @@ GRUPPE_BEWEGUNG = "Spots"
 HOHE_ENERGIE = 0.5
 STROBO_ENERGIE = 0.92
 STROBO_NACH_S = 2.0
+ERSATZ_HELLIGKEIT = 0.5
 UEBERGANG_S = 1.5        # so lange dauert der Wechsel zwischen Musik und Grundlicht
 ZIEL_HOEHE_M = 0.8       # die Spots wandern über den Bühnenboden
 
@@ -52,6 +53,8 @@ class Engine:
         self.letzte_zeit = jetzt
 
         grund, _ = loese_auf(profil["grundlicht"]["werte"], self.patch, self.buehne, self.positionen)
+        if not any(e.helligkeit > 0 for e in grund.values()):
+            grund = self._ersatz_grundlicht()
         grund = {i: e.kopie(helligkeit=min(e.helligkeit, profil["max_helligkeit"])) for i, e in grund.items()}
 
         ruhig = (messwerte is None or pause or profil["beat_reaktion"] <= 0
@@ -70,6 +73,16 @@ class Engine:
             ausgang = grund.get(geraet_id, Eigenschaften(farbe=eigenschaften.farbe,
                                                          pan=eigenschaften.pan, tilt=eigenschaften.tilt))
             ergebnis[geraet_id] = mischen(ausgang, eigenschaften, self.musik_anteil)
+        return ergebnis
+
+    def _ersatz_grundlicht(self) -> dict:
+        """Passt das Grundlicht zu keinem gepatchten Gerät, darf die Bühne nicht dunkel bleiben."""
+        warm = lies_farbe("warmweiss")
+        ergebnis = {}
+        for geraet in self.patch.geraete:
+            e = Eigenschaften(helligkeit=ERSATZ_HELLIGKEIT, farbe=warm)
+            self._ruhelage(geraet, e)
+            ergebnis[geraet["id"]] = e
         return ergebnis
 
     def _text_setzen(self, messwerte, pause, profil) -> None:
@@ -117,7 +130,7 @@ class Engine:
         for nummer, geraet in enumerate(self.patch.in_gruppe(GRUPPE_BEWEGUNG)):
             e = Eigenschaften(helligkeit=grenze * (0.4 + 0.6 * m.energie),
                               farbe=palette[(self.farb_schritt // 2 + nummer) % len(palette)],
-                              strobo_hz=strobo if "Effektlicht" in geraet.get("gruppen", []) else 0.0)
+                              strobo_hz=strobo if "Effektlicht" in self.patch.gruppen_von(geraet) else 0.0)
             if profil["bewegung"] != "aus" and m.energie >= HOHE_ENERGIE:
                 self._bewegen(geraet, nummer, profil["bewegung"], jetzt, e)
             elif geraet["id"] in self.winkel:

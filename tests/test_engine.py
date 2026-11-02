@@ -133,3 +133,33 @@ def test_strobo_erst_nach_langer_hoher_energie_und_nur_wenn_erlaubt(engine):
     assert zustand["kopf"].strobo_hz == 2
     zustand, _ = einschwingen(engine, {**PARTY, "strobo": "aus"}, werte, von=zeit + 2, dauer=4.0)
     assert zustand["kopf"].strobo_hz == 0
+
+
+# Nachgestellt: Nur Moving Heads im Patch, das Grundlicht kennt aber nur Farb-PARs.
+
+@pytest.fixture
+def nur_spots(pfade, katalog):
+    patch = Patch(pfade.fixtures, katalog)
+    patch.hinzufuegen("test/kopf", "7", 2, "Front 1-2", gruppen=["Frontlicht", "Spots"])
+    buehne = Buehne(pfade.stage)
+    for geraet, x in (("front-1", -3.5), ("front-2", 3.5)):
+        buehne.setze_geraet(geraet, {"ort": "stativ", "x": x, "y": -1, "z": 2.5, "montage": "stehend"})
+    return Engine(patch, buehne, {}, Grenzen(3, 5, 30))
+
+
+def test_nur_moving_heads_bleiben_ohne_ton_nicht_dunkel(nur_spots):
+    zustand = nur_spots.bewerte(None, PARTY, 0.0)
+    assert all(e.helligkeit == 0.5 and e.pan is not None for e in zustand.values())
+
+
+def test_nur_moving_heads_reagieren_auf_musik(nur_spots):
+    zustand, _ = einschwingen(nur_spots, PARTY, Messwerte(**{**MUSIK, "energie": 0.9}))
+    assert all(e.helligkeit > 0.5 and e.farbe in [farbe(f) for f in PARTY["palette"]] for e in zustand.values())
+
+
+def test_geraet_ohne_gruppe_zaehlt_nach_seinen_faehigkeiten(pfade, katalog):
+    patch = Patch(pfade.fixtures, katalog)
+    patch.hinzufuegen("test/kopf", "7", 1, "Kopf")
+    patch.hinzufuegen("test/par", "6", 1, "Par")
+    assert [g["id"] for g in patch.in_gruppe("Spots")] == ["kopf"]
+    assert [g["id"] for g in patch.in_gruppe("Farb-PARs")] == ["par"]

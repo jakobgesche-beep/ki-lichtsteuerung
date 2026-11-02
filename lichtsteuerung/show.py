@@ -37,6 +37,7 @@ from .version import VERSION
 from .vorschau import Vorschau
 
 
+ERSTES_PROFIL = "Schulfest Abend"   # beim allerersten Start, damit das Licht auf Musik reagiert
 WARM_POSITION = "Mitte"     # dorthin zeigen die Spots bei Warmweiß
 TEST_MAX_S = 120.0          # Ein vergessener DMX-Test endet von selbst.
 
@@ -192,11 +193,10 @@ class Show:
     def _sitzung_laden(self) -> None:
         """Nach einem Neustart: Letztes Profil und letzte Cueliste laden. DMX bleibt aus."""
         sitzung = daten.lese_json(self.pfade.sitzung, {})
-        if sitzung.get("profil"):
-            try:
-                self.profil = self.profile.laden(sitzung["profil"])
-            except ValueError:
-                self.profil = RUHE_PROFIL
+        try:
+            self.profil = self.profile.laden(sitzung.get("profil") or ERSTES_PROFIL)
+        except ValueError:
+            self.profil = RUHE_PROFIL
         if sitzung.get("cueliste"):
             try:
                 self.cueliste_laden(sitzung["cueliste"])
@@ -210,6 +210,7 @@ class Show:
             return {"geraete": self.simulator.lies(self.letztes_bild),
                     "dmx_ein": self.ausgabe.eingeschaltet, "meldungen": sorted(set(self.meldungen)),
                     "profil": self.profil["name"], "engine": self.engine.zustand_text,
+                    "reagiert": self.profil["beat_reaktion"] > 0,
                     "overrides": vars(self.overrides), "blitzt": self.blitzt,
                     "test_laeuft": self._test_laeuft(), "version": VERSION,
                     "update": self.update.status(),

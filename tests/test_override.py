@@ -236,3 +236,11 @@ def test_blitzwaechter_gilt_auch_im_bild(show):
             spruenge += 1
         vorher = wert
     assert spruenge <= 7       # 2 Sekunden lang höchstens 3 pro Sekunde
+
+
+def test_erster_start_nimmt_ein_profil_das_auf_musik_reagiert(tmp_path):
+    from lichtsteuerung import daten
+    daten.einrichten(tmp_path / "d")
+    show = Show(daten.Pfade(tmp_path / "d", daten.PROJEKT / "catalog"))
+    assert show.profil["name"] == "Schulfest Abend" and show.profil["beat_reaktion"] > 0
+    assert not show.ausgabe.eingeschaltet

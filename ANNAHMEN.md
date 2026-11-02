@@ -30,6 +30,9 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Warmweiß:** alle Geräte 70 %, Moving Heads ohne Ziel zeigen auf die Position „Mitte“.
 - **Blackout** gilt auch für rohe Werte aus dem DMX-Test.
 - **Strobo aus** bleibt an, bis man die Taste wieder drückt.
+- **Beim allerersten Start** ist „Schulfest Abend“ aktiv, damit das Licht sofort auf Musik reagiert. Das Profil „Ruhe“ gilt nur, wenn gar keins geladen werden kann.
+- **Passt das Grundlicht zu keinem gepatchten Gerät**, leuchten alle Geräte warmweiß mit 50 %. Die Bühne bleibt nie dunkel, weil Gruppen nicht passen.
+- **Geräte ohne Gruppe** zählen nach ihren Fähigkeiten: Pan oder Tilt als Spots, Nebel als Dunst, alles andere als Farb-PARs.
 - **Sicherer Rückfall:** Keine frischen Messwerte seit 0,5 s, Fehler in der Analyse oder in den Regeln führen zum Grundlicht. Misslingt ein ganzes Bild, bleibt das letzte stehen.
 - **Beim Neustart** kommen letztes Profil und letzte Cueliste zurück. Die Liste wird nur geladen, nicht gestartet, und DMX bleibt aus.
 - **Wartezeit im Cue:** 0 heißt, der nächste Cue wartet auf „Weiter“. Sonst geht es nach Einblenden plus Wartezeit von allein weiter.

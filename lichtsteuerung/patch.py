@@ -60,13 +60,24 @@ class Patch:
     def kanalzahl(self, geraet: dict) -> int:
         return self.typ(geraet).kanalzahl(geraet["modus"])
 
+    def gruppen_von(self, geraet: dict) -> list:
+        """Ohne eingetragene Gruppe entscheidet, was das Gerät kann."""
+        if geraet.get("gruppen"):
+            return geraet["gruppen"]
+        typen = {k["typ"] for _, k in self.typ(geraet).kanaele_im_modus(geraet["modus"])}
+        if "pan" in typen or "tilt" in typen:
+            return ["Spots"]
+        if "nebel" in typen:
+            return ["Dunst"]
+        return ["Farb-PARs"]
+
     def in_gruppe(self, gruppe: str) -> list:
-        return [g for g in self.geraete if gruppe in g.get("gruppen", [])]
+        return [g for g in self.geraete if gruppe in self.gruppen_von(g)]
 
     def gruppen(self) -> list:
         vorhanden = []
         for geraet in self.geraete:
-            for gruppe in geraet.get("gruppen", []):
+            for gruppe in self.gruppen_von(geraet):
                 if gruppe not in vorhanden:
                     vorhanden.append(gruppe)
         return vorhanden
