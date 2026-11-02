@@ -6,7 +6,7 @@ Der erste Entwurf läuft komplett **ohne Hardware** im Simulator. Die DMX-Ausgab
 
 ## Mac-App
 
-Die fertige App gibt es auf der [Website](https://jakobgesche-beep.github.io/ki-lichtsteuerung/). Sie braucht kein Python und aktualisiert sich selbst. Ihre Show-Daten liegen in `~/Library/Application Support/Lichtsteuerung`, ein Update fasst sie nicht an.
+Die fertige App gibt es auf der [Website](https://Jakobgesche-coder.github.io/ki-lichtsteuerung/). Sie braucht kein Python und aktualisiert sich selbst. Ihre Show-Daten liegen in `~/Library/Application Support/Lichtsteuerung`, ein Update fasst sie nicht an.
 
 ## Aus dem Quellcode starten
 

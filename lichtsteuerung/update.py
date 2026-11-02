@@ -32,7 +32,7 @@ from typing import Optional
 from . import daten
 from .version import VERSION
 
-BASIS_URL = "https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/"
+BASIS_URL = "https://github.com/Jakobgesche-coder/ki-lichtsteuerung/releases/latest/download/"
 ZEITLIMIT_S = 30
 ARCHITEKTUREN = {"arm64": "arm64", "x86_64": "intel"}
 

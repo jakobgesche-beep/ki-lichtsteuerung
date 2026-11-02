@@ -33,8 +33,8 @@
 
   <div class="kasten">
     <p id="version" class="leise">Für macOS 12 oder neuer</p>
-    <a class="knopf" href="https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-arm64.dmg">Download für Mac mit Apple-Chip</a>
-    <a class="knopf zweit" href="https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-intel.dmg">Mac mit Intel-Chip</a>
+    <a class="knopf" href="https://github.com/Jakobgesche-coder/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-arm64.dmg">Download für Mac mit Apple-Chip</a>
+    <a class="knopf zweit" href="https://github.com/Jakobgesche-coder/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-intel.dmg">Mac mit Intel-Chip</a>
     <p class="leise" style="margin-top:8px">Welcher Chip? Apple-Menü oben links → „Über diesen Mac“. Steht dort M1, M2, M3 oder höher, ist es ein Apple-Chip.</p>
   </div>
 
@@ -61,13 +61,13 @@
   </ul>
 
   <footer>
-    <a href="https://github.com/jakobgesche-beep/ki-lichtsteuerung">Quellcode</a> ·
+    <a href="https://github.com/Jakobgesche-coder/ki-lichtsteuerung">Quellcode</a> ·
     Gerätedaten: Open Fixture Library (MIT), QLC+ (Apache-2.0) · 3D: three.js (MIT)
   </footer>
 </main>
 <script>
   // Zeigt die aktuelle Version. Klappt das nicht, funktionieren die Knöpfe trotzdem.
-  fetch("https://api.github.com/repos/jakobgesche-beep/ki-lichtsteuerung/releases/latest")
+  fetch("https://api.github.com/repos/Jakobgesche-coder/ki-lichtsteuerung/releases/latest")
     .then((antwort) => antwort.ok ? antwort.json() : null)
     .then((release) => {
       if (release) document.getElementById("version").textContent =
