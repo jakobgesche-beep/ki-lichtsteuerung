@@ -17,7 +17,6 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .audio import quellen
-from .cues import pruefe_cueliste
 from .daten import PROJEKT
 from .dmx_ausgabe import EnttecFehler
 from .farben import FARBNAMEN
@@ -26,6 +25,8 @@ from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
+from .pult import EFFEKT_ARTEN, pruefe_effekt
+from .szenen import pruefe_werte
 from .show import Show
 
 WEB_ORDNER = PROJEKT / "web"
@@ -50,6 +51,24 @@ def patch_antwort(show: Show) -> dict:
     return {"geraete": geraete, "probleme": probleme,
             "warnungen": show.patch.traverse_warnungen(show.buehne),
             "gruppen": sorted(set(FUNKTIONS_GRUPPEN) | set(show.patch.gruppen()))}
+
+
+def geraet_faehigkeiten(show: Show, geraet: dict) -> dict:
+    """Was die Bedienung zu einem Gerät wissen muss, damit sie nur Passendes anbietet."""
+    kanaele = [k for _, k in show.patch.typ(geraet).kanaele_im_modus(geraet["modus"])]
+    typen = {k["typ"] for k in kanaele}
+    gobos, farbrad = [], []
+    for kanal in kanaele:
+        plaetze = [b for b in kanal.get("bereiche", []) if b["typ"] == "platz"]
+        if kanal["typ"] == "gobo":
+            gobos = [b["name"] for b in plaetze]
+        if kanal["typ"] == "farbrad":
+            farbrad = [{"name": b.get("name"), "farbe": b.get("farbe")} for b in plaetze if b.get("farbe")]
+    return {"id": geraet["id"], "name": geraet["name"], "gruppen": show.patch.gruppen_von(geraet),
+            "dimmer": "dimmer" in typen or bool(typen & {"rot", "gruen", "blau", "weiss"}),
+            "farbe": "mischung" if typen & {"rot", "gruen", "blau"} else "rad" if farbrad else None,
+            "farbrad": farbrad, "beweglich": "pan" in typen or "tilt" in typen, "gobos": gobos,
+            "drehung": any(b["typ"] == "drehung" for k in kanaele for b in k.get("bereiche", []))}
 
 
 def erstelle_app(show: Optional[Show] = None) -> FastAPI:
@@ -225,36 +244,11 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.profile.speichern(profil)
         return {"name": profil["name"]}
 
-    # --- Szenen und Vorschau ------------------------------------------------
-
-    @app.get("/api/szenen")
-    def szenen_lesen():
-        gobos = {}
-        for geraet in show.patch.geraete:
-            for _, kanal in show.patch.typ(geraet).kanaele_im_modus(geraet["modus"]):
-                if kanal["typ"] == "gobo":
-                    for bereich in kanal.get("bereiche", []):
-                        if bereich["typ"] == "platz":
-                            gobos[bereich.get("name")] = True
-        return {"namen": show.szenen.namen(), "positionen": list(show.positionen),
-                "gruppen": show.patch.gruppen(), "gobos": list(gobos), "farben": list(FARBNAMEN),
-                "geraete": [{"id": g["id"], "name": g["name"]} for g in show.patch.geraete]}
-
-    @app.get("/api/szenen/{name}")
-    def szene_lesen(name: str):
-        szene = show.szenen.lesen(name)
-        if szene is None:
-            raise ValueError(f"Szene {name!r} gibt es nicht.")
-        return szene
-
-    @app.delete("/api/szenen/{name}")
-    def szene_loeschen(name: str):
-        show.szenen.loeschen(name)
-        return {"namen": show.szenen.namen()}
+    # --- Profil-Entwürfe (Vorschau, dann Übernehmen) -------------------------
 
     @app.post("/api/vorschau")
     def vorschau_setzen(auftrag: dict = Body(...)):
-        """Zeigt einen Entwurf nur in der 3D-Vorschau. Nichts wird gesendet oder gespeichert."""
+        """Zeigt einen Entwurf nur in der Vorschau. Nichts wird gesendet oder gespeichert."""
         return {"meldungen": show.vorschau.entwurf_setzen(auftrag["art"], auftrag["inhalt"])}
 
     @app.delete("/api/vorschau")
@@ -266,59 +260,138 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def vorschau_uebernehmen():
         return {"name": show.vorschau.uebernehmen()}
 
-    # --- Cuelisten ----------------------------------------------------------
+    # --- Pult: Programmer, Sequenzen, Executoren ----------------------------
 
-    @app.get("/api/cuelisten")
-    def cuelisten_lesen():
-        return {"namen": show.cuelisten.namen()}
+    @app.get("/api/pult")
+    def pult_lesen():
+        return {"geraete": [geraet_faehigkeiten(show, g) for g in show.patch.geraete],
+                "gruppen": show.patch.gruppen(), "positionen": list(show.positionen),
+                "farben": list(FARBNAMEN), "effekte": EFFEKT_ARTEN,
+                "sequenzen": show.pult.sequenzen.namen(), "status": show.pult.status()}
 
-    @app.get("/api/cuelisten/{name}")
-    def cueliste_lesen(name: str):
-        liste = show.cuelisten.lesen(name)
-        if liste is None:
-            raise ValueError(f"Cueliste {name!r} gibt es nicht.")
-        return liste
-
-    @app.post("/api/cuelisten")
-    def cueliste_speichern(liste: dict = Body(...)):
-        fehler = pruefe_cueliste(liste, show.szenen)
+    @app.post("/api/programmer/werte")
+    def programmer_werte(auftrag: dict = Body(...)):
+        geraete, werte = auftrag.get("geraete", []), auftrag.get("werte", {})
+        if not geraete:
+            raise ValueError("Zuerst Geräte auswählen.")
+        fehler = pruefe_werte([{"geraet": g, **werte} for g in geraete], None,
+                              [g["id"] for g in show.patch.geraete], show.positionen)
         if fehler:
             raise ValueError(" ".join(fehler))
-        show.cuelisten.schreiben(liste)
-        if show.cues.liste and show.cues.liste["name"] == liste["name"]:
-            show.cueliste_laden(liste["name"])
-        return {"name": liste["name"]}
-
-    @app.post("/api/cuelisten/{name}/laden")
-    def cueliste_laden(name: str):
-        show.cueliste_laden(name)
-        return show.cues.status()
-
-    @app.post("/api/cue/weiter")
-    def cue_weiter():
         with show.sperre:
-            show.cues.weiter(time.monotonic())
-        return show.cues.status()
+            show.pult.programmer.setzen(geraete, werte)
+        return show.pult.status()
 
-    @app.post("/api/cue/stopp")
-    def cue_stopp():
+    @app.post("/api/programmer/effekt")
+    def programmer_effekt(effekt: dict = Body(...)):
+        fehler = pruefe_effekt(effekt, show.patch.gruppen(), [g["id"] for g in show.patch.geraete])
+        if fehler:
+            raise ValueError(" ".join(fehler))
         with show.sperre:
-            show.cues.stopp(time.monotonic())
-        return show.cues.status()
+            show.pult.programmer.effekt_dazu(effekt)
+        return show.pult.status()
 
-    # --- Fader --------------------------------------------------------------
-
-    @app.post("/api/fader/{nummer}")
-    def fader_setzen(nummer: int, auftrag: dict = Body(...)):
+    @app.delete("/api/programmer/effekt/{nummer}")
+    def programmer_effekt_weg(nummer: int):
         with show.sperre:
-            show.fader.setze(nummer, auftrag["wert"])
-        return {}
+            del show.pult.programmer.effekte[nummer]
+        return show.pult.status()
 
-    @app.post("/api/fader/{nummer}/belegen")
-    def fader_belegen(nummer: int, belegung: dict = Body(...)):
+    @app.post("/api/programmer/leeren")
+    def programmer_leeren():
         with show.sperre:
-            show.fader.belegen(nummer, belegung, show.szenen, show.patch.gruppen())
-        return {"fader": show.fader.status()}
+            show.pult.programmer.leeren()
+        return show.pult.status()
+
+    @app.post("/api/programmer/blind")
+    def programmer_blind(auftrag: dict = Body(...)):
+        with show.sperre:
+            show.pult.programmer.blind = bool(auftrag.get("an"))
+        return show.pult.status()
+
+    @app.post("/api/automatik")
+    def automatik(auftrag: dict = Body(...)):
+        with show.sperre:
+            show.automatik_an = bool(auftrag.get("an"))
+        show._sitzung_speichern()
+        return {"automatik": show.automatik_an}
+
+    @app.get("/api/sequenzen/{name}")
+    def sequenz_lesen(name: str):
+        sequenz = show.pult.sequenzen.lesen(name)
+        if sequenz is None:
+            raise ValueError(f"Sequenz {name!r} gibt es nicht.")
+        return sequenz
+
+    @app.post("/api/sequenzen")
+    def sequenz_speichern(sequenz: dict = Body(...)):
+        with show.sperre:
+            show.pult.sequenz_speichern(sequenz)
+        return {"name": sequenz["name"]}
+
+    @app.delete("/api/sequenzen/{name}")
+    def sequenz_loeschen(name: str):
+        with show.sperre:
+            for executor in show.pult.executoren:
+                if executor.sequenz and executor.sequenz["name"] == name:
+                    executor.belegen(None)
+            show.pult.sequenzen.loeschen(name)
+            show.pult.belegung_speichern()
+        return {"sequenzen": show.pult.sequenzen.namen()}
+
+    @app.post("/api/sequenzen/{name}/speichern")
+    def cue_speichern(name: str, auftrag: dict = Body(...)):
+        """Speichert den Programmer als Cue in die Sequenz."""
+        with show.sperre:
+            sequenz = show.pult.cue_speichern(name, auftrag.get("cue_name") or "Cue",
+                                              float(auftrag.get("zeit_s", 2)), auftrag.get("folgen_s"),
+                                              auftrag.get("nummer"))
+        return sequenz
+
+    @app.post("/api/sequenzen/{name}/cue/{nummer}/laden")
+    def cue_laden(name: str, nummer: int):
+        sequenz = show.pult.sequenzen.lesen(name)
+        if sequenz is None or not 1 <= nummer <= len(sequenz["cues"]):
+            raise ValueError("Diesen Cue gibt es nicht.")
+        with show.sperre:
+            show.pult.programmer.aus_cue(sequenz["cues"][nummer - 1], show.patch)
+        return show.pult.status()
+
+    @app.post("/api/executor/{nummer}/belegen")
+    def executor_belegen(nummer: int, auftrag: dict = Body(...)):
+        name = auftrag.get("sequenz")
+        sequenz = show.pult.sequenzen.lesen(name) if name else None
+        if name and sequenz is None:
+            raise ValueError(f"Sequenz {name!r} gibt es nicht.")
+        with show.sperre:
+            show.pult.executor(nummer).belegen(sequenz)
+            show.pult.belegung_speichern()
+        return show.pult.status()
+
+    @app.post("/api/executor/{nummer}/{aktion}")
+    def executor_aktion(nummer: int, aktion: str, auftrag: dict = Body(default={})):
+        jetzt = time.monotonic()
+        with show.sperre:
+            executor = show.pult.executor(nummer)
+            if aktion == "go":
+                show.pult.go(nummer, jetzt)
+            elif aktion == "zurueck":
+                show.pult.go(nummer, jetzt, -1)
+            elif aktion == "aus":
+                executor.aus(jetzt)
+            elif aktion == "fader":
+                executor.fader = max(0.0, min(1.0, float(auftrag["wert"])))
+            else:
+                raise ValueError(f"Unbekannte Aktion {aktion!r}.")
+        return show.pult.status()
+
+    @app.post("/api/go/{richtung}")
+    def go_haupt(richtung: str):
+        """Leertaste und Pfeiltasten: Go+ und Go- auf dem zuletzt benutzten Executor."""
+        nummer = show.pult.haupt + 1
+        with show.sperre:
+            show.pult.go(nummer, time.monotonic(), 1 if richtung == "plus" else -1)
+        return show.pult.status()
 
     # --- Audio -------------------------------------------------------------
 

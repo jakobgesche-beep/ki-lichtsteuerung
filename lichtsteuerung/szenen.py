@@ -31,11 +31,16 @@ def pruefe_werte(werte: list, gruppen: Optional[list] = None, geraete: Optional[
             fehler.append(f"Position {wert['position']!r} gibt es nicht.")
         if "farbe" in wert and not ist_farbe(str(wert["farbe"])):
             fehler.append(f"Unbekannte Farbe: {wert['farbe']}.")
-        for feld, grenze in (("helligkeit", 1.0), ("nebel", 1.0), ("strobo_hz", 1000.0)):
+        for feld, unten, oben in (("helligkeit", 0, 1), ("nebel", 0, 1), ("strobo_hz", 0, 1000),
+                                  ("gobo_drehung", -1, 1), ("pan", -360, 360), ("tilt", -180, 180)):
             if feld in wert:
                 zahl = wert[feld]
-                if not isinstance(zahl, (int, float)) or isinstance(zahl, bool) or not 0 <= zahl <= grenze:
-                    fehler.append(f"{feld} muss zwischen 0 und {grenze:g} liegen.")
+                if not isinstance(zahl, (int, float)) or isinstance(zahl, bool) or not unten <= zahl <= oben:
+                    fehler.append(f"{feld} muss zwischen {unten:g} und {oben:g} liegen.")
+        if "punkt" in wert:
+            punkt = wert["punkt"]
+            if not isinstance(punkt, dict) or not all(isinstance(punkt.get(k), (int, float)) for k in "xyz"):
+                fehler.append("Ein Punkt braucht x, y und z in Metern.")
     return fehler
 
 
@@ -78,17 +83,18 @@ def loese_auf(werte: list, patch, buehne, positionen: dict, basis: Optional[dict
                 aenderung["helligkeit"] = float(wert["helligkeit"])
             if "farbe" in wert:
                 aenderung["farbe"] = lies_farbe(wert["farbe"])
-            for feld in ("gobo", "strobo_hz", "nebel"):
+            for feld in ("gobo", "strobo_hz", "nebel", "gobo_drehung", "pan", "tilt"):
                 if feld in wert:
                     aenderung[feld] = wert[feld]
-            if "position" in wert:
-                punkt = positionen.get(wert["position"])
+            if "position" in wert or "punkt" in wert:
+                punkt = wert.get("punkt") or positionen.get(wert["position"])
                 if punkt is None:
                     meldungen.append(f"Position {wert['position']!r} gibt es nicht.")
                 elif bereiche_von(patch, geraet) is not None:
                     try:
                         ziel = (punkt["x"], punkt["y"], punkt["z"])
-                        aenderung["pan"], aenderung["tilt"] = zeige_auf(geraet, ziel, patch, buehne)
+                        alt = (e.pan, e.tilt) if e.pan is not None else None
+                        aenderung["pan"], aenderung["tilt"] = zeige_auf(geraet, ziel, patch, buehne, alt)
                     except ZielAusserhalb as grund:
                         meldungen.append(f"{geraet['name']}: {grund}")
             zustand[geraet["id"]] = e.kopie(**aenderung)

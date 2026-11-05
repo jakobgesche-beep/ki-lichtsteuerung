@@ -69,3 +69,23 @@ button.an kbd { color: inherit; }
 .cues li.aktiv { color: #fff; font-weight: 600; }
 .cues li.aktiv::marker { color: var(--blau); }
 td input[type=number] { width: 70px; }
+.pult { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; align-items: start; }
+.pult .seite3d { grid-column: span 2; }
+@media (max-width: 700px) { .pult .seite3d { grid-column: auto; } }
+.knopfreihe { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.knopfreihe button { padding: 10px 12px; }
+.knopfreihe button.an { background: var(--blau); border-color: var(--blau); color: #fff; }
+.knopfreihe button.gruppe { border-style: dashed; }
+.farbknopf { width: 42px; height: 42px; padding: 0 !important; background: var(--f) !important; border: 2px solid var(--linie) !important; }
+.unterteil { border-top: 1px solid var(--linie); padding-top: 8px; margin-top: 8px; }
+#grundriss { width: 100%; height: auto; border-radius: 4px; cursor: crosshair; margin: 4px 0 8px; display: block; }
+.schalter { display: flex; align-items: center; gap: 6px; margin: 0; color: var(--text); font-size: 14px; }
+.executoren { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+.executor { border: 1px solid var(--linie); border-radius: 4px; padding: 8px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.executor.laeuft { border-color: var(--blau); }
+.executor.haupt { box-shadow: inset 0 3px 0 var(--blau); }
+.executor select, .executor input { width: 100%; }
+.executor .cue-name { font-size: 13px; color: var(--leise); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.executor.laeuft .cue-name { color: var(--text); }
+.tasten3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+.tasten3 button { padding: 10px 0; font-size: 13px; }

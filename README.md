@@ -24,19 +24,28 @@ Beim ersten Mal dauert es ein paar Minuten, danach geht der Browser von selbst a
 
 1. Reiter **Profile**: zum Beispiel „Schulfest Abend“ anklicken.
 2. Reiter **Live**: Bei „Quelle“ das Testsignal wählen oder eine Audiodatei. Die PARs wechseln jetzt im Takt die Farbe.
-3. Tasten ausprobieren: `B` Blackout, `W` Warmweiß, `P` Automatik-Pause, `S` Strobo aus, Leertaste nächster Cue.
-4. Reiter **Szenen & Cues**: Szene bauen, „In Vorschau zeigen“, dann „Übernehmen“. Daraus eine Cueliste bauen und auf **Live** laden.
+3. Tasten ausprobieren: `B` Blackout, `W` Warmweiß, `P` Automatik-Pause, `S` Strobo aus, Leertaste oder `→` Go+, `←` Go−.
+4. Reiter **Pult**: eine Show programmieren, siehe unten.
 
 ## Die Reiter
 
 | Reiter | Wofür |
 |---|---|
-| Live | 3D-Bühne, Ton, Cueliste, Fader |
-| Szenen & Cues | Szenen, Cuelisten und Fader-Belegung |
+| Live | 3D-Bühne, Profil, Ton, Executoren, Musik-Automatik an oder aus |
+| Pult | Geräte wählen, Farbe, Position, Gobo und Effekte einstellen, als Cue in eine Sequenz speichern |
 | Profile | Profil für die Veranstaltung wählen und anpassen |
-| Patch | Geräte aus dem Katalog einbinden, Adressen, Gerät tauschen |
+| Patch | Geräte aus dem Katalog einbinden, Adressen, Ort, Gerät tauschen |
 | Katalog | Über 600 Gerätetypen durchsuchen, eigene anlegen, .qxf und .gdtf importieren |
 | DMX-Test | Jedes Gerät einzeln einschalten, einzelne Kanäle setzen, DMX-Ausgabe ein/aus |
+
+**So programmierst du eine Show (wie bei grandMA):**
+
+1. Reiter **Pult**: oben Geräte oder eine Gruppe antippen.
+2. Farbe, Position (auf den Grundriss tippen), Gobo und Effekt wählen. Mit „Blind“ siehst du es nur in der Vorschau.
+3. Cue-Namen eingeben, „Als neuen Cue speichern“. Danach den nächsten Cue einstellen und speichern.
+4. „Programmer leeren“, die Sequenz unten auf einen Executor legen und mit **Go+** (Leertaste oder →) und **Go−** (←) abspielen.
+
+Ein Cue speichert nur, was du geändert hast. Alles andere bleibt aus dem vorigen Cue stehen, wie bei grandMA („Tracking“). Der Fader eines Executors blendet seine Sequenz über die Musik-Automatik.
 
 Die großen Tasten oben gelten auf jeder Seite und haben immer Vorrang vor Automatik und Cues.
 
@@ -52,7 +61,7 @@ Die großen Tasten oben gelten auf jeder Seite und haben immer Vorrang vor Autom
 Der beste Einstieg ist [show.py](lichtsteuerung/show.py). Dort steht, wie ein DMX-Bild entsteht, 40-mal pro Sekunde:
 
 ```
-Automatik (Engine) → Cues und Fader → Profil-Grenzen → Override-Tasten → DMX-Zahlen → Prüfung → Ausgabe
+Automatik (Engine) → Executoren → Programmer → Profil-Grenzen → Override-Tasten → DMX-Zahlen → Prüfung → Ausgabe
 ```
 
 | Datei | Aufgabe |
@@ -62,7 +71,8 @@ Automatik (Engine) → Cues und Fader → Profil-Grenzen → Override-Tasten →
 | `pruefung.py`, `sicherheit.py`, `sperrzone.py` | Jeder Wert wird geprüft |
 | `pantilt.py` | Rechnung für die Moving Heads |
 | `audio/`, `engine.py` | Musik analysieren, Regeln fürs Licht |
-| `cues.py`, `szenen.py`, `profile.py` | Show-Daten |
+| `pult.py` | Programmer, Effekte, Sequenzen und Executoren |
+| `szenen.py`, `profile.py` | Werte auflösen, Profile |
 | `overrides.py` | die festen Tasten |
 | `vorschau.py` | Entwürfe erst zeigen, dann übernehmen |
 | `dmx_ausgabe.py`, `simulator.py` | Enttec und 3D-Vorschau |

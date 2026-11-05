@@ -3,7 +3,7 @@
 Hier läuft alles zusammen. Ein Bild entsteht immer in dieser Reihenfolge:
 
     Automatik      -> Engine reagiert auf die Musik, sonst Grundlicht
-    Cues und Fader -> liegen über der Automatik
+    Pult          -> Executoren und Programmer liegen über der Automatik
     Profil-Grenze  -> maximale Helligkeit und Blitz-Wächter
     Override       -> die Tasten haben immer Vorrang
     DMX-Test       -> nur, wenn er gerade läuft
@@ -20,12 +20,12 @@ from typing import Optional
 from . import daten
 from .audio.betrieb import AudioBetrieb
 from .buehne import Buehne
-from .cues import CueSpieler, FaderBank, Sammlung, pruefe_cueliste
 from .dmx_ausgabe import BILDER_PRO_SEKUNDE, DmxAusgabe
 from .engine import Engine, GRUPPE_BEWEGUNG
 from .katalog import Katalog
 from .overrides import Overrides
 from .patch import Patch
+from .pult import Pult
 from .profile import Profile, RUHE_PROFIL, strobo_grenzen
 from .pruefung import Pruefer, Vorgaben
 from .render import Eigenschaften, Renderer
@@ -56,12 +56,12 @@ class Show:
         self.profile = Profile(self.pfade.profile)
         self.profil = RUHE_PROFIL
         self.overrides = Overrides()
-        self.szenen = Sammlung(self.pfade.szenen)
-        self.cuelisten = Sammlung(self.pfade.cuelisten)
-        self.fader = FaderBank(self.pfade.fader)
-        self.cues = None
+        self.pult = Pult(self, self.pfade.sequenzen, self.pfade.executoren)
+        self.automatik_an = True
         self.vorschau = Vorschau(self)
+        self.vorschau_geraete = None
         self.blitze = BlitzWaechter()
+        self.vorschau_blitze = BlitzWaechter()
         self.blitzt = False
 
         self.sperre = threading.RLock()     # Oberfläche und Show-Schleife wechseln sich ab
@@ -87,10 +87,8 @@ class Show:
                 self.pruefer.strobo = alter_waechter
             self.simulator = Simulator(self.patch, self.buehne)
             self.engine = Engine(self.patch, self.buehne, self.positionen, self.grenzen)
-            liste = self.cues.liste if self.cues else None
-            self.cues = CueSpieler(self.patch, self.buehne, self.positionen, self.szenen)
-            if liste:
-                self.cues.laden(liste)
+            self.pult.aufbauen()
+            self.vorschau_pruefer = Pruefer(self.patch, self.buehne, self.grenzen)
             ziel, _ = loese_auf([{"gruppe": GRUPPE_BEWEGUNG, "position": WARM_POSITION}],
                                 self.patch, self.buehne, self.positionen)
             self.warm_stellung = {i: (e.pan, e.tilt) for i, e in ziel.items() if e.pan is not None}
@@ -103,14 +101,14 @@ class Show:
             self._test_pruefen(jetzt)
             zustand = self._automatik(jetzt)
             if not self._test_laeuft():
-                zustand = self.cues.ueberlagern(zustand, jetzt)
-                zustand = self.fader.anwenden(zustand, self.patch, self.buehne, self.positionen, self.szenen)
+                zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm())
+                self._blind_vorschau(zustand if self.pult.programmer.blind else None, jetzt)
             zustand = self._profil_grenzen(zustand, jetzt)
             zustand = self.overrides.anwenden(zustand, self.patch.geraete, self.warm_stellung)
             bild = self.renderer.bild(zustand)
             self._test_einmischen(bild)
             bild, meldungen, self.blitzt = self.pruefer.pruefe(bild, self._vorgaben(), jetzt)
-            self.meldungen = meldungen + self.cues.meldungen
+            self.meldungen = meldungen + self.pult.meldungen
             self.letztes_bild = bytes(bild)
             return self.letztes_bild
 
@@ -132,6 +130,9 @@ class Show:
             if self.test_geraet is not None:
                 zustand[self.test_geraet] = Eigenschaften(helligkeit=1.0, farbe=(1.0, 1.0, 1.0))
             return zustand
+        if not self.automatik_an:
+            self.audio.abholen(jetzt)     # Beats trotzdem abholen, damit keiner nachträglich kommt
+            return {}
         try:
             messwerte = self.audio.abholen(jetzt)
             return self.engine.bewerte(messwerte, self.profil, jetzt, self.overrides.pause)
@@ -140,12 +141,28 @@ class Show:
             logging.exception("Fehler in der Engine")
             return self.engine.bewerte(None, self.profil, jetzt)
 
-    def _profil_grenzen(self, zustand: dict, jetzt: float) -> dict:
+    def _musik_bpm(self) -> float:
+        werte = self.audio.aktuell()
+        return werte.tempo_bpm if werte and 40 <= werte.tempo_bpm <= 240 else 120.0
+
+    def _blind_vorschau(self, zustand: Optional[dict], jetzt: float) -> None:
+        """Im Blind-Modus: Programmer nur in die 3D-Vorschau, nie an den Ausgang."""
+        if zustand is None or self.pult.programmer.ist_leer():
+            self.vorschau_geraete = None
+            return
+        vorschau = self._profil_grenzen(self.pult.vorschau(zustand), jetzt, eigener_waechter=True)
+        bild = self.renderer.bild(vorschau)
+        hz, dauer = self.grenzen.strobo_max_hz, self.grenzen.strobo_max_dauer_s
+        bild, _, _ = self.vorschau_pruefer.pruefe(bild, Vorgaben(strobo_max_hz=hz, strobo_max_dauer_s=dauer), jetzt)
+        self.vorschau_geraete = self.simulator.lies(bytes(bild))
+
+    def _profil_grenzen(self, zustand: dict, jetzt: float, eigener_waechter: bool = False) -> dict:
         grenze = self.profil["max_helligkeit"]
+        waechter = self.vorschau_blitze if eigener_waechter else self.blitze
         ergebnis = {}
         for geraet_id, e in zustand.items():
             hell = e.helligkeit if self._test_laeuft() else min(e.helligkeit, grenze)
-            hell = self.blitze.begrenze(geraet_id, hell, jetzt, self.grenzen.strobo_max_hz)
+            hell = waechter.begrenze(geraet_id, hell, jetzt, self.grenzen.strobo_max_hz)
             ergebnis[geraet_id] = e.kopie(helligkeit=hell)
         return ergebnis
 
@@ -174,34 +191,17 @@ class Show:
             self.profil = profil
         self._sitzung_speichern()
 
-    def cueliste_laden(self, name: str) -> None:
-        liste = self.cuelisten.lesen(name)
-        if liste is None:
-            raise ValueError(f"Cueliste {name!r} gibt es nicht.")
-        fehler = pruefe_cueliste(liste, self.szenen)
-        if fehler:
-            raise ValueError(" ".join(fehler))
-        with self.sperre:
-            self.cues.laden(liste)
-        self._sitzung_speichern()
-
     def _sitzung_speichern(self) -> None:
-        daten.schreibe_json(self.pfade.sitzung, {
-            "profil": self.profil["name"],
-            "cueliste": self.cues.liste["name"] if self.cues.liste else None})
+        daten.schreibe_json(self.pfade.sitzung, {"profil": self.profil["name"], "automatik": self.automatik_an})
 
     def _sitzung_laden(self) -> None:
-        """Nach einem Neustart: Letztes Profil und letzte Cueliste laden. DMX bleibt aus."""
+        """Nach einem Neustart: Letztes Profil und Executor-Belegung kommen zurück. DMX bleibt aus."""
         sitzung = daten.lese_json(self.pfade.sitzung, {})
         try:
             self.profil = self.profile.laden(sitzung.get("profil") or ERSTES_PROFIL)
         except ValueError:
             self.profil = RUHE_PROFIL
-        if sitzung.get("cueliste"):
-            try:
-                self.cueliste_laden(sitzung["cueliste"])
-            except ValueError:
-                pass
+        self.automatik_an = sitzung.get("automatik", True)
 
     def live_daten(self) -> dict:
         """Das schickt der Server laufend an die 3D-Vorschau."""
@@ -214,9 +214,8 @@ class Show:
                     "overrides": vars(self.overrides), "blitzt": self.blitzt,
                     "test_laeuft": self._test_laeuft(), "version": VERSION,
                     "update": self.update.status(),
-                    "cues": self.cues.status(), "fader": self.fader.status(),
-                    "vorschau": {"art": self.vorschau.art, "geraete": self.vorschau.geraete,
-                                 "meldungen": self.vorschau.meldungen},
+                    "pult": self.pult.status(), "automatik": self.automatik_an,
+                    "vorschau": {"geraete": self.vorschau_geraete},
                     "strobo_erlaubt": self.profil["strobo"] != "aus",
                     "hazer_erlaubt": self.profil["hazer"],
                     "audio": {"quelle": self.audio.name, "fehler": self.audio.fehler,

@@ -38,12 +38,18 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Gobos und Drehung** nutzt die Engine ab `beat_reaktion` 0,5. Die Bilder in der 3D-Ansicht sind Beispiele, die echten Motive stehen nicht in den Gerätedaten.
 - **Sicherer Rückfall:** Keine frischen Messwerte seit 0,5 s, Fehler in der Analyse oder in den Regeln führen zum Grundlicht. Misslingt ein ganzes Bild, bleibt das letzte stehen.
 - **Beim Neustart** kommen letztes Profil und letzte Cueliste zurück. Die Liste wird nur geladen, nicht gestartet, und DMX bleibt aus.
-- **Wartezeit im Cue:** 0 heißt, der nächste Cue wartet auf „Weiter“. Sonst geht es nach Einblenden plus Wartezeit von allein weiter.
+- **Pult wie grandMA, aber kleiner:** Programmer, 8 Executoren mit Fader, Go+, Go− und Aus, Sequenzen mit Tracking. Die alten Cuelisten und Fader sind dadurch ersetzt.
+- **Reihenfolge der Ebenen:** Automatik, darüber die Executoren (der zuletzt gestartete oben), darüber der Programmer, zuletzt die Not-Tasten. Der Executor-Fader blendet seine Sequenz über das, was darunter liegt.
+- **Folgezeit im Cue (`folgen_s`):** leer heißt, der nächste Cue wartet auf Go+. Sonst geht es nach Überblenden plus Folgezeit von allein weiter. Nach dem letzten Cue fängt Go+ wieder beim ersten an.
+- **Ein Cue ohne `effekte`** lässt laufende Effekte weiterlaufen (Tracking). Mit `"effekte": []` hält er sie an.
+- **Programmer ist live,** wie am echten Pult. „Blind“ zeigt ihn nur in der Vorschau. Die KI soll später nur im Blind-Modus arbeiten dürfen.
+- **Die maximale Helligkeit des Profils** gilt auch für Programmer und Executoren.
+- **„Über das Publikum“** zielt deutlich über die Köpfe. Die Sperrzone prüft auch hier jeden Wert.
 - **Überschneidende Adressen** werden rot markiert, aber nicht verboten, denn zwei Geräte auf gleicher Adresse können gewollt sein. Über 512 ist gesperrt.
 - **Grundlicht** steht direkt im Profil und nicht als eigene Szene. So ist der Rückfall auch da, wenn jemand eine Szene löscht.
 - **Der Hazer** bekommt nur Werte, wenn das Profil ihn erlaubt. Alle vier Profile verbieten ihn. Die Automatik benutzt ihn nie, nur eine Cue mit `nebel`.
 - **Ein vergessener DMX-Test** endet nach 2 Minuten von selbst.
-- **Acht Fader.** Gruppen-Fader begrenzen die Helligkeit, Szenen-Fader blenden eine Szene dazu. Die Belegung wird gespeichert, die Stellung nicht.
+- **Executor-Belegung** wird gespeichert, die Stellung der Fader und der laufende Cue nicht. Nach einem Neustart ist alles aus.
 - **Kein Passwort** für die Oberfläche. Ohne `--netz` ist sie nur vom Laptop selbst erreichbar.
 
 ## Zusätzliche Sicherheit, die nicht in der Beschreibung stand
@@ -85,7 +91,7 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 
 | Schritt | Wo es andockt |
 |---|---|
-| 8 Licht-Chat | Die Werkzeuge rufen `show.vorschau.entwurf_setzen("szene", ...)` und `uebernehmen()` auf, dazu `FaderBank.belegen` und `pruefe_cueliste`. Der Key gehört in `lokal.json`, die Git ignoriert |
+| 8 Licht-Chat | Die Werkzeuge bedienen das Pult: `programmer.setzen`, `effekt_dazu`, Blind-Modus an, dann zeigt die Vorschau das Ergebnis. Gespeichert wird erst mit `cue_speichern`, wenn der Mensch zustimmt. Der Key gehört in `lokal.json`, die Git ignoriert |
 | 9 Profile per API | `entwurf_setzen("profil", ...)` samt Prüfung und Speichern gibt es schon und ist getestet |
 | 10 X32 | Das Modul setzt `show.overrides` oder einen eigenen Rede-Eingang und liest `x32.json`. Audio vom X32 läuft schon über `audio.quellen.Eingang` mit Kanalwahl |
 | 11 Klick-Positionen | `pantilt.py`, `szenen.zeige_auf` und die Versatz-Felder in `stage.json` sind fertig und getestet. Es fehlt nur die Oberfläche |

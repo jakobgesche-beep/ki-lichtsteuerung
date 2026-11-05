@@ -36,9 +36,8 @@ class Pfade:
         self.x32 = self.wurzel / "x32.json"
         self.sicherheit = self.wurzel / "sicherheit.json"
         self.profile = self.wurzel / "profile"
-        self.szenen = self.wurzel / "cues" / "szenen"
-        self.cuelisten = self.wurzel / "cues" / "listen"
-        self.fader = self.wurzel / "cues" / "fader.json"
+        self.sequenzen = self.wurzel / "cues" / "sequenzen"
+        self.executoren = self.wurzel / "cues" / "executoren.json"
         self.sitzung = self.wurzel / "daten" / "sitzung.json"
         self.audio = self.wurzel / "daten" / "audio"
 

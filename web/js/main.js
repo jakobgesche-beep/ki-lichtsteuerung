@@ -1,7 +1,7 @@
 // Der Rahmen: Reiter oben, die Seiten liegen jeweils in einer eigenen Datei.
 import { liveSeite } from "./live.js";
 import { profileSeite } from "./profile.js";
-import { szenenSeite } from "./szenen.js";
+import { pultSeite } from "./pult.js";
 import { patchSeite } from "./patch.js";
 import { tastenLeiste } from "./tasten.js";
 import { katalogSeite } from "./katalog.js";
@@ -9,7 +9,7 @@ import { dmxTestSeite } from "./dmxtest.js";
 
 const seiten = [
   ["Live", liveSeite],
-  ["Szenen & Cues", szenenSeite],
+  ["Pult", pultSeite],
   ["Profile", profileSeite],
   ["Patch", patchSeite],
   ["Katalog", katalogSeite],

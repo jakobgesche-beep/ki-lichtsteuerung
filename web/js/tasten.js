@@ -8,7 +8,8 @@ const TASTEN = [
   { id: "pause", text: "Automatik Pause", taste: "p" },
   { id: "strobo_aus", text: "Strobo aus", taste: "s" },
 ];
-const WEITER = () => senden("/cue/weiter");
+const WEITER = () => senden("/go/plus");
+const ZURUECK = () => senden("/go/minus");
 
 // Ein Update startet nie von selbst: Es könnte gerade eine Show laufen.
 function updateHinweis(live) {
@@ -37,7 +38,7 @@ export function tastenLeiste(leiste) {
   }
   const weiter = document.createElement("button");
   weiter.id = "taste-weiter";
-  weiter.innerHTML = `Nächster Cue <kbd>Leertaste</kbd>`;
+  weiter.innerHTML = `Go+ <kbd>Leertaste</kbd>`;
   weiter.onclick = WEITER;
   leiste.append(weiter);
 
@@ -54,7 +55,8 @@ export function tastenLeiste(leiste) {
     for (const { id } of TASTEN) {
       document.getElementById("taste-" + id).classList.toggle("an", live.overrides[id]);
     }
-    weiter.title = live.cues.naechster ?? "Keine weiteren Cues";
+    const haupt = live.pult.executoren[live.pult.haupt - 1];
+    weiter.title = haupt.sequenz ? `Executor ${haupt.nummer}: ${haupt.sequenz}` : "Executor ohne Sequenz";
     const texte = [];
     if (live.blitzt) texte.push(["rot", "Strobo läuft"]);
     if (live.test_laeuft) texte.push(["gelb", "DMX-Test läuft: Die Automatik ruht, solange der Test läuft."]);
@@ -69,9 +71,14 @@ export function tastenLeiste(leiste) {
 
   document.addEventListener("keydown", (ereignis) => {
     if (ereignis.target.closest("input, textarea, select") || ereignis.metaKey || ereignis.ctrlKey || ereignis.repeat) return;
-    if (ereignis.key === " ") {
+    if (ereignis.key === " " || ereignis.key === "ArrowRight") {
       ereignis.preventDefault();
       if (!ereignis.target.closest("button")) WEITER();
+      return;
+    }
+    if (ereignis.key === "ArrowLeft") {
+      ereignis.preventDefault();
+      ZURUECK();
       return;
     }
     const treffer = TASTEN.find(({ taste }) => taste === ereignis.key.toLowerCase());

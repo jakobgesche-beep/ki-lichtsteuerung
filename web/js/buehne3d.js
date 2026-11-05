@@ -9,12 +9,12 @@ const punkt = (x, y, z) => new THREE.Vector3(x, z, -y);
 const LICHT_REICHWEITE = 12;
 
 export class Buehne3D {
-  constructor(huelle, aufbau) {
+  constructor(huelle, aufbau, { nah = false } = {}) {
     this.huelle = huelle;
     this.szene = new THREE.Scene();
     this.szene.background = new THREE.Color(0x101113);
     this.kamera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    this.kamera.position.copy(punkt(0, -13, 6));
+    this.kamera.position.copy(nah ? punkt(0, -7.5, 4.5) : punkt(0, -13, 6));
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     huelle.append(this.renderer.domElement);

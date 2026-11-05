@@ -2,6 +2,7 @@
 import { api, senden, t } from "./api.js";
 import { Buehne3D } from "./buehne3d.js";
 import { abonnieren } from "./verbindung.js";
+import { executorLeiste } from "./executoren.js";
 
 export function liveSeite(wurzel) {
   wurzel.innerHTML = `
@@ -22,22 +23,17 @@ export function liveSeite(wurzel) {
           <div class="pegel"><span>Bass</span><i id="m-bass"></i></div>
           <div class="pegel"><span>Energie</span><i id="m-energie"></i></div>
         </div>
-        <div class="kasten">
-          <h2>Cueliste</h2>
-          <label>Liste <select id="cueliste"></select></label>
-          <ol id="cues" class="cues"></ol>
-          <button id="cue-stopp">Cue loslassen</button>
-        </div>
         <div id="meldungen"></div>
       </div>
     </div>
-    <div class="kasten"><h2>Fader</h2><div id="fader" class="fader"></div></div>`;
+    <div class="kasten"><h2 class="zeile" style="justify-content:space-between">Executoren
+      <label class="schalter"><input type="checkbox" id="automatik"> Musik-Automatik</label></h2>
+      <div id="executoren"></div></div>`;
   const feld = (id) => wurzel.querySelector("#" + id);
   let buehne = null;
   let beendet = false;
   let letzterBeat = 0;
-  let cueStand = "";
-  let faderGebaut = false;
+  const leiste = executorLeiste(feld("executoren"));
 
   async function quellenLaden() {
     const { eingaenge, dateien } = await api("/audio");
@@ -67,34 +63,6 @@ export function liveSeite(wurzel) {
     quelleWaehlen();
   }
 
-  function cuesZeigen(cues) {
-    const inhalt = JSON.stringify([cues.cues, cues.index]);
-    if (inhalt !== cueStand) {
-      cueStand = inhalt;
-      feld("cues").innerHTML = cues.cues.map((name, i) =>
-        `<li class="${i === cues.index ? "aktiv" : ""}">${t(name)}</li>`).join("");
-    }
-    if (cues.liste && feld("cueliste").value !== cues.liste) feld("cueliste").value = cues.liste;
-  }
-
-  function faderZeigen(fader) {
-    if (!faderGebaut) {
-      faderGebaut = true;
-      feld("fader").innerHTML = fader.map((f, i) => `
-        <label>${t(f.art === "frei" ? `Fader ${i + 1}` : f.ziel)}
-          <input type="range" min="0" max="1" step="0.01" data-fader="${i}" value="${f.wert}" ${f.art === "frei" ? "disabled" : ""}>
-        </label>`).join("");
-      wurzel.querySelectorAll("[data-fader]").forEach((regler) => {
-        regler.oninput = () => senden("/fader/" + regler.dataset.fader, { wert: Number(regler.value) });
-      });
-    }
-  }
-
-  async function listenLaden() {
-    const { namen } = await api("/cuelisten");
-    feld("cueliste").innerHTML = `<option value="">(keine)</option>` + namen.map((n) => `<option>${t(n)}</option>`).join("");
-  }
-
   function zeigen(live) {
     if (!live) return;
     buehne?.setzeWerte(live.geraete);
@@ -103,8 +71,8 @@ export function liveSeite(wurzel) {
     if (feld("profil").value !== live.profil && !feld("profil").matches(":focus")) feld("profil").value = live.profil;
     feld("ton-hinweis").innerHTML = live.audio.werte && !live.reagiert
       ? `<div class="meldung gelb" style="margin-top:8px">Dieses Profil reagiert nicht auf Musik. Oben ein anderes wählen.</div>` : "";
-    cuesZeigen(live.cues);
-    faderZeigen(live.fader);
+    leiste.zeigen(live.pult);
+    if (!feld("automatik").matches(":focus")) feld("automatik").checked = live.automatik;
     const ton = live.audio;
     if (ton.quelle === "Testsignal" && feld("quelle").value === "aus") feld("quelle").value = "test";
     const werte = ton.werte;
@@ -127,12 +95,8 @@ export function liveSeite(wurzel) {
   feld("profil").onchange = () => senden(`/profile/${encodeURIComponent(feld("profil").value)}/laden`);
   feld("quelle").onchange = quelleWaehlen;
   feld("datei").onchange = dateiHochladen;
-  feld("cueliste").onchange = () => {
-    if (feld("cueliste").value) senden(`/cuelisten/${encodeURIComponent(feld("cueliste").value)}/laden`);
-  };
-  feld("cue-stopp").onclick = () => senden("/cue/stopp");
+  feld("automatik").onchange = () => senden("/automatik", { an: feld("automatik").checked });
   quellenLaden();
-  listenLaden();
 
   api("/buehne").then((aufbau) => {
     if (beendet) return;

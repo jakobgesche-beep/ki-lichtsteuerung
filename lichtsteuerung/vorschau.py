@@ -4,15 +4,14 @@ Grundregel: Nichts von der KI geht direkt live. Ein Entwurf erscheint nur in der
 3D-Vorschau, nie am DMX-Ausgang. Gespeichert wird erst bei uebernehmen(). Es
 gibt hier bewusst keine Funktion, die etwas live schaltet.
 
-Der Szenen-Editor benutzt diesen Weg schon heute. Licht-Chat (Schritt 8) und
-Profile per API (Schritt 9) rufen später genau dieselben Funktionen auf:
-    entwurf_setzen("szene", {...})     entwurf_setzen("profil", {...})
+Für Profile per API (Schritt 9): entwurf_setzen("profil", {...}).
+Szenen und Cues laufen über den Programmer im Blind-Modus (pult.py): Er ist
+nur in der 3D-Vorschau zu sehen, bis jemand ihn als Cue speichert.
 """
 from __future__ import annotations
 
 from typing import Optional
 
-from .cues import pruefe_szene
 from .profile import pruefe_profil
 from .pruefung import Pruefer, Vorgaben
 from .szenen import loese_auf
@@ -46,8 +45,6 @@ class Vorschau:
 
     def _pruefen(self, art: str, inhalt: dict) -> tuple:
         show = self.show
-        if art == "szene":
-            return pruefe_szene(inhalt, show.patch, show.positionen), inhalt.get("werte", [])
         if art == "profil":
             return pruefe_profil(inhalt, show.patch.gruppen()), inhalt.get("grundlicht", {}).get("werte", [])
         raise ValueError(f"Unbekannte Art von Entwurf: {art}")
@@ -61,9 +58,6 @@ class Vorschau:
         if self.inhalt is None:
             raise ValueError("Es gibt keinen Entwurf zum Übernehmen.")
         name = self.inhalt["name"]
-        if self.art == "szene":
-            self.show.szenen.schreiben(self.inhalt)
-        else:
-            self.show.profile.speichern(self.inhalt)
+        self.show.profile.speichern(self.inhalt)
         self.verwerfen()
         return name
