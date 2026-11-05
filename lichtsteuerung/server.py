@@ -25,6 +25,7 @@ from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
 from . import patchplan
+from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
 from .pult import EFFEKT_ARTEN, pruefe_effekt
@@ -59,6 +60,7 @@ def geraet_faehigkeiten(show: Show, geraet: dict) -> dict:
     """Was die Bedienung zu einem Gerät wissen muss, damit sie nur Passendes anbietet."""
     kanaele = [k for _, k in show.patch.typ(geraet).kanaele_im_modus(geraet["modus"])]
     typen = {k["typ"] for k in kanaele}
+    grad = {k["typ"]: k.get("grad") for k in kanaele if k["typ"] in ("pan", "tilt")}
     gobos, farbrad = [], []
     for kanal in kanaele:
         plaetze = [b for b in kanal.get("bereiche", []) if b["typ"] == "platz"]
@@ -70,11 +72,14 @@ def geraet_faehigkeiten(show: Show, geraet: dict) -> dict:
             "dimmer": "dimmer" in typen or bool(typen & {"rot", "gruen", "blau", "weiss"}),
             "farbe": "mischung" if typen & {"rot", "gruen", "blau"} else "rad" if farbrad else None,
             "farbrad": farbrad, "beweglich": "pan" in typen or "tilt" in typen, "gobos": gobos,
+            "pan_grad": grad.get("pan"), "tilt_grad": grad.get("tilt"),
+            "nummer": show.patch.geraete.index(geraet) + 1,
             "drehung": any(b["typ"] == "drehung" for k in kanaele for b in k.get("bereiche", []))}
 
 
 def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     show = show or Show()
+    befehlszeile = Befehlszeile(show)
     app = FastAPI(title="Lichtsteuerung Technik-AG")
     app.state.show = show
     app.router.add_event_handler("startup", show.start)
@@ -271,9 +276,27 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
                 "farben": list(FARBNAMEN), "effekte": EFFEKT_ARTEN,
                 "sequenzen": show.pult.sequenzen.namen(), "status": show.pult.status()}
 
+    @app.post("/api/auswahl")
+    def auswahl(auftrag: dict = Body(...)):
+        geraete = list(auftrag.get("geraete", []))
+        if "gruppe" in auftrag:
+            geraete = [g["id"] for g in show.patch.in_gruppe(auftrag["gruppe"])]
+        with show.sperre:
+            show.pult.waehlen(geraete, auftrag.get("art", "setzen"))
+        return show.pult.status()
+
+    @app.post("/api/befehl")
+    def befehl(auftrag: dict = Body(...)):
+        if auftrag.get("sequenz"):
+            befehlszeile.sequenz = auftrag["sequenz"]
+        try:
+            return {"antwort": befehlszeile.ausfuehren(str(auftrag.get("text", ""))), "status": show.pult.status()}
+        except (ValueError, KatalogFehler, PatchFehler) as fehler:
+            return JSONResponse({"fehler": str(fehler)}, status_code=400)
+
     @app.post("/api/programmer/werte")
     def programmer_werte(auftrag: dict = Body(...)):
-        geraete, werte = auftrag.get("geraete", []), auftrag.get("werte", {})
+        geraete, werte = auftrag.get("geraete") or list(show.pult.auswahl), auftrag.get("werte", {})
         if not geraete:
             raise ValueError("Zuerst Geräte auswählen.")
         fehler = pruefe_werte([{"geraet": g, **werte} for g in geraete], None,
@@ -286,6 +309,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     @app.post("/api/programmer/effekt")
     def programmer_effekt(effekt: dict = Body(...)):
+        if not effekt.get("ziel"):
+            effekt["ziel"] = {"geraete": list(show.pult.auswahl)}
         fehler = pruefe_effekt(effekt, show.patch.gruppen(), [g["id"] for g in show.patch.geraete])
         if fehler:
             raise ValueError(" ".join(fehler))
@@ -383,6 +408,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
                 show.pult.go(nummer, jetzt, -1)
             elif aktion == "aus":
                 executor.aus(jetzt)
+            elif aktion == "goto":
+                show.pult.goto(nummer, int(auftrag["index"]), jetzt)
             elif aktion == "fader":
                 executor.fader = max(0.0, min(1.0, float(auftrag["wert"])))
             else:

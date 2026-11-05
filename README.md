@@ -22,31 +22,34 @@ Beim ersten Mal dauert es ein paar Minuten, danach geht der Browser von selbst a
 
 ## Erste Schritte ohne Hardware
 
-1. Reiter **Profile**: zum Beispiel „Schulfest Abend“ anklicken.
-2. Reiter **Live**: Bei „Quelle“ das Testsignal wählen oder eine Audiodatei. Die PARs wechseln jetzt im Takt die Farbe.
+1. View **Live**: Profil wählen, zum Beispiel „Schulfest Abend“.
+2. Ebenfalls auf **Live**: Bei „Quelle“ das Testsignal wählen oder eine Audiodatei. Die PARs wechseln jetzt im Takt die Farbe.
 3. Tasten ausprobieren: `B` Blackout, `W` Warmweiß, `P` Automatik-Pause, `S` Strobo aus, Leertaste oder `→` Go+, `←` Go−.
-4. Reiter **Pult**: eine Show programmieren, siehe unten.
+4. View **Programmieren**: eine Show programmieren, siehe unten.
 
 ## Die Reiter
 
-| Reiter | Wofür |
+Oben wählst du die **View**, wie an einem Lichtpult:
+
+| View | Wofür |
 |---|---|
-| Live | 3D-Bühne, Profil, Ton, Executoren, Musik-Automatik an oder aus |
-| Probe | Song aufnehmen oder als Datei laden: Das Programm erkennt Tempo und Songteile und baut die Lichtshow |
-| Pult | Geräte wählen, Farbe, Position, Gobo und Effekte einstellen, als Cue in eine Sequenz speichern |
-| Profile | Profil für die Veranstaltung wählen und anpassen |
-| Patch | Geräte aus dem Katalog einbinden, Adressen, Ort, Gerät tauschen, Patchplan zum Ausdrucken |
-| Katalog | Über 600 Gerätetypen durchsuchen, eigene anlegen, .qxf und .gdtf importieren |
-| DMX-Test | Jedes Gerät einzeln einschalten, einzelne Kanäle setzen, DMX-Ausgabe ein/aus |
+| Live | 3D-Bühne, Cue-Liste (Klick springt zum Cue), Ton, Profil, Musik-Automatik, Executoren |
+| Programmieren | Pools mit Gruppen, Geräten, Farben, Positionen, Gobos und Effekten, Fixture-Sheet, Encoder, Speichern |
+| Probe | Song aufnehmen oder als Datei laden: Tempo und Songteile erkennen, Lichtshow bauen |
+| Setup | Patch (mit Patchplan zum Ausdrucken), Profile, Katalog, DMX-Test |
+
+Gelb heißt ausgewählt, Rot heißt: steht im Programmer. Unten ist immer die **Befehlszeile**, zum Beispiel:
+`Gerät 1 bis 3 auf 80` · `Gruppe Spots Farbe Rot Gobo 3 Effekt Kreis` · `Speichern` · `Speichern Cue 2` · `Leeren` · `Go`.
+Englisch geht auch: `Fixture 1 Thru 3 At Full`. Zahlen tippen springt direkt in die Befehlszeile.
 
 **So programmierst du eine Show (wie bei grandMA):**
 
-1. Reiter **Pult**: oben Geräte oder eine Gruppe antippen.
+1. View **Programmieren**: Geräte oder eine Gruppe antippen.
 2. Farbe, Position (auf den Grundriss tippen), Gobo und Effekt wählen. Mit „Blind“ siehst du es nur in der Vorschau.
 3. Cue-Namen eingeben, „Als neuen Cue speichern“. Danach den nächsten Cue einstellen und speichern.
 4. „Programmer leeren“, die Sequenz unten auf einen Executor legen und mit **Go+** (Leertaste oder →) und **Go−** (←) abspielen.
 
-**Show aus der Probe:** Im Reiter **Probe** einen Namen eingeben und „Aufnahme starten“, während die Band den Song spielt (Tonquelle auf der Live-Seite: Eingang vom X32). Danach erkennt das Programm die Songteile und legt eine Sequenz mit einem Cue pro Teil an. „Probe ansehen“ spielt die Aufnahme ab, und das Licht wechselt genau an den erkannten Stellen. Live drückst du Go+, wenn der nächste Teil kommt.
+**Show aus der Probe:** In der View **Probe** einen Namen eingeben und „Aufnahme starten“, während die Band den Song spielt (Tonquelle auf der Live-Seite: Eingang vom X32). Danach erkennt das Programm die Songteile und legt eine Sequenz mit einem Cue pro Teil an. „Probe ansehen“ spielt die Aufnahme ab, und das Licht wechselt genau an den erkannten Stellen. Live drückst du Go+, wenn der nächste Teil kommt.
 
 Ein Cue speichert nur, was du geändert hast. Alles andere bleibt aus dem vorigen Cue stehen, wie bei grandMA („Tracking“). Der Fader eines Executors blendet seine Sequenz über die Musik-Automatik.
 
@@ -56,7 +59,7 @@ Die großen Tasten oben gelten auf jeder Seite und haben immer Vorrang vor Autom
 
 1. Laptop per USB mit X32 und Enttec verbinden, LAN-Kabel zum X32 stecken.
 2. Programm starten und Profil laden.
-3. Reiter **DMX-Test**: Ausgabe einschalten, jedes Licht kurz einzeln an.
+3. **Setup → DMX-Test**: Ausgabe einschalten, jedes Licht kurz einzeln an.
 4. Override-Tasten einmal ausprobieren, dann geht es los.
 
 ## Wie das Programm aufgebaut ist
@@ -74,7 +77,9 @@ Automatik (Engine) → Executoren → Programmer → Profil-Grenzen → Override
 | `pruefung.py`, `sicherheit.py`, `sperrzone.py` | Jeder Wert wird geprüft |
 | `pantilt.py` | Rechnung für die Moving Heads |
 | `audio/`, `engine.py` | Musik analysieren, Regeln fürs Licht |
-| `pult.py` | Programmer, Effekte, Sequenzen und Executoren |
+| `pult.py` | Programmer, Auswahl, Effekte, Sequenzen und Executoren |
+| `befehle.py` | die Befehlszeile |
+| `probe.py`, `patchplan.py` | Probe und Patchplan |
 | `szenen.py`, `profile.py` | Werte auflösen, Profile |
 | `overrides.py` | die festen Tasten |
 | `vorschau.py` | Entwürfe erst zeigen, dann übernehmen |

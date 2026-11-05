@@ -38,6 +38,8 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Gobos und Drehung** nutzt die Engine ab `beat_reaktion` 0,5. Die Bilder in der 3D-Ansicht sind Beispiele, die echten Motive stehen nicht in den Gerätedaten.
 - **Sicherer Rückfall:** Keine frischen Messwerte seit 0,5 s, Fehler in der Analyse oder in den Regeln führen zum Grundlicht. Misslingt ein ganzes Bild, bleibt das letzte stehen.
 - **Beim Neustart** kommen letztes Profil und letzte Cueliste zurück. Die Liste wird nur geladen, nicht gestartet, und DMX bleibt aus.
+- **Aussehen wie ein Lichtpult** (Wunsch: wie grandMA3 und ChamSys), ohne deren Namen oder Logos zu übernehmen. Die Auswahl liegt im Programm, nicht im Browser: Befehlszeile, Bildschirm und später die KI sehen dieselbe Auswahl.
+- **Gerätenummern** in der Befehlszeile sind die Reihenfolge im Patch (1, 2, 3 …).
 - **Pult wie grandMA, aber kleiner:** Programmer, 8 Executoren mit Fader, Go+, Go− und Aus, Sequenzen mit Tracking. Die alten Cuelisten und Fader sind dadurch ersetzt.
 - **Reihenfolge der Ebenen:** Automatik, darüber die Executoren (der zuletzt gestartete oben), darüber der Programmer, zuletzt die Not-Tasten. Der Executor-Fader blendet seine Sequenz über das, was darunter liegt.
 - **Folgezeit im Cue (`folgen_s`):** leer heißt, der nächste Cue wartet auf Go+. Sonst geht es nach Überblenden plus Folgezeit von allein weiter. Nach dem letzten Cue fängt Go+ wieder beim ersten an.

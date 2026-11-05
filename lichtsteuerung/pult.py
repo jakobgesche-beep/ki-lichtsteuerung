@@ -299,6 +299,7 @@ class Pult:
         self.sequenzen = Sammlung(ordner)
         self.belegung_pfad = Path(belegung_pfad)
         self.programmer = Programmer()
+        self.auswahl = []              # gewählte Geräte, wie die gelbe Auswahl bei grandMA
         self.executoren = [Executor(n) for n in range(1, ANZAHL_EXECUTOREN + 1)]
         self.haupt = 0                 # dieser Executor hört auf die Leertaste
         self.zaehler = 0
@@ -328,6 +329,35 @@ class Pult:
         if executor.go(jetzt, schritt):
             self.zaehler += 1
             executor.reihenfolge = self.zaehler
+
+    def waehlen(self, geraete: list, art: str = "setzen") -> None:
+        """art: setzen (nur diese), dazu, umschalten (an/aus) oder weg."""
+        bekannt = [g["id"] for g in self.show.patch.geraete]
+        geraete = [g for g in geraete if g in bekannt]
+        if art == "setzen":
+            self.auswahl = list(dict.fromkeys(geraete))
+        elif art == "dazu":
+            self.auswahl += [g for g in geraete if g not in self.auswahl]
+        elif art == "weg":
+            self.auswahl = [g for g in self.auswahl if g not in geraete]
+        elif art == "umschalten":
+            if geraete and all(g in self.auswahl for g in geraete):
+                self.auswahl = [g for g in self.auswahl if g not in geraete]
+            else:
+                self.auswahl += [g for g in geraete if g not in self.auswahl]
+        else:
+            raise ValueError(f"Unbekannte Auswahl-Art {art!r}.")
+
+    def goto(self, nummer: int, index: int, jetzt: float) -> None:
+        """Direkt zu einem Cue springen, wie Goto am Pult."""
+        executor = self.executor(nummer)
+        if not executor.sequenz or not 0 <= index < len(executor.sequenz["cues"]):
+            raise ValueError("Diesen Cue gibt es nicht.")
+        executor.zeitcode = False
+        executor.gehe_zu(index, jetzt)
+        self.haupt = nummer - 1
+        self.zaehler += 1
+        executor.reihenfolge = self.zaehler
 
     def sequenz_speichern(self, sequenz: dict) -> None:
         fehler = pruefe_sequenz(sequenz, self.show.patch, self.show.positionen)
@@ -441,7 +471,7 @@ class Pult:
 
     def status(self) -> dict:
         return {
-            "haupt": self.haupt + 1, "blind": self.programmer.blind,
+            "haupt": self.haupt + 1, "blind": self.programmer.blind, "auswahl": self.auswahl,
             "programmer": {"werte": self.programmer.werte, "effekte": self.programmer.effekte},
             "executoren": [{
                 "nummer": e.nummer, "sequenz": e.sequenz["name"] if e.sequenz else None,

@@ -26,6 +26,7 @@ export class Buehne3D {
     this.goboBilder = [];
     this.masse = aufbau.buehne;
     this.baueBuehne(aufbau);
+    this.anzahl = aufbau.geraete.length;
     for (const geraet of aufbau.geraete) this.baueLicht(geraet);
     this.groesse = new ResizeObserver(() => this.passeGroesseAn());
     this.groesse.observe(huelle);
@@ -74,7 +75,7 @@ export class Buehne3D {
     zeichnen.fillStyle = "#e6e6e6";
     zeichnen.fillText(text, 128, 32);
     const schild = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(tafel), depthTest: false, transparent: true }));
-    schild.scale.set(2, 0.5, 1);
+    schild.scale.set(1.4, 0.35, 1);
     schild.position.copy(ort);
     this.szene.add(schild);
   }
@@ -84,7 +85,8 @@ export class Buehne3D {
     const ankerPunkt = punkt(ort.x, ort.y, ort.z);
     const groesse = geraet.beweglich ? 0.42 : 0.3;
     const koerper = this.kasten(groesse, groesse, groesse, geraet.beweglich ? 0xd0d3d6 : 0xa8acb0, ankerPunkt);
-    this.beschriften(geraet.name, punkt(ort.x, ort.y, ort.z + 0.55));
+    // Nur Moving Heads beschriften, sonst überlappen die Namen an der Traverse.
+    if (geraet.beweglich || this.anzahl <= 4) this.beschriften(geraet.name, punkt(ort.x, ort.y, ort.z + 0.5));
     if (ort.ort === "stativ") {
       this.kasten(0.07, ort.z, 0.07, 0x8a8e92, punkt(ort.x, ort.y, ort.z / 2));
     }

@@ -9,13 +9,23 @@
 <script type="importmap">{"imports": {"three": "./vendor/three.module.min.js"}}</script>
 </head>
 <body>
-<header>
-  <strong>Lichtsteuerung</strong>
+<header class="kopf">
+  <span class="marke">Lichtsteuerung</span>
   <nav id="reiter"></nav>
+  <div id="status" class="status"></div>
+  <div id="tasten" class="nottasten"></div>
 </header>
-<div id="tasten"></div>
+<div id="hinweise"></div>
+<nav id="unterreiter" class="unterreiter" hidden></nav>
 <main id="inhalt"></main>
-<footer>Gerätedaten: <a href="https://github.com/OpenLightingProject/open-fixture-library">Open Fixture Library</a> (MIT-Lizenz) · <a href="https://github.com/mcallegari/qlcplus">QLC+</a> (Apache-2.0) · 3D: three.js (MIT-Lizenz)</footer>
+<footer class="befehlsleiste">
+  <label for="befehl" class="eingabe-titel">Befehl</label>
+  <input id="befehl" autocomplete="off" spellcheck="false" placeholder="zum Beispiel: Gruppe Spots auf 80 Farbe Rot">
+  <span id="antwort" class="antwort"></span>
+  <button id="go-minus" class="go">Go−</button>
+  <button id="go-plus" class="go haupt">Go+</button>
+</footer>
+<div class="quellen">Gerätedaten: <a href="https://github.com/OpenLightingProject/open-fixture-library">Open Fixture Library</a> (MIT) · <a href="https://github.com/mcallegari/qlcplus">QLC+</a> (Apache-2.0) · 3D: three.js (MIT)</div>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>
