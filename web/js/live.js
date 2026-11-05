@@ -87,10 +87,15 @@ export function liveSeite(wurzel) {
     feld("engine").textContent = live.automatik ? live.engine : "Automatik aus";
     if (!feld("automatik").matches(":focus")) feld("automatik").checked = live.automatik;
     if (feld("profil").value !== live.profil && !feld("profil").matches(":focus")) feld("profil").value = live.profil;
-    feld("ton-hinweis").innerHTML = live.audio.werte && !live.reagiert
+    const hinweis = live.audio.werte && !live.reagiert
       ? `<div class="meldung gelb" style="margin:8px 0 0">Dieses Profil reagiert nicht auf Musik.</div>` : "";
-    feld("version").innerHTML = `Version ${t(live.version)} · <button data-update-suchen class="klein">Nach Update suchen</button>
-      ${t(live.update.zustand === "sucht" ? "sucht …" : live.update.zustand === "laedt" ? `lädt ${live.update.neu} …` : live.update.text)}`;
+    if (feld("ton-hinweis").innerHTML !== hinweis) feld("ton-hinweis").innerHTML = hinweis;
+    if (!feld("version").firstChild) {
+      feld("version").innerHTML = `Version ${t(live.version)} · <button data-update-suchen class="klein">Nach Update suchen</button> <span></span>`;
+    }
+    const updateText = live.update.zustand === "sucht" ? "sucht …" : live.update.zustand === "laedt" ? `lädt ${live.update.neu} …` : live.update.text;
+    const span = feld("version").querySelector("span");
+    if (span.textContent !== updateText) span.textContent = updateText;
     const ton = live.audio;
     const werte = ton.werte;
     if (ton.quelle === "Testsignal" && feld("quelle").value === "aus") feld("quelle").value = "test";
@@ -101,7 +106,11 @@ export function liveSeite(wurzel) {
       letzterBeat = ton.beats;
       feld("beat").animate([{ opacity: 1 }, { opacity: 0.15 }], 180);
     }
-    feld("meldungen").innerHTML = live.meldungen.map((m) => `<div class="meldung gelb">${t(m)}</div>`).join("");
+    const meldungen = live.meldungen.map((m) => `<div class="meldung gelb">${t(m)}</div>`).join("");
+    if (feld("meldungen").dataset.inhalt !== meldungen) {
+      feld("meldungen").innerHTML = meldungen;
+      feld("meldungen").dataset.inhalt = meldungen;
+    }
   }
 
   wurzel.addEventListener("click", (ereignis) => {

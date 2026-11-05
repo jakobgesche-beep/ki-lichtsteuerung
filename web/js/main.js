@@ -69,11 +69,12 @@ const status = document.getElementById("status");
 abonnieren((live) => {
   if (!live) return (status.innerHTML = `<span class="chip warn">Keine Verbindung</span>`);
   const bpm = live.audio.werte ? Math.round(live.audio.werte.tempo_bpm) + " BPM" : "kein Ton";
-  status.innerHTML = `
+  const inhalt_ = `
     <span class="chip ${live.dmx_ein ? "an" : ""}">DMX ${live.dmx_ein ? "an" : "aus"}</span>
     <span class="chip">${bpm}</span>
     <span class="chip">${live.automatik ? "Automatik" : "Automatik aus"}</span>
     <span class="chip ${live.pult.blind ? "warn" : ""}">${live.pult.blind ? "Blind" : "Programmer live"}</span>`;
+  if (status.dataset.inhalt !== inhalt_) { status.innerHTML = inhalt_; status.dataset.inhalt = inhalt_; }
 });
 
 zeige(Math.max(0, views.findIndex(([n]) => n === erinnern("view"))));

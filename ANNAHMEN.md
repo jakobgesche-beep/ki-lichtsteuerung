@@ -34,8 +34,10 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Passt das Grundlicht zu keinem gepatchten Gerät**, leuchten alle Geräte warmweiß mit 50 %. Die Bühne bleibt nie dunkel, weil Gruppen nicht passen.
 - **Geräte ohne Gruppe** zählen nach ihren Fähigkeiten: Pan oder Tilt als Spots, Nebel als Dunst, alles andere als Farb-PARs.
 - **Moving Heads hängen an der Traverse** (Vorgabe des Nutzers, abweichend von der Projektbeschreibung). Mit 6 PARs, 2 MH-X25 und Hero Spot sind das 9 Geräte, die Traverse trägt 8: Das Programm warnt dann.
-- **Bewegung läuft bei jeder Musik**, die Energie bestimmt ihre Größe und ihr Tempo. Das weicht von „hohe Energie → Bewegung“ ab, weil das Licht sonst zu lange stillsteht.
-- **Gobos und Drehung** nutzt die Engine ab `beat_reaktion` 0,5. Die Bilder in der 3D-Ansicht sind Beispiele, die echten Motive stehen nicht in den Gerätedaten.
+- **Die Automatik arbeitet mit Looks** (Wunsch des Nutzers: ruhiger, „auf den Punkt“). Ein Look (Farbe, Gobo, Stand oder Bewegung, Art des Pulses) bleibt mindestens 16 Beats stehen und wechselt am Ende einer Phrase, wenn die Musik stärker oder ruhiger wird, sonst nach 32 Beats. Ein Drop (von ruhig/mittel direkt auf Höhepunkt) wechselt sofort, mit einem Akzent „doppelt hell“.
+- **Bewegung nur in starken Looks**, langsam (16 Beats pro Runde) und mit höchstens 180° pro Sekunde. In den anderen Looks steht das Licht und pulsiert im Beat.
+- **Farben** bleiben pro Look stehen, oder zwei Farben tauschen alle 4 Beats. Gemessen mit einem Test-Song: 12 statt 55 Farbwechsel pro Minute, Bewegung 23 % statt 100 % der Zeit.
+- **Gobos und Drehung** nutzt die Engine ab `beat_reaktion` 0,3 (Drehung ab 0,5), ein Gobo pro Look. Die Bilder in der 3D-Ansicht sind Beispiele, die echten Motive stehen nicht in den Gerätedaten.
 - **Sicherer Rückfall:** Keine frischen Messwerte seit 0,5 s, Fehler in der Analyse oder in den Regeln führen zum Grundlicht. Misslingt ein ganzes Bild, bleibt das letzte stehen.
 - **Beim Neustart** kommen letztes Profil und letzte Cueliste zurück. Die Liste wird nur geladen, nicht gestartet, und DMX bleibt aus.
 - **Aussehen wie ein Lichtpult** (Wunsch: wie grandMA3 und ChamSys), ohne deren Namen oder Logos zu übernehmen. Die Auswahl liegt im Programm, nicht im Browser: Befehlszeile, Bildschirm und später die KI sehen dieselbe Auswahl.

@@ -149,11 +149,11 @@ def einordnen(teile: list) -> None:
 # --- Aus der Analyse eine Show bauen --------------------------------------------
 
 LOOKS = {
-    # Bewegung, Größe, Beats pro Runde, Helligkeit, Gobo-Drehung, Licht-Effekt
-    "ruhig":      ("nicken", 0.3, 16, 0.55, 0.0, "dimmer_welle"),
-    "mittel":     ("kreis", 0.45, 8, 0.8, 0.3, None),
-    "stark":      ("acht", 0.7, 4, 1.0, 0.6, "dimmer_puls"),
-    "hoehepunkt": ("publikum", 0.9, 2, 1.0, 0.9, "dimmer_puls"),
+    # Bewegung (None = steht), Größe, Beats pro Runde, Helligkeit, Gobo-Drehung, Licht-Effekt
+    "ruhig":      (None, 0.0, 16, 0.6, 0.0, "dimmer_welle"),
+    "mittel":     (None, 0.0, 16, 0.85, 0.0, "dimmer_puls"),
+    "stark":      ("schwenk", 0.5, 16, 1.0, 0.25, "dimmer_puls"),
+    "hoehepunkt": ("kreis", 0.7, 8, 1.0, 0.4, "dimmer_puls"),
 }
 ZEITEN_S = {"ruhig": 3.0, "mittel": 2.0, "stark": 1.0, "hoehepunkt": 0.0}
 
@@ -170,7 +170,7 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von) -> dict:
         look = looks_je_buchstabe[buchstabe]
         bewegung, groesse, beats, hell, drehung, licht = LOOKS[teil["klasse"]]
         if teil["name"] == "Schluss":
-            bewegung, licht = "nicken", None
+            bewegung, licht = None, "dimmer_welle"
         farbe = palette[look % len(palette)]
         werte, effekte = [], []
         if "Spots" in gruppen:
@@ -182,20 +182,25 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von) -> dict:
             else:
                 wert["gobo"] = "Offen"
             werte.append(wert)
-            effekte.append({"art": bewegung, "ziel": {"gruppe": "Spots"}, "groesse": groesse,
-                            "tempo": "musik", "beats": beats, "verteilung": 0.5})
+            if bewegung:
+                effekte.append({"art": bewegung, "ziel": {"gruppe": "Spots"}, "groesse": groesse,
+                                "tempo": "musik", "beats": beats, "verteilung": 0.5})
+            if teil["klasse"] == "hoehepunkt":
+                # Im Höhepunkt wechseln zwei Farben hin und her, nicht die ganze Palette.
+                effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Spots"}, "tempo": "musik",
+                                "beats": 8, "verteilung": 0.5, "farben": [farbe, palette[(look + 1) % len(palette)]]})
         if "Farb-PARs" in gruppen:
             werte.append({"gruppe": "Farb-PARs", "helligkeit": hell,
                           "farbe": palette[(look + 1) % len(palette)]})
-            if teil["klasse"] in ("stark", "hoehepunkt"):
+            if teil["klasse"] == "hoehepunkt":
                 effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Farb-PARs"}, "tempo": "musik",
-                                "beats": beats * 2, "verteilung": 0.5,
-                                "farben": [palette[(look + i) % len(palette)] for i in range(1, 4)]})
-        if licht:
-            ziel = "Farb-PARs" if "Farb-PARs" in gruppen and licht == "dimmer_puls" else "Spots"
-            if ziel in gruppen:
+                                "beats": 8, "verteilung": 0.5,
+                                "farben": [palette[(look + 1) % len(palette)], farbe]})
+        # Der Puls im Beat: auf allen Lichtern, die Spots versetzt, damit sie sich abwechseln.
+        for ziel in ("Spots", "Farb-PARs"):
+            if licht and ziel in gruppen:
                 effekte.append({"art": licht, "ziel": {"gruppe": ziel}, "tempo": "musik",
-                                "beats": 1 if licht == "dimmer_puls" else 16, "verteilung": 0.5})
+                                "beats": 2 if licht == "dimmer_puls" else 16, "verteilung": 0.5})
         dauer = teil["ende"] - teil["start"]
         takte = round(dauer * analyse["tempo_bpm"] / 60 / 4)
         cues.append({"name": f"{teil['name']} {buchstabe} ({takte} Takte)",

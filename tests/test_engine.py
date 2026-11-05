@@ -3,7 +3,7 @@ import pytest
 
 from lichtsteuerung.audio.analyse import Messwerte
 from lichtsteuerung.buehne import Buehne
-from lichtsteuerung.engine import Engine
+from lichtsteuerung.engine import LOOKS, Engine
 from lichtsteuerung.farben import farbe
 from lichtsteuerung.patch import Patch
 from lichtsteuerung.sicherheit import Grenzen
@@ -48,40 +48,11 @@ def test_ausfall_mitten_in_der_musik_geht_sofort_aufs_grundlicht(engine):
     assert zustand["kopf"].strobo_hz == 0 if "kopf" in zustand else True
 
 
-def test_beat_gibt_farbschritt(engine):
-    _, zeit = einschwingen(engine, PARTY, Messwerte(**MUSIK))
-    vorher = engine.bewerte(Messwerte(**MUSIK), PARTY, zeit)["par-1"].farbe
-    nachher = engine.bewerte(Messwerte(beat=True, **MUSIK), PARTY, zeit + 1)["par-1"].farbe
-    assert vorher != nachher and nachher in [farbe(f) for f in PARTY["palette"]]
-
-
-def test_farbschritte_nie_schneller_als_die_grenze(engine):
-    _, zeit = einschwingen(engine, PARTY, Messwerte(**MUSIK))
-    start = engine.farb_schritt
-    for i in range(40):       # 20 Beats pro Sekunde, 2 Sekunden lang
-        engine.bewerte(Messwerte(beat=True, **MUSIK), PARTY, zeit + i * 0.05)
-    assert engine.farb_schritt - start <= 7
-
-
-def test_bass_steuert_helligkeit(engine):
-    _, zeit = einschwingen(engine, PARTY, Messwerte(**MUSIK))
-    tief = engine.bewerte(Messwerte(**{**MUSIK, "bass": 0.0}), PARTY, zeit)["par-1"].helligkeit
-    hoch = engine.bewerte(Messwerte(**{**MUSIK, "bass": 1.0}), PARTY, zeit + 0.01)["par-1"].helligkeit
-    assert hoch > tief * 2
-
-
 def test_max_helligkeit_gilt_auch_fuer_das_grundlicht(engine):
     dunkel = {**PARTY, "max_helligkeit": 0.2}
     assert engine.bewerte(None, dunkel, 0.0)["par-1"].helligkeit == pytest.approx(0.2)
     zustand, _ = einschwingen(engine, dunkel, Messwerte(**{**MUSIK, "bass": 1.0}))
     assert max(e.helligkeit for e in zustand.values()) <= 0.2 + 1e-9
-
-
-def test_hohe_energie_bewegt_die_spots(engine):
-    werte = Messwerte(**{**MUSIK, "energie": 0.9})
-    a, zeit = einschwingen(engine, PARTY, werte)
-    b, _ = einschwingen(engine, PARTY, werte, von=zeit, dauer=0.5)
-    assert a["kopf"].pan is not None and a["kopf"].pan != b["kopf"].pan
 
 
 def test_viel_energie_bewegt_groesser_als_wenig(engine):
@@ -166,16 +137,10 @@ def test_geraet_ohne_gruppe_zaehlt_nach_seinen_faehigkeiten(pfade, katalog):
 
 def test_spots_wechseln_sich_auf_dem_beat_ab(nur_spots):
     _, zeit = einschwingen(nur_spots, PARTY, Messwerte(**{**MUSIK, "energie": 0.1}))
+    erzwinge(nur_spots, "Stehen")
     a = nur_spots.bewerte(Messwerte(beat=True, **{**MUSIK, "energie": 0.1}), PARTY, zeit)
     b = nur_spots.bewerte(Messwerte(beat=True, **{**MUSIK, "energie": 0.1}), PARTY, zeit + 0.5)
     assert (a["front-1"].helligkeit > a["front-2"].helligkeit) != (b["front-1"].helligkeit > b["front-2"].helligkeit)
-
-
-def test_farbe_blendet_weich_ueber(engine):
-    _, zeit = einschwingen(engine, PARTY, Messwerte(**MUSIK))
-    vorher = engine.bewerte(Messwerte(**MUSIK), PARTY, zeit)["par-1"].farbe
-    gleich_danach = engine.bewerte(Messwerte(beat=True, **MUSIK), PARTY, zeit + 0.025)["par-1"].farbe
-    assert gleich_danach != vorher and gleich_danach not in [farbe(f) for f in PARTY["palette"]]
 
 
 def test_bewegung_springt_nicht(nur_spots):
@@ -187,7 +152,7 @@ def test_bewegung_springt_nicht(nur_spots):
         if letzte is not None and i > 80:
             groesster = max(groesster, abs(pan - letzte))
         letzte = pan
-    assert groesster <= 6.01    # 240 Grad pro Sekunde bei 40 Bildern
+    assert groesster <= 4.51    # 180 Grad pro Sekunde bei 40 Bildern
 
 
 def test_muster_bleiben_auf_der_buehne(nur_spots):
@@ -201,10 +166,119 @@ def test_muster_bleiben_auf_der_buehne(nur_spots):
                 assert abs(x) <= masse["breite_m"] / 2 and 0 <= y <= masse["tiefe_m"]
 
 
-def test_gobos_wechseln_alle_8_beats_und_drehen(pfade, katalog):
-    from lichtsteuerung.importe.gemeinsam import speichere_import
-    from lichtsteuerung.importe import qxf
+def test_profil_mit_wenig_reaktion_bleibt_ruhig(nur_spots):
+    ruhig = {**PARTY, "beat_reaktion": 0.15, "bewegung": "langsam"}
+    z, _ = einschwingen(nur_spots, ruhig, Messwerte(beat=True, **MUSIK))
+    assert z["front-1"].gobo is None
+
+
+
+# --- Looks: Ruhe statt Dauerwechsel ------------------------------------------------
+
+def look(name):
+    return next(l for l in LOOKS if l.name == name)
+
+
+def erzwinge(engine, name):
+    """Setzt einen Look von Hand, als hätte die Engine ihn gerade gewählt."""
+    engine.look, engine.look_seit = look(name), engine.beats
+    engine.look_nummer = max(engine.look_nummer, 1)
+
+
+def beats_spielen(engine, profil, anzahl, energie, von=0.0, bpm=120, **werte):
+    """Spielt Beats im Takt. Gibt (Zeit, Liste der Looks pro Beat) zurück."""
+    abstand = 60 / bpm
+    looks = []
+    zeit = von
+    for _ in range(anzahl):
+        for schritt in range(int(abstand * 40)):
+            m = Messwerte(beat=schritt == 0, tempo_bpm=bpm, energie=energie, leise=False, bass=werte.get("bass", 0.5))
+            engine.bewerte(m, profil, zeit)
+            zeit += 1 / 40
+        looks.append(engine.look.name)
+    return zeit, looks
+
+
+def test_startet_gleich_mit_passendem_look(engine):
+    beats_spielen(engine, PARTY, 2, 0.9)
+    assert engine.look.stufe == 3
+
+
+def test_look_bleibt_mindestens_eine_phrase_stehen(engine):
+    zeit, looks = beats_spielen(engine, PARTY, 4, 0.5)
+    erster = engine.look
+    # Energie springt mitten in der Phrase hin und her: Der Look bleibt.
+    for energie in (0.7, 0.45, 0.7, 0.45):
+        zeit, neu = beats_spielen(engine, PARTY, 2, energie, von=zeit)
+        looks += neu
+    assert set(looks[2:12]) == {erster.name}
+
+
+def test_mehr_energie_wechselt_am_ende_der_phrase(engine):
+    zeit, _ = beats_spielen(engine, PARTY, 4, 0.5)
+    alt = engine.look
+    zeit, looks = beats_spielen(engine, PARTY, 30, 0.7, von=zeit)
+    assert engine.look.stufe == 2 and engine.look != alt
+    wechsel = next(i for i, name in enumerate(looks) if name != alt.name) + 4
+    assert wechsel >= 16                     # nicht vor dem Ende der Phrase
+
+
+def test_drop_wechselt_sofort_mit_akzent(engine):
+    start, _ = beats_spielen(engine, PARTY, 20, 0.3)
+    zeit, looks = beats_spielen(engine, PARTY, 6, 0.95, von=start)
+    assert engine.look.stufe == 3 and looks.index(engine.look.name) <= 1     # sofort, nicht erst nach der Phrase
+    assert start <= engine.letzter_akzent < start + 1.5                       # mit einem hellen Akzent
+
+
+def test_farben_wechseln_hoechstens_alle_4_beats(engine):
+    zeit, _ = beats_spielen(engine, PARTY, 1, 0.65)
+    erzwinge(engine, "Stehen mit Akzent")
+    farben = []
+    for beat in range(16):
+        zeit, _ = beats_spielen(engine, PARTY, 1, 0.65, von=zeit)
+        farben.append(engine.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False), PARTY, zeit)["kopf"].farbe)
+    wechsel = sum(1 for a, b in zip(farben, farben[1:]) if a != b)
+    assert 2 <= wechsel <= 4
+
+
+def test_stehender_look_bewegt_sich_nicht(engine):
+    zeit, _ = beats_spielen(engine, PARTY, 2, 0.5)
+    erzwinge(engine, "Stehen")
+    zeit, _ = beats_spielen(engine, PARTY, 4, 0.5, von=zeit)
+    a = engine.bewerte(Messwerte(tempo_bpm=120, energie=0.5, leise=False), PARTY, zeit)["kopf"]
+    _, _ = beats_spielen(engine, PARTY, 4, 0.5, von=zeit + 0.025)
+    b = engine.bewerte(Messwerte(tempo_bpm=120, energie=0.5, leise=False), PARTY, zeit + 2.1)["kopf"]
+    assert a.pan == pytest.approx(b.pan, abs=0.01) and a.tilt == pytest.approx(b.tilt, abs=0.01)
+
+
+def test_bewegter_look_bewegt_sich_weich(engine):
+    einschwingen(engine, PARTY, Messwerte(**{**MUSIK, "energie": 0.9}))
+    erzwinge(engine, "Kreis")
+    pans = []
+    for i in range(160):
+        pans.append(engine.bewerte(Messwerte(beat=i % 20 == 0, tempo_bpm=120, energie=0.9, leise=False), PARTY, 3 + i / 40)["kopf"].pan)
+    assert max(pans) - min(pans) > 10
+    assert max(abs(a - b) for a, b in zip(pans[20:], pans[21:])) <= 4.6
+
+
+def test_puls_auf_dem_beat_und_akzent_auf_der_eins(engine):
+    zeit, _ = beats_spielen(engine, PARTY, 4, 0.65, bass=0.0)
+    erzwinge(engine, "Stehen mit Akzent")
+    engine.letzter_akzent = -99
+    zeit, _ = beats_spielen(engine, PARTY, 3 - engine.beats % 4 if engine.beats % 4 != 3 else 4, 0.65, von=zeit, bass=0.0)
+    erzwinge(engine, "Stehen mit Akzent")
+    engine.letzter_akzent = -99
+    zwischen = engine.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False, bass=0.0), PARTY, zeit + 0.2)["kopf"].helligkeit
+    engine.bewerte(Messwerte(beat=True, tempo_bpm=120, energie=0.65, leise=False, bass=0.0), PARTY, zeit + 0.25)
+    auf_eins = engine.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False, bass=0.0), PARTY, zeit + 0.3)
+    assert engine.beats % 4 == 0
+    assert auf_eins["kopf"].helligkeit > 0.9 > zwischen
+
+
+def test_gobo_bleibt_im_look_und_wechselt_mit_dem_look(pfade, katalog):
     from pathlib import Path
+    from lichtsteuerung.importe import qxf
+    from lichtsteuerung.importe.gemeinsam import speichere_import
     speichere_import(qxf.wandle((Path(__file__).parent / "beispiele/Varytec-Hero-Spot-60.qxf").read_bytes()), pfade.katalog)
     katalog.neu_laden()
     patch = Patch(pfade.fixtures, katalog)
@@ -212,17 +286,18 @@ def test_gobos_wechseln_alle_8_beats_und_drehen(pfade, katalog):
     buehne = Buehne(pfade.stage)
     buehne.setze_geraet("spot", {"ort": "traverse", "x": 0, "y": 2, "z": 3.9, "montage": "haengend", "drehung_grad": 180})
     e = Engine(patch, buehne, {}, Grenzen(3, 5, 30))
-    z, _ = einschwingen(e, PARTY, Messwerte(**MUSIK))
-    assert z["spot"].gobo == "Gobo 1" and z["spot"].gobo_drehung
-    e.beats = 4
-    z = e.bewerte(Messwerte(**MUSIK), PARTY, 4.0)
-    assert z["spot"].gobo == "Gobo 2"
-    from lichtsteuerung.render import Renderer
-    bild = Renderer(patch).bild(z)
-    assert 27 <= bild[8] <= 43 and bild[9] >= 10     # Gobo 2, Drehung läuft
+    zeit, _ = beats_spielen(e, PARTY, 2, 0.65)
+    erzwinge(e, "Kreuz")
+    gobos = set()
+    for _ in range(8):
+        zeit, _ = beats_spielen(e, PARTY, 1, 0.65, von=zeit)
+        gobos.add(e.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False), PARTY, zeit)["spot"].gobo)
+    assert len(gobos) == 1 and gobos != {"Offen"}
+    e.look_nummer += 1
+    z = e.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False), PARTY, zeit + 0.1)
+    assert z["spot"].gobo not in gobos and z["spot"].gobo_drehung
 
 
-def test_profil_mit_wenig_reaktion_bleibt_ruhig(nur_spots):
-    ruhig = {**PARTY, "beat_reaktion": 0.15, "bewegung": "langsam"}
-    z, _ = einschwingen(nur_spots, ruhig, Messwerte(beat=True, **MUSIK))
-    assert z["front-1"].gobo is None
+def test_ohne_bewegung_im_profil_nur_stehende_looks(engine):
+    beats_spielen(engine, {**PARTY, "bewegung": "aus"}, 40, 0.95)
+    assert engine.look.bewegung is None

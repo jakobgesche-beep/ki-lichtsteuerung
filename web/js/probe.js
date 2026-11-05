@@ -4,6 +4,7 @@ import { Buehne3D } from "./buehne3d.js";
 import { abonnieren } from "./verbindung.js";
 import { executorLeiste } from "./executoren.js";
 
+const setzeText = (element, text) => { if (element.textContent !== text) element.textContent = text; };
 const minuten = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
 
 export function probeSeite(wurzel) {
@@ -93,14 +94,17 @@ export function probeSeite(wurzel) {
     buehne?.setzeWerte(live.geraete);
     leiste.zeigen(live.pult);
     nimmtAuf = Boolean(live.aufnahme.name);
-    if (!feld("aufnahme").disabled) {
-      feld("aufnahme").textContent = nimmtAuf ? "Aufnahme beenden und auswerten" : "Aufnahme starten";
+    // Nur ändern, wenn sich etwas ändert: Wird ein Knopf beim Drücken neu beschriftet,
+    // verwirft der Browser den Klick. Das war der Grund, warum "Aufnahme starten" nicht ging.
+    const text = nimmtAuf ? "Aufnahme beenden und auswerten" : "Aufnahme starten";
+    if (!feld("aufnahme").disabled && feld("aufnahme").textContent !== text) {
+      feld("aufnahme").textContent = text;
       feld("aufnahme").classList.toggle("aufnahme-an", nimmtAuf);
     }
-    feld("zeit").textContent = nimmtAuf ? `● ${t(live.aufnahme.name)} ${minuten(live.aufnahme.sekunden)}` : "";
-    feld("quelle").textContent = live.audio.quelle === "aus"
-      ? "Keine Tonquelle: auf der Live-Seite den Eingang (zum Beispiel X32) wählen."
-      : `Tonquelle: ${live.audio.quelle}`;
+    setzeText(feld("zeit"), nimmtAuf ? `● ${live.aufnahme.name} ${minuten(live.aufnahme.sekunden)}` : "");
+    setzeText(feld("quelle"), live.audio.quelle === "aus"
+      ? "Keine Tonquelle: auf der Live-Seite den Eingang (zum Beispiel X32 oder Mikrofon) wählen."
+      : `Tonquelle: ${live.audio.quelle}`);
   });
 
   songsZeigen();
