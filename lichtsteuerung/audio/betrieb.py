@@ -12,6 +12,7 @@ from typing import Optional
 
 from .analyse import Analyse, Messwerte
 
+MAX_AUFNAHME_BLOECKE = 20 * 60 * 44100 // 512   # höchstens 20 Minuten
 MAX_ALTER_S = 0.5     # Ältere Messwerte gelten als ausgefallen
 
 
@@ -24,6 +25,7 @@ class AudioBetrieb:
         self.zeitpunkt = 0.0
         self.beat_zaehler = 0
         self.abgeholt = 0
+        self.aufnahme = None      # Liste von Blöcken, solange in der Probe aufgenommen wird
         self.beat_erkennung = None
         self._thread: Optional[threading.Thread] = None
         self._stopp = threading.Event()
@@ -52,12 +54,31 @@ class AudioBetrieb:
             analyse = Analyse()
             self.beat_erkennung = analyse.beat.name
             while not stopp.is_set():
-                werte = analyse.verarbeite(quelle.lies())
+                block = quelle.lies()
+                if self.aufnahme is not None and len(self.aufnahme) < MAX_AUFNAHME_BLOECKE:
+                    self.aufnahme.append(block.copy())
+                werte = analyse.verarbeite(block)
                 if werte.beat:
                     self.beat_zaehler += 1
                 self.messwerte, self.zeitpunkt = werte, time.monotonic()
         except Exception as fehler:
             self.fehler = str(fehler)
+
+    def aufnahme_starten(self) -> None:
+        if self.quelle is None:
+            raise ValueError("Zuerst auf der Live-Seite eine Tonquelle wählen, zum Beispiel den Eingang vom X32.")
+        self.aufnahme = []
+
+    def aufnahme_beenden(self):
+        """Gibt den aufgenommenen Ton als eine lange Zahlenreihe zurück."""
+        import numpy as np
+        bloecke, self.aufnahme = self.aufnahme or [], None
+        return np.concatenate(bloecke) if bloecke else np.zeros(0, dtype="float32")
+
+    def position_s(self) -> Optional[float]:
+        """Wo eine Audiodatei gerade steht. Für das Nachspielen der Probe."""
+        stelle = getattr(self.quelle, "stelle", None)
+        return None if stelle is None else stelle / 44100
 
     def abholen(self, jetzt: Optional[float] = None) -> Optional[Messwerte]:
         """Für die Show: Die Analyse läuft schneller als das Licht.

@@ -347,3 +347,17 @@ def test_ablauf_ueber_den_server(show):
         assert client.post("/api/executor/9/go").status_code == 400
         assert client.post("/api/sequenzen/Weihnachten/cue/1/laden").json()["programmer"]["effekte"]
         assert client.delete("/api/sequenzen/Weihnachten").json()["sequenzen"] == []
+
+
+def test_wechsel_vom_publikum_auf_die_buehne_schwenkt_nie_durch_die_koepfe(show):
+    publikum = {"art": "publikum", "ziel": {"gruppe": "Spots"}, "groesse": 1.0, "tempo": 120, "beats": 8}
+    sequenz_anlegen(show, [cue("Oben", [{"gruppe": "Spots", "helligkeit": 1}], [publikum], zeit=0),
+                           cue("Bühne", [{"gruppe": "Spots", "position": "Mitte"}], [], zeit=3.0)])
+    show.pult.go(1, 0.0)
+    for i in range(40):
+        show.baue_bild(i / 40)
+    show.pult.go(1, 1.0)
+    for i in range(200):
+        show.baue_bild(1.0 + i / 40)
+        assert not any("Sperrzone" in m for m in show.meldungen)
+    assert kopf(show, show.baue_bild(7.0))["hell"] == 1

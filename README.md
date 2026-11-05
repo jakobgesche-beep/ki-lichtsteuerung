@@ -32,9 +32,10 @@ Beim ersten Mal dauert es ein paar Minuten, danach geht der Browser von selbst a
 | Reiter | Wofür |
 |---|---|
 | Live | 3D-Bühne, Profil, Ton, Executoren, Musik-Automatik an oder aus |
+| Probe | Song aufnehmen oder als Datei laden: Das Programm erkennt Tempo und Songteile und baut die Lichtshow |
 | Pult | Geräte wählen, Farbe, Position, Gobo und Effekte einstellen, als Cue in eine Sequenz speichern |
 | Profile | Profil für die Veranstaltung wählen und anpassen |
-| Patch | Geräte aus dem Katalog einbinden, Adressen, Ort, Gerät tauschen |
+| Patch | Geräte aus dem Katalog einbinden, Adressen, Ort, Gerät tauschen, Patchplan zum Ausdrucken |
 | Katalog | Über 600 Gerätetypen durchsuchen, eigene anlegen, .qxf und .gdtf importieren |
 | DMX-Test | Jedes Gerät einzeln einschalten, einzelne Kanäle setzen, DMX-Ausgabe ein/aus |
 
@@ -44,6 +45,8 @@ Beim ersten Mal dauert es ein paar Minuten, danach geht der Browser von selbst a
 2. Farbe, Position (auf den Grundriss tippen), Gobo und Effekt wählen. Mit „Blind“ siehst du es nur in der Vorschau.
 3. Cue-Namen eingeben, „Als neuen Cue speichern“. Danach den nächsten Cue einstellen und speichern.
 4. „Programmer leeren“, die Sequenz unten auf einen Executor legen und mit **Go+** (Leertaste oder →) und **Go−** (←) abspielen.
+
+**Show aus der Probe:** Im Reiter **Probe** einen Namen eingeben und „Aufnahme starten“, während die Band den Song spielt (Tonquelle auf der Live-Seite: Eingang vom X32). Danach erkennt das Programm die Songteile und legt eine Sequenz mit einem Cue pro Teil an. „Probe ansehen“ spielt die Aufnahme ab, und das Licht wechselt genau an den erkannten Stellen. Live drückst du Go+, wenn der nächste Teil kommt.
 
 Ein Cue speichert nur, was du geändert hast. Alles andere bleibt aus dem vorigen Cue stehen, wie bei grandMA („Tracking“). Der Fader eines Executors blendet seine Sequenz über die Musik-Automatik.
 

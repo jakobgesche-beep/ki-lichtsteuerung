@@ -248,6 +248,7 @@ class Executor:
         self.zuletzt = {}             # das zuletzt ausgegebene Bild
         self.aus_seit: Optional[float] = None
         self.reihenfolge = 0          # wer zuletzt Go hatte, liegt oben
+        self.zeitcode = False         # beim Nachspielen der Probe: Cues folgen der Aufnahme
 
     @property
     def aktiv(self) -> bool:
@@ -255,6 +256,7 @@ class Executor:
 
     def belegen(self, sequenz: Optional[dict]) -> None:
         self.sequenz, self.index, self.vorher, self.zuletzt, self.aus_seit = sequenz, -1, {}, {}, None
+        self.zeitcode = False
 
     def go(self, jetzt: float, schritt: int = 1) -> bool:
         if not self.sequenz or not self.sequenz["cues"]:
@@ -267,6 +269,10 @@ class Executor:
         self.vorher = dict(self.zuletzt)
         self.index, self.start, self.aus_seit = neu, jetzt, None
         return True
+
+    def gehe_zu(self, index: int, jetzt: float) -> None:
+        self.vorher = dict(self.zuletzt)
+        self.index, self.start, self.aus_seit = index, jetzt, None
 
     def aus(self, jetzt: float) -> None:
         if self.index >= 0:
@@ -371,7 +377,20 @@ class Pult:
     def _welt(self) -> tuple:
         return self.show.patch, self.show.buehne, self.show.positionen
 
+    def _zeitcode(self, executor: Executor, jetzt: float) -> None:
+        """Probe ansehen: Der Cue richtet sich nach der Stelle in der Aufnahme."""
+        stelle = self.show.audio.position_s()
+        zeiten = executor.sequenz.get("zeitcode") if executor.sequenz else None
+        if stelle is None or not zeiten:
+            return
+        ziel = max(i for i, z in enumerate(zeiten) if z <= stelle + 0.05)
+        ziel = min(ziel, len(executor.sequenz["cues"]) - 1)     # falls im Pult Cues gelöscht wurden
+        if ziel != executor.index:
+            executor.gehe_zu(ziel, jetzt)
+
     def _executor(self, executor: Executor, zustand: dict, jetzt: float) -> dict:
+        if executor.zeitcode:
+            self._zeitcode(executor, jetzt)
         cue = executor.cue()
         if cue is not None:
             ziel, effekte, meldungen = executor.tracking(*self._welt())
@@ -396,9 +415,14 @@ class Pult:
             neu = ziel.get(geraet_id)
             if neu is None:
                 neu = alt.kopie(helligkeit=0.0)
-            bild[geraet_id] = neu if alt is None else mischen(alt, neu, anteil)
             if alt is None:
                 bild[geraet_id] = neu.kopie(helligkeit=neu.helligkeit * anteil)
+            elif self._weg_gesperrt(geraet_id, alt, neu):
+                # Kein weicher Schwenk durchs Publikum: direkt hinfahren und dort aufblenden.
+                bild[geraet_id] = mischen(alt, neu, anteil).kopie(
+                    pan=neu.pan, tilt=neu.tilt, helligkeit=neu.helligkeit * anteil)
+            else:
+                bild[geraet_id] = mischen(alt, neu, anteil)
         executor.zuletzt = bild
         ergebnis = dict(zustand)
         for geraet_id, e in bild.items():
@@ -408,6 +432,12 @@ class Pult:
                                                  gobo_drehung=e.gobo_drehung if executor.fader > 0.5 else unten.gobo_drehung,
                                                  strobo_hz=e.strobo_hz if executor.fader >= 1 else 0.0)
         return ergebnis
+
+    def _weg_gesperrt(self, geraet_id: str, alt: Eigenschaften, neu: Eigenschaften) -> bool:
+        if None in (alt.pan, alt.tilt, neu.pan, neu.tilt) or (alt.pan, alt.tilt) == (neu.pan, neu.tilt):
+            return False
+        pruefer = getattr(self.show, "pruefer", None)
+        return pruefer is not None and not pruefer.weg_frei(geraet_id, (alt.pan, alt.tilt), (neu.pan, neu.tilt))
 
     def status(self) -> dict:
         return {

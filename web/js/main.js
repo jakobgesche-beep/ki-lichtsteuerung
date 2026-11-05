@@ -2,6 +2,7 @@
 import { liveSeite } from "./live.js";
 import { profileSeite } from "./profile.js";
 import { pultSeite } from "./pult.js";
+import { probeSeite } from "./probe.js";
 import { patchSeite } from "./patch.js";
 import { tastenLeiste } from "./tasten.js";
 import { katalogSeite } from "./katalog.js";
@@ -10,6 +11,7 @@ import { dmxTestSeite } from "./dmxtest.js";
 const seiten = [
   ["Live", liveSeite],
   ["Pult", pultSeite],
+  ["Probe", probeSeite],
   ["Profile", profileSeite],
   ["Patch", patchSeite],
   ["Katalog", katalogSeite],
@@ -40,3 +42,6 @@ seiten.forEach(([name], nummer) => {
 let start = 0;
 try { start = Math.max(0, seiten.findIndex(([n]) => n === localStorage.getItem("reiter"))); } catch {}
 zeige(start);
+
+// Fehler vom Programm zeigt api.js schon als Meldung an. Hier nicht noch einmal melden.
+window.addEventListener("unhandledrejection", (ereignis) => ereignis.preventDefault());

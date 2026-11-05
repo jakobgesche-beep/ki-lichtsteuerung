@@ -28,7 +28,9 @@ export function patchSeite(wurzel) {
       <div>
         <div id="meldungen"></div>
         <div class="kasten tabelle-huelle">
-          <h2>Gepatchte Geräte</h2>
+          <h2 class="zeile" style="justify-content:space-between">Gepatchte Geräte
+            <span><button id="plan-zeigen">Patchplan</button> <button id="plan-drucken">Drucken</button></span></h2>
+          <div id="plan" hidden></div>
           <table id="tabelle"></table>
         </div>
       </div>
@@ -101,6 +103,18 @@ export function patchSeite(wurzel) {
   }
 
   const laden = async () => zeigen(await api("/patch"));
+
+  feld("plan-zeigen").onclick = async () => {
+    const plan = feld("plan");
+    plan.hidden = !plan.hidden;
+    if (plan.hidden) return;
+    const html = await (await fetch("/patchplan")).text();
+    const dokument = new DOMParser().parseFromString(html, "text/html");
+    plan.innerHTML = `<div class="patchplan">${dokument.querySelector("style").outerHTML}${dokument.body.innerHTML}</div>`;
+    plan.querySelector(".nicht-drucken")?.remove();
+  };
+  // In der App gibt es keinen Druckdialog, deshalb öffnet sich der Plan im Browser.
+  feld("plan-drucken").onclick = () => senden("/patchplan/oeffnen");
 
   feld("suche").oninput = suchen;
   feld("hinzu").onclick = async () => {

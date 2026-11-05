@@ -40,6 +40,7 @@ class Pfade:
         self.executoren = self.wurzel / "cues" / "executoren.json"
         self.sitzung = self.wurzel / "daten" / "sitzung.json"
         self.audio = self.wurzel / "daten" / "audio"
+        self.proben = self.wurzel / "daten" / "proben"
 
 
 def datenordner() -> Path:

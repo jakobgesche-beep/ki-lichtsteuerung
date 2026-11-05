@@ -89,3 +89,11 @@ td input[type=number] { width: 70px; }
 .executor.laeuft .cue-name { color: var(--text); }
 .tasten3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
 .tasten3 button { padding: 10px 0; font-size: 13px; }
+.patchplan { background: #fff; color: #111; border-radius: 4px; padding: 12px; margin-bottom: 12px; overflow-x: auto; }
+.patchplan * { color: inherit; }
+.patchplan table { color: #111; }
+.zeitleiste { display: flex; height: 34px; border-radius: 4px; overflow: hidden; margin: 6px 0; }
+.zeitleiste div { border-right: 2px solid var(--grund); font-size: 11px; padding: 2px 4px; overflow: hidden; white-space: nowrap; color: #fff; }
+.zeitleiste .ruhig { background: #2f4a63; } .zeitleiste .mittel { background: #3d6a94; }
+.zeitleiste .stark { background: #8a5a1c; } .zeitleiste .hoehepunkt { background: #a33a30; }
+.aufnahme-an { background: var(--rot) !important; border-color: var(--rot) !important; color: #fff !important; }

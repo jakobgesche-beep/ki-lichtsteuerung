@@ -23,6 +23,8 @@ from .sicherheit import Grenzen, StroboWaechter
 from .sperrzone import zielt_ins_publikum
 
 STANDARD_KEGEL_GRAD = 15.0
+REISE_GRAD_PRO_S = 150.0   # vorsichtig geschätzt: so schnell dreht ein Kopf höchstens
+WEG_PROBEN = 12            # so viele Punkte prüfen wir auf dem Weg zwischen zwei Stellungen
 
 
 @dataclass
@@ -76,6 +78,8 @@ class Pruefer:
                 "kegel": typ.daten.get("physik", {}).get("abstrahlwinkel_grad") or STANDARD_KEGEL_GRAD,
             })
         self.letzte_sichere_stellung = {}
+        self.letzte_winkel = {}
+        self.dunkel_bis = {}
 
     def pruefe(self, bild: bytearray, vorgaben: Vorgaben, jetzt: Optional[float] = None):
         """Gibt (geprüftes Bild, Meldungen, blitzt gerade) zurück. Das Original bleibt."""
@@ -90,7 +94,7 @@ class Pruefer:
                 blitzt = True
             if not vorgaben.hazer_erlaubt and "nebel" in geraet["typen"]:
                 bild[geraet["typen"]["nebel"][0]] = 0
-            self._pruefe_sperrzone(bild, geraet, meldungen)
+            self._pruefe_sperrzone(bild, geraet, meldungen, jetzt)
             if vorgaben.blackout:
                 self._verdunkeln(bild, geraet)
         self.strobo.melde(blitzt, jetzt, self._max_dauer(vorgaben), self.grenzen.strobo_pause_s)
@@ -129,26 +133,58 @@ class Pruefer:
                 blitzt = True
         return blitzt
 
-    def _pruefe_sperrzone(self, bild, geraet, meldungen) -> None:
+    def _montage_und_grad(self, geraet):
         typen = geraet["typen"]
-        if "pan" not in typen and "tilt" not in typen:
-            return
         ort = self.buehne.geraet(geraet["id"])
         pan_grad = typen["pan"][1].get("grad") if "pan" in typen else 0.0
         tilt_grad = typen["tilt"][1].get("grad") if "tilt" in typen else 0.0
         if ort is None or pan_grad is None or tilt_grad is None:
+            return None
+        return Montage.aus_buehne(ort), pan_grad, tilt_grad
+
+    def trifft(self, geraet, montage: Montage, pan: float, tilt: float) -> bool:
+        strahl = richtung(montage, pan, tilt)
+        return zielt_ins_publikum((montage.x, montage.y, montage.z), strahl, self.buehne.publikum, geraet["kegel"])
+
+    def weg_frei(self, geraet_id: str, von: tuple, nach: tuple) -> bool:
+        """Kommt ein Kopf von einer Stellung zur anderen, ohne durch die Sperrzone zu schwenken?"""
+        geraet = next((g for g in self.geraete if g["id"] == geraet_id), None)
+        daten_ = self._montage_und_grad(geraet) if geraet else None
+        if daten_ is None:
+            return True
+        montage = daten_[0]
+        for schritt in range(1, WEG_PROBEN):
+            anteil = schritt / WEG_PROBEN
+            if self.trifft(geraet, montage, von[0] + (nach[0] - von[0]) * anteil,
+                           von[1] + (nach[1] - von[1]) * anteil):
+                return False
+        return True
+
+    def _pruefe_sperrzone(self, bild, geraet, meldungen, jetzt: float) -> None:
+        typen = geraet["typen"]
+        if "pan" not in typen and "tilt" not in typen:
+            return
+        daten_ = self._montage_und_grad(geraet)
+        if daten_ is None:
             self._verdunkeln(bild, geraet)
             meldungen.append(f"{geraet['name']}: Ort oder Winkelbereich fehlt, Gerät bleibt dunkel.")
             return
-        montage = Montage.aus_buehne(ort)
+        montage, pan_grad, tilt_grad = daten_
         winkel = {}
         for name, grad in (("pan", pan_grad), ("tilt", tilt_grad)):
             winkel[name] = anteil_zu_winkel(self._anteil(bild, typen, name), grad) if name in typen else 0.0
-        strahl = richtung(montage, winkel["pan"], winkel["tilt"])
+        neu = (winkel["pan"], winkel["tilt"])
         stellung_kanaele = [typen[t][0] for t in ("pan", "pan_fein", "tilt", "tilt_fein") if t in typen]
-        if not zielt_ins_publikum((montage.x, montage.y, montage.z), strahl,
-                                  self.buehne.publikum, geraet["kegel"]):
+        if not self.trifft(geraet, montage, *neu):
+            alt = self.letzte_winkel.get(geraet["id"])
+            if alt is not None and not self.weg_frei(geraet["id"], alt, neu):
+                # Der Weg führt durchs Publikum: dunkel bleiben, bis der Kopf angekommen ist.
+                reise = max(abs(neu[0] - alt[0]), abs(neu[1] - alt[1])) / REISE_GRAD_PRO_S + 0.1
+                self.dunkel_bis[geraet["id"]] = jetzt + reise
             self.letzte_sichere_stellung[geraet["id"]] = [bild[i] for i in stellung_kanaele]
+            self.letzte_winkel[geraet["id"]] = neu
+            if jetzt < self.dunkel_bis.get(geraet["id"], 0.0):
+                self._verdunkeln(bild, geraet)
             return
         meldungen.append(f"{geraet['name']}: Ziel liegt in der Sperrzone Publikum.")
         sicher = self.letzte_sichere_stellung.get(geraet["id"])
@@ -157,6 +193,8 @@ class Pruefer:
         else:
             for index, wert in zip(stellung_kanaele, sicher):
                 bild[index] = wert
+            if jetzt < self.dunkel_bis.get(geraet["id"], 0.0):
+                self._verdunkeln(bild, geraet)
 
     @staticmethod
     def _anteil(bild, typen, name) -> float:

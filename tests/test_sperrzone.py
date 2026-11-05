@@ -128,3 +128,21 @@ def test_hin_und_rueckrechnung_aus_dem_bild_ist_genau(aufbau):
     assert (p - 0.5) * 540 == pytest.approx(pan, abs=0.1)
     assert (t - 0.5) * 270 == pytest.approx(tilt, abs=0.1)
     assert richtung(montage, (p - 0.5) * 540, (t - 0.5) * 270)[2] < 0
+
+
+def test_sprung_durchs_publikum_bleibt_dunkel_bis_der_kopf_da_ist(aufbau):
+    """Von über den Köpfen direkt auf die Bühnenkante: Der Weg geht durch die Kopfhöhe."""
+    _, buehne, pruefer, renderer = aufbau
+    oben = bild_fuer_ziel(renderer, buehne, (0, -8, 5.5))
+    unten = bild_fuer_ziel(renderer, buehne, (0, 0.3, 0.8))
+    assert pruefer.pruefe(oben, Vorgaben(), jetzt=0.0)[0][4] == 255
+    geprueft, _, _ = pruefer.pruefe(unten, Vorgaben(), jetzt=0.1)
+    assert geprueft[4] == 0                           # unterwegs dunkel
+    assert pruefer.pruefe(unten, Vorgaben(), jetzt=5.0)[0][4] == 255   # angekommen
+
+
+def test_kleiner_schritt_bleibt_hell(aufbau):
+    _, buehne, pruefer, renderer = aufbau
+    pruefer.pruefe(bild_fuer_ziel(renderer, buehne, (0, 3, 0.8)), Vorgaben(), jetzt=0.0)
+    geprueft, _, _ = pruefer.pruefe(bild_fuer_ziel(renderer, buehne, (0.5, 3, 0.8)), Vorgaben(), jetzt=0.025)
+    assert geprueft[4] == 255

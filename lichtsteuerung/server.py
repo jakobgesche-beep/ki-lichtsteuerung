@@ -7,13 +7,14 @@ from __future__ import annotations
 
 import asyncio
 import time
+import webbrowser
 import xml.etree.ElementTree as ElementTree
 from pathlib import Path
 from typing import Optional
 from urllib.parse import urlparse
 
 from fastapi import Body, FastAPI, Request, WebSocket, WebSocketDisconnect
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .audio import quellen
@@ -23,6 +24,7 @@ from .farben import FARBNAMEN
 from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
+from . import patchplan
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
 from .pult import EFFEKT_ARTEN, pruefe_effekt
@@ -373,6 +375,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         jetzt = time.monotonic()
         with show.sperre:
             executor = show.pult.executor(nummer)
+            if aktion in ("go", "zurueck", "aus"):
+                executor.zeitcode = False
             if aktion == "go":
                 show.pult.go(nummer, jetzt)
             elif aktion == "zurueck":
@@ -392,6 +396,73 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         with show.sperre:
             show.pult.go(nummer, time.monotonic(), 1 if richtung == "plus" else -1)
         return show.pult.status()
+
+    # --- Probe: aufnehmen, analysieren, Show bauen --------------------------
+
+    @app.get("/api/proben")
+    def proben_lesen():
+        return {"proben": [show.proben.lesen(n) for n in show.proben.namen()],
+                "aufnahme": show.aufnahme_name}
+
+    @app.post("/api/proben/aufnahme")
+    def probe_aufnehmen(auftrag: dict = Body(...)):
+        name = str(auftrag.get("name", "")).strip()
+        if not name:
+            raise ValueError("Bitte einen Namen für den Song eingeben.")
+        show.audio.aufnahme_starten()
+        show.aufnahme_name = name
+        return {"aufnahme": name}
+
+    @app.post("/api/proben/stopp")
+    def probe_stoppen():
+        name, show.aufnahme_name = show.aufnahme_name, None
+        ton = show.audio.aufnahme_beenden()
+        if not name:
+            raise ValueError("Es läuft keine Aufnahme.")
+        show.proben.speichern(name, ton)
+        return {"analyse": show.proben.lesen(name), "sequenz": show.show_aus_probe(name)}
+
+    @app.post("/api/proben/datei")
+    async def probe_aus_datei(anfrage: Request, name: str, datei: str):
+        """Einen Song als Datei analysieren, zum Beispiel das Original zum Vorbereiten."""
+        if Path(datei).suffix.lower() not in AUDIO_ENDUNGEN:
+            raise ValueError("Diese Dateiart kann das Programm nicht lesen.")
+        show.pfade.audio.mkdir(parents=True, exist_ok=True)
+        pfad = show.pfade.audio / Path(datei).name
+        pfad.write_bytes(await anfrage.body())
+        try:
+            show.proben.aus_datei(name, pfad)
+        except quellen.AudioFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        return {"analyse": show.proben.lesen(name), "sequenz": show.show_aus_probe(name)}
+
+    @app.post("/api/proben/{name}/neu")
+    def probe_neu_bauen(name: str):
+        return show.show_aus_probe(name)
+
+    @app.post("/api/proben/{name}/abspielen")
+    def probe_abspielen(name: str, auftrag: dict = Body(default={})):
+        """Spielt die Aufnahme ab, das Licht folgt genau den erkannten Stellen."""
+        nummer = int(auftrag.get("executor", 1))
+        sequenz = show.pult.sequenzen.lesen(name)
+        if sequenz is None:
+            raise ValueError("Zu dieser Probe gibt es noch keine Sequenz.")
+        try:
+            show.audio.starten(quellen.Datei(show.proben.ton_pfad(name)), f"Probe: {name}")
+        except quellen.AudioFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        with show.sperre:
+            executor = show.pult.executor(nummer)
+            executor.belegen(sequenz)
+            executor.zeitcode = True
+            show.pult.go(nummer, time.monotonic())
+            show.pult.belegung_speichern()
+        return show.pult.status()
+
+    @app.delete("/api/proben/{name}")
+    def probe_loeschen(name: str):
+        show.proben.loeschen(name)
+        return {"proben": show.proben.namen()}
 
     # --- Audio -------------------------------------------------------------
 
@@ -453,6 +524,18 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def update_installieren():
         show.update.installieren()
         return {"zustand": "installiert"}
+
+    # --- Patchplan zum Ausdrucken ------------------------------------------
+
+    @app.get("/patchplan")
+    def patchplan_seite():
+        return HTMLResponse(patchplan.seite(show))
+
+    @app.post("/api/patchplan/oeffnen")
+    def patchplan_oeffnen(anfrage: Request):
+        """Öffnet den Patchplan im normalen Browser. Dort kann man ihn drucken."""
+        webbrowser.open(f"http://{anfrage.headers.get('host')}/patchplan")
+        return {}
 
     # --- Die Oberfläche ---------------------------------------------------
 

@@ -5,6 +5,7 @@ __pycache__/
 # Wird beim Betrieb geschrieben (letztes Profil, letzte Cueliste):
 daten/sitzung.json
 daten/audio/
+daten/proben/
 # Lokale Einstellungen, zum Beispiel später der API-Key. Niemals ins Repository!
 lokal.json
 .env

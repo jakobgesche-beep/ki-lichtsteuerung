@@ -45,6 +45,11 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Programmer ist live,** wie am echten Pult. „Blind“ zeigt ihn nur in der Vorschau. Die KI soll später nur im Blind-Modus arbeiten dürfen.
 - **Die maximale Helligkeit des Profils** gilt auch für Programmer und Executoren.
 - **„Über das Publikum“** zielt deutlich über die Köpfe. Die Sperrzone prüft auch hier jeden Wert.
+- **Wege durchs Publikum:** Springt ein Kopf so, dass er auf dem Weg durch die Kopfhöhe schwenken würde, bleibt er dunkel, bis er angekommen ist (geschätzt mit 150° pro Sekunde). Das Pult blendet solche Wechsel nicht weich über, sondern fährt direkt hin und blendet dort auf.
+- **Probe:** Die Show aus der Probe folgt live nicht der Uhr, denn eine Band spielt nie genau gleich. Go+ wechselt zum nächsten Songteil, die Effekte laufen im Live-Tempo. Nur „Probe ansehen“ folgt der Aufnahme genau.
+- **Songteile** erkennt das Programm am Klang: Lautstärke, Bass, Höhen und Unruhe. Namen wie „Refrain“ sind geschätzt. Gleich klingende Teile bekommen denselben Buchstaben und dasselbe Licht. Strobo baut die Probe nie ein.
+- **Songerkennung und „offizielle Lichtshows“:** Eine offizielle Lichtshow zum Herunterladen gibt es nicht, und Erkennungsdienste kennen nur Originalaufnahmen, keine Schulband. Der Songname wird deshalb eingetippt. Farben und Stil passend zum Song soll später die KI vorschlagen (braucht den API-Key).
+- **Patchplan:** DIP-Schalter rechnen mit Schalter 1 = 1, 2 = 2, 3 = 4 und so weiter. Das ist bei den meisten Geräten so, bitte trotzdem im Handbuch prüfen.
 - **Überschneidende Adressen** werden rot markiert, aber nicht verboten, denn zwei Geräte auf gleicher Adresse können gewollt sein. Über 512 ist gesperrt.
 - **Grundlicht** steht direkt im Profil und nicht als eigene Szene. So ist der Rückfall auch da, wenn jemand eine Szene löscht.
 - **Der Hazer** bekommt nur Werte, wenn das Profil ihn erlaubt. Alle vier Profile verbieten ihn. Die Automatik benutzt ihn nie, nur eine Cue mit `nebel`.

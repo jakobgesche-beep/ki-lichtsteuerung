@@ -25,6 +25,7 @@ from .engine import Engine, GRUPPE_BEWEGUNG
 from .katalog import Katalog
 from .overrides import Overrides
 from .patch import Patch
+from .probe import Proben, show_bauen
 from .pult import Pult
 from .profile import Profile, RUHE_PROFIL, strobo_grenzen
 from .pruefung import Pruefer, Vorgaben
@@ -57,6 +58,8 @@ class Show:
         self.profil = RUHE_PROFIL
         self.overrides = Overrides()
         self.pult = Pult(self, self.pfade.sequenzen, self.pfade.executoren)
+        self.proben = Proben(self.pfade.proben)
+        self.aufnahme_name: Optional[str] = None
         self.automatik_an = True
         self.vorschau = Vorschau(self)
         self.vorschau_geraete = None
@@ -203,6 +206,28 @@ class Show:
             self.profil = RUHE_PROFIL
         self.automatik_an = sitzung.get("automatik", True)
 
+    def gobos_der_gruppe(self, gruppe: str) -> list:
+        """Gobo-Namen, die alle Geräte der Gruppe haben (ohne "Offen")."""
+        listen = []
+        for geraet in self.patch.in_gruppe(gruppe):
+            namen = []
+            for _, kanal in self.patch.typ(geraet).kanaele_im_modus(geraet["modus"]):
+                if kanal["typ"] == "gobo":
+                    namen += [b["name"] for b in kanal.get("bereiche", []) if b["typ"] == "platz"]
+            listen.append([n for n in namen if n != "Offen"])
+        gemeinsam = [n for n in (listen[0] if listen else []) if all(n in l for l in listen)]
+        return gemeinsam or (listen[0] if listen else [])
+
+    def show_aus_probe(self, name: str) -> dict:
+        """Baut aus einer analysierten Probe die Sequenz mit demselben Namen."""
+        analyse = self.proben.lesen(name)
+        if analyse is None:
+            raise ValueError(f"Probe {name!r} gibt es nicht.")
+        sequenz = show_bauen(analyse, self.patch, self.profil["palette"], self.gobos_der_gruppe)
+        with self.sperre:
+            self.pult.sequenz_speichern(sequenz)
+        return sequenz
+
     def live_daten(self) -> dict:
         """Das schickt der Server laufend an die 3D-Vorschau."""
         with self.sperre:
@@ -215,6 +240,8 @@ class Show:
                     "test_laeuft": self._test_laeuft(), "version": VERSION,
                     "update": self.update.status(),
                     "pult": self.pult.status(), "automatik": self.automatik_an,
+                    "aufnahme": {"name": self.aufnahme_name,
+                                 "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1)},
                     "vorschau": {"geraete": self.vorschau_geraete},
                     "strobo_erlaubt": self.profil["strobo"] != "aus",
                     "hazer_erlaubt": self.profil["hazer"],
