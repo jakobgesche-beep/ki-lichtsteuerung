@@ -25,6 +25,8 @@ class AudioBetrieb:
         self.zeitpunkt = 0.0
         self.beat_zaehler = 0
         self.abgeholt = 0
+        self.drop_zaehler = 0
+        self.drop_abgeholt = 0
         self.aufnahme = None      # Liste von Blöcken, solange in der Probe aufgenommen wird
         self.beat_erkennung = None
         self._thread: Optional[threading.Thread] = None
@@ -60,6 +62,8 @@ class AudioBetrieb:
                 werte = analyse.verarbeite(block)
                 if werte.beat:
                     self.beat_zaehler += 1
+                if werte.drop:
+                    self.drop_zaehler += 1
                 self.messwerte, self.zeitpunkt = werte, time.monotonic()
         except Exception as fehler:
             self.fehler = str(fehler)
@@ -90,8 +94,9 @@ class AudioBetrieb:
         if werte is None:
             return None
         neuer_beat = self.beat_zaehler != self.abgeholt
-        self.abgeholt = self.beat_zaehler
-        return replace(werte, beat=neuer_beat)
+        neuer_drop = self.drop_zaehler != self.drop_abgeholt
+        self.abgeholt, self.drop_abgeholt = self.beat_zaehler, self.drop_zaehler
+        return replace(werte, beat=neuer_beat, drop=neuer_drop)
 
     def aktuell(self, jetzt: Optional[float] = None) -> Optional[Messwerte]:
         """Die neuesten Messwerte, oder None, wenn nichts Frisches da ist."""

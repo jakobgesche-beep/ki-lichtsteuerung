@@ -507,6 +507,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
                 show.audio.stoppen()
             elif art == "test":
                 show.audio.starten(quellen.Testsignal(float(auftrag.get("bpm", 120))), "Testsignal")
+            elif art == "test_drop":
+                show.audio.starten(quellen.Testsignal(128, "drop"), "Testsong mit Drop")
             elif art == "datei":
                 name = Path(auftrag["name"]).name     # nie aus dem Ordner hinaus
                 show.audio.starten(quellen.Datei(show.pfade.audio / name), name)

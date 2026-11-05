@@ -37,6 +37,9 @@ class Messwerte:
     pegel: float = 0.0
     leise: bool = True
     rede: bool = False
+    spannung: float = 0.0      # 0 bis 1: wie stark sich gerade ein Drop aufbaut
+    vor_drop: bool = False     # die kurze Pause direkt vor dem Drop
+    drop: bool = False         # genau jetzt schlägt der Drop ein (nur in einem Block wahr)
 
 
 class AubioBeatErkennung:
@@ -141,6 +144,107 @@ class BeatUhr:
         return faellig
 
 
+class DropErkennung:
+    """Erkennt einen echten Drop, nicht nur "es wird lauter".
+
+    Ein Drop gilt nur, wenn vorher ein Aufbau war:
+      Aufbau   Die Höhen werden über mehrere Sekunden stetig lauter (Riser, Snare-Wirbel),
+               und der Bass ist deutlich leiser als sonst im Song.
+      Pause    Oft wird es direkt davor kurz fast still.
+      Drop     Dann kommt der Bass mit voller Wucht zurück: viel lauter als eben noch
+               und so laut wie die lautesten Bass-Stellen des Songs.
+
+    Gerechnet wird mit echten Lautstärken in dB, zehnmal pro Sekunde.
+    """
+
+    RATE = 20                  # Messpunkte pro Sekunde (alle 50 ms)
+    BASS_SPRUNG_DB = 10.0      # so viel lauter muss der Bass schlagartig werden
+    BASS_NAH_AN_MAX_DB = 6.0   # und dabei fast so laut wie die lautesten Stellen
+    AUFBAU_DB_PRO_S = 1.2      # so schnell steigen die Höhen in einem Aufbau mindestens
+    BASS_WEG_DB = 6.0          # so viel leiser ist der Bass im Aufbau
+    AUFBAU_S = 4               # so viele Sekunden müssen die Höhen stetig steigen
+    AUFBAU_MIN_DB = 6.0        # und dabei mindestens so viel lauter werden
+    HOEHEN_ANTEIL_DB = 15.0    # höchstens so viel leiser als der Gesamtklang dürfen die Höhen sein
+    PAUSE_DB = 12.0            # so viel leiser ist die Pause vor dem Drop
+    SPERRE_S = 15.0            # nach einem Drop kommt so schnell kein zweiter
+
+    def __init__(self):
+        laenge = 30 * self.RATE
+        self.bass = deque(maxlen=laenge)
+        self.hoch = deque(maxlen=laenge)
+        self.gesamt = deque(maxlen=laenge)
+        self.sammeln = []
+        self.spannung = 0.0
+        self.spannung_verlauf = deque(maxlen=6 * self.RATE)
+        self.letzter_drop = -99.0
+        self.zeit = 0.0
+        self.vor_drop = False
+
+    @staticmethod
+    def _db(wert: float) -> float:
+        return 20 * np.log10(wert + 1e-9)
+
+    def verarbeite(self, spektrum: np.ndarray, masken: dict, dauer: float) -> bool:
+        """Bekommt pro Block das Spektrum. Gibt True zurück, wenn genau jetzt der Drop kommt."""
+        self.zeit += dauer
+        self.sammeln.append((float(np.sqrt(np.mean(spektrum[masken["bass"]] ** 2))),
+                             float(np.sqrt(np.mean(spektrum[masken["hoehe"]] ** 2))),
+                             float(np.sqrt(np.mean(spektrum ** 2)))))
+        if len(self.sammeln) * dauer < 1 / self.RATE:
+            return False
+        bass, hoch, gesamt = (self._db(float(np.mean(w))) for w in zip(*self.sammeln))
+        self.sammeln = []
+        self.bass.append(bass)
+        self.hoch.append(hoch)
+        self.gesamt.append(gesamt)
+        return self._auswerten()
+
+    def _auswerten(self) -> bool:
+        if len(self.bass) < 8 * self.RATE:
+            return False                # erst nach 8 Sekunden genug Verlauf
+        bass = np.array(self.bass)
+        hoch = np.array(self.hoch)
+        gesamt = np.array(self.gesamt)
+        # Bass als Mittel über eine Sekunde: Zwischen zwei Kicks ist er sonst immer "weg".
+        leistung = 10 ** (bass / 10)
+        bass_sekunde = 10 * np.log10(np.convolve(leistung, np.ones(self.RATE) / self.RATE, mode="valid") + 1e-12)
+        bass_typisch = np.percentile(bass_sekunde, 80)
+
+        # Aufbau: Die Höhen steigen über 4 Sekunden GLEICHMÄSSIG (nicht ein einzelner Sprung
+        # wie beim Refrain), und der Bass ist weg.
+        fenster = self.AUFBAU_S * self.RATE
+        sekunden = np.arange(fenster) / self.RATE
+        steigung = np.polyfit(sekunden, hoch[-fenster:], 1)[0]
+        stufen = hoch[-fenster:].reshape(self.AUFBAU_S, self.RATE).mean(axis=1)
+        schritte = np.diff(stufen)
+        anstieg = stufen[-1] - stufen[0]
+        gleichmaessig = ((schritte > 0).all() and anstieg >= self.AUFBAU_MIN_DB
+                         and schritte.max() < 0.45 * anstieg)
+        # Die Höhen müssen hörbar sein: In einem Aufbau prägen Riser und Snare den Klang.
+        hoerbar = stufen[-1] > gesamt[-self.RATE:].mean() - self.HOEHEN_ANTEIL_DB
+        gleichmaessig = gleichmaessig and hoerbar
+        bass_weg = bass_sekunde[-self.RATE:].max() < bass_typisch - self.BASS_WEG_DB
+        ziel = min(1.0, max(0.0, steigung / self.AUFBAU_DB_PRO_S)) if (gleichmaessig and bass_weg) else 0.0
+        self.spannung = float(self.spannung + (ziel - self.spannung) * (0.3 if ziel > self.spannung else 0.05))
+        self.spannung_verlauf.append(self.spannung)
+        aufgebaut = max(self.spannung_verlauf) > 0.5
+
+        # Pause: mitten im Aufbau plötzlich viel leiser.
+        # bool() und float(): numpy-Werte lassen sich nicht an die Oberfläche schicken.
+        self.vor_drop = bool(self.spannung > 0.4 and gesamt[-1] < gesamt[-3 * self.RATE:-self.RATE // 2].mean() - self.PAUSE_DB)
+
+        # Drop: Bass schlägt ein, viel lauter als eben, fast so laut wie sonst die lautesten Stellen.
+        jetzt, eben = bass[-1], bass[-2 * self.RATE:-self.RATE // 5].mean()
+        einschlag = jetzt > eben + self.BASS_SPRUNG_DB and jetzt > np.percentile(bass, 90) - self.BASS_NAH_AN_MAX_DB
+        if aufgebaut and einschlag and self.zeit - self.letzter_drop > self.SPERRE_S:
+            self.letzter_drop = self.zeit
+            self.spannung = 0.0
+            self.spannung_verlauf.clear()
+            self.vor_drop = False
+            return True
+        return False
+
+
 class Analyse:
     def __init__(self, beat=None):
         self.beat = beat or beat_erkennung()
@@ -158,6 +262,7 @@ class Analyse:
         self.zeit_ohne_beat = KEIN_BEAT_S
         self.tempo = 0.0
         self.anteil_mitte = 0.0
+        self.drops = DropErkennung()
 
     def verarbeite(self, block: np.ndarray) -> Messwerte:
         dauer = len(block) / ABTASTRATE
@@ -176,6 +281,8 @@ class Analyse:
             alt = self.werte[name]
             self.werte[name] = ziel if ziel > alt else alt + (ziel - alt) * 0.15
 
+        drop = self.drops.verarbeite(spektrum, self.masken, dauer)
+
         pegel = float(np.sqrt(np.mean(block ** 2)))
         self.pegel_glatt += (pegel - self.pegel_glatt) * 0.1
         self.pegel_spitze = max(self.pegel_glatt, self.pegel_spitze * 0.99995, 1e-3)
@@ -192,4 +299,6 @@ class Analyse:
         rede = not leise and self.zeit_ohne_beat >= KEIN_BEAT_S and self.anteil_mitte > 0.45
         return Messwerte(beat=self.uhr.takt(beat, self.tempo, dauer), tempo_bpm=round(self.tempo, 1), bass=self.werte["bass"],
                          mitte=self.werte["mitte"], hoehe=self.werte["hoehe"],
-                         energie=min(1.0, self.energie), pegel=pegel, leise=leise, rede=rede)
+                         energie=min(1.0, self.energie), pegel=pegel, leise=leise and not self.drops.vor_drop,
+                         rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
+                         vor_drop=self.drops.vor_drop, drop=drop)

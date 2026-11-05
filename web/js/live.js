@@ -43,6 +43,7 @@ export function liveSeite(wurzel) {
     feld("quelle").innerHTML = `
       <option value="aus">Aus</option>
       <option value="test">Testsignal (120 BPM)</option>
+      <option value="test_drop">Testsong mit Aufbau und Drop</option>
       ${eingaenge.map((e) => `<option value="eingang:${e.nummer}">Eingang: ${t(e.name)}</option>`).join("")}
       ${dateien.map((d) => `<option value="datei:${t(d)}">Datei: ${t(d)}</option>`).join("")}
       <option value="neu">Audiodatei wählen …</option>`;

@@ -121,3 +121,62 @@ def test_abholen_zaehlt_einen_beat_nur_einmal():
     betrieb.messwerte, betrieb.zeitpunkt, betrieb.beat_zaehler = Messwerte(beat=True), 100.0, 1
     assert betrieb.abholen(100.0).beat and not betrieb.abholen(100.0).beat
     assert betrieb.aktuell(100.0).beat       # die Anzeige verbraucht nichts
+
+
+# --- Drops: nur echte, mit Aufbau und Bass-Einschlag ---------------------------------
+
+def drops_finden(ton):
+    analyse = Analyse(EigeneBeatErkennung())
+    drops, spannung = [], 0.0
+    for start in range(0, len(ton) - BLOCK, BLOCK):
+        werte = analyse.verarbeite(ton[start:start + BLOCK])
+        if werte.drop:
+            drops.append(start / ABTASTRATE)
+        spannung = max(spannung, werte.spannung)
+    return drops, spannung
+
+
+@pytest.mark.parametrize("bpm", [100, 128, 174])
+@pytest.mark.parametrize("mit_pause", [True, False])
+def test_echter_drop_wird_auf_50_ms_genau_erkannt(bpm, mit_pause):
+    from lichtsteuerung.audio.quellen import erzeuge_edm
+    ton, zeit = erzeuge_edm(bpm, mit_pause=mit_pause)
+    drops, spannung = drops_finden(ton)
+    assert len(drops) == 1 and 0 <= drops[0] - zeit <= 0.06
+    assert spannung > 0.8
+
+
+def test_kein_drop_ohne_aufbau():
+    """Normale Songs: lauter Refrain, Bridge vor Refrain, Becken-Crescendo. Alles kein Drop."""
+    rng = np.random.default_rng(1)
+    refrain = np.concatenate([erzeuge_takt(120, 20) * 0.3, erzeuge_takt(120, 6) * 0.05,
+                              erzeuge_takt(120, 20) * 0.9 + (rng.standard_normal(20 * ABTASTRATE) * 0.1).astype("float32")])
+    zeit = np.arange(30 * ABTASTRATE) / ABTASTRATE
+    crescendo = (erzeuge_takt(110, 30) * 0.6
+                 + rng.standard_normal(len(zeit)) * np.clip((zeit - 10) / 10, 0, 1) * 0.2).astype("float32")
+    for ton in (refrain, crescendo):
+        assert drops_finden(ton)[0] == []
+
+
+def test_pause_vor_dem_drop_ist_nicht_leise():
+    """Die Stille vor dem Drop darf nicht als leise Stelle aufs Grundlicht gehen."""
+    from lichtsteuerung.audio.quellen import erzeuge_edm
+    ton, zeit = erzeuge_edm(128)
+    analyse = Analyse(EigeneBeatErkennung())
+    pause_gesehen = False
+    for start in range(0, int(zeit * ABTASTRATE), BLOCK):
+        werte = analyse.verarbeite(ton[start:start + BLOCK])
+        pause_gesehen |= werte.vor_drop
+        if start / ABTASTRATE > zeit - 0.3:
+            assert not werte.leise
+    assert pause_gesehen
+
+
+def test_messwerte_lassen_sich_immer_an_die_oberflaeche_schicken():
+    """Ein numpy-Wert in den Messwerten hat einmal die Live-Verbindung abbrechen lassen."""
+    import json
+    from lichtsteuerung.audio.quellen import erzeuge_edm
+    ton, _ = erzeuge_edm(128)
+    analyse = Analyse(EigeneBeatErkennung())
+    for start in range(0, len(ton) - BLOCK, BLOCK * 7):
+        json.dumps(vars(analyse.verarbeite(ton[start:start + BLOCK])))

@@ -55,6 +55,50 @@ def erzeuge_takt(bpm: float, sekunden: float, abtastrate: int = ABTASTRATE) -> n
     return ton
 
 
+def erzeuge_edm(bpm: float = 128, abtastrate: int = ABTASTRATE, mit_pause: bool = True) -> tuple:
+    """Ein künstlicher EDM-Song: Groove, Aufbau ohne Bass, kurze Pause, Drop mit fettem Bass.
+
+    Gibt (Ton, Zeitpunkt des Drops in Sekunden) zurück. Für Tests und zum Ausprobieren.
+    """
+    rng = np.random.default_rng(7)
+    beat = 60.0 / bpm
+    stuecke = []
+
+    def kick(laenge, laut):
+        t = np.arange(int(laenge * abtastrate)) / abtastrate
+        frequenz = 50 + 80 * np.exp(-t * 30)
+        return laut * np.sin(2 * np.pi * np.cumsum(frequenz) / abtastrate) * np.exp(-t * 6)
+
+    def groove(takte, laut, sub):
+        ton = np.zeros(int(takte * 4 * beat * abtastrate))
+        for n in range(takte * 4):
+            start = int(n * beat * abtastrate)
+            schlag = kick(beat, laut)
+            ton[start:start + len(schlag)] += schlag[: len(ton) - start]
+        t = np.arange(len(ton)) / abtastrate
+        ton += sub * np.sin(2 * np.pi * 55 * t)
+        ton += 0.04 * rng.standard_normal(len(ton)) * (np.sin(2 * np.pi * t / beat * 2) > 0.6)
+        return ton
+
+    stuecke.append(groove(8, 0.5, 0.15))                    # 16 Takte Groove
+    aufbau = np.zeros(int(16 * beat * abtastrate))           # 4 Takte Aufbau ohne Bass
+    t = np.arange(len(aufbau)) / abtastrate
+    anteil = t / t[-1]
+    aufbau += (0.02 + 0.35 * anteil ** 2) * rng.standard_normal(len(aufbau))
+    for teil, unterteilung in enumerate((1, 2, 4, 8)):       # Snare-Wirbel wird immer schneller
+        for n in range(4 * unterteilung):
+            start = int((teil * 4 + n / unterteilung) * beat * abtastrate)
+            laenge = int(0.05 * abtastrate)
+            aufbau[start:start + laenge] += (0.1 + 0.3 * teil / 3) * rng.standard_normal(min(laenge, len(aufbau) - start))
+    stuecke.append(aufbau)
+    if mit_pause:
+        stuecke.append(np.zeros(int(beat * abtastrate)))     # ein Beat Stille
+    drop_zeit = sum(len(s) for s in stuecke) / abtastrate
+    stuecke.append(groove(8, 1.0, 0.5))                      # Drop: alles voll
+    ton = np.concatenate(stuecke)
+    return (ton / np.max(np.abs(ton)) * 0.9).astype(np.float32), drop_zeit
+
+
 class _Schleife:
     """Spielt fertige Zahlen immer wieder ab."""
 
@@ -78,8 +122,11 @@ class _Schleife:
 
 
 class Testsignal(_Schleife):
-    def __init__(self, bpm: float = 120.0):
-        super().__init__(erzeuge_takt(bpm, 16 * 60.0 / bpm))
+    def __init__(self, bpm: float = 120.0, art: str = "takt"):
+        if art == "drop":
+            super().__init__(erzeuge_edm(bpm)[0])
+        else:
+            super().__init__(erzeuge_takt(bpm, 16 * 60.0 / bpm))
 
 
 def lade_datei(pfad: Path) -> np.ndarray:

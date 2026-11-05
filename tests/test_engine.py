@@ -301,3 +301,89 @@ def test_gobo_bleibt_im_look_und_wechselt_mit_dem_look(pfade, katalog):
 def test_ohne_bewegung_im_profil_nur_stehende_looks(engine):
     beats_spielen(engine, {**PARTY, "bewegung": "aus"}, 40, 0.95)
     assert engine.look.bewegung is None
+
+
+# --- Drop im Licht ----------------------------------------------------------------
+
+def test_drop_ablauf_im_licht(nur_spots):
+    """Aufbau: heller und weißer, Strahlen zur Mitte. Pause: dunkel. Drop: weißer Schlag, dann Farbe und Bewegung."""
+    e = nur_spots
+    zeit, _ = beats_spielen(e, PARTY, 8, 0.6)
+    aufbau = None
+    for i in range(80):
+        m = Messwerte(beat=i % 20 == 0, tempo_bpm=120, energie=0.6, leise=False, spannung=0.3 + 0.007 * i)
+        aufbau = e.bewerte(m, PARTY, zeit + i / 40)
+    assert e.zustand_text.startswith("Aufbau")
+    assert min(aufbau["front-1"].farbe) > 0.6                    # fast weiß
+    pause = e.bewerte(Messwerte(tempo_bpm=120, energie=0.6, leise=False, spannung=0.9, vor_drop=True), PARTY, zeit + 2.1)
+    assert pause["front-1"].helligkeit < 0.05 and e.zustand_text == "Pause vor dem Drop"
+    schlag = e.bewerte(Messwerte(beat=True, drop=True, tempo_bpm=120, energie=0.9, leise=False), PARTY, zeit + 2.2)
+    assert schlag["front-1"].helligkeit == 1.0 and schlag["front-1"].farbe == (1.0, 1.0, 1.0)
+    pans, hell = [], []
+    for i in range(1, 160):
+        z = e.bewerte(Messwerte(beat=i % 20 == 0, tempo_bpm=120, energie=0.9, leise=False), PARTY, zeit + 2.2 + i / 40)
+        pans.append(z["front-1"].pan)
+        hell.append(z["front-1"].helligkeit)
+    assert e.zustand_text == "DROP"
+    assert z["front-1"].farbe != (1.0, 1.0, 1.0) and z["front-1"].farbe != z["front-2"].farbe
+    assert max(pans) - min(pans) > 40                         # große Bewegung
+    assert max(hell) == 1.0 and min(hell) < 0.3               # harte Schläge auf jedem Beat
+
+
+def test_drop_haelt_32_beats_dann_starker_look(nur_spots):
+    e = nur_spots
+    zeit, _ = beats_spielen(e, PARTY, 4, 0.9)
+    e.bewerte(Messwerte(beat=True, drop=True, tempo_bpm=120, energie=0.9, leise=False), PARTY, zeit)
+    zeit, _ = beats_spielen(e, PARTY, 31, 0.9, von=zeit + 0.025)
+    assert e.drop_laeuft()
+    beats_spielen(e, PARTY, 2, 0.9, von=zeit)
+    assert not e.drop_laeuft() and e.look.stufe >= 2
+
+
+def test_ruhiges_profil_kennt_keinen_drop(nur_spots):
+    ruhig = {**PARTY, "beat_reaktion": 0.15}
+    zeit, _ = beats_spielen(nur_spots, ruhig, 4, 0.9)
+    nur_spots.bewerte(Messwerte(beat=True, drop=True, tempo_bpm=120, energie=0.9, leise=False), ruhig, zeit)
+    assert not nur_spots.drop_laeuft()
+
+
+def test_drop_bleibt_unter_der_blitz_grenze_auch_bei_174_bpm(pfade):
+    """Der ganze EDM-Song durch die echte Show: Schläge auf jedem Beat, aber nie mehr als 3 pro Sekunde."""
+    import numpy as np
+    from lichtsteuerung import daten
+    from lichtsteuerung.audio.analyse import Analyse, EigeneBeatErkennung
+    from lichtsteuerung.audio.quellen import BLOCK, erzeuge_edm
+    from lichtsteuerung.show import Show
+    daten.einrichten(pfade.wurzel / "d")
+    show = Show(daten.Pfade(pfade.wurzel / "d", daten.PROJEKT / "catalog"))
+
+    class Ton:
+        name, fehler, beat_zaehler, beat_erkennung, werte = "t", None, 0, "t", None
+        def aktuell(self, jetzt=None): return self.werte
+        abholen = aktuell
+        def stoppen(self): pass
+        def position_s(self): return None
+    ton_quelle = Ton()
+    show.audio = ton_quelle
+    ton, _ = erzeuge_edm(174)
+    analyse = Analyse(EigeneBeatErkennung())
+    stelle, bild_nr = 0, 0
+    hell_verlauf = []
+    while stelle + BLOCK < len(ton):
+        beat = drop = False
+        # Die Analyse läuft schneller als das Licht: Beats und Drop dazwischen nicht verlieren.
+        while stelle + BLOCK < min(int((bild_nr + 1) / 40 * 44100), len(ton)):
+            werte = analyse.verarbeite(ton[stelle:stelle + BLOCK])
+            stelle += BLOCK
+            beat |= werte.beat
+            drop |= werte.drop
+        werte.beat, werte.drop = beat, drop
+        ton_quelle.werte = werte
+        bild = show.baue_bild(bild_nr / 40)
+        bild_nr += 1
+        hell_verlauf.append(next(g for g in show.simulator.lies(bild) if g["id"] == "front-1")["hell"])
+        assert not any("Sperrzone" in m for m in show.meldungen)
+    assert show.engine.drop_zeit > 0
+    spruenge = [i for i, (a, b) in enumerate(zip(hell_verlauf, hell_verlauf[1:])) if b - a >= 0.4]
+    for i, start in enumerate(spruenge):
+        assert sum(1 for s in spruenge[i:] if s - start < 40) <= 3     # höchstens 3 in einer Sekunde

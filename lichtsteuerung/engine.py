@@ -13,6 +13,13 @@ Was im Look passiert:
     Farbe      bleibt stehen, oder zwei Farben wechseln sich alle 4 Beats ab.
     Bewegung   nur in manchen Looks, dann langsam und weich. Sonst steht das Licht.
 
+Drops sind ein eigenes Ereignis (die Analyse prüft: erst Aufbau, dann Bass-Einschlag):
+    Aufbau     Strahlen sammeln sich in der Mitte, das Licht wird heller und weißer,
+               der Puls wird stärker.
+    Pause      kurz vor dem Drop fast dunkel.
+    Drop       ein weißer Schlag, dann kräftige Farben, jeder Bass-Schlag ein harter
+               Lichtschlag, große schnelle Bewegung, drehende Gobos, 32 Beats lang.
+
 Wie stark alles wirkt, sagt das Profil. Die Engine spricht nur die Gruppen
 "Farb-PARs" und "Spots" an. Sie läuft komplett lokal und braucht kein Internet.
 """
@@ -42,6 +49,10 @@ BEATS_BEWEGUNG = 16      # ein Bewegungs-Durchlauf, bei "langsam" doppelt so lan
 STUFEN = (0.35, 0.6, 0.8) # Energie-Grenzen zwischen ruhig, mittel, stark, Höhepunkt
 HYSTERESE = 0.08         # damit es an einer Grenze nicht hin und her springt
 DROP = 0.25              # so viel Energie mehr als zuletzt gilt als Drop
+DROP_BEATS = 32         # so lange hält das Drop-Bild
+DROP_WEISS_S = 0.25      # erst ein kurzer weißer Schlag
+DROP_BEWEGUNG_BEATS = 4  # eine Runde der Drop-Bewegung, schnell
+AUFBAU_AB = 0.3          # ab dieser Spannung zeigt das Licht den Aufbau
 STROBO_ENERGIE = 0.92
 STROBO_NACH_S = 2.0
 ERSATZ_HELLIGKEIT = 0.5
@@ -90,6 +101,8 @@ class Engine:
         self.look = LOOKS[0]
         self.look_seit = 0              # bei welchem Beat der Look begann
         self.look_nummer = 0            # zählt Looks, daraus kommen Farben und Gobos
+        self.drop_zeit = -99.0
+        self.drop_beat = -999
         self.dauer = 0.0
         self.led_farbe = {}
         self.gobo_listen = {}
@@ -118,9 +131,12 @@ class Engine:
             if messwerte.beat:
                 self.beats += 1
                 self.letzter_beat = jetzt
+            if messwerte.drop and profil["beat_reaktion"] >= 0.5 and not pause:
+                self.drop_zeit, self.drop_beat = jetzt, self.beats
+                self.musik_anteil = 1.0          # der Drop kommt sofort voll, ohne Überblenden
         ruhig = (messwerte is None or pause or profil["beat_reaktion"] <= 0
                  or messwerte.leise or messwerte.rede)
-        self._text_setzen(messwerte, pause, profil)
+        self._text_setzen(messwerte, pause, profil)   # Aufbau, Pause und Drop setzen ihn danach neu
         schritt = dauer / UEBERGANG_S
         self.musik_anteil = max(0.0, min(1.0, self.musik_anteil + (-schritt if ruhig else schritt)))
         # Fällt die Analyse aus, soll das nicht mitten im Blitz stehen bleiben.
@@ -260,12 +276,24 @@ class Engine:
         hell = max(hell, math.exp(-(jetzt - self.letzter_akzent) / (AKZENT_ABKLANG * periode)))
         return grenze * min(1.0, hell)
 
+    def drop_laeuft(self) -> bool:
+        return self.beats - self.drop_beat < DROP_BEATS
+
     def _musik(self, m: Messwerte, profil: dict, jetzt: float) -> dict:
         reaktion = profil["beat_reaktion"]
         palette = [lies_farbe(f) for f in profil["palette"]]
         grenze = profil["max_helligkeit"]
         tempo = m.tempo_bpm if 40.0 <= m.tempo_bpm <= 240.0 else STANDARD_TEMPO
         periode = 60.0 / tempo
+        if reaktion >= 0.5:
+            if self.drop_laeuft():
+                return self._drop(m, profil, palette, grenze, jetzt, periode)
+            if self.drop_beat >= 0 and self.beats - self.drop_beat == DROP_BEATS:
+                self._nach_dem_drop(m, profil)
+            if m.vor_drop:
+                return self._pause(grenze)
+            if m.spannung >= AUFBAU_AB:
+                return self._aufbau(m, palette, grenze, jetzt, periode)
         self._look_waehlen(m, profil, jetzt)
         ergebnis = {}
 
@@ -294,6 +322,85 @@ class Engine:
                 self._stehen(geraet, nummer, len(spots), e)
             ergebnis[geraet["id"]] = e
         return ergebnis
+
+    # --- Aufbau, Pause, Drop ----------------------------------------------------
+
+    def _alle_lichter(self):
+        for nummer, geraet in enumerate(self.patch.in_gruppe(GRUPPE_BEWEGUNG)):
+            yield "spot", nummer, geraet
+        for nummer, geraet in enumerate(self.patch.in_gruppe(GRUPPE_FARBE)):
+            yield "par", nummer, geraet
+
+    def _aufbau(self, m: Messwerte, palette: list, grenze: float, jetzt: float, periode: float) -> dict:
+        """Spannung: Strahlen sammeln sich, Licht wird heller und weißer, der Puls stärker."""
+        s = min(1.0, (m.spannung - AUFBAU_AB) / (1.0 - AUFBAU_AB))
+        weiss = (1.0, 1.0, 1.0)
+        farbe = tuple(a + (b - a) * s for a, b in zip(palette[self.look_nummer % len(palette)], weiss))
+        puls = math.exp(-(jetzt - self.letzter_beat) / (PULS_ABKLANG * periode))
+        # Der Puls wird mit der Spannung tiefer. Er bleibt im Beat, also unter der Blitz-Grenze.
+        hell = grenze * min(1.0, (0.35 + 0.5 * s) + (0.15 + 0.35 * s) * puls)
+        masse = self.buehne.daten["buehne"]
+        ergebnis = {}
+        for art, nummer, geraet in self._alle_lichter():
+            e = Eigenschaften(helligkeit=hell, farbe=self._weiche_farbe(geraet["id"], farbe) if art == "par" else farbe)
+            if art == "spot":
+                e.gobo = "Offen" if self._gobos(geraet) else None
+                anzahl = len(self.patch.in_gruppe(GRUPPE_BEWEGUNG))
+                breit = 0.3 * masse["breite_m"] * (1.0 - s)
+                x = 0.0 if anzahl < 2 else -breit + 2 * breit * nummer / (anzahl - 1)
+                self._zielen(geraet, (x, masse["tiefe_m"] * (0.5 - 0.3 * s), ZIEL_HOEHE_M), e)
+            ergebnis[geraet["id"]] = e
+        self.zustand_text = f"Aufbau {round(m.spannung * 100)} %"
+        return ergebnis
+
+    def _pause(self, grenze: float) -> dict:
+        """Der Moment vor dem Drop: fast dunkel, die Spots bleiben in der Mitte."""
+        ergebnis = {}
+        for art, _, geraet in self._alle_lichter():
+            e = Eigenschaften(helligkeit=0.03 * grenze, farbe=(1.0, 1.0, 1.0))
+            if art == "spot" and geraet["id"] in self.winkel:
+                e.pan, e.tilt = self.winkel[geraet["id"]]
+            ergebnis[geraet["id"]] = e
+        self.zustand_text = "Pause vor dem Drop"
+        return ergebnis
+
+    def _drop(self, m: Messwerte, profil: dict, palette: list, grenze: float, jetzt: float, periode: float) -> dict:
+        """Der Drop: weißer Schlag, dann jeder Bass-Schlag ein harter Lichtschlag."""
+        seit = jetzt - self.drop_zeit
+        a = palette[(self.look_nummer + 1) % len(palette)]
+        b = palette[(self.look_nummer + 2) % len(palette)]
+        wechsel = ((self.beats - self.drop_beat) // 8) % 2
+        schlag = math.exp(-(jetzt - max(self.letzter_beat, self.drop_zeit)) / (0.35 * periode))
+        hell = grenze * (1.0 if seit < DROP_WEISS_S else 0.15 + 0.85 * schlag)
+        masse = self.buehne.daten["buehne"]
+        ergebnis = {}
+        for art, nummer, geraet in self._alle_lichter():
+            farbe = (1.0, 1.0, 1.0) if seit < DROP_WEISS_S else (a if (nummer + wechsel) % 2 == 0 else b)
+            e = Eigenschaften(helligkeit=hell, farbe=farbe)
+            if art == "spot":
+                gobos = self._gobos(geraet)
+                if gobos:
+                    e.gobo = gobos[(self.look_nummer + 1) % len(gobos)]
+                    e.gobo_drehung = 0.8 if nummer % 2 == 0 else -0.8
+                if profil["bewegung"] != "aus":
+                    # Große, schnelle Bewegung im Takt: die Strahlen kreuzen sich auf der Eins.
+                    winkel = 2 * math.pi * (self.beats - self.drop_beat + min(1.0, (jetzt - self.letzter_beat) / periode)) / DROP_BEWEGUNG_BEATS
+                    seite = 1 if nummer % 2 == 0 else -1
+                    ziel = (seite * 0.42 * masse["breite_m"] * math.sin(winkel),
+                            masse["tiefe_m"] * (0.45 + 0.3 * math.cos(winkel)), ZIEL_HOEHE_M)
+                    self._zielen(geraet, ziel, e)
+                elif geraet["id"] in self.winkel:
+                    e.pan, e.tilt = self.winkel[geraet["id"]]
+            ergebnis[geraet["id"]] = e
+        self.zustand_text = "DROP"
+        return ergebnis
+
+    def _nach_dem_drop(self, m: Messwerte, profil: dict) -> None:
+        """Nach dem Drop geht es mit einem starken Look weiter, nicht zurück auf ruhig."""
+        looks = self._passende_looks(max(2, self._stufe(m.energie)), profil)
+        self.look = looks[self.look_nummer % len(looks)]
+        self.look_nummer += 1
+        self.look_seit = self.beats
 
     def _ruhelage(self, geraet: dict, e: Eigenschaften) -> None:
         """Ohne Bewegung zeigen Spots auf die Bühnenmitte, nicht einfach nach oben."""
