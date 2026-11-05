@@ -520,6 +520,11 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     # --- Update -------------------------------------------------------------
 
+    @app.post("/api/update/suchen")
+    def update_suchen():
+        show.update.jetzt_suchen()
+        return show.update.status()
+
     @app.post("/api/update/installieren")
     def update_installieren():
         show.update.installieren()

@@ -67,7 +67,9 @@ export function liveSeite(wurzel) {
     if (!live) return;
     buehne?.setzeWerte(live.geraete);
     feld("status").innerHTML = `${live.dmx_ein ? "DMX-Ausgabe: eingeschaltet" : "DMX-Ausgabe: aus (Simulator)"}<br>
-      ${t(live.engine)}<br>Version ${t(live.version)}`;
+      ${t(live.engine)}<br>Version ${t(live.version)} ·
+      <button data-update-suchen class="klein">Nach Update suchen</button>
+      <span>${t(live.update.zustand === "sucht" ? "sucht …" : live.update.zustand === "laedt" ? `lädt ${live.update.neu} …` : live.update.text)}</span>`;
     if (feld("profil").value !== live.profil && !feld("profil").matches(":focus")) feld("profil").value = live.profil;
     feld("ton-hinweis").innerHTML = live.audio.werte && !live.reagiert
       ? `<div class="meldung gelb" style="margin-top:8px">Dieses Profil reagiert nicht auf Musik. Oben ein anderes wählen.</div>` : "";
@@ -95,6 +97,9 @@ export function liveSeite(wurzel) {
   feld("profil").onchange = () => senden(`/profile/${encodeURIComponent(feld("profil").value)}/laden`);
   feld("quelle").onchange = quelleWaehlen;
   feld("datei").onchange = dateiHochladen;
+  wurzel.addEventListener("click", (ereignis) => {
+    if (ereignis.target.matches("[data-update-suchen]")) senden("/update/suchen");
+  });
   feld("automatik").onchange = () => senden("/automatik", { an: feld("automatik").checked });
   quellenLaden();
 

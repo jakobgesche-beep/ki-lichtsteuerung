@@ -1,8 +1,9 @@
 """Selbst-Update der Mac-App: Niemand muss die App neu herunterladen.
 
 Ablauf:
-  1. Beim Start schaut die App einmal im GitHub-Release nach (latest.json).
-     Ohne Internet passiert einfach nichts. Die Show braucht das nie.
+  1. Beim Start und danach alle 30 Minuten schaut die App im GitHub-Release
+     nach (latest.json), dazu auf Knopfdruck. Ohne Internet passiert einfach
+     nichts. Die Show braucht das nie.
   2. Gibt es eine neuere Version, lädt sie die ZIP-Datei im Hintergrund und
      vergleicht die Prüfsumme.
   3. Oben erscheint ein Knopf. Installiert wird nur auf Klick und nie, solange
@@ -25,6 +26,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 import urllib.request
 from pathlib import Path
 from typing import Optional
@@ -34,6 +36,7 @@ from .version import VERSION
 
 BASIS_URL = "https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/"
 ZEITLIMIT_S = 30
+ABSTAND_S = 30 * 60
 ARCHITEKTUREN = {"arm64": "arm64", "x86_64": "intel"}
 
 INSTALLIER_SKRIPT = """#!/bin/sh
@@ -102,9 +105,28 @@ class Aktualisierer:
             return "Keine Schreibrechte für den Ordner der App."
         return ""
 
-    def im_hintergrund_pruefen(self) -> None:
-        if app_pfad() is not None:
-            threading.Thread(target=self.pruefen, name="Update", daemon=True).start()
+    def im_hintergrund_pruefen(self, wiederholen: bool = True) -> None:
+        """Beim Start, dann regelmäßig. Ein schon geladenes Update bleibt liegen."""
+        if app_pfad() is None:
+            return
+
+        def schleife():
+            while True:
+                if self.zustand not in ("laedt", "bereit", "sucht"):
+                    self.pruefen()
+                if not wiederholen:
+                    return
+                time.sleep(ABSTAND_S)
+
+        threading.Thread(target=schleife, name="Update", daemon=True).start()
+
+    def jetzt_suchen(self) -> None:
+        """Für den Knopf "Nach Update suchen"."""
+        if app_pfad() is None:
+            self.text = "Aus dem Quellcode gestartet: Updates gibt es nur in der Mac-App."
+            return
+        self.text = ""
+        self.im_hintergrund_pruefen(wiederholen=False)
 
     def _oeffnen(self, name: str):
         return urllib.request.urlopen(self.basis_url + name, timeout=ZEITLIMIT_S, context=tls_kontext())
@@ -117,6 +139,7 @@ class Aktualisierer:
                 manifest = json.load(antwort)
             if not ist_neuer(manifest["version"]):
                 self.zustand = "ruht"
+                self.text = f"Version {VERSION} ist aktuell."
                 return
             eintrag = manifest["dateien"][ARCHITEKTUREN[platform.machine()]]
             self.neu = manifest["version"]
@@ -126,6 +149,7 @@ class Aktualisierer:
         except Exception as fehler:
             logging.info("Update nicht möglich: %s", fehler)
             self.zustand = "ruht"
+            self.text = "Keine Verbindung zum Update-Server. Die Show läuft trotzdem."
 
     def _laden(self, name: str, pruefsumme: str) -> Path:
         ordner = self.show.pfade.wurzel / "update"

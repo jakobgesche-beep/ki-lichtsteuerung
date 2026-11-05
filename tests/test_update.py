@@ -186,3 +186,16 @@ def test_kaputtes_update_laesst_die_alte_app_stehen(tmp_path, monkeypatch):
 def test_status_steht_in_den_live_daten(show):
     live = show.live_daten()
     assert live["version"] and live["update"]["zustand"] == "ruht"
+
+
+def test_aus_dem_quellcode_gibt_es_keine_updates_aber_eine_antwort(show):
+    show.update.jetzt_suchen()
+    assert "Mac-App" in show.update.text
+
+
+def test_aktuelle_version_wird_gemeldet(show, webserver, ohne_certifi):
+    ordner, url = webserver
+    veroeffentlichen(ordner, "0.0.1")
+    a = Aktualisierer(show, url)
+    a.pruefen()
+    assert "aktuell" in a.text

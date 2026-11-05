@@ -97,3 +97,4 @@ td input[type=number] { width: 70px; }
 .zeitleiste .ruhig { background: #2f4a63; } .zeitleiste .mittel { background: #3d6a94; }
 .zeitleiste .stark { background: #8a5a1c; } .zeitleiste .hoehepunkt { background: #a33a30; }
 .aufnahme-an { background: var(--rot) !important; border-color: var(--rot) !important; color: #fff !important; }
+button.klein { padding: 2px 8px; font-size: 12px; }
