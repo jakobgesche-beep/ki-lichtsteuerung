@@ -14,7 +14,7 @@ from lichtsteuerung.show import Show
 WECHSEL = [16, 40, 64, 88, 112]
 
 
-def testsong():
+def beispielsong():
     rng = np.random.default_rng(3)
 
     def teil(sek, laut, rauschen=0.0):
@@ -26,7 +26,7 @@ def testsong():
 
 @pytest.fixture(scope="module")
 def analyse():
-    return analysieren(testsong(), "Testsong")
+    return analysieren(beispielsong(), "Testsong")
 
 
 def test_findet_alle_wechsel_auf_zwei_sekunden_genau(analyse):
@@ -88,7 +88,7 @@ def test_aufnahme_speichern_analysieren_und_nachspielen(show):
     with TestClient(erstelle_app(show)) as client:
         show.audio.quelle = object()            # tut so, als liefe ein Eingang
         assert client.post("/api/proben/aufnahme", json={"name": "Song 1"}).status_code == 200
-        show.audio.aufnahme = [testsong()]
+        show.audio.aufnahme = [beispielsong()]
         antwort = client.post("/api/proben/stopp").json()
         show.audio.quelle = None
         assert len(antwort["analyse"]["teile"]) == 6 and antwort["sequenz"]["name"] == "Song 1"
@@ -135,3 +135,34 @@ def test_patchplan_seite(show):
     with TestClient(erstelle_app(show)) as client:
         html = client.get("/patchplan").text
     assert "Patchplan" in html and "049" in html and "12 Kanäle" in html
+
+
+def test_probe_findet_drop_und_aufbau_und_merkt_markierung(show):
+    from lichtsteuerung.audio.quellen import erzeuge_edm
+    ton, zeit = erzeuge_edm(128)
+    analyse = show.proben.speichern("Party", ton, markierungen=[zeit + 0.2])
+    assert len(analyse["drops_s"]) == 1 and abs(analyse["drops_s"][0] - zeit) < 0.1
+    namen = [t["name"] for t in analyse["teile"]]
+    assert "Drop" in namen and namen[namen.index("Drop") - 1] == "Aufbau"
+    assert analyse["markiert_s"] == [round(zeit + 0.2, 2)]
+    sequenz = show.show_aus_probe("Party")
+    drop_cue = sequenz["cues"][namen.index("Drop")]
+    assert any(e["art"] == "acht" and e["beats"] == 4 for e in drop_cue["effekte"])
+    assert sequenz["cues"][namen.index("Aufbau")]["name"].startswith("Aufbau")
+    assert pruefe_sequenz(sequenz, show.patch, show.positionen) == []
+
+
+def test_markieren_nur_waehrend_der_aufnahme(show):
+    with TestClient(erstelle_app(show)) as client:
+        assert client.post("/api/proben/markieren").status_code == 400
+
+        class Quelle:
+            def schliessen(self):
+                pass
+        show.audio.quelle = Quelle()
+        client.post("/api/proben/aufnahme", json={"name": "Song"})
+        show.audio.aufnahme = [np.zeros(44100, dtype="float32")]
+        assert client.post("/api/proben/markieren").json() == {"markierungen": 1}
+        show.audio.aufnahme = [beispielsong()]
+        assert client.post("/api/proben/stopp").json()["analyse"]["markiert_s"] == [1.0]
+        show.audio.quelle = None

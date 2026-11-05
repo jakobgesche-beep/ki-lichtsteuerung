@@ -17,6 +17,7 @@ export function probeSeite(wurzel) {
           <label>Name des Songs <input id="name" placeholder="zum Beispiel Last Christmas"></label>
           <p class="zeile"><button id="aufnahme" class="haupt">Aufnahme starten</button> <span id="zeit" class="leise"></span></p>
           <p class="leise">Die Band spielt den Song einmal ganz durch. Danach erkennt das Programm Tempo und Songteile und baut die Lichtshow.</p>
+          <p class="leise"><b>Taste D</b> während der Aufnahme: „Hier war der Drop“. So lässt sich die Drop-Erkennung auf deinen Song abstimmen.</p>
         </div>
         <div class="kasten">
           <h2>Oder: Song als Datei</h2>
@@ -43,6 +44,8 @@ export function probeSeite(wurzel) {
         <h2>${t(p.name)} <span class="leise">${p.tempo_bpm} BPM · ${minuten(p.dauer_s)}</span></h2>
         <div class="zeitleiste">${p.teile.map((teil) => `<div class="${teil.klasse}" style="flex:${teil.ende - teil.start}"
           title="${t(teil.name)} ${teil.gruppe}: ${minuten(teil.start)} bis ${minuten(teil.ende)}">${t(teil.name)} ${teil.gruppe}</div>`).join("")}</div>
+        ${(p.drops_s?.length || p.markiert_s?.length) ? `<p class="leise">Drops erkannt: ${(p.drops_s ?? []).map(minuten).join(", ") || "keiner"}
+          ${p.markiert_s?.length ? ` · von dir markiert: ${p.markiert_s.map(minuten).join(", ")}` : ""}</p>` : ""}
         <p class="zeile">
           <button data-ansehen="${t(p.name)}" class="haupt">Probe ansehen</button>
           <button data-neu="${t(p.name)}">Show neu bauen</button>
@@ -101,7 +104,8 @@ export function probeSeite(wurzel) {
       feld("aufnahme").textContent = text;
       feld("aufnahme").classList.toggle("aufnahme-an", nimmtAuf);
     }
-    setzeText(feld("zeit"), nimmtAuf ? `● ${live.aufnahme.name} ${minuten(live.aufnahme.sekunden)}` : "");
+    setzeText(feld("zeit"), nimmtAuf ? `● ${live.aufnahme.name} ${minuten(live.aufnahme.sekunden)}` +
+      (live.aufnahme.markierungen ? ` · ${live.aufnahme.markierungen}× Drop markiert` : "") : "");
     setzeText(feld("quelle"), live.audio.quelle === "aus"
       ? "Keine Tonquelle: auf der Live-Seite den Eingang (zum Beispiel X32 oder Mikrofon) wählen."
       : `Tonquelle: ${live.audio.quelle}`);

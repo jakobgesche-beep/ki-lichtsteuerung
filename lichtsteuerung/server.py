@@ -438,7 +438,16 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             raise ValueError("Bitte einen Namen für den Song eingeben.")
         show.audio.aufnahme_starten()
         show.aufnahme_name = name
+        show.aufnahme_marken = []
         return {"aufnahme": name}
+
+    @app.post("/api/proben/markieren")
+    def probe_markieren():
+        """Taste D: Hier war der Drop. Nur während einer Aufnahme."""
+        if not show.aufnahme_name:
+            raise ValueError("Zum Markieren erst in der Probe eine Aufnahme starten.")
+        show.aufnahme_marken.append(sum(len(b) for b in show.audio.aufnahme or []) / 44100)
+        return {"markierungen": len(show.aufnahme_marken)}
 
     @app.post("/api/proben/stopp")
     def probe_stoppen():
@@ -446,7 +455,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         ton = show.audio.aufnahme_beenden()
         if not name:
             raise ValueError("Es läuft keine Aufnahme.")
-        show.proben.speichern(name, ton)
+        marken, show.aufnahme_marken = show.aufnahme_marken, []
+        show.proben.speichern(name, ton, marken)
         return {"analyse": show.proben.lesen(name), "sequenz": show.show_aus_probe(name)}
 
     @app.post("/api/proben/datei")

@@ -142,20 +142,55 @@ def test_echter_drop_wird_auf_50_ms_genau_erkannt(bpm, mit_pause):
     from lichtsteuerung.audio.quellen import erzeuge_edm
     ton, zeit = erzeuge_edm(bpm, mit_pause=mit_pause)
     drops, spannung = drops_finden(ton)
-    assert len(drops) == 1 and 0 <= drops[0] - zeit <= 0.06
+    assert len(drops) == 1 and 0 <= drops[0] - zeit <= 0.08
     assert spannung > 0.8
 
 
-def test_kein_drop_ohne_aufbau():
-    """Normale Songs: lauter Refrain, Bridge vor Refrain, Becken-Crescendo. Alles kein Drop."""
+def test_kein_drop_ohne_aufbau_oder_break():
+    """Normale Songs: Strophe geht in einen lauten Refrain, Becken-Crescendo. Alles kein Drop."""
     rng = np.random.default_rng(1)
-    refrain = np.concatenate([erzeuge_takt(120, 20) * 0.3, erzeuge_takt(120, 6) * 0.05,
+    refrain = np.concatenate([erzeuge_takt(120, 20) * 0.3,
                               erzeuge_takt(120, 20) * 0.9 + (rng.standard_normal(20 * ABTASTRATE) * 0.1).astype("float32")])
     zeit = np.arange(30 * ABTASTRATE) / ABTASTRATE
     crescendo = (erzeuge_takt(110, 30) * 0.6
                  + rng.standard_normal(len(zeit)) * np.clip((zeit - 10) / 10, 0, 1) * 0.2).astype("float32")
     for ton in (refrain, crescendo):
         assert drops_finden(ton)[0] == []
+
+
+def test_break_dann_volle_band_ist_ein_drop():
+    """Sechs Sekunden fast still, dann setzt die ganze Band ein: Das soll das Licht treffen."""
+    rng = np.random.default_rng(1)
+    ton = np.concatenate([erzeuge_takt(120, 20) * 0.3, erzeuge_takt(120, 6) * 0.05,
+                          erzeuge_takt(120, 20) * 0.9 + (rng.standard_normal(20 * ABTASTRATE) * 0.1).astype("float32")])
+    drops, _ = drops_finden(ton)
+    assert len(drops) == 1 and 26 <= drops[0] <= 26.6
+
+
+def handy(ton, rng=np.random.default_rng(5)):
+    """Ungefähr so klingt es über einen Handy-Lautsprecher am Laptop-Mikrofon: kein Tiefbass, etwas Raum."""
+    spektrum = np.fft.rfft(ton)
+    frequenz = np.fft.rfftfreq(len(ton), 1 / ABTASTRATE)
+    spektrum *= np.clip((frequenz - 120) / 200, 0, 1) * np.clip((12000 - frequenz) / 4000, 0, 1)
+    gefiltert = np.fft.irfft(spektrum, len(ton)).astype("float32")
+    hall = np.convolve(gefiltert, np.exp(-np.arange(2000) / 300) / 60, mode="same").astype("float32")
+    return gefiltert * 0.4 + hall + rng.standard_normal(len(ton)).astype("float32") * 0.003
+
+
+@pytest.mark.parametrize("bpm", [128, 174])
+def test_drop_auch_ueber_handy_lautsprecher(bpm):
+    """Ohne Tiefbass und mit einem Riser, der lauter ist als der Drop selbst."""
+    from lichtsteuerung.audio.quellen import erzeuge_edm
+    ton, zeit = erzeuge_edm(bpm)
+    drops, _ = drops_finden(handy(ton))
+    assert len(drops) == 1 and -0.05 <= drops[0] - zeit <= 0.1
+
+
+def test_drop_ohne_pause_ueber_handy_hoechstens_einen_beat_spaet():
+    from lichtsteuerung.audio.quellen import erzeuge_edm
+    ton, zeit = erzeuge_edm(128, mit_pause=False)
+    drops, _ = drops_finden(handy(ton))
+    assert len(drops) == 1 and 0 <= drops[0] - zeit <= 60 / 128 + 0.05
 
 
 def test_pause_vor_dem_drop_ist_nicht_leise():

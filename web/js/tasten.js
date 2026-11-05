@@ -78,6 +78,11 @@ export function tastenLeiste(leiste) {
       document.getElementById("befehl").focus();
       return;
     }
+    if (ereignis.key.toLowerCase() === "d") {
+      // Drop markieren: Nur während einer Aufnahme in der Probe.
+      senden("/proben/markieren");
+      return;
+    }
     const treffer = TASTEN.find(({ taste }) => taste === ereignis.key.toLowerCase());
     if (treffer) {
       ereignis.preventDefault();

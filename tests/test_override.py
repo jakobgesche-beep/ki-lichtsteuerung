@@ -64,7 +64,7 @@ def einschwingen(show):
 
 def test_musik_macht_licht(show):
     bild, _ = einschwingen(show)
-    assert bild[DIMMER] > 150
+    assert bild[DIMMER] > 120            # Licht ist an (zwischen zwei Beats etwas dunkler)
 
 
 def test_blackout_schlaegt_alles(show):

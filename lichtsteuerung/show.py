@@ -60,6 +60,7 @@ class Show:
         self.pult = Pult(self, self.pfade.sequenzen, self.pfade.executoren)
         self.proben = Proben(self.pfade.proben)
         self.aufnahme_name: Optional[str] = None
+        self.aufnahme_marken = []
         self.automatik_an = True
         self.vorschau = Vorschau(self)
         self.vorschau_geraete = None
@@ -241,7 +242,8 @@ class Show:
                     "update": self.update.status(),
                     "pult": self.pult.status(), "automatik": self.automatik_an,
                     "aufnahme": {"name": self.aufnahme_name,
-                                 "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1)},
+                                 "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
+                                 "markierungen": len(self.aufnahme_marken)},
                     "vorschau": {"geraete": self.vorschau_geraete},
                     "strobo_erlaubt": self.profil["strobo"] != "aus",
                     "hazer_erlaubt": self.profil["hazer"],

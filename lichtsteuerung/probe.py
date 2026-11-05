@@ -50,13 +50,20 @@ def merkmale(ton: np.ndarray) -> np.ndarray:
 
 
 def tempo_und_beats(ton: np.ndarray) -> tuple:
+    """Spielt den Song einmal durch die Live-Analyse: Tempo, Beats, Drops und Aufbau."""
     analyse = Analyse(beat_erkennung())
-    beats = []
+    beats, drops, aufbau = [], [], []
     for start in range(0, len(ton) - BLOCK, BLOCK):
-        if analyse.verarbeite(ton[start:start + BLOCK]).beat:
-            beats.append(start / ABTASTRATE)
+        werte = analyse.verarbeite(ton[start:start + BLOCK])
+        zeit = start / ABTASTRATE
+        if werte.beat:
+            beats.append(zeit)
+        if werte.drop:
+            drops.append(round(zeit, 2))
+        if werte.spannung >= 0.3:
+            aufbau.append(zeit)
     tempo = analyse.tempo if 40 <= analyse.tempo <= 240 else 120.0
-    return round(float(tempo), 1), beats
+    return round(float(tempo), 1), beats, drops, aufbau
 
 
 def grenzen_finden(werte: np.ndarray) -> list:
@@ -92,8 +99,11 @@ def auf_takt(sekunde: float, beats: list, tempo: float) -> float:
 def analysieren(ton: np.ndarray, name: str) -> dict:
     dauer = len(ton) / ABTASTRATE
     werte = merkmale(ton)
-    tempo, beats = tempo_und_beats(ton)
+    tempo, beats, drops, aufbau = tempo_und_beats(ton)
     zeiten = [0.0] + [auf_takt(i * SCHRITT_S, beats, tempo) for i in grenzen_finden(werte)] + [dauer]
+    # Ein Drop ist immer ein Wechsel, genau an seiner Stelle. Ein Wechsel kurz davor fällt weg.
+    zeiten = [z for z in zeiten if not any(0 < abs(z - d) < 2.0 for d in drops)] + drops
+    zeiten += [a for a in _aufbau_beginn(aufbau)]
     zeiten = sorted({max(0.0, min(dauer, z)) for z in zeiten})
     teile = []
     for start, ende in zip(zeiten, zeiten[1:]):
@@ -104,7 +114,23 @@ def analysieren(ton: np.ndarray, name: str) -> dict:
     if not teile:
         teile = [{"start": 0.0, "ende": round(dauer, 2), "merkmal": werte.mean(axis=0).tolist() if len(werte) else [0, 0, 0, 0]}]
     einordnen(teile)
-    return {"name": name, "dauer_s": round(dauer, 2), "tempo_bpm": tempo, "teile": teile}
+    for teil in teile:
+        if any(abs(teil["start"] - d) < 0.3 for d in drops):
+            teil.update(name="Drop", klasse="hoehepunkt")
+        elif any(teil["start"] - 0.3 <= a < teil["ende"] for a in aufbau) and any(
+                abs(teil["ende"] - d) < 0.3 for d in drops):
+            teil["name"] = "Aufbau"
+    return {"name": name, "dauer_s": round(dauer, 2), "tempo_bpm": tempo, "teile": teile, "drops_s": drops}
+
+
+def _aufbau_beginn(zeiten: list) -> list:
+    """Erster Zeitpunkt jedes zusammenhängenden Aufbaus."""
+    beginn, letzte = [], None
+    for zeit in zeiten:
+        if letzte is None or zeit - letzte > 1.0:
+            beginn.append(round(zeit, 2))
+        letzte = zeit
+    return beginn
 
 
 def einordnen(teile: list) -> None:
@@ -171,6 +197,12 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von) -> dict:
         bewegung, groesse, beats, hell, drehung, licht = LOOKS[teil["klasse"]]
         if teil["name"] == "Schluss":
             bewegung, licht = None, "dimmer_welle"
+        if teil["name"] == "Aufbau":
+            cues.append(aufbau_cue(teil, gruppen, palette[look % len(palette)]))
+            zeitcode.append(teil["start"])
+            continue
+        if teil["name"] == "Drop":
+            bewegung, groesse, beats, hell, drehung, licht = "acht", 1.0, 4, 1.0, 0.8, "dimmer_puls"
         farbe = palette[look % len(palette)]
         werte, effekte = [], []
         if "Spots" in gruppen:
@@ -211,6 +243,18 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von) -> dict:
             "_hinweis": "Automatisch aus der Probe gebaut. Im Pult frei änderbar."}
 
 
+def aufbau_cue(teil: dict, gruppen: list, farbe: str) -> dict:
+    """Aufbau: Strahlen in die Mitte, Licht weiß, sanft pulsierend. Der Drop kommt im nächsten Cue."""
+    werte, effekte = [], []
+    if "Spots" in gruppen:
+        werte.append({"gruppe": "Spots", "helligkeit": 0.8, "farbe": "weiss", "gobo": "Offen", "position": "Mitte"})
+        effekte.append({"art": "dimmer_puls", "ziel": {"gruppe": "Spots"}, "tempo": "musik", "beats": 1, "verteilung": 0.0})
+    if "Farb-PARs" in gruppen:
+        werte.append({"gruppe": "Farb-PARs", "helligkeit": 0.7, "farbe": farbe})
+        effekte.append({"art": "dimmer_puls", "ziel": {"gruppe": "Farb-PARs"}, "tempo": "musik", "beats": 1, "verteilung": 0.0})
+    return {"name": f"Aufbau {teil['gruppe']}", "zeit_s": 2.0, "folgen_s": None, "werte": werte, "effekte": effekte}
+
+
 class Proben:
     """Ablage der Aufnahmen und Analysen in daten/proben/."""
 
@@ -226,13 +270,16 @@ class Proben:
     def ton_pfad(self, name: str) -> Path:
         return self.ordner / f"{daten.dateiname(name)}.wav"
 
-    def speichern(self, name: str, ton: np.ndarray) -> dict:
+    def speichern(self, name: str, ton: np.ndarray, markierungen: Optional[list] = None) -> dict:
         import soundfile
         if len(ton) < ABTASTRATE * 10:
             raise ValueError("Die Aufnahme ist kürzer als 10 Sekunden. Läuft der Ton?")
         self.ordner.mkdir(parents=True, exist_ok=True)
         soundfile.write(str(self.ton_pfad(name)), ton, ABTASTRATE, subtype="PCM_16")
         analyse = analysieren(ton, name)
+        if markierungen:
+            # Wo du "Drop!" gedrückt hast. Damit lässt sich die Erkennung auf echte Songs abstimmen.
+            analyse["markiert_s"] = [round(m, 2) for m in markierungen]
         daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
         return analyse
 

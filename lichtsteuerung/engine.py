@@ -41,10 +41,11 @@ STANDARD_TEMPO = 120.0
 PULS_ABKLANG = 0.45      # wie schnell der Lichtpuls ausklingt, in Beats
 AKZENT_ABKLANG = 1.2     # der Akzent ("doppelt hell") klingt langsamer aus
 FARB_BLENDE_S = 0.25     # Überblendung der LED-Farben
-WINKEL_GLAETTUNG_S = 0.35 # so weich laufen Pan und Tilt, auch beim Look-Wechsel
-MAX_GRAD_PRO_S = 180     # schneller folgt auch ein echter Kopf nicht sauber
+WINKEL_GLAETTUNG_S = 0.25 # so weich laufen Pan und Tilt, auch beim Look-Wechsel
+MAX_GRAD_PRO_S = 220     # schneller folgt auch ein echter Kopf nicht sauber
 PHRASE = 16              # so viele Beats bleibt ein Look mindestens stehen
-ABWECHSLUNG = 32         # spätestens dann kommt ein neuer Look derselben Stärke
+ABWECHSLUNG = 32         # spätestens dann kommt ein neuer Look derselben Stärke (ruhige Teile)
+ABWECHSLUNG_STARK = 16   # in starken Teilen schneller
 BEATS_BEWEGUNG = 16      # ein Bewegungs-Durchlauf, bei "langsam" doppelt so lang
 STUFEN = (0.35, 0.6, 0.8) # Energie-Grenzen zwischen ruhig, mittel, stark, Höhepunkt
 HYSTERESE = 0.08         # damit es an einer Grenze nicht hin und her springt
@@ -65,24 +66,27 @@ class Look:
     name: str
     stufe: int                       # 0 ruhig, 1 mittel, 2 stark, 3 Höhepunkt
     bewegung: Optional[str] = None   # None: das Licht steht
+    beats: int = 16                  # Beats für eine Runde der Bewegung
     farben: str = "eine"             # eine, zwei (fest verteilt), wechsel (alle 4 Beats)
     gobo: bool = False
     drehung: float = 0.0
     puls: str = "beat"               # atmen, beat, akzent (Takt-Eins doppelt hell)
+    schub: bool = False              # kleiner Ruck auf jedem Beat
 
 
 LOOKS = (
     Look("Ruhe", 0, puls="atmen"),
-    Look("Ruhe mit Gobo", 0, puls="atmen", gobo=True),
+    Look("Ruhe schwenkt", 0, bewegung="schwenk", beats=32, puls="atmen", gobo=True),
     Look("Stehen", 1, gobo=True),
-    Look("Farbwechsel", 1, farben="wechsel"),
-    Look("Zwei Farben", 1, farben="zwei", gobo=True, drehung=0.2),
-    Look("Schwenk", 2, bewegung="schwenk", gobo=True),
-    Look("Kreuz", 2, bewegung="kreuz", farben="zwei", gobo=True, drehung=0.3),
-    Look("Stehen mit Akzent", 2, farben="wechsel", puls="akzent"),
-    Look("Kreis", 3, bewegung="kreis", farben="wechsel", gobo=True, drehung=0.5, puls="akzent"),
-    Look("Fächer", 3, bewegung="faecher", farben="zwei", gobo=True, drehung=0.6, puls="akzent"),
-    Look("Höhepunkt stehend", 3, farben="wechsel", gobo=True, puls="akzent"),
+    Look("Sanfter Schwenk", 1, bewegung="schwenk", beats=16, farben="zwei"),
+    Look("Farbwechsel", 1, farben="wechsel", gobo=True),
+    Look("Schwenk", 2, bewegung="schwenk", beats=8, gobo=True, drehung=0.3, schub=True),
+    Look("Kreuz", 2, bewegung="kreuz", beats=8, farben="zwei", gobo=True, drehung=0.3),
+    Look("Nicken", 2, bewegung="nicken", beats=4, farben="wechsel", schub=True),
+    Look("Stehen mit Akzent", 2, farben="wechsel", gobo=True, puls="akzent"),
+    Look("Kreis", 3, bewegung="kreis", beats=8, farben="wechsel", gobo=True, drehung=0.5, puls="akzent"),
+    Look("Fächer", 3, bewegung="faecher", beats=4, farben="zwei", gobo=True, drehung=0.6, puls="akzent", schub=True),
+    Look("Höhepunkt", 3, bewegung="kreuz", beats=4, farben="wechsel", gobo=True, drehung=0.8, puls="akzent", schub=True),
 )
 
 
@@ -102,6 +106,7 @@ class Engine:
         self.look_seit = 0              # bei welchem Beat der Look begann
         self.look_nummer = 0            # zählt Looks, daraus kommen Farben und Gobos
         self.drop_zeit = -99.0
+        self.schub = 0.0
         self.drop_beat = -999
         self.dauer = 0.0
         self.led_farbe = {}
@@ -200,19 +205,22 @@ class Engine:
 
     def _look_waehlen(self, m: Messwerte, profil: dict, jetzt: float) -> None:
         """Nur am Ende einer Phrase wechseln, außer bei einem Drop."""
-        stufe = self._stufe(m.energie)
+        # Intensität: wie stark diese Stelle im Vergleich zum Rest des Songs ist.
+        staerke = m.intensitaet if m.intensitaet > 0 else m.energie
+        stufe = self._stufe(staerke)
         if self.look_nummer == 0:
-            self.energie_langsam = m.energie
-        # Ein Drop: von ruhig oder mittel plötzlich auf Höhepunkt, deutlich über dem Schnitt.
-        drop = (stufe == 3 and self.stufe <= 1 and m.energie - self.energie_langsam > DROP)
-        self.energie_langsam += (m.energie - self.energie_langsam) * min(1.0, self.dauer / 8.0)
+            self.energie_langsam = staerke
+        # Ein Sprung: von ruhig oder mittel plötzlich auf Höhepunkt, deutlich über dem Schnitt.
+        drop = (stufe == 3 and self.stufe <= 1 and staerke - self.energie_langsam > DROP)
+        self.energie_langsam += (staerke - self.energie_langsam) * min(1.0, self.dauer / 8.0)
         seit = self.beats - self.look_seit
+        abwechslung = ABWECHSLUNG_STARK if self.look.stufe >= 2 else ABWECHSLUNG
         phrase_um = m.beat and seit >= PHRASE and seit % 8 == 0
         # Passt der Look gar nicht (zwei Stufen daneben), wartet er nur bis zum nächsten Takt.
-        weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and seit % 4 == 0
+        weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and seit >= 8 and seit % 4 == 0
         erster = self.look_nummer == 0          # beim ersten Ton gleich den passenden Look nehmen
         wechseln = erster or (drop and seit >= 4) or weit_daneben or (
-            phrase_um and (stufe != self.stufe or seit >= ABWECHSLUNG))
+            phrase_um and (stufe != self.stufe or seit >= abwechslung))
         self.stufe = stufe if (wechseln or seit < 1) else self.stufe
         if not wechseln and self.look in self._passende_looks(self.look.stufe, profil):
             return
@@ -267,7 +275,7 @@ class Engine:
         # Die Lampen wechseln sich auf dem Beat ab, das wirkt auch mit nur zweien lebendig.
         if anzahl > 1 and self.beats % anzahl != nummer % anzahl:
             puls *= 0.35
-        grund = 1.0 - (0.3 + 0.4 * reaktion)        # so tief geht der Dimmer zwischen den Beats
+        grund = 1.0 - (0.35 + 0.45 * reaktion)      # so tief geht der Dimmer zwischen den Beats
         hell = grund + (1.0 - grund) * max(puls, 0.5 * m.bass)
         if look.puls == "akzent" and self.beats % 4 == 0:
             # Auf der Eins im Takt: alle zusammen voll, und langsamer wieder runter.
@@ -285,6 +293,7 @@ class Engine:
         grenze = profil["max_helligkeit"]
         tempo = m.tempo_bpm if 40.0 <= m.tempo_bpm <= 240.0 else STANDARD_TEMPO
         periode = 60.0 / tempo
+        self.schub = math.exp(-(jetzt - self.letzter_beat) / (PULS_ABKLANG * periode))
         if reaktion >= 0.5:
             if self.drop_laeuft():
                 return self._drop(m, profil, palette, grenze, jetzt, periode)
@@ -437,14 +446,18 @@ class Engine:
         if muster == "kreis":        # Kreise, die sich gegenüberliegen
             return (0.3 * breite * weite * math.cos(winkel + versatz),
                     tiefe * (0.5 + 0.3 * weite * math.sin(winkel + versatz)))
-        if muster == "kreuz":        # die Strahlen tauschen langsam die Seiten
+        if muster == "kreuz":        # die Strahlen tauschen die Seiten
             return (seite * 0.38 * breite * weite * math.sin(winkel), tiefe * 0.5)
+        if muster == "nicken":       # vor und zurück, gegeneinander
+            return (seite * 0.2 * breite, tiefe * (0.5 + 0.3 * weite * math.sin(winkel + versatz)))
         return (0.35 * breite * weite * math.sin(winkel + versatz / 2), tiefe * 0.5)   # Schwenk
 
     def _bewegen(self, geraet: dict, nummer: int, bewegung: str, energie: float, e: Eigenschaften) -> None:
-        """Die Spots folgen dem Muster des Looks, langsam und geglättet."""
-        zyklus = BEATS_BEWEGUNG * (2 if bewegung == "langsam" else 1)
+        """Die Spots folgen dem Muster des Looks, im Takt und geglättet."""
+        zyklus = self.look.beats * (2 if bewegung == "langsam" else 1)
         x, y = self._muster(nummer, zyklus, 0.6 + 0.4 * energie)
+        if self.look.schub:
+            y += self.schub * self.buehne.daten["buehne"]["tiefe_m"] * 0.12     # kleiner Ruck auf dem Beat
         self._zielen(geraet, (x, y, ZIEL_HOEHE_M), e)
 
     def _zielen(self, geraet: dict, ziel: tuple, e: Eigenschaften) -> None:

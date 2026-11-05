@@ -152,7 +152,7 @@ def test_bewegung_springt_nicht(nur_spots):
         if letzte is not None and i > 80:
             groesster = max(groesster, abs(pan - letzte))
         letzte = pan
-    assert groesster <= 4.51    # 180 Grad pro Sekunde bei 40 Bildern
+    assert groesster <= 5.51    # 220 Grad pro Sekunde bei 40 Bildern
 
 
 def test_muster_bleiben_auf_der_buehne(nur_spots):
@@ -234,7 +234,7 @@ def test_farben_wechseln_hoechstens_alle_4_beats(engine):
     zeit, _ = beats_spielen(engine, PARTY, 1, 0.65)
     erzwinge(engine, "Stehen mit Akzent")
     farben = []
-    for beat in range(16):
+    for beat in range(14):              # innerhalb einer Phrase, vor dem nächsten Look
         zeit, _ = beats_spielen(engine, PARTY, 1, 0.65, von=zeit)
         farben.append(engine.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False), PARTY, zeit)["kopf"].farbe)
     wechsel = sum(1 for a, b in zip(farben, farben[1:]) if a != b)
@@ -258,7 +258,7 @@ def test_bewegter_look_bewegt_sich_weich(engine):
     for i in range(160):
         pans.append(engine.bewerte(Messwerte(beat=i % 20 == 0, tempo_bpm=120, energie=0.9, leise=False), PARTY, 3 + i / 40)["kopf"].pan)
     assert max(pans) - min(pans) > 10
-    assert max(abs(a - b) for a, b in zip(pans[20:], pans[21:])) <= 4.6
+    assert max(abs(a - b) for a, b in zip(pans[20:], pans[21:])) <= 5.51     # höchstens 220° pro Sekunde
 
 
 def test_puls_auf_dem_beat_und_akzent_auf_der_eins(engine):
