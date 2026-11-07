@@ -115,9 +115,18 @@ def test_ueber_das_publikum_aber_nie_auf_kopfhoehe(show):
 
 def test_dimmer_welle_laeuft_durch(show):
     show.pult.programmer.setzen(["par-1"], {"helligkeit": 1})
-    show.pult.programmer.effekt_dazu({"art": "dimmer_welle", "ziel": {"geraete": ["par-1"]}, "tempo": 60, "beats": 1})
+    show.pult.programmer.effekt_dazu({"art": "dimmer_welle", "ziel": {"geraete": ["par-1"]}, "tempo": 60, "beats": 1,
+                                      "tiefe": 0.9})
     werte = {show.baue_bild(i / 10)[DIMMER] for i in range(10)}
     assert min(werte) < 60 and max(werte) > 200
+
+
+def test_puls_laesst_das_licht_an(show):
+    """Ohne Angabe geht der Puls nur bis zur Hälfte herunter: kein Flackern im Dunkeln."""
+    show.pult.programmer.setzen(["par-1"], {"helligkeit": 1})
+    show.pult.programmer.effekt_dazu({"art": "dimmer_puls", "ziel": {"geraete": ["par-1"]}, "tempo": 60, "beats": 1})
+    werte = [show.baue_bild(i / 20)[DIMMER] for i in range(20)]
+    assert min(werte) >= 120 and max(werte) == 255 and sum(werte) / len(werte) > 150
 
 
 def test_farbwechsel(show):

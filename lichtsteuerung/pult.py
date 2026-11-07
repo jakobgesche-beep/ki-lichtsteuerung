@@ -60,7 +60,7 @@ def pruefe_effekt(effekt: dict, gruppen: list, geraete: list) -> list:
         fehler.append("Ein Gerät im Effekt ist nicht gepatcht.")
     if "gruppe" not in ziel and not ziel.get("geraete"):
         fehler.append("Der Effekt braucht Geräte oder eine Gruppe.")
-    for feld, unten, oben in (("groesse", 0, 1), ("verteilung", 0, 1), ("beats", 0.25, 64)):
+    for feld, unten, oben in (("groesse", 0, 1), ("verteilung", 0, 1), ("beats", 0.25, 64), ("tiefe", 0, 1)):
         if feld in effekt and not (isinstance(effekt[feld], (int, float)) and unten <= effekt[feld] <= oben):
             fehler.append(f"{feld} muss zwischen {unten:g} und {oben:g} liegen.")
     tempo = effekt.get("tempo", "musik")
@@ -131,10 +131,13 @@ class Effekte:
 
     def _wirkung(self, effekt: dict, geraet: dict, phase: float, e: Eigenschaften) -> Eigenschaften:
         art = effekt["art"]
+        # "tiefe": wie weit das Licht zwischendurch heruntergeht. 1 = ganz aus, 0.5 = halb.
         if art == "dimmer_welle":
-            return e.kopie(helligkeit=e.helligkeit * (0.1 + 0.9 * (0.5 + 0.5 * math.sin(2 * math.pi * phase))))
+            tiefe = effekt.get("tiefe", 0.6)
+            return e.kopie(helligkeit=e.helligkeit * (1.0 - tiefe * (0.5 - 0.5 * math.sin(2 * math.pi * phase))))
         if art == "dimmer_puls":
-            return e.kopie(helligkeit=e.helligkeit * math.exp(-phase * 5.0))
+            tiefe = effekt.get("tiefe", 0.5)
+            return e.kopie(helligkeit=e.helligkeit * (1.0 - tiefe * (1.0 - math.exp(-phase * 5.0))))
         if art == "farbwechsel":
             farben = effekt.get("farben") or ["rot", "blau"]
             return e.kopie(farbe=lies_farbe(farben[int(phase * len(farben)) % len(farben)]))

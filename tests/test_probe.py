@@ -166,3 +166,23 @@ def test_markieren_nur_waehrend_der_aufnahme(show):
         show.audio.aufnahme = [beispielsong()]
         assert client.post("/api/proben/stopp").json()["analyse"]["markiert_s"] == [1.0]
         show.audio.quelle = None
+
+
+def test_show_hat_nur_zwei_songfarben_und_akzente_an_markierungen(show, analyse):
+    show.patch.hinzufuegen("technik-ag/strobo-ohne-namen", "2 Kanäle: Tempo, Helligkeit", 1, "Strobo", start=200)
+    show.aufbauen()
+    analyse = {**analyse, "markiert_s": [50.0, 50.3, 70.0]}
+    daten.schreibe_json(show.pfade.proben / "testsong.json", analyse)
+    sequenz = show.show_aus_probe("Testsong")
+    farben = {w["farbe"] for c in sequenz["cues"] for w in c["werte"] if "farbe" in w}
+    assert farben <= set(sequenz["farben"]) | {"weiss"} and len(sequenz["farben"]) == 2
+    akzente = [i for i, c in enumerate(sequenz["cues"]) if c["name"] == "Akzent"]
+    assert len(akzente) == 2                             # 50.0 und 70.0, 50.3 ist zu dicht dran
+    assert sequenz["cues"][akzente[0]]["folgen_s"] == 0.4
+    assert sequenz["cues"][akzente[0] + 1]["name"].endswith("weiter")
+    assert sequenz["zeitcode"] == sorted(sequenz["zeitcode"]) and len(sequenz["zeitcode"]) == len(sequenz["cues"])
+    starke = [c for c in sequenz["cues"] if "Refrain" in c["name"]]
+    assert any(w.get("gruppe") == "Strobo" and w["strobo_hz"] > 0 for w in starke[0]["werte"])
+    strophe = next(c for c in sequenz["cues"] if c["name"].startswith("Strophe"))
+    assert all(w.get("strobo_hz", 0) == 0 for w in strophe["werte"])
+    assert pruefe_sequenz(sequenz, show.patch, show.positionen) == []

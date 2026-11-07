@@ -307,7 +307,7 @@ class Show:
         analyse = self.proben.lesen(name)
         if analyse is None:
             raise ValueError(f"Probe {name!r} gibt es nicht.")
-        sequenz = show_bauen(analyse, self.patch, self.profil["palette"], self.gobos_der_gruppe)
+        sequenz = show_bauen(analyse, self.patch, self.profil["palette"], self.gobos_der_gruppe, self.positionen)
         with self.sperre:
             self.pult.sequenz_speichern(sequenz)
         return sequenz

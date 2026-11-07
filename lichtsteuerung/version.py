@@ -1,2 +1,2 @@
 """Die Versionsnummer. Bei jedem Release hier erhöhen, siehe README.md."""
-VERSION = "1.7.2"
+VERSION = "1.8.0"

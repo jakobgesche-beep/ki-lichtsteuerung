@@ -174,73 +174,107 @@ def einordnen(teile: list) -> None:
 
 # --- Aus der Analyse eine Show bauen --------------------------------------------
 
+# So sieht jede Stärke aus. Der Song bekommt nur zwei Farben (A und B) und Weiß für Akzente,
+# damit es zusammenpasst und nicht wie eine bunte Lichterkette wirkt.
 LOOKS = {
-    # Bewegung (None = steht), Größe, Beats pro Runde, Helligkeit, Gobo-Drehung, Licht-Effekt
-    "ruhig":      (None, 0.0, 16, 0.6, 0.0, "dimmer_welle"),
-    "mittel":     (None, 0.0, 16, 0.85, 0.0, "dimmer_puls"),
-    "stark":      ("schwenk", 0.5, 16, 1.0, 0.25, "dimmer_puls"),
-    "hoehepunkt": ("kreis", 0.7, 8, 1.0, 0.4, "dimmer_puls"),
+    #              Bewegung, Größe, Beats/Runde, Helligkeit, Gobo-Drehung, Puls-Tiefe, Farben
+    "ruhig":      (None,      0.0, 16, 0.5, 0.0, 0.3, "B"),
+    "mittel":     (None,      0.0, 16, 0.7, 0.0, 0.3, "A"),
+    "stark":      ("schwenk", 0.5, 16, 1.0, 0.3, 0.35, "A"),
+    "hoehepunkt": ("kreis",   0.7, 8,  1.0, 0.6, 0.35, "AB"),
 }
 ZEITEN_S = {"ruhig": 3.0, "mittel": 2.0, "stark": 1.0, "hoehepunkt": 0.0}
+AKZENT_S = 0.4            # so lange dauert ein Akzent, dann geht es von selbst weiter
 
 
-def show_bauen(analyse: dict, patch, palette: list, gobos_von) -> dict:
-    """Baut die Sequenz. Gleiche Buchstaben bekommen dasselbe Aussehen."""
+def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optional[dict] = None) -> dict:
+    """Baut die Sequenz: ein Cue pro Songteil, dazu Akzente an markierten Stellen.
+
+    Gleiche Buchstaben sehen gleich aus. Strophen sind ruhiger, Refrain und Höhepunkt
+    bewegen sich und tauschen die zwei Song-Farben. Der Strobo blitzt nur bei
+    Höhepunkt, Drop und Akzenten, und nur so weit die Prüfung es erlaubt.
+    """
     gruppen = patch.gruppen()
+    farbe_a = palette[0]
+    farbe_b = palette[1 % len(palette)]
+    gobos = gobos_von("Spots") if "Spots" in gruppen else []
+    band = "Band" if positionen and "Band" in positionen else None
     cues, zeitcode = [], []
-    looks_je_buchstabe = {}
-    for nummer, teil in enumerate(analyse["teile"]):
-        buchstabe = teil["gruppe"]
-        if buchstabe not in looks_je_buchstabe:
-            looks_je_buchstabe[buchstabe] = len(looks_je_buchstabe)
-        look = looks_je_buchstabe[buchstabe]
-        bewegung, groesse, beats, hell, drehung, licht = LOOKS[teil["klasse"]]
-        if teil["name"] == "Schluss":
-            bewegung, licht = None, "dimmer_welle"
+    buchstaben = {}
+    for teil in analyse["teile"]:
+        nummer = buchstaben.setdefault(teil["gruppe"], len(buchstaben))
         if teil["name"] == "Aufbau":
-            cues.append(aufbau_cue(teil, gruppen, palette[look % len(palette)]))
+            cues.append(aufbau_cue(teil, gruppen, farbe_b))
             zeitcode.append(teil["start"])
             continue
+        klasse = "hoehepunkt" if teil["name"] == "Drop" else teil["klasse"]
+        if teil["name"] == "Schluss":
+            klasse = "ruhig"
+        bewegung, groesse, beats, hell, drehung, tiefe, farben = LOOKS[klasse]
         if teil["name"] == "Drop":
-            bewegung, groesse, beats, hell, drehung, licht = "acht", 1.0, 4, 1.0, 0.8, "dimmer_puls"
-        farbe = palette[look % len(palette)]
+            bewegung, groesse, beats, drehung = "acht", 1.0, 4, 0.8
+        # Gleich starke, aber verschiedene Teile tauschen A und B, damit man den Wechsel sieht.
+        a, b = (farbe_a, farbe_b) if nummer % 2 == 0 else (farbe_b, farbe_a)
+        haupt = b if farben == "B" else a
         werte, effekte = [], []
         if "Spots" in gruppen:
-            wert = {"gruppe": "Spots", "helligkeit": hell, "farbe": farbe}
-            gobos = gobos_von("Spots")
-            if gobos and teil["klasse"] != "ruhig":
-                wert["gobo"] = gobos[look % len(gobos)]
+            wert = {"gruppe": "Spots", "helligkeit": hell, "farbe": haupt,
+                    "gobo": gobos[nummer % len(gobos)] if gobos and klasse != "ruhig" else "Offen"}
+            if gobos and drehung:
                 wert["gobo_drehung"] = drehung
-            else:
-                wert["gobo"] = "Offen"
+            if band and not bewegung:
+                wert["position"] = band            # stehendes Licht zeigt auf die Band
             werte.append(wert)
             if bewegung:
                 effekte.append({"art": bewegung, "ziel": {"gruppe": "Spots"}, "groesse": groesse,
                                 "tempo": "musik", "beats": beats, "verteilung": 0.5})
-            if teil["klasse"] == "hoehepunkt":
-                # Im Höhepunkt wechseln zwei Farben hin und her, nicht die ganze Palette.
+            if farben == "AB":
                 effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Spots"}, "tempo": "musik",
-                                "beats": 8, "verteilung": 0.5, "farben": [farbe, palette[(look + 1) % len(palette)]]})
+                                "beats": 8, "verteilung": 0.5, "farben": [a, b]})
         if "Farb-PARs" in gruppen:
-            werte.append({"gruppe": "Farb-PARs", "helligkeit": hell,
-                          "farbe": palette[(look + 1) % len(palette)]})
-            if teil["klasse"] == "hoehepunkt":
+            werte.append({"gruppe": "Farb-PARs", "helligkeit": hell, "farbe": b if farben != "B" else a})
+            if farben == "AB":
                 effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Farb-PARs"}, "tempo": "musik",
-                                "beats": 8, "verteilung": 0.5,
-                                "farben": [palette[(look + 1) % len(palette)], farbe]})
-        # Der Puls im Beat: auf allen Lichtern, die Spots versetzt, damit sie sich abwechseln.
+                                "beats": 8, "verteilung": 0.5, "farben": [b, a]})
+        puls = "dimmer_welle" if klasse == "ruhig" else "dimmer_puls"
         for ziel in ("Spots", "Farb-PARs"):
-            if licht and ziel in gruppen:
-                effekte.append({"art": licht, "ziel": {"gruppe": ziel}, "tempo": "musik",
-                                "beats": 2 if licht == "dimmer_puls" else 16, "verteilung": 0.5})
-        dauer = teil["ende"] - teil["start"]
-        takte = round(dauer * analyse["tempo_bpm"] / 60 / 4)
-        cues.append({"name": f"{teil['name']} {buchstabe} ({takte} Takte)",
-                     "zeit_s": 4.0 if teil["name"] == "Schluss" else ZEITEN_S[teil["klasse"]],
-                     "folgen_s": None, "werte": werte, "effekte": effekte})
+            if ziel in gruppen:
+                effekte.append({"art": puls, "ziel": {"gruppe": ziel}, "tempo": "musik", "tiefe": tiefe,
+                                "beats": 16 if puls == "dimmer_welle" else 2, "verteilung": 0.5})
+        if "Strobo" in gruppen:
+            # Im Höhepunkt blitzt er. Wie lange, begrenzt die Prüfung (Dauer, dann Pause).
+            werte.append({"gruppe": "Strobo", "helligkeit": 1.0 if klasse == "hoehepunkt" else 0.0,
+                          "strobo_hz": 3.0 if klasse == "hoehepunkt" else 0.0})
+        takte = round((teil["ende"] - teil["start"]) * analyse["tempo_bpm"] / 60 / 4)
+        cue = {"name": f"{teil['name']} {teil['gruppe']} ({takte} Takte)",
+               "zeit_s": 4.0 if teil["name"] == "Schluss" else ZEITEN_S[klasse],
+               "folgen_s": None, "werte": werte, "effekte": effekte}
+        cues.append(cue)
         zeitcode.append(teil["start"])
+        for stelle in akzente_im_teil(analyse, teil):
+            cues += [akzent_cue(gruppen), {**cue, "name": cue["name"] + " weiter", "zeit_s": 0.5}]
+            zeitcode += [stelle, round(stelle + AKZENT_S, 2)]
     return {"name": analyse["name"], "cues": cues, "zeitcode": zeitcode,
+            "farben": [farbe_a, farbe_b],
             "_hinweis": "Automatisch aus der Probe gebaut. Im Pult frei änderbar."}
+
+
+def akzente_im_teil(analyse: dict, teil: dict) -> list:
+    """Markierte Stellen (Taste D) und erkannte Drops, die mitten in diesem Teil liegen."""
+    stellen = sorted(set(analyse.get("markiert_s", [])) | set(analyse.get("drops_s", [])))
+    ergebnis = []
+    for stelle in stellen:
+        if teil["start"] + 0.5 < stelle < teil["ende"] - AKZENT_S and (not ergebnis or stelle - ergebnis[-1] > 1.0):
+            ergebnis.append(stelle)
+    return ergebnis
+
+
+def akzent_cue(gruppen: list) -> dict:
+    """Ein heller Schlag: alles weiß und voll, der Strobo blitzt. Danach geht es von selbst weiter."""
+    werte = [{"gruppe": g, "helligkeit": 1.0, "farbe": "weiss"} for g in ("Spots", "Farb-PARs") if g in gruppen]
+    if "Strobo" in gruppen:
+        werte.append({"gruppe": "Strobo", "helligkeit": 1.0, "strobo_hz": 3.0})
+    return {"name": "Akzent", "zeit_s": 0.0, "folgen_s": AKZENT_S, "werte": werte, "effekte": []}
 
 
 def aufbau_cue(teil: dict, gruppen: list, farbe: str) -> dict:
