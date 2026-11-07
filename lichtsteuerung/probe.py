@@ -2,12 +2,13 @@
 
 Ablauf:
   1. In der Probe nimmt das Programm die Summe vom Pult auf (oder man nimmt eine Audiodatei).
-  2. Die Analyse findet Tempo und Songteile: wo es ruhig wird, wo der Refrain kommt.
-     Teile, die gleich klingen, bekommen denselben Buchstaben (A, B, C ...).
+  2. Die Analyse (audio/songanalyse.py) findet Tempo, Beats, Takt-Einsen und Songteile.
+     Teile mit derselben Akkordfolge bekommen denselben Buchstaben (A, B, C ...),
+     daraus folgen die Namen: Der lauteste wiederholte Teil ist der Refrain.
   3. Daraus entsteht eine Sequenz mit einem Cue pro Songteil. Gleiche Teile sehen
-     gleich aus, der Höhepunkt bekommt das meiste Licht.
-  4. Live drückt man Go+, wenn der nächste Teil kommt. Die Effekte laufen im Tempo
-     der Band mit, denn eine Band spielt nie genau wie in der Probe.
+     gleich aus, der letzte Refrain bekommt das meiste Licht.
+  4. Live drückt man einmal Start, wenn die Band anfängt. Der Song-Folger
+     (audio/folgen.py) hört mit und schaltet die Teile von selbst weiter.
 
 Alles läuft ohne Internet.
 """
@@ -19,108 +20,33 @@ from typing import Optional
 import numpy as np
 
 from . import daten
+from .audio import songanalyse
 from .audio.analyse import Analyse, EigeneBeatErkennung, beat_erkennung
 from .audio.quellen import ABTASTRATE, BLOCK, lade_datei
 
-SCHRITT_S = 0.5          # alle halbe Sekunde ein Messpunkt
-FENSTER_S = 8.0          # so weit schaut die Suche nach Wechseln vor und zurück
-KUERZESTER_TEIL_S = 8.0
-
+ANALYSE_VERSION = 2
 KLASSEN = ("ruhig", "mittel", "stark", "hoehepunkt")
 
 
-def merkmale(ton: np.ndarray) -> np.ndarray:
-    """Pro halbe Sekunde: Lautstärke, Bass-Anteil, Höhen-Anteil, Unruhe."""
-    schritt = int(SCHRITT_S * ABTASTRATE)
-    fenster = np.hanning(schritt * 2)
-    freq = np.fft.rfftfreq(schritt * 2, 1 / ABTASTRATE)
-    bass, hoch = freq < 150, freq > 2500
-    zeilen, vorher = [], None
-    for start in range(0, max(len(ton) - 2 * schritt, 1), schritt):
-        stueck = ton[start:start + 2 * schritt]
-        if len(stueck) < 2 * schritt:
-            break
-        spektrum = np.abs(np.fft.rfft(stueck * fenster)) + 1e-9
-        gesamt = spektrum.sum()
-        laut = 20 * np.log10(np.sqrt(np.mean(stueck ** 2)) + 1e-6)
-        unruhe = 0.0 if vorher is None else float(np.mean(np.abs(np.log(spektrum) - np.log(vorher))))
-        vorher = spektrum
-        zeilen.append([laut, spektrum[bass].sum() / gesamt, spektrum[hoch].sum() / gesamt, unruhe])
-    return np.array(zeilen) if zeilen else np.zeros((0, 4))
-
-
-def tempo_und_beats(ton: np.ndarray) -> tuple:
-    """Spielt den Song einmal durch die Live-Analyse: Tempo, Beats, Drops und Aufbau."""
+def drops_und_aufbau(ton: np.ndarray) -> tuple:
+    """Spielt den Song einmal durch die Live-Analyse: Wo sind Drops und Aufbauten?"""
     analyse = Analyse(beat_erkennung())
-    beats, drops, aufbau = [], [], []
+    drops, aufbau = [], []
     for start in range(0, len(ton) - BLOCK, BLOCK):
         werte = analyse.verarbeite(ton[start:start + BLOCK])
         zeit = start / ABTASTRATE
-        if werte.beat:
-            beats.append(zeit)
         if werte.drop:
             drops.append(round(zeit, 2))
         if werte.spannung >= 0.3:
             aufbau.append(zeit)
-    tempo = analyse.tempo if 40 <= analyse.tempo <= 240 else 120.0
-    return round(float(tempo), 1), beats, drops, aufbau
+    return drops, aufbau
 
 
-def grenzen_finden(werte: np.ndarray) -> list:
-    """Wo sich der Klang deutlich ändert. Gibt Stellen in Messpunkten zurück."""
-    if len(werte) < 4:
-        return []
-    norm = (werte - werte.mean(axis=0)) / (werte.std(axis=0) + 1e-9)
-    norm[:, 0] *= 2.0       # Lautstärke zählt doppelt
-    k = int(FENSTER_S / SCHRITT_S)
-    neuheit = np.zeros(len(norm))
-    for i in range(k, len(norm) - k):
-        neuheit[i] = np.linalg.norm(norm[i:i + k].mean(axis=0) - norm[i - k:i].mean(axis=0))
-    schwelle = neuheit[neuheit > 0].mean() + 0.5 * neuheit[neuheit > 0].std() if neuheit.any() else np.inf
-    abstand = int(KUERZESTER_TEIL_S / SCHRITT_S)
-    stellen = []
-    for i in np.argsort(-neuheit):
-        if neuheit[i] < schwelle:
-            break
-        if all(abs(i - j) >= abstand for j in stellen):
-            stellen.append(int(i))
-    return sorted(stellen)
-
-
-def auf_takt(sekunde: float, beats: list, tempo: float) -> float:
-    """Ein Wechsel kommt fast immer auf dem ersten Schlag eines Takts."""
-    if not beats:
-        return sekunde
-    takt = 4 * 60.0 / tempo
-    erster = beats[0]
-    return round(erster + round((sekunde - erster) / takt) * takt, 2)
-
-
-def analysieren(ton: np.ndarray, name: str) -> dict:
-    dauer = len(ton) / ABTASTRATE
-    werte = merkmale(ton)
-    tempo, beats, drops, aufbau = tempo_und_beats(ton)
-    zeiten = [0.0] + [auf_takt(i * SCHRITT_S, beats, tempo) for i in grenzen_finden(werte)] + [dauer]
-    # Ein Drop ist immer ein Wechsel, genau an seiner Stelle. Ein Wechsel kurz davor fällt weg.
-    zeiten = [z for z in zeiten if not any(0 < abs(z - d) < 2.0 for d in drops)] + drops
-    zeiten += [a for a in _aufbau_beginn(aufbau)]
-    zeiten = sorted({max(0.0, min(dauer, z)) for z in zeiten})
-    teile = []
-    for start, ende in zip(zeiten, zeiten[1:]):
-        if ende - start < 2.0:
-            continue
-        stueck = werte[int(start / SCHRITT_S):max(int(ende / SCHRITT_S), int(start / SCHRITT_S) + 1)]
-        teile.append({"start": round(start, 2), "ende": round(ende, 2), "merkmal": stueck.mean(axis=0).tolist()})
-    if not teile:
-        teile = [{"start": 0.0, "ende": round(dauer, 2), "merkmal": werte.mean(axis=0).tolist() if len(werte) else [0, 0, 0, 0]}]
-    einordnen(teile)
-    for teil in teile:
-        if any(abs(teil["start"] - d) < 0.3 for d in drops):
-            teil.update(name="Drop", klasse="hoehepunkt")
-        elif any(teil["start"] - 0.3 <= a < teil["ende"] for a in aufbau) and any(
-                abs(teil["ende"] - d) < 0.3 for d in drops):
-            teil["name"] = "Aufbau"
-    return {"name": name, "dauer_s": round(dauer, 2), "tempo_bpm": tempo, "teile": teile, "drops_s": drops}
+def tempo_und_beats(ton: np.ndarray) -> tuple:
+    """Tempo und Beats aus der neuen Songanalyse, Drops und Aufbau aus der Live-Analyse."""
+    ergebnis = songanalyse.analysieren(ton)
+    drops, aufbau = drops_und_aufbau(ton)
+    return ergebnis["tempo_bpm"], ergebnis["beats_s"], drops, aufbau
 
 
 def _aufbau_beginn(zeiten: list) -> list:
@@ -133,43 +59,106 @@ def _aufbau_beginn(zeiten: list) -> list:
     return beginn
 
 
-def einordnen(teile: list) -> None:
-    """Gibt jedem Teil Stärke, Buchstaben und einen Namen wie "Refrain"."""
-    lautheit = np.array([t["merkmal"][0] for t in teile])
-    unten, oben = lautheit.min(), lautheit.max()
-    spanne = max(oben - unten, 6.0)          # weniger als 6 dB Unterschied zählt kaum
-    for teil, laut in zip(teile, lautheit):
-        anteil = (laut - unten) / spanne
-        teil["staerke"] = round(float(anteil), 2)
-        teil["klasse"] = "ruhig" if anteil < 0.3 else "mittel" if anteil < 0.6 else "stark" if anteil < 0.9 else "hoehepunkt"
-    # Gleich klingende Teile bekommen denselben Buchstaben.
-    merkmale_ = np.array([t["merkmal"] for t in teile])
-    skala = merkmale_.std(axis=0) + 1e-9
-    buchstaben = []
-    for nummer, teil in enumerate(teile):
-        gefunden = None
-        for frueher in range(nummer):
-            if np.linalg.norm((merkmale_[nummer] - merkmale_[frueher]) / skala) < 1.2:
-                gefunden = buchstaben[frueher]
+def _drops_einbauen(teile: list, drops: list, einsen: list) -> list:
+    """Ein Drop beginnt immer einen neuen Teil, genau dort."""
+    for drop in drops:
+        for nummer, teil in enumerate(teile):
+            if teil["start"] - 0.3 <= drop < teil["ende"]:
+                if abs(drop - teil["start"]) < 1.0:
+                    teil["drop"] = True
+                elif teil["ende"] - drop > 2.0:
+                    neu = dict(teil, start=round(drop, 2), drop=True)
+                    teil["ende"] = round(drop, 2)
+                    teile.insert(nummer + 1, neu)
                 break
-        buchstaben.append(gefunden or chr(ord("A") + len(set(buchstaben))))
-        teil["gruppe"] = buchstaben[-1]
-    lauteste_wiederholung = max((t for t in teile if buchstaben.count(t["gruppe"]) > 1),
-                                key=lambda t: t["staerke"], default=None)
+    for teil in teile:
+        teil["takte"] = max(1, sum(1 for e in einsen if teil["start"] - 0.05 <= e < teil["ende"] - 0.05)) if einsen else teil.get("takte", 0)
+    return teile
+
+
+def analysieren(ton: np.ndarray, name: str) -> dict:
+    erg = songanalyse.analysieren(ton)
+    drops, aufbau = drops_und_aufbau(ton)
+    teile = _drops_einbauen([dict(t) for t in erg["teile"]], drops, erg["einsen_s"])
+    einordnen(teile)
+    aufbau_starts = _aufbau_beginn(aufbau)
     for nummer, teil in enumerate(teile):
-        if nummer == 0 and teil["klasse"] in ("ruhig", "mittel") and len(teile) > 2:
-            teil["name"] = "Intro"
-        elif nummer == len(teile) - 1 and len(teile) > 2 and teil["staerke"] < 0.6:
-            teil["name"] = "Schluss"
-        elif lauteste_wiederholung and teil["gruppe"] == lauteste_wiederholung["gruppe"]:
+        naechster = teile[nummer + 1] if nummer + 1 < len(teile) else None
+        if teil.pop("drop", False):
+            teil.update(name="Drop", klasse="hoehepunkt")
+        elif naechster is not None and naechster.get("drop") and any(teil["start"] - 0.3 <= a < teil["ende"] for a in aufbau_starts):
+            teil["name"] = "Aufbau"
+    return {"name": name, "dauer_s": erg["dauer_s"], "tempo_bpm": erg["tempo_bpm"], "teile": teile, "drops_s": drops,
+            "musik_von_s": erg["musik_von_s"], "beats_s": erg["beats_s"], "einsen_s": erg["einsen_s"],
+            "version": ANALYSE_VERSION}
+
+
+def einordnen(teile: list) -> None:
+    """Gibt jedem Teil Stärke, Buchstaben, Namen und Klasse.
+
+    Buchstaben: gleiche Akkordfolge, gleicher Buchstabe (in der Reihenfolge des Songs).
+    Namen: Der wiederholte Teil mit dem meisten Druck ist der Refrain, der früheste
+    andere wiederholte Teil die Strophe. Ein kurzer Teil direkt vor dem Refrain ist die
+    Überleitung, ein einzelner Teil nach dem zweiten Refrain die Bridge.
+    Klasse (wie viel Licht): aus der Lautstärke, aber der Refrain ist mindestens "stark"
+    und der letzte Refrain ist der Höhepunkt.
+    """
+    if not teile:
+        return
+    laut = np.array([t.get("laut_db", 0.0) for t in teile])
+    unten, oben = float(laut.min()), float(laut.max())
+    spanne = max(oben - unten, 6.0)           # weniger als 6 dB Unterschied zählt kaum
+    buchstaben = {}
+    for teil, wert in zip(teile, laut):
+        teil["staerke"] = round(float((wert - unten) / spanne), 2)
+        roh = teil["gruppe"]
+        teil["gruppe"] = buchstaben.setdefault(roh, chr(ord("A") + len(buchstaben))) if not isinstance(roh, str) else roh
+    anzahl, mitte = {}, {}
+    for nummer, teil in enumerate(teile):
+        anzahl[teil["gruppe"]] = anzahl.get(teil["gruppe"], 0) + 1
+        if 0 < nummer < len(teile) - 1:
+            mitte[teil["gruppe"]] = mitte.get(teil["gruppe"], 0) + 1
+    # Ein Teil, der nur ganz am Anfang und ganz am Ende vorkommt, ist Intro und Schluss.
+    wiederholt = [g for g, n in anzahl.items() if n > 1 and mitte.get(g, 0) > 0]
+
+    def druck(gruppe):
+        return float(np.mean([t["staerke"] for t in teile if t["gruppe"] == gruppe]))
+
+    refrain = max(wiederholt, key=druck, default=None)
+    andere = [g for g in wiederholt if g != refrain]
+    strophe = min(andere, key=lambda g: min(i for i, t in enumerate(teile) if t["gruppe"] == g), default=None)
+    refrain_stellen = [i for i, t in enumerate(teile) if t["gruppe"] == refrain]
+    for nummer, teil in enumerate(teile):
+        g = teil["gruppe"]
+        naechster = teile[nummer + 1]["gruppe"] if nummer + 1 < len(teile) else None
+        if g == refrain:
             teil["name"] = "Refrain"
-        elif teil["klasse"] == "hoehepunkt":
-            teil["name"] = "Höhepunkt"
-        elif buchstaben.count(teil["gruppe"]) > 1:
+        elif nummer == 0 and mitte.get(g, 0) == 0 and len(teile) > 2:
+            teil["name"] = "Intro"
+        elif nummer == len(teile) - 1 and mitte.get(g, 0) == 0 and len(teile) > 2:
+            teil["name"] = "Schluss" if teil["staerke"] < 0.6 else "Finale"
+        elif g == strophe:
             teil["name"] = "Strophe"
+        elif naechster == refrain and teil.get("takte", 99) <= 8:
+            teil["name"] = "Überleitung"
+        elif anzahl[g] == 1 and len(refrain_stellen) >= 2 and nummer > refrain_stellen[1]:
+            teil["name"] = "Bridge"
         else:
             teil["name"] = "Zwischenteil"
-        teil.pop("merkmal")
+        s = teil["staerke"]
+        klasse = "ruhig" if s < 0.3 else "mittel" if s < 0.6 else "stark" if s < 0.85 else "hoehepunkt"
+        if teil["name"] == "Refrain":
+            klasse = "stark" if klasse in ("ruhig", "mittel") else klasse
+        elif teil["name"] in ("Strophe", "Intro") and klasse == "hoehepunkt":
+            klasse = "stark"
+        teil["klasse"] = klasse
+        teil.pop("laut_db", None)
+    # Der letzte Refrain (und ein direkt folgender) ist der Höhepunkt des Songs.
+    if refrain_stellen:
+        letzte = refrain_stellen[-1]
+        teile[letzte]["klasse"] = "hoehepunkt"
+        if letzte - 1 in refrain_stellen:
+            teile[letzte - 1]["klasse"] = "hoehepunkt"
 
 
 # --- Aus der Analyse eine Show bauen --------------------------------------------
@@ -187,68 +176,84 @@ ZEITEN_S = {"ruhig": 3.0, "mittel": 2.0, "stark": 1.0, "hoehepunkt": 0.0}
 AKZENT_S = 0.4            # so lange dauert ein Akzent, dann geht es von selbst weiter
 
 
+def look_cue(name: str, klasse: str, gruppen: list, farbe_a: str, farbe_b: str, gobo: Optional[str] = None,
+             band: Optional[str] = None, drop: bool = False, zeit_s: Optional[float] = None) -> dict:
+    """Ein Look als Cue: Farbe, Gobo, stehen oder bewegen, Puls im Beat. Für Songs und Show-Tasten."""
+    bewegung, groesse, beats, hell, drehung, tiefe, farben = LOOKS[klasse]
+    if drop:
+        bewegung, groesse, beats, drehung = "acht", 1.0, 4, 0.8
+    haupt = farbe_b if farben == "B" else farbe_a
+    werte, effekte = [], []
+    if "Spots" in gruppen:
+        wert = {"gruppe": "Spots", "helligkeit": hell, "farbe": haupt,
+                "gobo": gobo if gobo and klasse != "ruhig" else "Offen"}
+        if gobo and drehung and klasse != "ruhig":
+            wert["gobo_drehung"] = drehung
+        if band and not bewegung:
+            wert["position"] = band            # stehendes Licht zeigt auf die Band
+        werte.append(wert)
+        if bewegung:
+            effekte.append({"art": bewegung, "ziel": {"gruppe": "Spots"}, "groesse": groesse,
+                            "tempo": "musik", "beats": beats, "verteilung": 0.5})
+        if farben == "AB":
+            effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Spots"}, "tempo": "musik",
+                            "beats": 8, "verteilung": 0.5, "farben": [farbe_a, farbe_b]})
+    if "Farb-PARs" in gruppen:
+        werte.append({"gruppe": "Farb-PARs", "helligkeit": hell, "farbe": farbe_b if farben != "B" else farbe_a})
+        if farben == "AB":
+            effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Farb-PARs"}, "tempo": "musik",
+                            "beats": 8, "verteilung": 0.5, "farben": [farbe_b, farbe_a]})
+    puls = "dimmer_welle" if klasse == "ruhig" else "dimmer_puls"
+    for ziel in ("Spots", "Farb-PARs"):
+        if ziel in gruppen:
+            effekte.append({"art": puls, "ziel": {"gruppe": ziel}, "tempo": "musik", "tiefe": tiefe,
+                            "beats": 16 if puls == "dimmer_welle" else (1 if drop else 2), "verteilung": 0.5})
+    if "Strobo" in gruppen:
+        # Im Höhepunkt blitzt er. Wie lange, begrenzt die Prüfung (Dauer, dann Pause).
+        werte.append({"gruppe": "Strobo", "helligkeit": 1.0 if klasse == "hoehepunkt" else 0.0,
+                      "strobo_hz": 3.0 if klasse == "hoehepunkt" else 0.0})
+    return {"name": name, "zeit_s": ZEITEN_S[klasse] if zeit_s is None else zeit_s,
+            "folgen_s": None, "werte": werte, "effekte": effekte}
+
+
 def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optional[dict] = None) -> dict:
     """Baut die Sequenz: ein Cue pro Songteil, dazu Akzente an markierten Stellen.
 
     Gleiche Buchstaben sehen gleich aus. Strophen sind ruhiger, Refrain und Höhepunkt
-    bewegen sich und tauschen die zwei Song-Farben. Der Strobo blitzt nur bei
-    Höhepunkt, Drop und Akzenten, und nur so weit die Prüfung es erlaubt.
+    bewegen sich und tauschen die zwei Song-Farben. Eine Überleitung vor dem Refrain
+    baut Spannung auf (weiß in die Mitte). Der Strobo blitzt nur bei Höhepunkt, Drop
+    und Akzenten, und nur so weit die Prüfung es erlaubt.
+    In "song" steht die Song-Karte für den Song-Start: Teile, Zeiten, Tempo.
     """
     gruppen = patch.gruppen()
     farbe_a = palette[0]
     farbe_b = palette[1 % len(palette)]
     gobos = gobos_von("Spots") if "Spots" in gruppen else []
     band = "Band" if positionen and "Band" in positionen else None
-    cues, zeitcode = [], []
+    cues, zeitcode, karte = [], [], []
     buchstaben = {}
-    for teil in analyse["teile"]:
+    teile = analyse["teile"]
+    for index, teil in enumerate(teile):
         nummer = buchstaben.setdefault(teil["gruppe"], len(buchstaben))
-        if teil["name"] == "Aufbau":
-            cues.append(aufbau_cue(teil, gruppen, farbe_b))
+        naechster = teile[index + 1] if index + 1 < len(teile) else None
+        takte = teil.get("takte") or round((teil["ende"] - teil["start"]) * analyse["tempo_bpm"] / 60 / 4)
+        titel = f"{teil['name']} {teil['gruppe']} ({takte} Takte)"
+        klasse = "hoehepunkt" if teil["name"] == "Drop" else teil["klasse"]
+        karte.append({"name": teil["name"], "gruppe": teil["gruppe"], "klasse": klasse, "start": teil["start"],
+                      "ende": teil["ende"], "takte": takte, "cue": len(cues)})
+        if teil["name"] == "Aufbau" or (teil["name"] == "Überleitung" and naechster and naechster["name"] in ("Refrain", "Drop")):
+            cue = aufbau_cue(teil, gruppen, farbe_b)
+            cue["name"] = titel
+            cues.append(cue)
             zeitcode.append(teil["start"])
             continue
-        klasse = "hoehepunkt" if teil["name"] == "Drop" else teil["klasse"]
         if teil["name"] == "Schluss":
             klasse = "ruhig"
-        bewegung, groesse, beats, hell, drehung, tiefe, farben = LOOKS[klasse]
-        if teil["name"] == "Drop":
-            bewegung, groesse, beats, drehung = "acht", 1.0, 4, 0.8
         # Gleich starke, aber verschiedene Teile tauschen A und B, damit man den Wechsel sieht.
         a, b = (farbe_a, farbe_b) if nummer % 2 == 0 else (farbe_b, farbe_a)
-        haupt = b if farben == "B" else a
-        werte, effekte = [], []
-        if "Spots" in gruppen:
-            wert = {"gruppe": "Spots", "helligkeit": hell, "farbe": haupt,
-                    "gobo": gobos[nummer % len(gobos)] if gobos and klasse != "ruhig" else "Offen"}
-            if gobos and drehung:
-                wert["gobo_drehung"] = drehung
-            if band and not bewegung:
-                wert["position"] = band            # stehendes Licht zeigt auf die Band
-            werte.append(wert)
-            if bewegung:
-                effekte.append({"art": bewegung, "ziel": {"gruppe": "Spots"}, "groesse": groesse,
-                                "tempo": "musik", "beats": beats, "verteilung": 0.5})
-            if farben == "AB":
-                effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Spots"}, "tempo": "musik",
-                                "beats": 8, "verteilung": 0.5, "farben": [a, b]})
-        if "Farb-PARs" in gruppen:
-            werte.append({"gruppe": "Farb-PARs", "helligkeit": hell, "farbe": b if farben != "B" else a})
-            if farben == "AB":
-                effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Farb-PARs"}, "tempo": "musik",
-                                "beats": 8, "verteilung": 0.5, "farben": [b, a]})
-        puls = "dimmer_welle" if klasse == "ruhig" else "dimmer_puls"
-        for ziel in ("Spots", "Farb-PARs"):
-            if ziel in gruppen:
-                effekte.append({"art": puls, "ziel": {"gruppe": ziel}, "tempo": "musik", "tiefe": tiefe,
-                                "beats": 16 if puls == "dimmer_welle" else 2, "verteilung": 0.5})
-        if "Strobo" in gruppen:
-            # Im Höhepunkt blitzt er. Wie lange, begrenzt die Prüfung (Dauer, dann Pause).
-            werte.append({"gruppe": "Strobo", "helligkeit": 1.0 if klasse == "hoehepunkt" else 0.0,
-                          "strobo_hz": 3.0 if klasse == "hoehepunkt" else 0.0})
-        takte = round((teil["ende"] - teil["start"]) * analyse["tempo_bpm"] / 60 / 4)
-        cue = {"name": f"{teil['name']} {teil['gruppe']} ({takte} Takte)",
-               "zeit_s": 4.0 if teil["name"] == "Schluss" else ZEITEN_S[klasse],
-               "folgen_s": None, "werte": werte, "effekte": effekte}
+        gobo = gobos[nummer % len(gobos)] if gobos else None
+        cue = look_cue(titel, klasse, gruppen, a, b, gobo, band, drop=teil["name"] == "Drop",
+                       zeit_s=4.0 if teil["name"] == "Schluss" else None)
         cues.append(cue)
         zeitcode.append(teil["start"])
         for stelle in akzente_im_teil(analyse, teil):
@@ -256,6 +261,8 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optio
             zeitcode += [stelle, round(stelle + AKZENT_S, 2)]
     return {"name": analyse["name"], "cues": cues, "zeitcode": zeitcode,
             "farben": [farbe_a, farbe_b],
+            "song": {"probe": analyse["name"], "tempo_bpm": analyse["tempo_bpm"], "dauer_s": analyse["dauer_s"],
+                     "musik_von_s": analyse.get("musik_von_s", 0.0), "teile": karte},
             "_hinweis": "Automatisch aus der Probe gebaut. Im Pult frei änderbar."}
 
 
