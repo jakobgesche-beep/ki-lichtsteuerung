@@ -206,12 +206,21 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         """Alle gepatchten Geräte mit Strobo-Kanal, und ob ihr Tempo bekannt ist."""
         ergebnis = []
         for geraet in show.patch.geraete:
-            kanaele = [k for _, k in show.patch.typ(geraet).kanaele_im_modus(geraet["modus"]) if k["typ"] == "strobo"]
-            if kanaele:
-                bekannt = any(b.get("hz_bis") for k in kanaele for b in k.get("bereiche", []) if b["typ"] == "strobo")
+            art = show.strobo_art(geraet)
+            if art:
+                typ = show.patch.typ(geraet)
                 ergebnis.append({"id": geraet["id"], "name": geraet["name"], "adresse": geraet["adresse"],
-                                 "eingemessen": bekannt, "hinweis": show.patch.typ(geraet).daten.get("_hinweis", "")})
+                                 "eingemessen": art == "eingemessen", "art": art,
+                                 "rein": "Strobo" in show.patch.gruppen_von(geraet) or art == "software",
+                                 "zuruecknehmbar": bool(typ.daten.get("basis") or typ.id.endswith("-eingemessen")),
+                                 "hinweis": typ.daten.get("_hinweis", "")})
+        # Echte Strobos zuerst: Sonst ist ein Scheinwerfer mit Shutter-Strobo vorausgewählt.
+        ergebnis.sort(key=lambda g: not g["rein"])
         return {"strobos": ergebnis}
+
+    @app.post("/api/strobos/{geraet_id}/zuruecksetzen")
+    def strobo_zuruecksetzen(geraet_id: str):
+        return show.strobo_zuruecksetzen(geraet_id)
 
     @app.post("/api/strobos/{geraet_id}/blitzen")
     def strobo_blitzen(geraet_id: str, auftrag: dict = Body(...)):

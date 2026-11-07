@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import threading
 import time
 from typing import Optional
@@ -33,7 +34,7 @@ from .pult import Pult
 from .profile import Profile, RUHE_PROFIL, strobo_grenzen
 from .pruefung import Pruefer, Vorgaben
 from .render import Eigenschaften, Renderer
-from .sicherheit import BlitzWaechter, Grenzen
+from .sicherheit import BlitzWaechter, Grenzen, StroboWaechter
 from .simulator import Simulator
 from .songspieler import SongSpieler
 from .szenen import loese_auf
@@ -45,6 +46,7 @@ from .vorschau import Vorschau
 ERSTES_PROFIL = "Schulfest Abend"   # beim allerersten Start, damit das Licht auf Musik reagiert
 WARM_POSITION = "Mitte"     # dorthin zeigen die Spots bei Warmweiß
 EINMESS_S = 3.0             # so lange blitzt der Strobo beim Einmessen
+SOFTWARE_BLITZ_S = 0.05     # so lange ist ein Blitz an, wenn das Programm selbst blitzt
 TEST_MAX_S = 120.0          # Ein vergessener DMX-Test endet von selbst.
 
 
@@ -75,6 +77,11 @@ class Show:
         self.blitze = BlitzWaechter()
         self.vorschau_blitze = BlitzWaechter()
         self.blitzt = False
+        self.software_strobos = set()        # reine Strobos ohne bekanntes Tempo: das Programm blitzt selbst
+        self.software_blitzt = set()
+        self.software_waechter = StroboWaechter()
+        self._software_letzter = {}
+        self._software_schritt = {}
 
         self.sperre = threading.RLock()     # Oberfläche und Show-Schleife wechseln sich ab
         self.test_geraet: Optional[str] = None
@@ -106,6 +113,21 @@ class Show:
             ziel, _ = loese_auf([{"gruppe": GRUPPE_BEWEGUNG, "position": WARM_POSITION}],
                                 self.patch, self.buehne, self.positionen)
             self.warm_stellung = {i: (e.pan, e.tilt) for i, e in ziel.items() if e.pan is not None}
+            self.software_strobos = {g["id"] for g in self.patch.geraete if self.strobo_art(g) == "software"}
+
+    def strobo_art(self, geraet: dict) -> str:
+        """"eingemessen": blitzt mit eigenem Tempo. "software": reiner Strobo ohne bekanntes Tempo,
+        das Programm blitzt selbst über die Helligkeit. "gesperrt": Strobo-Kanal ohne Tempo. "": keiner."""
+        kanaele = [k for _, k in self.patch.typ(geraet).kanaele_im_modus(geraet["modus"])]
+        typen = {k["typ"] for k in kanaele}
+        if "strobo" not in typen:
+            return ""
+        bekannt = any(b.get("hz_bis") for k in kanaele if k["typ"] == "strobo"
+                      for b in k.get("bereiche", []) if b["typ"] == "strobo")
+        if bekannt:
+            return "eingemessen"
+        rein = not typen & {"rot", "gruen", "blau", "weiss", "amber", "uv", "pan", "tilt", "farbrad", "gobo"}
+        return "software" if rein and "dimmer" in typen else "gesperrt"
 
     # --- Ein Bild bauen ---------------------------------------------------
 
@@ -118,11 +140,15 @@ class Show:
             if not self._test_laeuft():
                 zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm(), self._beat)
                 self._blind_vorschau(zustand if self.pult.programmer.blind else None, jetzt)
+                zustand = self._software_blitz(zustand, jetzt)
+            else:
+                self.software_blitzt = set()
             zustand = self._profil_grenzen(zustand, jetzt)
             zustand = self.overrides.anwenden(zustand, self.patch.geraete, self.warm_stellung)
             bild = self.renderer.bild(zustand)
             self._test_einmischen(bild)
-            bild, meldungen, self.blitzt = self.pruefer.pruefe(bild, self._vorgaben(), jetzt)
+            bild, meldungen, blitzt = self.pruefer.pruefe(bild, self._vorgaben(), jetzt)
+            self.blitzt = blitzt or bool(self.software_blitzt)
             self.meldungen = meldungen + self.pult.meldungen
             self.letztes_bild = bytes(bild)
             return self.letztes_bild
@@ -194,7 +220,9 @@ class Show:
         if not getroffen:
             raise ValueError("Die gemessenen Werte liegen nicht alle im Strobo-Bereich dieses Geräts.")
         kanal["bereiche"] = [b for b in neu_bereiche if b["von"] <= b["bis"]]
-        eintrag.update(id=f"technik-ag/{geraet_id}-eingemessen", name=f"{typ.daten['name']} eingemessen",
+        eintrag["basis"] = typ.daten.get("basis", typ.id)       # damit man die Einmessung zurücknehmen kann
+        basis_name = typ.daten["name"].removesuffix(" eingemessen")
+        eintrag.update(id=f"technik-ag/{geraet_id}-eingemessen", name=f"{basis_name} eingemessen",
                        hersteller="Technik-AG", platzhalter=False, eingemessen=messungen)
         eintrag["_hinweis"] = (f"Eingemessen: Wert {unten} ≈ {hz_unten:.1f} Blitze/s, Wert {oben} ≈ {hz_oben:.1f} Blitze/s. "
                                "Werte außerhalb bleiben gesperrt.")
@@ -210,6 +238,68 @@ class Show:
                 "text": (f"Fertig. Bis {grenze:g} Blitze pro Sekunde darf er jetzt blitzen." if nutzbar else
                          f"Schon der kleinste Wert blitzt {hz_unten:.1f}-mal pro Sekunde, das ist über der Grenze von "
                          f"{grenze:g}. Bitte noch einen kleineren Wert messen.")}
+
+    def _software_blitz(self, zustand: dict, jetzt: float) -> dict:
+        """Strobo ohne bekanntes Tempo: Das Programm blitzt selbst über die Helligkeit.
+
+        So bestimmt das Programm das Tempo, nicht das unbekannte Gerät: kurze Blitze
+        (50 ms) auf dem Beat, nie öfter als erlaubt (3 pro Sekunde), nach der Höchstdauer
+        kommt die Pause. Ohne Blitz-Wunsch bleibt der Strobo dunkel (kein Dauerlicht).
+        """
+        self.software_blitzt = set()
+        if not self.software_strobos:
+            return zustand
+        hz, dauer = strobo_grenzen(self.profil, self.grenzen)
+        grenze = 0.0 if self.overrides.strobo_aus else min(hz, self.grenzen.strobo_max_hz)
+        wunsch = {i for i in self.software_strobos
+                  if i in zustand and zustand[i].strobo_hz > 0 and zustand[i].helligkeit > 0}
+        erlaubt = grenze > 0 and bool(wunsch) and self.software_waechter.erlaubt(jetzt)
+        self.software_waechter.melde(erlaubt, jetzt, min(dauer, self.grenzen.strobo_max_dauer_s),
+                                     self.grenzen.strobo_pause_s)
+        beats = self.pult.effekte.musik_beats if self.pult.effekte is not None else jetzt * 2.0
+        beat_hz = self._musik_bpm() / 60.0
+        ergebnis = dict(zustand)
+        for geraet_id in self.software_strobos:
+            e = ergebnis.get(geraet_id)
+            if e is None:
+                continue
+            if not erlaubt or geraet_id not in wunsch:
+                ergebnis[geraet_id] = e.kopie(helligkeit=0.0, strobo_hz=0.0)
+                self._software_schritt.pop(geraet_id, None)
+                continue
+            rate = min(e.strobo_hz, grenze)
+            # Blitze pro Beat: so viele wie möglich, aber nie schneller als erlaubt
+            pro_beat = next((teil for teil in (4, 2, 1, 0.5, 0.25) if beat_hz * teil <= rate + 1e-6), 0.25)
+            schritt = math.floor(beats * pro_beat)
+            vorher = self._software_schritt.get(geraet_id)
+            seit = jetzt - self._software_letzter.get(geraet_id, -99.0)
+            if (vorher is None or schritt != vorher) and seit >= 1.0 / grenze - 1e-3:
+                self._software_letzter[geraet_id] = jetzt
+            self._software_schritt[geraet_id] = schritt
+            an = jetzt - self._software_letzter.get(geraet_id, -99.0) < SOFTWARE_BLITZ_S
+            ergebnis[geraet_id] = e.kopie(helligkeit=e.helligkeit if an else 0.0, strobo_hz=0.0)
+            if an:
+                self.software_blitzt.add(geraet_id)
+        return ergebnis
+
+    def strobo_zuruecksetzen(self, geraet_id: str) -> dict:
+        """Nimmt eine Einmessung zurück: Das Gerät bekommt wieder seinen ursprünglichen Typ."""
+        geraet = self.patch.geraet(geraet_id)
+        typ = self.patch.typ(geraet)
+        basis = typ.daten.get("basis")
+        if basis is None and typ.id.endswith("-eingemessen"):
+            name = typ.daten["name"].removesuffix(" eingemessen")
+            kanaele = set(typ.daten["kanaele"])
+            basis = next((t.id for t in self.katalog.typen.values()
+                          if t.daten["name"] == name and set(t.daten["kanaele"]) == kanaele
+                          and not t.id.endswith("-eingemessen")), None)
+        if basis is None:
+            raise ValueError(f"{geraet['name']} ist nicht eingemessen.")
+        with self.sperre:
+            self.patch.tauschen(geraet_id, basis, geraet["modus"])
+            self.patch.speichern()
+            self.aufbauen()
+        return {"typ": basis, "text": f"{geraet['name']}: Einmessung zurückgenommen. Sein Strobo ist wieder gesperrt."}
 
     def _test_laeuft(self) -> bool:
         return self.test_geraet is not None or bool(self.test_kanaele)
@@ -283,7 +373,7 @@ class Show:
         if self.overrides.strobo_aus:
             hz = 0.0
         return Vorgaben(strobo_max_hz=hz, strobo_max_dauer_s=dauer, blackout=self.overrides.blackout,
-                        strobo_aus=self.overrides.strobo_aus,
+                        strobo_aus=self.overrides.strobo_aus, software_blitz=frozenset(self.software_blitzt),
                         hazer_erlaubt=self.profil["hazer"] and not self.overrides.blackout)
 
     def notbild(self) -> bytes:

@@ -29,8 +29,10 @@ export function dmxTestSeite(wurzel) {
         <p class="leise">Damit das Programm die Grenze von 3 Blitzen pro Sekunde einhalten kann, muss es wissen,
           wie schnell der Strobo bei welchem Wert blitzt. Der Strobo blitzt dafür je 3 Sekunden.
           Filme ihn mit der Zeitlupe vom Handy und zähle die Blitze.</p>
-        <label>Strobo <select id="e-geraet"></select></label>
+        <label>Welches Gerät? <select id="e-geraet"></select></label>
+        <div class="meldung" id="e-auswahl"></div>
         <p class="leise" id="e-hinweis"></p>
+        <p class="zeile"><button id="e-zurueck" class="gefahr" hidden>Einmessung zurücknehmen</button></p>
         <label class="schalter"><input type="checkbox" id="e-ok"> Lehrkraft ist dabei, und niemand im Raum reagiert empfindlich auf Blitzlicht.</label>
         <div class="tabelle-huelle"><table id="e-tabelle">
           <tr><th>Tempo-Wert</th><th></th><th>gezählte Blitze in 3 s</th></tr>
@@ -73,15 +75,36 @@ export function dmxTestSeite(wurzel) {
   feld("ein").onclick = async () => { await senden("/dmx/ein"); status(); };
   feld("aus").onclick = async () => { await senden("/dmx/aus"); status(); };
 
-  async function strobosLaden() {
-    const { strobos } = await api("/strobos");
+  const ART = {
+    software: "noch nicht eingemessen. Blitzt trotzdem schon: Das Programm schaltet seine Helligkeit selbst, höchstens 3-mal pro Sekunde.",
+    gesperrt: "noch nicht eingemessen. Sein Strobo ist gesperrt.",
+    eingemessen: "eingemessen. Er blitzt mit seinem eigenen Tempo, höchstens 3-mal pro Sekunde.",
+  };
+  let strobos = [];
+  async function strobosLaden(auswahl) {
+    ({ strobos } = await api("/strobos"));
     feld("einmessen-kasten").hidden = !strobos.length;
     feld("e-geraet").innerHTML = strobos.map((g) =>
-      `<option value="${t(g.id)}">${t(g.name)} (Adresse ${g.adresse}${g.eingemessen ? ", eingemessen" : ""})</option>`).join("");
-    const hinweis = () => { const g = strobos.find((x) => x.id === feld("e-geraet").value); feld("e-hinweis").textContent = g?.hinweis ?? ""; };
-    feld("e-geraet").onchange = hinweis;
-    hinweis();
+      `<option value="${t(g.id)}">${t(g.name)} · Adresse ${g.adresse}${g.rein ? "" : " (Scheinwerfer mit Shutter-Strobo)"}</option>`).join("");
+    if (auswahl && strobos.some((g) => g.id === auswahl)) feld("e-geraet").value = auswahl;
+    zeigeAuswahl();
   }
+  function zeigeAuswahl() {
+    const g = strobos.find((x) => x.id === feld("e-geraet").value);
+    if (!g) return;
+    feld("e-auswahl").innerHTML = `Ausgewählt: <b>${t(g.name)}</b>, DMX-Adresse <b>${g.adresse}</b>: ${t(ART[g.art] ?? "")}`;
+    feld("e-hinweis").textContent = g.hinweis ?? "";
+    feld("e-zurueck").hidden = !g.zuruecknehmbar;
+    for (const knopf of wurzel.querySelectorAll("[data-blitzen]")) knopf.textContent = `${g.name} 3 s blitzen`;
+  }
+  feld("e-geraet").onchange = zeigeAuswahl;
+  feld("e-zurueck").onclick = async () => {
+    const g = strobos.find((x) => x.id === feld("e-geraet").value);
+    if (!g || !confirm(`Einmessung von „${g.name}“ zurücknehmen? Sein Strobo ist danach wieder gesperrt.`)) return;
+    const ergebnis = await senden(`/strobos/${encodeURIComponent(g.id)}/zuruecksetzen`);
+    feld("e-ergebnis").innerHTML = `<div class="meldung">${t(ergebnis.text)}</div>`;
+    strobosLaden(g.id);
+  };
   feld("einmessen-kasten").addEventListener("click", async (ereignis) => {
     const knopf = ereignis.target.closest("[data-blitzen]");
     if (!knopf) return;
@@ -97,7 +120,7 @@ export function dmxTestSeite(wurzel) {
     const ergebnis = await senden(`/strobos/${encodeURIComponent(feld("e-geraet").value)}/auswerten`, { messungen });
     feld("e-ergebnis").innerHTML = `<div class="meldung ${ergebnis.nutzbar ? "" : "gelb"}">${t(ergebnis.text)}
       <br><span class="leise">Wert ${ergebnis.von} ≈ ${ergebnis.hz_von} Blitze/s, Wert ${ergebnis.bis} ≈ ${ergebnis.hz_bis} Blitze/s.</span></div>`;
-    strobosLaden();
+    strobosLaden(feld("e-geraet").value);
   };
   strobosLaden();
 

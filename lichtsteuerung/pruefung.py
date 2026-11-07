@@ -36,6 +36,7 @@ class Vorgaben:
     hazer_erlaubt: bool = False
     blackout: bool = False            # Die Taste gilt auch für rohe Werte.
     strobo_aus: bool = False          # Die Taste "Strobo aus" gilt auch beim Einmessen.
+    software_blitz: frozenset = frozenset()   # reine Strobos, die gerade per Helligkeit blitzen
 
 
 def bereich_von(kanal: dict, wert: int) -> Optional[dict]:
@@ -94,7 +95,7 @@ class Pruefer:
                 self._pruefe_bereich(bild, index, kanal)
             if self._pruefe_strobo(bild, geraet, vorgaben, jetzt, meldungen):
                 blitzt = True
-            elif self._nur_strobo(geraet):
+            elif self._nur_strobo(geraet) and geraet["id"] not in vorgaben.software_blitz:
                 # Ein reiner Strobo, der nicht blitzen darf, bleibt dunkel. Viele leuchten sonst
                 # bei Tempo 0 und voller Helligkeit dauerhaft grell weiß.
                 self._verdunkeln(bild, geraet)
