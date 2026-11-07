@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lichtsteuerung der Technik-AG</title>
-<meta name="description" content="Eigenes Programm für das Bühnenlicht der Technik-AG. Download für den Mac.">
+<meta name="description" content="Eigenes Programm für das Bühnenlicht der Technik-AG. Download für Mac und Windows.">
 <link rel="icon" href="symbol.png">
 <style>
   :root { --grund: #1c1d1f; --flaeche: #26282b; --linie: #3a3d41; --text: #e6e6e6; --leise: #9a9ea3; --blau: #4a7fb5; }
@@ -31,14 +31,20 @@
   <h1>Lichtsteuerung der Technik-AG</h1>
   <p>Unser eigenes Programm für das Bühnenlicht. Es reagiert live und ohne Internet auf die Musik, hält sich an ein Veranstaltungsprofil und zeigt alles auf einer 3D-Bühne.</p>
 
-  <div class="kasten">
-    <p id="version" class="leise">Für macOS 12 oder neuer</p>
+  <div class="kasten" id="mac">
+    <p class="leise"><strong>Mac</strong> · macOS 12 oder neuer <span class="version"></span></p>
     <a class="knopf" href="https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-arm64.dmg">Download für Mac mit Apple-Chip</a>
     <a class="knopf zweit" href="https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-intel.dmg">Mac mit Intel-Chip</a>
     <p class="leise" style="margin-top:8px">Welcher Chip? Apple-Menü oben links → „Über diesen Mac“. Steht dort M1, M2, M3 oder höher, ist es ein Apple-Chip.</p>
   </div>
 
-  <h2>Installieren</h2>
+  <div class="kasten" id="windows">
+    <p class="leise"><strong>Windows</strong> · Windows 10 oder 11, 64 Bit <span class="version"></span></p>
+    <a class="knopf" href="https://github.com/jakobgesche-beep/ki-lichtsteuerung/releases/latest/download/Lichtsteuerung-Setup.exe">Download für Windows</a>
+    <p class="leise" style="margin-top:8px">Der Installer braucht keine Administrator-Rechte. Er installiert nur für dich und legt ein Symbol auf den Desktop.</p>
+  </div>
+
+  <h2>Installieren auf dem Mac</h2>
   <ol>
     <li>Die heruntergeladene Datei öffnen und <strong>Lichtsteuerung</strong> auf <strong>Programme</strong> ziehen.</li>
     <li>Die App in Programme doppelklicken. macOS meldet, dass es den Entwickler nicht prüfen kann, denn wir haben kein bezahltes Apple-Konto.</li>
@@ -46,8 +52,16 @@
   </ol>
   <p class="leise">Klappt das nicht, hilft im Terminal: <code>xattr -dr com.apple.quarantine /Applications/Lichtsteuerung.app</code></p>
 
+  <h2>Installieren unter Windows</h2>
+  <ol>
+    <li><strong>Lichtsteuerung-Setup.exe</strong> doppelklicken.</li>
+    <li>Windows zeigt vielleicht „Der Computer wurde durch Windows geschützt“, denn wir haben kein bezahltes Zertifikat. Dann auf <strong>Weitere Informationen</strong> und <strong>Trotzdem ausführen</strong> klicken. Das ist nur beim ersten Mal nötig.</li>
+    <li>Fertig: Die Lichtsteuerung startet und liegt im Startmenü.</li>
+  </ol>
+  <p class="leise"><strong>Enttec Open DMX unter Windows:</strong> Einmal den USB-Treiber umstellen, sonst findet das Programm das Enttec nicht. Das kostenlose Programm <a href="https://zadig.akeo.ie/">Zadig</a> öffnen, „FT232R USB UART“ auswählen und <strong>WinUSB</strong> installieren.</p>
+
   <h2>Updates</h2>
-  <p>Du musst nichts neu herunterladen. Beim Start lädt die App neue Versionen selbst im Hintergrund. Dann erscheint oben ein Knopf, und ein Klick reicht. Eure Patches, Profile und Cues bleiben dabei erhalten. Solange die DMX-Ausgabe läuft, wird nie aktualisiert.</p>
+  <p>Du musst nichts neu herunterladen, auf dem Mac und unter Windows. Beim Start lädt die App neue Versionen selbst im Hintergrund. Dann erscheint oben ein Knopf, und ein Klick reicht. Eure Patches, Profile und Cues bleiben dabei erhalten. Solange die DMX-Ausgabe läuft, wird nie aktualisiert.</p>
 
   <h2>Was das Programm kann</h2>
   <ul>
@@ -66,12 +80,17 @@
   </footer>
 </main>
 <script>
+  // Windows-Besucher sehen Windows zuerst.
+  if (/Windows/i.test(navigator.userAgent)) {
+    const mac = document.getElementById("mac");
+    mac.parentNode.insertBefore(document.getElementById("windows"), mac);
+  }
   // Zeigt die aktuelle Version. Klappt das nicht, funktionieren die Knöpfe trotzdem.
   fetch("https://api.github.com/repos/jakobgesche-beep/ki-lichtsteuerung/releases/latest")
     .then((antwort) => antwort.ok ? antwort.json() : null)
     .then((release) => {
-      if (release) document.getElementById("version").textContent =
-        `Version ${release.tag_name.replace(/^v/, "")} · für macOS 12 oder neuer`;
+      if (release) for (const feld of document.querySelectorAll(".version"))
+        feld.textContent = `· Version ${release.tag_name.replace(/^v/, "")}`;
     }).catch(() => {});
 </script>
 </body>
