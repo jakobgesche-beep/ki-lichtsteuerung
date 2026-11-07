@@ -33,6 +33,7 @@ Oben wählst du die **View**, wie an einem Lichtpult:
 
 | View | Wofür |
 |---|---|
+| Show | **Live fahren:** Song-Start (ein Druck, dann läuft der ganze Song), Look-Tasten, Farben, Halte-Tasten, Tap-Tempo |
 | Live | 3D-Bühne, Cue-Liste (Klick springt zum Cue), Ton, Profil, Musik-Automatik, Executoren |
 | Programmieren | Pools mit Gruppen, Geräten, Farben, Positionen, Gobos und Effekten, Fixture-Sheet, Encoder, Speichern |
 | Probe | Song aufnehmen oder als Datei laden: Tempo und Songteile erkennen, Lichtshow bauen |
@@ -49,7 +50,16 @@ Englisch geht auch: `Fixture 1 Thru 3 At Full`. Zahlen tippen springt direkt in 
 3. Cue-Namen eingeben, „Als neuen Cue speichern“. Danach den nächsten Cue einstellen und speichern.
 4. „Programmer leeren“, die Sequenz unten auf einen Executor legen und mit **Go+** (Leertaste oder →) und **Go−** (←) abspielen.
 
-**Show aus der Probe:** In der View **Probe** einen Namen eingeben und „Aufnahme starten“, während die Band den Song spielt (Tonquelle auf der Live-Seite: Eingang vom X32). Danach erkennt das Programm die Songteile und legt eine Sequenz mit einem Cue pro Teil an. „Probe ansehen“ spielt die Aufnahme ab, und das Licht wechselt genau an den erkannten Stellen. Live drückst du Go+, wenn der nächste Teil kommt.
+**Show aus der Probe:** In der View **Probe** einen Namen eingeben und „Aufnahme starten“, während die Band den Song spielt (Tonquelle auf der Live-Seite: Eingang vom X32). Danach erkennt das Programm Tempo, Takte und Songteile (Intro, Strophe, Refrain, Bridge …) und legt eine Sequenz mit einem Cue pro Teil an. „Probe ansehen“ spielt die Aufnahme ab, und das Licht wechselt genau an den erkannten Stellen. Ältere Aufnahmen: „Show neu bauen“ analysiert sie mit der neuen Erkennung noch einmal.
+
+**Live fahren (View Show):**
+
+- **Song-Start:** Den Song antippen, wenn die Band anfängt. Dann läuft der ganze Song von selbst durch. Das Programm hört mit und vergleicht mit der Probe-Aufnahme, so bleibt es auch dran, wenn die Band schneller oder langsamer spielt. Groß angezeigt: welcher Teil jetzt läuft, wie viele Takte und Sekunden noch, was danach kommt. Fällt der Ton aus, läuft der Song im Tempo der Probe weiter. Hört die Band mitten im Song auf, wartet das Programm.
+- **Korrigieren:** „Nächster Teil jetzt“ (Leertaste), „Teil zurück“ (←) oder einfach auf einen Teil in der Zeitleiste klicken. Der Song läuft von dort weiter.
+- **Look-Tasten 1 bis 9:** Ruhig, Strophe, Aufbau, Refrain, Höhepunkt, Drop!, Solo, Ballade, Schluss. Sie gehen immer, auch ganz ohne Musik-Erkennung. 0 = Look aus, dann ist wieder der Song oder die Automatik zu sehen.
+- **Farben:** Farbe 1 und Farbe 2 gelten für alle Looks, ein Druck ändert den laufenden Look mit.
+- **Halten:** Weiß voll (Taste F), Strobo und Dunkel gelten nur, solange du drückst.
+- **Tap:** Ein paar Mal im Takt auf TAP (Taste T) tippen, dann laufen alle Effekte in diesem Tempo. „Tempo vom Ton“ schaltet zurück.
 
 Ein Cue speichert nur, was du geändert hast. Alles andere bleibt aus dem vorigen Cue stehen, wie bei grandMA („Tracking“). Der Fader eines Executors blendet seine Sequenz über die Musik-Automatik.
 

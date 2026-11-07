@@ -44,6 +44,7 @@ export function probeSeite(wurzel) {
         <h2>${t(p.name)} <span class="leise">${p.tempo_bpm} BPM · ${minuten(p.dauer_s)}</span></h2>
         <div class="zeitleiste">${p.teile.map((teil) => `<div class="${teil.klasse}" style="flex:${teil.ende - teil.start}"
           title="${t(teil.name)} ${teil.gruppe}: ${minuten(teil.start)} bis ${minuten(teil.ende)}">${t(teil.name)} ${teil.gruppe}</div>`).join("")}</div>
+        ${(p.version ?? 1) < 2 ? `<div class="meldung gelb">Neue Song-Erkennung: „Show neu bauen“ drücken, dann wird diese Aufnahme neu analysiert (Tempo, Takte, Teile).</div>` : ""}
         ${(p.drops_s?.length || p.markiert_s?.length) ? `<p class="leise">Drops erkannt: ${(p.drops_s ?? []).map(minuten).join(", ") || "keiner"}
           ${p.markiert_s?.length ? ` · von dir markiert: ${p.markiert_s.map(minuten).join(", ")}` : ""}</p>` : ""}
         <p class="zeile">
@@ -51,7 +52,7 @@ export function probeSeite(wurzel) {
           <button data-neu="${t(p.name)}">Show neu bauen</button>
           <button data-weg="${t(p.name)}" class="gefahr">Löschen</button></p>
         <p class="leise">Die Show liegt als Sequenz „${t(p.name)}“ im Pult. Dort kannst du jeden Cue ändern.
-          Live legst du sie auf einen Executor und drückst Go+, wenn der nächste Teil beginnt.</p>
+          Live: auf der Seite „Show“ einmal Start drücken, wenn die Band anfängt. Der Song läuft dann von selbst durch.</p>
       </div>`).join("") || `<p class="leise">Noch keine Songs aufgenommen.</p>`;
   }
 
@@ -85,7 +86,12 @@ export function probeSeite(wurzel) {
   wurzel.addEventListener("click", async (ereignis) => {
     const d = ereignis.target.dataset;
     if (d.ansehen) await senden(`/proben/${encodeURIComponent(d.ansehen)}/abspielen`, { executor: 1 });
-    if (d.neu) { await senden(`/proben/${encodeURIComponent(d.neu)}/neu`); meldung("Show neu gebaut."); }
+    if (d.neu) {
+      meldung("Baue die Show neu …");
+      await senden(`/proben/${encodeURIComponent(d.neu)}/neu`);
+      meldung("Show neu gebaut.");
+      songsZeigen();
+    }
     if (d.weg && confirm(`Aufnahme „${d.weg}“ löschen? Die Sequenz im Pult bleibt.`)) {
       await api(`/proben/${encodeURIComponent(d.weg)}`, { method: "DELETE" });
       songsZeigen();

@@ -147,6 +147,11 @@ class SongSpieler:
             index -= 1
         self.folger.setzen(teile[index]["start"] + 0.01)
 
+    def zu_teil(self, index: int) -> None:
+        teile = self.karte.get("teile", [])
+        if self.folger is not None and 0 <= index < len(teile):
+            self.folger.setzen(teile[index]["start"] + 0.01)
+
     def zu_cue(self, index: int) -> None:
         if self.folger is not None and 0 <= index < len(self.zeitcode):
             self.folger.setzen(self.zeitcode[index] + 0.01)

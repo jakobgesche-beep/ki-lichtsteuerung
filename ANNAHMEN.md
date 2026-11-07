@@ -96,6 +96,16 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **GDTF:** nur gegen eine selbst gebaute Beispieldatei getestet. QLC+-Import gegen die echte Datei des Hero Spot 60.
 - **Die genaue Lage** eines Geräts (x, y, z, Drehung, Neigung) trägt man in `stage.json` ein, solange es die Klick-Oberfläche aus Schritt 11 nicht gibt.
 
+## Song-Erkennung, Song-Start und Show-Tasten (ab 1.9.0)
+
+- **Gemessen statt geraten:** 12 künstliche Songs (Pop, Rock, Ballade, EDM, Punk, Swing, Weihnachtslied ohne Schlagzeug), jeweils als „Probe“ und als „Live“-Fassung (4 % schneller, zum Ende 3 % schneller, ungenaues Timing, Handy-Lautsprecher, Raum, Publikum). Tempo: 24 von 24 richtig, Beats: 97 % getroffen, Takt-Eins: 24 von 24. Die alte Erkennung hatte auf den ersten 16 dieser Aufnahmen 3 Tempi richtig und 67 % der Beats.
+- **Songteile sind schwerer:** Die Grenzen kommen aus Lautstärke und Klang, die Buchstaben aus dem Vergleich der Akkordfolgen. Auf den künstlichen Songs werden gut ein Drittel der Teil-Wechsel exakt gefunden, die gefundenen stimmen zu 84 %. Kurze Überleitungen (4 Takte) gehen oft im Nachbarteil auf. Beim echten Song „Hh“ lagen die gefundenen Wechsel bei 69, 119, 144 und 181 s, die D-Markierungen bei 69, 120, 144 und 181 s.
+- **Halbes oder doppeltes Tempo** ist bei schnellen Songs Geschmackssache (Boulevard of Broken Dreams: 83 oder 167 BPM). Das Programm entscheidet nach der Snare. Fürs Licht ist beides brauchbar.
+- **Song-Folger:** Im harten Test (7 % Tempo-Unterschied, Publikum, Handy-Klang) lag der Teil-Wechsel im Mittel 2 s daneben, eine reine Uhr 2,7 s. Bei normalem Tempo eher 1 s. Spielt die Band einen Teil öfter oder lässt einen aus, merkt das der Folger nicht sicher: dann „Nächster Teil“ oder auf den Teil klicken. Mit echter Band ist das noch nicht ausprobiert.
+- **Leise Intros:** Der Musikanfang wird gegen das Rauschen der ersten Sekunde der Aufnahme gemessen. Darum vor dem Song kurz Stille aufnehmen.
+- **Show-Tasten** bauen ihre Looks aus den Gruppen Spots, Farb-PARs und Strobo. Der Strobo blitzt nur, wenn er eingemessen ist und die Prüfung es erlaubt. Halte-Tasten gehen nach 20 s von selbst aus, falls das Loslassen nicht ankommt.
+- **Effekte rasten auf den Beat ein:** Jeder gehörte Schlag zieht die Effekt-Uhr ein Stück nach, so liegt der Puls auf dem Beat. Welcher der Schläge die Takt-Eins ist, weiß live nur der Song-Start.
+
 ## Mac-App, Website und Updates
 
 - **Die Website** ist für GitHub Pages vorbereitet. Cloudflare muss einmal im eigenen Konto mit dem Repo verbunden werden.

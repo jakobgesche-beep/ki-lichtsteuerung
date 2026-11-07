@@ -324,6 +324,18 @@ class Proben:
         daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
         return analyse
 
+    def neu_analysieren(self, name: str) -> Optional[dict]:
+        """Ältere Analysen (vor der neuen Erkennung) noch einmal machen. Markierungen bleiben."""
+        alt = self.lesen(name)
+        pfad = self.ton_pfad(name)
+        if alt is None or alt.get("version", 1) >= ANALYSE_VERSION or not pfad.exists():
+            return alt
+        analyse = analysieren(lade_datei(pfad), alt.get("name", name))
+        if alt.get("markiert_s"):
+            analyse["markiert_s"] = alt["markiert_s"]
+        daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
+        return analyse
+
     def aus_datei(self, name: str, pfad: Path) -> dict:
         return self.speichern(name, lade_datei(pfad))
 

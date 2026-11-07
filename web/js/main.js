@@ -1,5 +1,6 @@
 // Der Rahmen: Views oben wie am Pult, unter "Setup" die Einrichtungs-Seiten.
 // Unten ist immer die Befehlszeile, oben immer die Not-Tasten.
+import { showSeite } from "./show.js";
 import { liveSeite } from "./live.js";
 import { programmierenSeite } from "./programmieren.js";
 import { probeSeite } from "./probe.js";
@@ -12,6 +13,7 @@ import { befehlszeile } from "./befehl.js";
 import { abonnieren } from "./verbindung.js";
 
 const views = [
+  ["Show", showSeite],
   ["Live", liveSeite],
   ["Programmieren", programmierenSeite],
   ["Probe", probeSeite],

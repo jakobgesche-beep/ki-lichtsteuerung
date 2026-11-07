@@ -326,7 +326,7 @@ class Show:
 
     def show_aus_probe(self, name: str) -> dict:
         """Baut aus einer analysierten Probe die Sequenz mit demselben Namen."""
-        analyse = self.proben.lesen(name)
+        analyse = self.proben.neu_analysieren(name)
         if analyse is None:
             raise ValueError(f"Probe {name!r} gibt es nicht.")
         sequenz = show_bauen(analyse, self.patch, self.profil["palette"], self.gobos_der_gruppe, self.positionen)

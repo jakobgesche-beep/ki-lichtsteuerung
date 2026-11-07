@@ -540,6 +540,12 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.song.starten(str(auftrag.get("name", "")), int(auftrag.get("executor", 1)))
         return show.song.zustand()
 
+    @app.post("/api/song/teil")
+    def song_teil(auftrag: dict = Body(...)):
+        """Klick auf einen Teil in der Zeitleiste: Der Song läuft ab dort weiter."""
+        show.song.zu_teil(int(auftrag.get("index", 0)))
+        return show.song.zustand()
+
     @app.post("/api/song/{aktion}")
     def song_aktion(aktion: str):
         if aktion == "stopp":
