@@ -41,13 +41,18 @@ ABSTAND_S = 30 * 60
 ARCHITEKTUREN = {"arm64": "arm64", "x86_64": "intel"}
 
 WINDOWS_SKRIPT = r"""@echo off
-rem Bekommt: Prozessnummer der App, Installer, Programm. Wartet, bis die App zu ist.
+rem Bekommt: Prozessnummer der App, Installer, Programm. Wartet, bis die App zu ist,
+rem hoechstens etwa 20 Sekunden. Laeuft sie dann noch, schliesst der Installer sie selbst.
+set /a runden=0
 :warten
 tasklist /FI "PID eq %~1" /NH 2>NUL | findstr /R /C:" %~1 " >NUL
 if not errorlevel 1 (
+  set /a runden+=1
+  if %runden% GEQ 20 goto installieren
   ping -n 2 127.0.0.1 >NUL
   goto warten
 )
+:installieren
 "%~2" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CURRENTUSER
 del "%~2" >NUL 2>NUL
 if not defined LICHT_KEIN_NEUSTART start "" "%~3"

@@ -78,10 +78,12 @@ def webserver(tmp_path):
 def veroeffentlichen(ordner, version, inhalt=b"neue app", summe=None):
     (ordner / "Lichtsteuerung-arm64.zip").write_bytes(inhalt)
     (ordner / "Lichtsteuerung-intel.zip").write_bytes(inhalt)
+    (ordner / "Lichtsteuerung-Setup.exe").write_bytes(inhalt)
     eintrag = {"sha256": summe or hashlib.sha256(inhalt).hexdigest()}
     (ordner / "latest.json").write_text(json.dumps({"version": version, "dateien": {
         "arm64": {**eintrag, "name": "Lichtsteuerung-arm64.zip"},
-        "intel": {**eintrag, "name": "Lichtsteuerung-intel.zip"}}}))
+        "intel": {**eintrag, "name": "Lichtsteuerung-intel.zip"},
+        "windows": {**eintrag, "name": "Lichtsteuerung-Setup.exe"}}}))
 
 
 @pytest.fixture
@@ -135,6 +137,7 @@ def test_ohne_download_kein_installieren(show):
         show.update.installieren()
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Mac: App im Download-Ordner oder auf dem DMG")
 def test_kein_update_aus_dem_download_ordner(show, monkeypatch, tmp_path):
     monkeypatch.setattr(update, "app_pfad", lambda: daten.Path("/Volumes/Lichtsteuerung/Lichtsteuerung.app"))
     assert "Programme" in show.update.sperrgrund()
@@ -209,7 +212,7 @@ def test_paket_und_datenordner_je_system(monkeypatch, tmp_path):
     monkeypatch.setenv("APPDATA", str(tmp_path / "Roaming"))
     assert daten.datenordner() == tmp_path / "Roaming" / "Lichtsteuerung"
     monkeypatch.setattr(daten.sys, "platform", "darwin")
-    assert str(daten.datenordner()).endswith("Library/Application Support/Lichtsteuerung")
+    assert daten.datenordner().parts[-3:] == ("Library", "Application Support", "Lichtsteuerung")
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="nur unter Windows")
@@ -224,5 +227,6 @@ def test_windows_skript_wartet_bis_die_app_zu_ist_und_installiert(tmp_path, monk
     time.sleep(1.5)
     assert not marke.exists()                     # die App läuft noch: warten
     app.wait()
-    skript.wait(timeout=60)
+    del app                                       # Griff schließen, sonst zählt Windows den Prozess noch
+    skript.wait(timeout=90)
     assert "/VERYSILENT" in marke.read_text()

@@ -4,9 +4,14 @@ Unser eigenes Programm für das Bühnenlicht. Es reagiert live und ohne Internet
 
 Der erste Entwurf läuft komplett **ohne Hardware** im Simulator. Die DMX-Ausgabe ist beim Start immer aus.
 
-## Mac-App
+## App für Mac und Windows
 
-Die fertige App gibt es auf der [Website](https://jakobgesche-beep.github.io/ki-lichtsteuerung/). Sie braucht kein Python und aktualisiert sich selbst. Ihre Show-Daten liegen in `~/Library/Application Support/Lichtsteuerung`, ein Update fasst sie nicht an.
+Die fertige App gibt es auf der [Website](https://jakobgesche-beep.github.io/ki-lichtsteuerung/), für den Mac (Apple-Chip und Intel) und für Windows 10/11. Sie braucht kein Python und aktualisiert sich selbst. Die Show-Daten liegen getrennt vom Programm, ein Update fasst sie nicht an:
+
+- Mac: `~/Library/Application Support/Lichtsteuerung`
+- Windows: `%APPDATA%\Lichtsteuerung` (das Programm selbst liegt in `%LOCALAPPDATA%\Programs\Lichtsteuerung`)
+
+Unter Windows braucht das Enttec Open DMX einmal den WinUSB-Treiber: [Zadig](https://zadig.akeo.ie/) öffnen, „FT232R USB UART“ wählen, WinUSB installieren.
 
 ## Aus dem Quellcode starten
 
@@ -124,7 +129,7 @@ Das braucht Internet und läuft nie während einer Show.
 1. In `lichtsteuerung/version.py` die Nummer erhöhen, zum Beispiel auf `1.1.0`, und committen.
 2. `git tag v1.1.0` und `git push origin main v1.1.0`.
 
-GitHub testet und baut dann alles selbst und legt das Release an. Jede installierte App findet es beim nächsten Start. Die Website im Ordner `site/` geht bei jedem Push auf `main` von selbst online.
+GitHub testet und baut dann alles selbst (Mac auf macOS, Windows auf einem Windows-Rechner samt stiller Installation und Selbsttest) und legt das Release an. Jede installierte App findet es beim nächsten Start. Nur Windows ausprobieren, ohne Release: den Stand auf den Zweig `win-probe` pushen. Die Website im Ordner `site/` geht bei jedem Push auf `main` von selbst online.
 
 ## Website auf Cloudflare
 

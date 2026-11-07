@@ -106,6 +106,20 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Show-Tasten** bauen ihre Looks aus den Gruppen Spots, Farb-PARs und Strobo. Der Strobo blitzt nur, wenn er eingemessen ist und die Prüfung es erlaubt. Halte-Tasten gehen nach 20 s von selbst aus, falls das Loslassen nicht ankommt.
 - **Effekte rasten auf den Beat ein:** Jeder gehörte Schlag zieht die Effekt-Uhr ein Stück nach, so liegt der Puls auf dem Beat. Welcher der Schläge die Takt-Eins ist, weiß live nur der Song-Start.
 
+## Strobo ohne Einmessen (ab 1.10.0)
+
+- **Ein reiner Strobo ohne bekanntes Tempo blitzt trotzdem:** Das Programm lässt sein eigenes Tempo auf 0 und schaltet die Helligkeit selbst kurz an (50 ms), auf dem Beat, höchstens 3-mal pro Sekunde, nach 5 s Pause. Das Tempo bestimmt so das Programm. Ohne Blitz-Wunsch bleibt er dunkel, ein weißes Dauerlicht gibt es nicht.
+- **Annahme:** Der Strobo leuchtet bei Tempo 0 mit der eingestellten Helligkeit (so machen es LED-Strobos). Ein alter Xenon-Strobo blitzt bei Tempo 0 gar nicht. Dann bleibt er dunkel, und nur Einmessen hilft.
+- **Einmessen** zeigt jetzt den echten Strobo zuerst, und groß, welches Gerät gerade blitzt. Am 07.11. war aus Versehen Front 1 (MH-X25) eingemessen worden. Das lässt sich mit „Einmessung zurücknehmen“ rückgängig machen.
+
+## Windows-Version (ab 1.10.0)
+
+- **Getestet nur automatisch** auf einem Windows-Server bei GitHub: alle Tests, Bau, stille Installation, Selbsttest der installierten App, das Update-Skript. Nicht getestet: ein echter Windows-Laptop, das Fenster selbst (Edge WebView2), Mikrofon, Enttec.
+- **Das Fenster** nutzt Edge WebView2 (in Windows 10/11 meist schon drin). Fehlt es, öffnet sich die Oberfläche im Browser.
+- **Nicht signiert:** Windows warnt beim ersten Start („Weitere Informationen“, „Trotzdem ausführen“).
+- **Enttec:** Unter Windows braucht pyftdi den WinUSB-Treiber (Zadig). Danach ist das Enttec für andere Programme mit FTDI-Treiber nicht mehr sichtbar.
+- **Updates** laden den neuen Installer, prüfen die Prüfsumme und installieren ihn still, sobald die App geschlossen ist.
+
 ## Mac-App, Website und Updates
 
 - **Die Website** ist für GitHub Pages vorbereitet. Cloudflare muss einmal im eigenen Konto mit dem Repo verbunden werden.
