@@ -40,22 +40,13 @@ ZEITLIMIT_S = 30
 ABSTAND_S = 30 * 60
 ARCHITEKTUREN = {"arm64": "arm64", "x86_64": "intel"}
 
-WINDOWS_SKRIPT = r"""@echo off
-rem Bekommt: Prozessnummer der App, Installer, Programm. Wartet, bis die App zu ist,
-rem hoechstens etwa 20 Sekunden. Laeuft sie dann noch, schliesst der Installer sie selbst.
-set /a runden=0
-:warten
-tasklist /FI "PID eq %~1" /NH 2>NUL | findstr /R /C:" %~1 " >NUL
-if not errorlevel 1 (
-  set /a runden+=1
-  if %runden% GEQ 20 goto installieren
-  ping -n 2 127.0.0.1 >NUL
-  goto warten
-)
-:installieren
-"%~2" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CURRENTUSER
-del "%~2" >NUL 2>NUL
-if not defined LICHT_KEIN_NEUSTART start "" "%~3"
+WINDOWS_SKRIPT = r"""param([int]$AppPid, [string]$Installer, [string]$Programm)
+# Wartet, bis die App zu ist (hoechstens 20 Sekunden; laeuft sie dann noch,
+# schliesst der Installer sie selbst). Dann still installieren und neu starten.
+try { Wait-Process -Id $AppPid -Timeout 20 -ErrorAction Stop } catch { }
+$p = Start-Process -FilePath $Installer -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/CURRENTUSER' -Wait -PassThru
+Remove-Item -LiteralPath $Installer -ErrorAction SilentlyContinue
+if (-not $env:LICHT_KEIN_NEUSTART) { Start-Process -FilePath $Programm }
 """
 
 
@@ -227,10 +218,11 @@ def starte_skript(pid: int, zip_datei: Path, app: Path) -> subprocess.Popen:
 
 def starte_windows_skript(pid: int, installer: Path, programm: Path) -> subprocess.Popen:
     """Windows: Das Skript wartet, bis die App zu ist, und installiert dann still darüber."""
-    griff, pfad = tempfile.mkstemp(suffix=".cmd", prefix="licht-update-")
-    with os.fdopen(griff, "w", encoding="ascii", newline="\r\n") as datei:
+    griff, pfad = tempfile.mkstemp(suffix=".ps1", prefix="licht-update-")
+    with os.fdopen(griff, "w", encoding="ascii") as datei:
         datei.write(WINDOWS_SKRIPT)
-    neues_fenster = getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(subprocess, "DETACHED_PROCESS", 0)
-    return subprocess.Popen(["cmd.exe", "/c", pfad, str(pid), str(installer), str(programm)],
-                            creationflags=neues_fenster | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0),
-                            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    ohne_fenster = getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0)
+    return subprocess.Popen(["powershell.exe", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass",
+                             "-WindowStyle", "Hidden", "-File", pfad, str(pid), str(installer), str(programm)],
+                            creationflags=ohne_fenster, stdin=subprocess.DEVNULL,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
