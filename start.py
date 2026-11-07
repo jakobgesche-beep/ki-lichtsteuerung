@@ -104,6 +104,9 @@ def main() -> None:
         try:
             selbsttest(adresse)
             code = 0
+            if daten.ALS_APP:
+                # Für die Prüfung im Bau: Ein Fenster-Programm hat keine Konsole für "bestanden".
+                (daten.datenordner() / "selbsttest.txt").write_text("bestanden", encoding="utf-8")
         except BaseException:
             logging.exception("Selbsttest fehlgeschlagen")
             code = 1

@@ -58,6 +58,7 @@ jobs:
           $p = Start-Process -FilePath "dist\Lichtsteuerung\Lichtsteuerung.exe" -ArgumentList "--selbsttest","--port","8391" -Wait -PassThru
           Get-Content (Join-Path $env:LICHT_DATEN "logbuch.txt") -ErrorAction SilentlyContinue | Select-Object -Last 30
           if ($p.ExitCode -ne 0) { exit 1 }
+          if ((Get-Content (Join-Path $env:LICHT_DATEN "selbsttest.txt")) -ne "bestanden") { exit 1 }
       - name: Installer bauen
         shell: pwsh
         run: |
@@ -77,6 +78,7 @@ jobs:
           $p = Start-Process -FilePath $exe -ArgumentList "--selbsttest","--port","8392" -Wait -PassThru
           Get-Content (Join-Path $env:LICHT_DATEN "logbuch.txt") -ErrorAction SilentlyContinue | Select-Object -Last 30
           if ($p.ExitCode -ne 0) { exit 1 }
+          if ((Get-Content (Join-Path $env:LICHT_DATEN "selbsttest.txt")) -ne "bestanden") { exit 1 }
       - uses: actions/upload-artifact@v4
         with:
           name: windows
