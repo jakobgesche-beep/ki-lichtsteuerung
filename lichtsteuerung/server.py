@@ -201,6 +201,29 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.test_setzen(geraet, kanaele)
         return {"bild": list(show.baue_bild()), "meldungen": show.meldungen}
 
+    @app.get("/api/strobos")
+    def strobos():
+        """Alle gepatchten Geräte mit Strobo-Kanal, und ob ihr Tempo bekannt ist."""
+        ergebnis = []
+        for geraet in show.patch.geraete:
+            kanaele = [k for _, k in show.patch.typ(geraet).kanaele_im_modus(geraet["modus"]) if k["typ"] == "strobo"]
+            if kanaele:
+                bekannt = any(b.get("hz_bis") for k in kanaele for b in k.get("bereiche", []) if b["typ"] == "strobo")
+                ergebnis.append({"id": geraet["id"], "name": geraet["name"], "adresse": geraet["adresse"],
+                                 "eingemessen": bekannt, "hinweis": show.patch.typ(geraet).daten.get("_hinweis", "")})
+        return {"strobos": ergebnis}
+
+    @app.post("/api/strobos/{geraet_id}/blitzen")
+    def strobo_blitzen(geraet_id: str, auftrag: dict = Body(...)):
+        if auftrag.get("bestaetigt") is not True:
+            raise ValueError("Bitte zuerst bestätigen: Lehrkraft dabei, niemand im Raum reagiert empfindlich auf Blitzlicht.")
+        show.strobo_einmessen(geraet_id, int(auftrag["wert"]))
+        return {"sekunden": 3}
+
+    @app.post("/api/strobos/{geraet_id}/auswerten")
+    def strobo_auswerten(geraet_id: str, auftrag: dict = Body(...)):
+        return show.strobo_auswerten(geraet_id, auftrag["messungen"])
+
     @app.get("/api/dmx")
     def dmx_status():
         return {"eingeschaltet": show.ausgabe.eingeschaltet,

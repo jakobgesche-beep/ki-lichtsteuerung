@@ -23,9 +23,27 @@ export function dmxTestSeite(wurzel) {
           <p class="leise" id="ergebnis"></p>
         </div>
       </div>
+      <div>
+      <div class="kasten" id="einmessen-kasten">
+        <h2>Strobo einmessen</h2>
+        <p class="leise">Damit das Programm die Grenze von 3 Blitzen pro Sekunde einhalten kann, muss es wissen,
+          wie schnell der Strobo bei welchem Wert blitzt. Der Strobo blitzt dafür je 3 Sekunden.
+          Filme ihn mit der Zeitlupe vom Handy und zähle die Blitze.</p>
+        <label>Strobo <select id="e-geraet"></select></label>
+        <p class="leise" id="e-hinweis"></p>
+        <label class="schalter"><input type="checkbox" id="e-ok"> Lehrkraft ist dabei, und niemand im Raum reagiert empfindlich auf Blitzlicht.</label>
+        <div class="tabelle-huelle"><table id="e-tabelle">
+          <tr><th>Tempo-Wert</th><th></th><th>gezählte Blitze in 3 s</th></tr>
+          ${[10, 30, 60].map((w) => `<tr><td><input type="number" min="1" max="255" value="${w}" data-wert></td>
+            <td><button data-blitzen>3 s blitzen</button></td><td><input type="number" min="0" step="1" data-blitze></td></tr>`).join("")}
+        </table></div>
+        <p class="zeile"><button id="e-auswerten" class="haupt">Auswerten</button></p>
+        <div id="e-ergebnis"></div>
+      </div>
       <div class="kasten tabelle-huelle">
         <h2>Jedes Gerät kurz einzeln an</h2>
         <table id="geraete"></table>
+      </div>
       </div>
     </div>`;
   const feld = (id) => wurzel.querySelector("#" + id);
@@ -54,6 +72,34 @@ export function dmxTestSeite(wurzel) {
   feld("ende").onclick = () => { feld("ergebnis").textContent = ""; testen({}); };
   feld("ein").onclick = async () => { await senden("/dmx/ein"); status(); };
   feld("aus").onclick = async () => { await senden("/dmx/aus"); status(); };
+
+  async function strobosLaden() {
+    const { strobos } = await api("/strobos");
+    feld("einmessen-kasten").hidden = !strobos.length;
+    feld("e-geraet").innerHTML = strobos.map((g) =>
+      `<option value="${t(g.id)}">${t(g.name)} (Adresse ${g.adresse}${g.eingemessen ? ", eingemessen" : ""})</option>`).join("");
+    const hinweis = () => { const g = strobos.find((x) => x.id === feld("e-geraet").value); feld("e-hinweis").textContent = g?.hinweis ?? ""; };
+    feld("e-geraet").onchange = hinweis;
+    hinweis();
+  }
+  feld("einmessen-kasten").addEventListener("click", async (ereignis) => {
+    const knopf = ereignis.target.closest("[data-blitzen]");
+    if (!knopf) return;
+    const wert = Number(knopf.closest("tr").querySelector("[data-wert]").value);
+    await senden(`/strobos/${encodeURIComponent(feld("e-geraet").value)}/blitzen`, { wert, bestaetigt: feld("e-ok").checked });
+    knopf.disabled = true;
+    setTimeout(() => (knopf.disabled = false), 3200);
+  });
+  feld("e-auswerten").onclick = async () => {
+    const messungen = [...wurzel.querySelectorAll("#e-tabelle tr")].slice(1)
+      .map((zeile) => ({ wert: Number(zeile.querySelector("[data-wert]").value), blitze: zeile.querySelector("[data-blitze]").value, sekunden: 3 }))
+      .filter((m) => m.blitze !== "").map((m) => ({ ...m, blitze: Number(m.blitze) }));
+    const ergebnis = await senden(`/strobos/${encodeURIComponent(feld("e-geraet").value)}/auswerten`, { messungen });
+    feld("e-ergebnis").innerHTML = `<div class="meldung ${ergebnis.nutzbar ? "" : "gelb"}">${t(ergebnis.text)}
+      <br><span class="leise">Wert ${ergebnis.von} ≈ ${ergebnis.hz_von} Blitze/s, Wert ${ergebnis.bis} ≈ ${ergebnis.hz_bis} Blitze/s.</span></div>`;
+    strobosLaden();
+  };
+  strobosLaden();
 
   api("/patch").then((patch) => {
     feld("geraete").innerHTML = `<tr><th>Name</th><th>Adresse</th><th></th></tr>` + patch.geraete.map((g) => `

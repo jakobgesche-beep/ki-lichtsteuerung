@@ -35,6 +35,7 @@ class Vorgaben:
     strobo_max_dauer_s: float = 0.0
     hazer_erlaubt: bool = False
     blackout: bool = False            # Die Taste gilt auch für rohe Werte.
+    strobo_aus: bool = False          # Die Taste "Strobo aus" gilt auch beim Einmessen.
 
 
 def bereich_von(kanal: dict, wert: int) -> Optional[dict]:
@@ -78,6 +79,7 @@ class Pruefer:
                 "kegel": typ.daten.get("physik", {}).get("abstrahlwinkel_grad") or STANDARD_KEGEL_GRAD,
             })
         self.letzte_sichere_stellung = {}
+        self.einmessen_bis = {}       # Geräte-id -> Zeit: so lange darf es beim Einmessen blitzen
         self.letzte_winkel = {}
         self.dunkel_bis = {}
 
@@ -114,12 +116,17 @@ class Pruefer:
         """Setzt jeden Strobo-Wert über der Grenze zurück. True, wenn es erlaubt blitzt."""
         grenze = min(vorgaben.strobo_max_hz, self.grenzen.strobo_max_hz)
         blitzt = False
+        einmessen = jetzt < self.einmessen_bis.get(geraet["id"], 0.0) and not vorgaben.strobo_aus
         for index, kanal in geraet["kanaele"]:
             bereich = bereich_von(kanal, bild[index])
             if bereich is None or bereich["typ"] != "strobo":
                 continue
             hz = hz_von(bereich, bild[index])
-            if hz is None:
+            if einmessen:
+                # Einmessen: ein paar Sekunden mit Bestätigung, damit man das Tempo zählen kann.
+                blitzt = True
+                meldungen.append(f"{geraet['name']}: wird eingemessen, Strobo-Grenze kurz aus.")
+            elif hz is None:
                 bild[index] = sicherer_wert(kanal)
                 meldungen.append(f"{geraet['name']}: Strobo-Tempo unbekannt, Strobo gesperrt.")
             elif grenze <= 0 or not self.strobo.erlaubt(jetzt):

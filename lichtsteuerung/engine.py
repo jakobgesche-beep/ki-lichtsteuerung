@@ -37,6 +37,7 @@ from .szenen import bereiche_von, loese_auf, zeige_auf
 
 GRUPPE_FARBE = "Farb-PARs"
 GRUPPE_BEWEGUNG = "Spots"
+GRUPPE_STROBO = "Strobo"
 STANDARD_TEMPO = 120.0
 PULS_ABKLANG = 0.45      # wie schnell der Lichtpuls ausklingt, in Beats
 AKZENT_ABKLANG = 1.2     # der Akzent ("doppelt hell") klingt langsamer aus
@@ -401,6 +402,13 @@ class Engine:
                 elif geraet["id"] in self.winkel:
                     e.pan, e.tilt = self.winkel[geraet["id"]]
             ergebnis[geraet["id"]] = e
+        # Strobos blitzen beim Drop, aber nur wenn das Profil es erlaubt. Tempo und Dauer begrenzt
+        # die Prüfung, ein nicht eingemessener Strobo bleibt dort gesperrt.
+        if profil["strobo"] != "aus":
+            hz = min(profil["strobo"]["max_blitze_pro_sekunde"], self.grenzen.strobo_max_hz)
+            for geraet in self.patch.in_gruppe(GRUPPE_STROBO):
+                ergebnis[geraet["id"]] = Eigenschaften(helligkeit=grenze, strobo_hz=hz if seit < 4.0 else 0.0,
+                                                       farbe=(1.0, 1.0, 1.0))
         self.zustand_text = "DROP"
         return ergebnis
 

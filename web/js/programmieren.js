@@ -49,6 +49,7 @@ export function programmierenSeite(wurzel) {
           <label>Pan <span class="wert" id="w-pan">–</span><input id="pan" type="range" min="-270" max="270" value="0"></label>
           <label>Tilt <span class="wert" id="w-tilt">–</span><input id="tilt" type="range" min="-135" max="135" value="0"></label>
           <label>Gobo-Drehung <span class="wert" id="w-drehung">0</span><input id="drehung" type="range" min="-100" max="100" value="0"></label>
+          <label>Strobo (Blitze/s) <span class="wert" id="w-strobo">0</span><input id="strobo" type="range" min="0" max="3" step="0.5" value="0"></label>
         </div></section>
         <section class="fenster"><header>Speichern</header><div class="inhalt">
           <div class="zeile">
@@ -281,6 +282,7 @@ export function programmierenSeite(wurzel) {
   };
   encoder("hell", (w) => w, (w) => ({ helligkeit: w / 100 }));
   encoder("drehung", (w) => w, (w) => ({ gobo_drehung: w / 100 }));
+  encoder("strobo", (w) => w, (w) => ({ strobo_hz: w }));
   encoder("pan", (w) => w + "°", (w) => ({ pan: w, tilt: Number(feld("tilt").value) }));
   encoder("tilt", (w) => w + "°", (w) => ({ tilt: w, pan: Number(feld("pan").value) }));
   for (const id of ["groesse", "verteilung"]) feld("e-" + id).oninput = () => (feld("w-" + id).textContent = feld("e-" + id).value);

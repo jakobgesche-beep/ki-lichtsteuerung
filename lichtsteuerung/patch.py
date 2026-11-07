@@ -15,7 +15,7 @@ from .buehne import Buehne
 from .katalog import Katalog
 
 DMX_KANAELE = 512
-FUNKTIONS_GRUPPEN = ["Farb-PARs", "Frontlicht", "Effektlicht", "Spots", "Dunst"]
+FUNKTIONS_GRUPPEN = ["Farb-PARs", "Frontlicht", "Effektlicht", "Spots", "Strobo", "Dunst"]
 
 
 class PatchFehler(Exception):
@@ -69,6 +69,8 @@ class Patch:
             return ["Spots"]
         if "nebel" in typen:
             return ["Dunst"]
+        if "strobo" in typen and not typen & {"rot", "gruen", "blau", "weiss"}:
+            return ["Strobo"]
         return ["Farb-PARs"]
 
     def in_gruppe(self, gruppe: str) -> list:

@@ -139,7 +139,8 @@ class Katalog:
         self.typen = {}
         orte = [self.ordner / name for name in ("ofl", "importiert", "eigene")]
         if self.eingebaut:
-            orte = [self.eingebaut / "ofl", self.eingebaut / "importiert"] + orte
+            # Auch mitgelieferte eigene Einträge (zum Beispiel der Strobo ohne Namen)
+            orte = [self.eingebaut / "ofl", self.eingebaut / "importiert", self.eingebaut / "eigene"] + orte
         for ort in orte:
             for pfad in sorted(ort.glob("*/*.json")):
                 eintrag = daten.lese_json(pfad)

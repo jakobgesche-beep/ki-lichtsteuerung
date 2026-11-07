@@ -12,10 +12,13 @@ Hier läuft alles zusammen. Ein Bild entsteht immer in dieser Reihenfolge:
 """
 from __future__ import annotations
 
+import json
 import logging
 import threading
 import time
 from typing import Optional
+
+import numpy as np
 
 from . import daten
 from .audio.betrieb import AudioBetrieb
@@ -40,6 +43,7 @@ from .vorschau import Vorschau
 
 ERSTES_PROFIL = "Schulfest Abend"   # beim allerersten Start, damit das Licht auf Musik reagiert
 WARM_POSITION = "Mitte"     # dorthin zeigen die Spots bei Warmweiß
+EINMESS_S = 3.0             # so lange blitzt der Strobo beim Einmessen
 TEST_MAX_S = 120.0          # Ein vergessener DMX-Test endet von selbst.
 
 
@@ -85,7 +89,9 @@ class Show:
         with self.sperre:
             self.renderer = Renderer(self.patch)
             alter_waechter = self.pruefer.strobo if self.pruefer else None
+            alte_einmessung = self.pruefer.einmessen_bis if self.pruefer else {}
             self.pruefer = Pruefer(self.patch, self.buehne, self.grenzen)
+            self.pruefer.einmessen_bis = alte_einmessung
             if alter_waechter:
                 # Eine Patch-Änderung darf die Strobo-Dauer nicht zurücksetzen.
                 self.pruefer.strobo = alter_waechter
@@ -103,6 +109,7 @@ class Show:
         jetzt = time.monotonic() if jetzt is None else jetzt
         with self.sperre:
             self._test_pruefen(jetzt)
+            self._einmessen_pruefen(jetzt)
             zustand = self._automatik(jetzt)
             if not self._test_laeuft():
                 zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm())
@@ -124,6 +131,81 @@ class Show:
     def _test_pruefen(self, jetzt: float) -> None:
         if self.test_seit is not None and time.monotonic() - self.test_seit > TEST_MAX_S:
             self.test_geraet, self.test_kanaele, self.test_seit = None, {}, None
+
+    def strobo_einmessen(self, geraet_id: str, wert: int, jetzt: Optional[float] = None) -> None:
+        """Lässt einen Strobo EINMESS_S Sekunden lang mit diesem Tempo-Wert blitzen."""
+        if not 1 <= wert <= 255:
+            raise ValueError("Tempo-Wert von 1 bis 255.")
+        geraet = self.patch.geraet(geraet_id)
+        kanaele = {}
+        for versatz, kanal in self.patch.typ(geraet).kanaele_im_modus(geraet["modus"]):
+            if kanal["typ"] == "strobo":
+                kanaele[geraet["adresse"] + versatz] = wert
+            elif kanal["typ"] == "dimmer":
+                kanaele[geraet["adresse"] + versatz] = 255
+        if not any(w == wert for w in kanaele.values()):
+            raise ValueError(f"{geraet['name']} hat keinen Strobo-Kanal.")
+        jetzt = time.monotonic() if jetzt is None else jetzt
+        with self.sperre:
+            self.test_setzen(None, kanaele)
+            self.pruefer.einmessen_bis[geraet_id] = jetzt + EINMESS_S
+            self.einmessen_ende = (geraet_id, jetzt + EINMESS_S)
+
+    def _einmessen_pruefen(self, jetzt: float) -> None:
+        ende = getattr(self, "einmessen_ende", None)
+        if ende and jetzt >= ende[1]:
+            self.test_geraet, self.test_kanaele, self.test_seit = None, {}, None
+            self.pruefer.einmessen_bis.pop(ende[0], None)
+            self.einmessen_ende = None
+
+    def strobo_auswerten(self, geraet_id: str, messungen: list) -> dict:
+        """Aus gezählten Blitzen wird ein eingemessener Gerätetyp. Gibt das Ergebnis zurück."""
+        geraet = self.patch.geraet(geraet_id)
+        typ = self.patch.typ(geraet)
+        werte = sorted((int(m["wert"]), float(m["blitze"]) / float(m.get("sekunden", EINMESS_S))) for m in messungen)
+        if len(werte) < 2 or len({w for w, _ in werte}) < 2:
+            raise ValueError("Bitte mindestens zwei verschiedene Werte messen.")
+        hz = [h for _, h in werte]
+        if any(b <= a for a, b in zip(hz, hz[1:])) or hz[0] <= 0:
+            raise ValueError("Die Messung passt nicht: Ein höherer Wert muss schneller blitzen. Bitte noch einmal zählen.")
+        # float(): numpy-Zahlen lassen sich nicht an die Oberfläche schicken.
+        steigung, achse = (float(x) for x in np.polyfit([w for w, _ in werte], hz, 1))
+        unten, oben = werte[0][0], werte[-1][0]
+        hz_unten, hz_oben = max(0.1, steigung * unten + achse), steigung * oben + achse
+        eintrag = json.loads(json.dumps(typ.daten))
+        name, kanal = next((n, k) for n, k in eintrag["kanaele"].items() if k["typ"] == "strobo")
+        # Nur den Strobo-Bereich aufteilen, in dem gemessen wurde. "Shutter zu", "offen" und
+        # alles andere bleibt, wie es im Katalog steht.
+        neu_bereiche, getroffen = [], False
+        for bereich in kanal.get("bereiche", []):
+            if bereich["typ"] == "strobo" and bereich["von"] <= unten and oben <= bereich["bis"]:
+                getroffen = True
+                neu_bereiche += [
+                    {**bereich, "bis": unten - 1, "hz_von": None, "hz_bis": None},
+                    {**bereich, "von": unten, "bis": oben, "hz_von": round(hz_unten, 2), "hz_bis": round(hz_oben, 2)},
+                    {**bereich, "von": oben + 1, "hz_von": None, "hz_bis": None},
+                ]
+            else:
+                neu_bereiche.append(bereich)
+        if not getroffen:
+            raise ValueError("Die gemessenen Werte liegen nicht alle im Strobo-Bereich dieses Geräts.")
+        kanal["bereiche"] = [b for b in neu_bereiche if b["von"] <= b["bis"]]
+        eintrag.update(id=f"technik-ag/{geraet_id}-eingemessen", name=f"{typ.daten['name']} eingemessen",
+                       hersteller="Technik-AG", platzhalter=False, eingemessen=messungen)
+        eintrag["_hinweis"] = (f"Eingemessen: Wert {unten} ≈ {hz_unten:.1f} Blitze/s, Wert {oben} ≈ {hz_oben:.1f} Blitze/s. "
+                               "Werte außerhalb bleiben gesperrt.")
+        neu = self.katalog.speichere_eigenen(eintrag)
+        with self.sperre:
+            self.patch.tauschen(geraet_id, neu.id, geraet["modus"])
+            self.patch.speichern()
+            self.aufbauen()
+        grenze = self.grenzen.strobo_max_hz
+        nutzbar = bool(hz_unten <= grenze)
+        return {"typ": neu.id, "von": unten, "bis": oben, "hz_von": round(hz_unten, 2), "hz_bis": round(hz_oben, 2),
+                "nutzbar": nutzbar,
+                "text": (f"Fertig. Bis {grenze:g} Blitze pro Sekunde darf er jetzt blitzen." if nutzbar else
+                         f"Schon der kleinste Wert blitzt {hz_unten:.1f}-mal pro Sekunde, das ist über der Grenze von "
+                         f"{grenze:g}. Bitte noch einen kleineren Wert messen.")}
 
     def _test_laeuft(self) -> bool:
         return self.test_geraet is not None or bool(self.test_kanaele)
@@ -181,6 +263,7 @@ class Show:
         if self.overrides.strobo_aus:
             hz = 0.0
         return Vorgaben(strobo_max_hz=hz, strobo_max_dauer_s=dauer, blackout=self.overrides.blackout,
+                        strobo_aus=self.overrides.strobo_aus,
                         hazer_erlaubt=self.profil["hazer"] and not self.overrides.blackout)
 
     def notbild(self) -> bytes:

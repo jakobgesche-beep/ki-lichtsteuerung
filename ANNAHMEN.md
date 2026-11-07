@@ -20,6 +20,9 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Quad Par und Hero Spot 60** fehlen in der Open Fixture Library. Ihre Daten stammen aus der Gerätebibliothek von QLC+. Gewicht, Winkel, Modi und Pan/Tilt stimmen mit der Hardware-Tabelle überein.
 - **Alle vier Geräte sind noch nicht mit dem Handbuch abgeglichen** und im Patch als „ungeprüft“ markiert. Nach dem Abgleich `handbuch_geprueft` im Katalog-Eintrag auf `true` setzen.
 - **Der Quad Par hat laut Suche auch eine 45°-Version.** Wir nehmen 25° wie in der Tabelle.
+- **Strobo ohne Namen:** eigener Gerätetyp mit 2 Kanälen (Tempo und Helligkeit, beide Reihenfolgen als Modus), Wert 0 heißt „blitzt nicht“. Gepatcht auf Adresse 110, Gruppe „Strobo“. Bis er eingemessen ist, bleibt er gesperrt.
+- **Strobo einmessen (Setup → DMX-Test):** Nur mit bestätigtem Haken („Lehrkraft dabei, niemand reagiert empfindlich auf Blitzlicht“). Der Strobo blitzt je 3 Sekunden mit einem Wert, man zählt die Blitze (Zeitlupe vom Handy). Aus mindestens zwei Werten wird ein Tempo-Bereich berechnet. Nur der gemessene Bereich wird freigegeben, darüber und darunter bleibt gesperrt. „Strobo aus“ und Blackout gelten auch beim Einmessen. Das geht genauso für den Shutter der Moving Heads, deren übrige Bereiche (zu, offen) bleiben dabei unverändert.
+- **Strobo in der Automatik:** nur beim Drop, nur wenn das Profil Strobo erlaubt, höchstens 4 Sekunden und höchstens 3 Blitze pro Sekunde.
 - **Strobo-Tempo:** Für alle unsere Geräte steht in den Daten nur „langsam bis schnell“, ohne Hertz. Das Programm kann so nicht sicherstellen, dass die Grenze hält, und **sperrt ihr Strobo deshalb komplett**. Auch im Profil „Schulfest Abend“ blitzt also nichts. Zum Freischalten im Katalog-Eintrag beim Strobo-Bereich `hz_von` und `hz_bis` aus dem Handbuch eintragen.
 
 ## Aufbau und Verhalten

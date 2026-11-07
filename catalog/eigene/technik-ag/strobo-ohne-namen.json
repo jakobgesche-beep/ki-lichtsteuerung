@@ -1,0 +1,60 @@
+{
+  "id": "technik-ag/strobo-ohne-namen",
+  "hersteller": "Technik-AG",
+  "name": "Strobo (ohne Namen)",
+  "kategorien": [
+    "Strobe"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": 90
+  },
+  "_hinweis": "Platzhalter für den Strobo ohne Typenschild. Das Tempo ist unbekannt und darum gesperrt, bis es unter Setup → DMX-Test eingemessen ist. Welcher Kanal Tempo und welcher Helligkeit ist, zeigt der DMX-Test.",
+  "platzhalter": true,
+  "kanaele": {
+    "Tempo": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 0,
+          "typ": "offen",
+          "name": "blitzt nicht"
+        },
+        {
+          "von": 1,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null
+        }
+      ]
+    },
+    "Helligkeit": {
+      "typ": "dimmer",
+      "standard": 0
+    }
+  },
+  "modi": [
+    {
+      "name": "2 Kanäle: Tempo, Helligkeit",
+      "kanaele": [
+        "Tempo",
+        "Helligkeit"
+      ]
+    },
+    {
+      "name": "2 Kanäle: Helligkeit, Tempo",
+      "kanaele": [
+        "Helligkeit",
+        "Tempo"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "eigener Eintrag",
+    "name": "Technik-AG"
+  },
+  "handbuch_geprueft": false
+}
