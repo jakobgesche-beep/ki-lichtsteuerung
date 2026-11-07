@@ -8,6 +8,8 @@ Eingeschaltet wird sie ausschließlich per Knopf und nur, wenn ein Enttec da ist
 """
 from __future__ import annotations
 
+import sys
+
 import threading
 import time
 from typing import Optional
@@ -93,7 +95,9 @@ class DmxAusgabe:
             if self.geraet is not None:
                 return
             if not self.enttec_gefunden():
-                raise EnttecFehler("Kein Enttec gefunden.")
+                raise EnttecFehler("Kein Enttec gefunden." + (
+                    " Unter Windows braucht es einmal den WinUSB-Treiber: Programm Zadig öffnen, "
+                    "„FT232R USB UART“ wählen, WinUSB installieren." if sys.platform == "win32" else ""))
             self.geraet = self.geraet_klasse()
             self.fehler = None
             self._stopp.clear()

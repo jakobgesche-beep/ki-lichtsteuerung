@@ -7,4 +7,4 @@ soundfile>=0.12
 pyftdi>=0.55
 libusb-package>=1.0
 certifi
-pywebview>=5; sys_platform == "darwin"
+pywebview>=5; sys_platform == "darwin" or sys_platform == "win32"

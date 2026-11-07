@@ -2,7 +2,7 @@
 """Startet das Programm:  python start.py
 
 Mit --netz ist die Oberfläche auch vom Tablet aus erreichbar. In der fertigen
-Mac-App öffnet sich statt des Browsers ein eigenes Fenster.
+App (Mac und Windows) öffnet sich statt des Browsers ein eigenes Fenster.
 """
 import argparse
 import json
@@ -60,6 +60,9 @@ def selbsttest(adresse: str) -> None:
         assert antwort.status == 200
     assert len(patch["geraete"]) == 10 and katalog["gesamt"] > 600
     import sounddevice, soundfile  # noqa: E401,F401  Audio muss sich laden lassen
+    import webview  # noqa: F401  das eigene Fenster muss sich laden lassen
+    if sys.platform == "win32":
+        import clr  # noqa: F401  unter Windows braucht das Fenster pythonnet
     from lichtsteuerung.dmx_ausgabe import EnttecOpenDmx
     EnttecOpenDmx.suchen()
     print("Selbsttest bestanden")
@@ -89,7 +92,7 @@ def main() -> None:
 
     if daten.ALS_APP:
         pfade = daten.standard_pfade()
-        logging.basicConfig(filename=pfade.wurzel / "logbuch.txt", level=logging.INFO)
+        logging.basicConfig(filename=pfade.wurzel / "logbuch.txt", level=logging.INFO, encoding="utf-8")
     show = Show()
     port = freier_port(args.port)
     adresse = f"http://localhost:{port}"
@@ -97,9 +100,15 @@ def main() -> None:
     show.update.beenden = lambda: beenden(show, server)
 
     if args.selbsttest:
-        selbsttest(adresse)
+        # Fehler ergeben einen Exit-Code statt eines Fensters: Die Prüfung läuft ohne Bildschirm.
+        try:
+            selbsttest(adresse)
+            code = 0
+        except BaseException:
+            logging.exception("Selbsttest fehlgeschlagen")
+            code = 1
         show.stopp()
-        os._exit(0)
+        os._exit(code)
     show.update.im_hintergrund_pruefen()
     if daten.ALS_APP:
         app_fenster(adresse, show, server)

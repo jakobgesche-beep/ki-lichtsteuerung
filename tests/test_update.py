@@ -190,7 +190,7 @@ def test_status_steht_in_den_live_daten(show):
 
 def test_aus_dem_quellcode_gibt_es_keine_updates_aber_eine_antwort(show):
     show.update.jetzt_suchen()
-    assert "Mac-App" in show.update.text
+    assert "fertigen App" in show.update.text
 
 
 def test_aktuelle_version_wird_gemeldet(show, webserver, ohne_certifi):
@@ -199,3 +199,30 @@ def test_aktuelle_version_wird_gemeldet(show, webserver, ohne_certifi):
     a = Aktualisierer(show, url)
     a.pruefen()
     assert "aktuell" in a.text
+
+
+def test_paket_und_datenordner_je_system(monkeypatch, tmp_path):
+    monkeypatch.delenv("LICHT_DATEN", raising=False)
+    monkeypatch.setattr(update.sys, "platform", "win32")
+    assert update.paket() == "windows"
+    monkeypatch.setattr(daten.sys, "platform", "win32")
+    monkeypatch.setenv("APPDATA", str(tmp_path / "Roaming"))
+    assert daten.datenordner() == tmp_path / "Roaming" / "Lichtsteuerung"
+    monkeypatch.setattr(daten.sys, "platform", "darwin")
+    assert str(daten.datenordner()).endswith("Library/Application Support/Lichtsteuerung")
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="nur unter Windows")
+def test_windows_skript_wartet_bis_die_app_zu_ist_und_installiert(tmp_path, monkeypatch):
+    import time
+    monkeypatch.setenv("LICHT_KEIN_NEUSTART", "1")
+    marke = tmp_path / "installiert.txt"
+    installer = tmp_path / "setup.bat"
+    installer.write_text(f'@echo %* > "{marke}"\r\n', encoding="ascii")
+    app = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(4)"])
+    skript = update.starte_windows_skript(app.pid, installer, tmp_path / "Lichtsteuerung.exe")
+    time.sleep(1.5)
+    assert not marke.exists()                     # die App läuft noch: warten
+    app.wait()
+    skript.wait(timeout=60)
+    assert "/VERYSILENT" in marke.read_text()

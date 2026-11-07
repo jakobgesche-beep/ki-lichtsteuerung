@@ -1,4 +1,4 @@
-"""Selbst-Update der Mac-App: Niemand muss die App neu herunterladen.
+"""Selbst-Update der App (Mac und Windows): Niemand muss die App neu herunterladen.
 
 Ablauf:
   1. Beim Start und danach alle 30 Minuten schaut die App im GitHub-Release
@@ -10,6 +10,7 @@ Ablauf:
      die DMX-Ausgabe läuft: Ein Neustart mitten in der Show wäre ein Blackout.
   4. Ein kleines Skript wartet, bis die App beendet ist, tauscht das App-Paket
      aus und startet sie neu. Geht etwas schief, bleibt die alte Version.
+     Unter Windows führt das Skript stattdessen den neuen Installer still aus.
 
 Die Show-Daten liegen außerhalb der App (siehe daten.py) und bleiben unberührt.
 """
@@ -39,6 +40,26 @@ ZEITLIMIT_S = 30
 ABSTAND_S = 30 * 60
 ARCHITEKTUREN = {"arm64": "arm64", "x86_64": "intel"}
 
+WINDOWS_SKRIPT = r"""@echo off
+rem Bekommt: Prozessnummer der App, Installer, Programm. Wartet, bis die App zu ist.
+:warten
+tasklist /FI "PID eq %~1" /NH 2>NUL | findstr /R /C:" %~1 " >NUL
+if not errorlevel 1 (
+  ping -n 2 127.0.0.1 >NUL
+  goto warten
+)
+"%~2" /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CURRENTUSER
+del "%~2" >NUL 2>NUL
+if not defined LICHT_KEIN_NEUSTART start "" "%~3"
+"""
+
+
+def paket() -> str:
+    """Welche Datei aus latest.json passt zu diesem Rechner."""
+    if sys.platform == "win32":
+        return "windows"
+    return ARCHITEKTUREN[platform.machine()]
+
 INSTALLIER_SKRIPT = """#!/bin/sh
 # Bekommt: Prozessnummer der App, ZIP-Datei, Pfad der App
 pid=$1; zip=$2; app=$3
@@ -67,9 +88,12 @@ def ist_neuer(version: str, als: str = VERSION) -> bool:
 
 
 def app_pfad() -> Optional[Path]:
-    """Der Ort von Lichtsteuerung.app. None, wenn das Programm aus dem Quellcode läuft."""
+    """Mac: der Ort von Lichtsteuerung.app. Windows: der Programmordner.
+    None, wenn das Programm aus dem Quellcode läuft."""
     if not daten.ALS_APP:
         return None
+    if sys.platform == "win32":
+        return Path(sys.executable).resolve().parent
     return Path(sys.executable).resolve().parents[2]
 
 
@@ -99,6 +123,10 @@ class Aktualisierer:
         app = app_pfad()
         if app is None:
             return ""
+        if sys.platform == "win32":
+            if not os.access(app, os.W_OK):
+                return "Keine Schreibrechte für den Programmordner. Bitte mit dem Installer von der Website neu installieren."
+            return ""
         if "AppTranslocation" in str(app) or str(app).startswith("/Volumes/"):
             return "Bitte die App zuerst in den Ordner Programme ziehen."
         if not os.access(app.parent, os.W_OK):
@@ -123,7 +151,7 @@ class Aktualisierer:
     def jetzt_suchen(self) -> None:
         """Für den Knopf "Nach Update suchen"."""
         if app_pfad() is None:
-            self.text = "Aus dem Quellcode gestartet: Updates gibt es nur in der Mac-App."
+            self.text = "Aus dem Quellcode gestartet: Updates gibt es nur in der fertigen App."
             return
         self.text = ""
         self.im_hintergrund_pruefen(wiederholen=False)
@@ -141,7 +169,7 @@ class Aktualisierer:
                 self.zustand = "ruht"
                 self.text = f"Version {VERSION} ist aktuell."
                 return
-            eintrag = manifest["dateien"][ARCHITEKTUREN[platform.machine()]]
+            eintrag = manifest["dateien"][paket()]
             self.neu = manifest["version"]
             self.zustand = "laedt"
             self.zip = self._laden(eintrag["name"], eintrag["sha256"])
@@ -175,7 +203,10 @@ class Aktualisierer:
         grund = self.sperrgrund()
         if grund:
             raise ValueError(grund)
-        starte_skript(os.getpid(), self.zip, app_pfad())
+        if sys.platform == "win32":
+            starte_windows_skript(os.getpid(), self.zip, app_pfad() / "Lichtsteuerung.exe")
+        else:
+            starte_skript(os.getpid(), self.zip, app_pfad())
         threading.Timer(0.3, self.beenden or (lambda: os._exit(0))).start()
 
 
@@ -187,3 +218,14 @@ def starte_skript(pid: int, zip_datei: Path, app: Path) -> subprocess.Popen:
     return subprocess.Popen(["/bin/sh", pfad, str(pid), str(zip_datei), str(app)],
                             start_new_session=True, stdin=subprocess.DEVNULL,
                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def starte_windows_skript(pid: int, installer: Path, programm: Path) -> subprocess.Popen:
+    """Windows: Das Skript wartet, bis die App zu ist, und installiert dann still darüber."""
+    griff, pfad = tempfile.mkstemp(suffix=".cmd", prefix="licht-update-")
+    with os.fdopen(griff, "w", encoding="ascii", newline="\r\n") as datei:
+        datei.write(WINDOWS_SKRIPT)
+    neues_fenster = getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(subprocess, "DETACHED_PROCESS", 0)
+    return subprocess.Popen(["cmd.exe", "/c", pfad, str(pid), str(installer), str(programm)],
+                            creationflags=neues_fenster | getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0),
+                            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

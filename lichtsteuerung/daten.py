@@ -44,8 +44,18 @@ class Pfade:
 
 
 def datenordner() -> Path:
-    """Wo die App ihre Show-Daten ablegt. LICHT_DATEN ist für Tests gedacht."""
-    return Path(os.environ.get("LICHT_DATEN", Path.home() / "Library/Application Support/Lichtsteuerung"))
+    """Wo die App ihre Show-Daten ablegt. LICHT_DATEN ist für Tests gedacht.
+
+    Mac: ~/Library/Application Support/Lichtsteuerung
+    Windows: %APPDATA%\\Lichtsteuerung (bleibt auch beim Deinstallieren erhalten)
+    """
+    if os.environ.get("LICHT_DATEN"):
+        return Path(os.environ["LICHT_DATEN"])
+    if sys.platform == "win32":
+        return Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming")) / "Lichtsteuerung"
+    if sys.platform == "darwin":
+        return Path.home() / "Library/Application Support/Lichtsteuerung"
+    return Path.home() / ".local/share/Lichtsteuerung"
 
 
 def einrichten(ziel: Path, vorlage: Path = PROJEKT) -> None:

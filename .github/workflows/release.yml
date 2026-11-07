@@ -1,13 +1,16 @@
-# Tag vX.Y.Z pushen: testet, baut die Mac-App und legt das Release an.
+# Tag vX.Y.Z pushen: testet, baut Mac- und Windows-App und legt das Release an.
 # Die App findet das neue Release dann selbst über latest.json.
+# Zweig win-probe pushen: nur Windows bauen und testen, ohne Release.
 name: Release
 on:
   push:
     tags: ["v*"]
+    branches: ["win-probe"]
 permissions:
   contents: write
 jobs:
   bauen:
+    if: startsWith(github.ref, 'refs/tags/v')
     strategy:
       fail-fast: true
       matrix:
@@ -35,8 +38,52 @@ jobs:
           path: |
             dist/*.zip
             dist/*.dmg
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Version passt zum Tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: python -c "import os; from lichtsteuerung.version import VERSION; assert 'v' + VERSION == os.environ['GITHUB_REF_NAME']"
+      - run: pip install -r requirements-dev.txt pyinstaller
+      - run: python -m pytest -q
+      - run: python -m PyInstaller --noconfirm --clean --log-level WARN packaging/Lichtsteuerung-windows.spec
+      - name: Selbsttest der gebauten App
+        shell: pwsh
+        run: |
+          $env:LICHT_DATEN = Join-Path $env:RUNNER_TEMP "licht-daten"
+          $p = Start-Process -FilePath "dist\Lichtsteuerung\Lichtsteuerung.exe" -ArgumentList "--selbsttest","--port","8391" -Wait -PassThru
+          Get-Content (Join-Path $env:LICHT_DATEN "logbuch.txt") -ErrorAction SilentlyContinue | Select-Object -Last 30
+          if ($p.ExitCode -ne 0) { exit 1 }
+      - name: Installer bauen
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\iscc.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress; }
+          $version = python -c "from lichtsteuerung.version import VERSION; print(VERSION)"
+          & $iscc "/DVERSION=$version" packaging\lichtsteuerung.iss
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - name: Installer still installieren, installierte App testen
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath "dist\Lichtsteuerung-Setup.exe" -ArgumentList "/VERYSILENT","/SUPPRESSMSGBOXES","/NORESTART","/CURRENTUSER" -Wait -PassThru
+          if ($p.ExitCode -ne 0) { exit 1 }
+          $exe = Join-Path $env:LOCALAPPDATA "Programs\Lichtsteuerung\Lichtsteuerung.exe"
+          if (-not (Test-Path $exe)) { Write-Error "nicht installiert"; exit 1 }
+          $env:LICHT_DATEN = Join-Path $env:RUNNER_TEMP "licht-daten-2"
+          $p = Start-Process -FilePath $exe -ArgumentList "--selbsttest","--port","8392" -Wait -PassThru
+          Get-Content (Join-Path $env:LICHT_DATEN "logbuch.txt") -ErrorAction SilentlyContinue | Select-Object -Last 30
+          if ($p.ExitCode -ne 0) { exit 1 }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: dist/Lichtsteuerung-Setup.exe
   veroeffentlichen:
-    needs: bauen
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [bauen, windows]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -49,8 +96,8 @@ jobs:
           python3 - <<'PY'
           import hashlib, json, os
           dateien = {}
-          for arch in ("arm64", "intel"):
-              name = f"Lichtsteuerung-{arch}.zip"
+          for arch, name in (("arm64", "Lichtsteuerung-arm64.zip"), ("intel", "Lichtsteuerung-intel.zip"),
+                             ("windows", "Lichtsteuerung-Setup.exe")):
               summe = hashlib.sha256(open(name, "rb").read()).hexdigest()
               dateien[arch] = {"name": name, "sha256": summe}
           version = os.environ["GITHUB_REF_NAME"].lstrip("v")
