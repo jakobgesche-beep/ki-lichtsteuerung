@@ -109,3 +109,17 @@ def test_moving_head_shutter_bleibt_beim_einmessen_heil(show):
     assert (20, 60, "strobo", 9 / 3) in [(v, b, t, round(h, 2) if h else h) for v, b, t, h in arten]
     with pytest.raises(ValueError, match="Strobo-Bereich"):
         show.strobo_auswerten("front-2", [{"wert": 2, "blitze": 1}, {"wert": 60, "blitze": 9}])
+
+
+def test_gesperrter_strobo_leuchtet_nicht_dauerhaft(show):
+    """Helligkeit voll, Tempo gesperrt: Er darf nicht als weißes Dauerlicht ins Publikum strahlen."""
+    show.automatik_an = True
+    show.pult.programmer.setzen(["strobo"], {"helligkeit": 1.0, "strobo_hz": 3})
+    bild = show.baue_bild(0.0)
+    assert kanal(bild, HELL) == 0 and kanal(bild, TEMPO) == 0
+    show.pult.programmer.leeren()
+    show.strobo_auswerten("strobo", [{"wert": 10, "blitze": 3}, {"wert": 40, "blitze": 12}])
+    show.profil = {**show.profil, "strobo": {"max_blitze_pro_sekunde": 3, "max_dauer_s": 5}}
+    show.pult.programmer.setzen(["strobo"], {"helligkeit": 1.0, "strobo_hz": 3})
+    bild = show.baue_bild(1.0)
+    assert kanal(bild, HELL) == 255 and kanal(bild, TEMPO) > 0 and show.blitzt

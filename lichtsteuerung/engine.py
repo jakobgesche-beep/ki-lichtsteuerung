@@ -407,8 +407,9 @@ class Engine:
         if profil["strobo"] != "aus":
             hz = min(profil["strobo"]["max_blitze_pro_sekunde"], self.grenzen.strobo_max_hz)
             for geraet in self.patch.in_gruppe(GRUPPE_STROBO):
-                ergebnis[geraet["id"]] = Eigenschaften(helligkeit=grenze, strobo_hz=hz if seit < 4.0 else 0.0,
-                                                       farbe=(1.0, 1.0, 1.0))
+                blitzen = seit < 4.0
+                ergebnis[geraet["id"]] = Eigenschaften(helligkeit=grenze if blitzen else 0.0,
+                                                       strobo_hz=hz if blitzen else 0.0, farbe=(1.0, 1.0, 1.0))
         self.zustand_text = "DROP"
         return ergebnis
 

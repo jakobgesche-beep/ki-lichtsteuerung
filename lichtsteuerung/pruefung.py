@@ -94,6 +94,10 @@ class Pruefer:
                 self._pruefe_bereich(bild, index, kanal)
             if self._pruefe_strobo(bild, geraet, vorgaben, jetzt, meldungen):
                 blitzt = True
+            elif self._nur_strobo(geraet):
+                # Ein reiner Strobo, der nicht blitzen darf, bleibt dunkel. Viele leuchten sonst
+                # bei Tempo 0 und voller Helligkeit dauerhaft grell weiß.
+                self._verdunkeln(bild, geraet)
             if not vorgaben.hazer_erlaubt and "nebel" in geraet["typen"]:
                 bild[geraet["typen"]["nebel"][0]] = 0
             self._pruefe_sperrzone(bild, geraet, meldungen, jetzt)
@@ -139,6 +143,11 @@ class Pruefer:
             else:
                 blitzt = True
         return blitzt
+
+    @staticmethod
+    def _nur_strobo(geraet) -> bool:
+        typen = set(geraet["typen"])
+        return "strobo" in typen and not typen & (set(FARB_TYPEN) | {"pan", "tilt", "farbrad", "gobo"})
 
     def _montage_und_grad(self, geraet):
         typen = geraet["typen"]
