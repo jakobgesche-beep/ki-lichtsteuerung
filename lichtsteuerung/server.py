@@ -24,7 +24,7 @@ from .farben import FARBNAMEN
 from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
-from . import patchplan
+from . import showtasten, patchplan
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
@@ -423,13 +423,15 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         jetzt = time.monotonic()
         with show.sperre:
             executor = show.pult.executor(nummer)
-            if aktion in ("go", "zurueck", "aus"):
-                executor.zeitcode = False
+            if aktion in ("go", "zurueck", "aus") and executor.zeitcode is True:
+                executor.zeitcode = False         # Probe ansehen endet, Song-Start bleibt
             if aktion == "go":
                 show.pult.go(nummer, jetzt)
             elif aktion == "zurueck":
                 show.pult.go(nummer, jetzt, -1)
             elif aktion == "aus":
+                if show.song.laeuft_auf(nummer):
+                    show.song.stoppen(jetzt)
                 executor.aus(jetzt)
             elif aktion == "goto":
                 show.pult.goto(nummer, int(auftrag["index"]), jetzt)
@@ -504,6 +506,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def probe_abspielen(name: str, auftrag: dict = Body(default={})):
         """Spielt die Aufnahme ab, das Licht folgt genau den erkannten Stellen."""
         nummer = int(auftrag.get("executor", 1))
+        show.song.stoppen()
         sequenz = show.pult.sequenzen.lesen(name)
         if sequenz is None:
             raise ValueError("Zu dieser Probe gibt es noch keine Sequenz.")
@@ -523,6 +526,68 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def probe_loeschen(name: str):
         show.proben.loeschen(name)
         return {"proben": show.proben.namen()}
+
+    # --- Show: Song-Start und Show-Tasten ------------------------------------
+
+    @app.get("/api/show")
+    def show_lesen():
+        return {"songs": show.song.songs(), "looks": showtasten.LOOKS, "halten": showtasten.HALTEN,
+                "farben": showtasten.FARBEN}
+
+    @app.post("/api/song/start")
+    def song_start(auftrag: dict = Body(...)):
+        """Einmal drücken, wenn die Band anfängt: Der ganze Song läuft von selbst durch."""
+        show.song.starten(str(auftrag.get("name", "")), int(auftrag.get("executor", 1)))
+        return show.song.zustand()
+
+    @app.post("/api/song/{aktion}")
+    def song_aktion(aktion: str):
+        if aktion == "stopp":
+            show.song.stoppen()
+        elif aktion == "vor":
+            show.song.teil_vor()
+        elif aktion == "zurueck":
+            show.song.teil_zurueck()
+        else:
+            raise ValueError(f"Unbekannte Aktion {aktion!r}.")
+        return show.song.zustand()
+
+    @app.post("/api/look/{look_id}")
+    def look(look_id: str):
+        with show.sperre:
+            if look_id == "aus":
+                show.pult.look_aus(time.monotonic())
+            else:
+                show.pult.look_druecken(look_id, time.monotonic())
+        return show.pult.status()
+
+    @app.post("/api/farben")
+    def farben(auftrag: dict = Body(...)):
+        with show.sperre:
+            show.pult.farben_setzen(auftrag.get("farbe_1"), auftrag.get("farbe_2"), time.monotonic())
+        return show.pult.status()
+
+    @app.post("/api/halten/{art}")
+    def halten(art: str, auftrag: dict = Body(default={})):
+        with show.sperre:
+            show.pult.halten_setzen(art, bool(auftrag.get("an", True)), time.monotonic())
+        return show.pult.status()
+
+    @app.post("/api/tap")
+    def tap():
+        with show.sperre:
+            tempo = show.pult.tap(time.monotonic())
+        return {"tempo": tempo}
+
+    @app.post("/api/tempo/quelle")
+    def tempo_quelle(auftrag: dict = Body(...)):
+        quelle = auftrag.get("quelle")
+        if quelle not in ("ton", "tap"):
+            raise ValueError('Tempo-Quelle ist "ton" oder "tap".')
+        if quelle == "tap" and not show.pult.tempo_getippt:
+            raise ValueError("Erst ein paar Mal auf Tap tippen.")
+        show.pult.tempo_quelle = quelle
+        return show.pult.status()
 
     # --- Audio -------------------------------------------------------------
 

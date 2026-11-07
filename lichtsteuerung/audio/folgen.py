@@ -113,6 +113,10 @@ def musik_anfang(pegel: np.ndarray, rate: float = RATE) -> int:
     """
     if len(pegel) == 0:
         return 0
+    # Über eine halbe Sekunde gemittelt (als Leistung): Pausen zwischen zwei Tönen zählen nicht als Stille
+    breite = max(1, int(0.5 * rate))
+    leistung = 10 ** (np.asarray(pegel, float) / 10)
+    pegel = 10 * np.log10(np.convolve(leistung, np.ones(breite) / breite, mode="full")[:len(leistung)] + 1e-12)
     vorlauf = np.sort(pegel[: max(3, int(1.5 * rate))])
     grund = float(np.mean(vorlauf[: max(1, len(vorlauf) // 3)]))
     if grund > np.percentile(pegel, 50) - 6.0:
@@ -150,6 +154,7 @@ class SongFolger:
         self.daneben_seit = 0.0
         self.live_pegel_oben = None
         self.verlauf = []                     # die letzten Schätzungen, für die Sicherheit
+        self.eindeutig = 0.0
         self._dtw_zuruecksetzen(self.anfang, START_SUCHE_S)
 
     # --- Steuerung ------------------------------------------------------
@@ -273,6 +278,13 @@ class SongFolger:
         # Sicherheit: Rückt die Schätzung gleichmäßig vor (wie eine Band), oder springt sie?
         self.verlauf.append(self.mitte)
         self.verlauf = self.verlauf[-int(3 * RATE):]
+        # Eindeutig? Passt die beste Stelle klar besser als alles, was mehr als 1 s daneben liegt?
+        # Bei einem Schlagzeug-Intro klingt jede Stelle gleich: dann lieber der Uhr vertrauen.
+        weg = np.abs(idx - self.mitte) > RATE
+        andere = normiert[weg]
+        andere = andere[np.isfinite(andere)]
+        eindeutig = 1.0 if len(andere) == 0 else float(np.clip((andere.min() - normiert[beste]) * 8.0, 0, 1))
+        self.eindeutig += (eindeutig - self.eindeutig) * 0.1
         if len(self.verlauf) >= int(1.5 * RATE):
             schritte = np.diff(self.verlauf)
             ruhig = float(np.mean(np.abs(schritte - self.rate_lang) <= 1.01))

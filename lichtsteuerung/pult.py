@@ -23,7 +23,7 @@ import math
 from pathlib import Path
 from typing import Optional
 
-from . import daten
+from . import daten, showtasten
 from .cues import Sammlung
 from .farben import farbe as lies_farbe, ist_farbe
 from .pantilt import ZielAusserhalb
@@ -105,9 +105,19 @@ class Effekte:
         self.zeit = 0.0
         self.winkel = {}                # letzte Stellung pro Gerät, für kurze Wege
 
-    def takt(self, dauer: float, musik_bpm: float) -> None:
+    def takt(self, dauer: float, musik_bpm: float, beat: bool = False) -> None:
         self.zeit += dauer
         self.musik_beats += dauer * musik_bpm / 60.0
+        if beat:
+            # Einrasten: Die Effekt-Uhr wird sanft auf den gehörten Schlag gezogen,
+            # so landet der Puls auf dem Beat statt irgendwo dazwischen.
+            rest = self.musik_beats % 1.0
+            fehler = rest if rest < 0.5 else rest - 1.0
+            self.musik_beats -= 0.25 * fehler
+
+    def auf_schlag(self) -> None:
+        """Tap: Genau jetzt ist ein Schlag."""
+        self.musik_beats = float(round(self.musik_beats))
 
     def geraete(self, effekt: dict) -> list:
         ziel = effekt.get("ziel", {})
@@ -309,6 +319,14 @@ class Pult:
         self.meldungen = []
         self.effekte = None
         self.letzte_zeit: Optional[float] = None
+        # Show-Tasten: ein eigener Executor (nicht unter den acht), dazu Halten und Tap
+        self.tasten = Executor(0)
+        self.look: Optional[str] = None
+        self.farbe_1, self.farbe_2 = "rot", "blau"
+        self.halten = {art: None for art in showtasten.HALTEN}     # seit wann gedrückt
+        self.tipps = []
+        self.tempo_getippt: Optional[float] = None
+        self.tempo_quelle = "ton"         # "ton": vom Mikrofon, "tap": getippt
         belegung = daten.lese_json(self.belegung_pfad, {"executoren": []})["executoren"]
         for executor, name in zip(self.executoren, belegung):
             if name:
@@ -329,9 +347,70 @@ class Pult:
     def go(self, nummer: int, jetzt: float, schritt: int = 1) -> None:
         executor = self.executor(nummer)
         self.haupt = nummer - 1
+        song = getattr(self.show, "song", None)
+        if executor.zeitcode == "song" and song is not None and song.laeuft_auf(nummer):
+            # Im Song-Modus heißt Go+: nächster Teil jetzt. Go-: Teil zurück.
+            song.teil_vor() if schritt > 0 else song.teil_zurueck()
+            self.nach_oben(executor, jetzt, umschalten=False)
+            return
         if executor.go(jetzt, schritt):
-            self.zaehler += 1
-            executor.reihenfolge = self.zaehler
+            self.nach_oben(executor, jetzt, umschalten=False)
+
+    def nach_oben(self, executor: Executor, jetzt: float, umschalten: bool = True) -> None:
+        """Dieser Executor liegt jetzt oben (wie "zuletzt gedrückt" am Pult)."""
+        if umschalten and executor.index < 0:
+            executor.go(jetzt)
+        self.zaehler += 1
+        executor.reihenfolge = self.zaehler
+
+    # --- Show-Tasten ------------------------------------------------------
+
+    def look_druecken(self, look_id: str, jetzt: float) -> None:
+        gobos = self.show.gobos_der_gruppe("Spots") if "Spots" in self.show.patch.gruppen() else []
+        welt = (self.show.patch, self.farbe_1, self.farbe_2, gobos, self.show.positionen)
+        cues = showtasten.drop_folge(*welt) if look_id == "drop" else [showtasten.look_bauen(look_id, *welt)]
+        self.tasten.sequenz = {"name": "Show-Tasten", "cues": cues}
+        self.tasten.gehe_zu(0, jetzt)
+        self.look = look_id
+        self.nach_oben(self.tasten, jetzt, umschalten=False)
+
+    def look_aus(self, jetzt: float) -> None:
+        self.tasten.aus(jetzt)
+        self.look = None
+
+    def farben_setzen(self, farbe_1: Optional[str], farbe_2: Optional[str], jetzt: float) -> None:
+        for farbe in (farbe_1, farbe_2):
+            if farbe is not None and not showtasten.ist_farbe(farbe):
+                raise ValueError(f"Unbekannte Farbe {farbe!r}.")
+        self.farbe_1 = farbe_1 or self.farbe_1
+        self.farbe_2 = farbe_2 or self.farbe_2
+        if self.look and self.look != "drop" and self.tasten.index >= 0:
+            # Der laufende Look nimmt die neue Farbe gleich mit (weich überblendet)
+            reihenfolge = self.tasten.reihenfolge
+            self.look_druecken(self.look, jetzt)
+            self.tasten.reihenfolge = reihenfolge
+
+    def halten_setzen(self, art: str, an: bool, jetzt: float) -> None:
+        if art not in self.halten:
+            raise ValueError(f"Unbekannte Halte-Taste {art!r}.")
+        self.halten[art] = jetzt if an else None
+
+    def tap(self, jetzt: float) -> Optional[float]:
+        if self.tipps and jetzt - self.tipps[-1] > 2.0:
+            self.tipps = []                  # nach einer Pause beginnt das Tippen neu
+        self.tipps = (self.tipps + [jetzt])[-8:]
+        tempo = showtasten.tap_tempo(self.tipps)
+        if tempo:
+            self.tempo_getippt, self.tempo_quelle = tempo, "tap"
+        if self.effekte is not None:
+            self.effekte.auf_schlag()
+        return tempo
+
+    def _halten_jetzt(self, jetzt: float) -> dict:
+        for art, seit in self.halten.items():
+            if seit is not None and jetzt - seit > showtasten.HALTEN_MAX_S:
+                self.halten[art] = None
+        return {art: seit is not None for art, seit in self.halten.items()}
 
     def waehlen(self, geraete: list, art: str = "setzen") -> None:
         """art: setzen (nur diese), dazu, umschalten (an/aus) oder weg."""
@@ -356,6 +435,10 @@ class Pult:
         executor = self.executor(nummer)
         if not executor.sequenz or not 0 <= index < len(executor.sequenz["cues"]):
             raise ValueError("Diesen Cue gibt es nicht.")
+        song = getattr(self.show, "song", None)
+        if executor.zeitcode == "song" and song is not None and song.laeuft_auf(nummer):
+            song.zu_cue(index)               # der Song läuft von dort aus weiter
+            return
         executor.zeitcode = False
         executor.gehe_zu(index, jetzt)
         self.haupt = nummer - 1
@@ -388,19 +471,21 @@ class Pult:
 
     # --- Ein Bild ---------------------------------------------------------
 
-    def anwenden(self, zustand: dict, jetzt: float, musik_bpm: float) -> dict:
-        """Legt Executoren und Programmer über die Automatik."""
+    def anwenden(self, zustand: dict, jetzt: float, musik_bpm: float, beat: bool = False) -> dict:
+        """Legt Executoren, Show-Tasten, Programmer und Halte-Tasten über die Automatik."""
         dauer = 0.0 if self.letzte_zeit is None else max(0.0, jetzt - self.letzte_zeit)
         self.letzte_zeit = jetzt
-        self.effekte.takt(dauer, musik_bpm)
+        self.effekte.takt(dauer, musik_bpm, beat)
         self.meldungen = []
-        aktive = sorted((e for e in self.executoren if e.aktiv), key=lambda e: e.reihenfolge)
+        aktive = sorted((e for e in self.executoren + [self.tasten] if e.aktiv), key=lambda e: e.reihenfolge)
         for executor in aktive:
             zustand = self._executor(executor, zustand, jetzt)
         if not self.programmer.blind and not self.programmer.ist_leer():
             zustand, meldungen = self.programmer.ausgabe(zustand, *self._welt(), self.effekte)
             self.meldungen += meldungen
-        return zustand
+        grenzen = getattr(self.show, "grenzen", None)
+        strobo_hz = min(3.0, grenzen.strobo_max_hz) if grenzen is not None else 3.0
+        return showtasten.halten_anwenden(zustand, self._halten_jetzt(jetzt), self.show.patch, strobo_hz)
 
     def vorschau(self, zustand: dict) -> dict:
         """Was der Programmer zeigen würde. Für Blind und später für die KI."""
@@ -410,19 +495,24 @@ class Pult:
     def _welt(self) -> tuple:
         return self.show.patch, self.show.buehne, self.show.positionen
 
-    def _zeitcode(self, executor: Executor, jetzt: float) -> None:
-        """Probe ansehen: Der Cue richtet sich nach der Stelle in der Aufnahme."""
-        stelle = self.show.audio.position_s()
+    def _zeitcode(self, executor: Executor, jetzt: float, stelle: Optional[float] = None) -> None:
+        """Probe ansehen und Song-Start: Der Cue richtet sich nach der Stelle im Song."""
+        stelle = self.show.audio.position_s() if stelle is None else stelle
         zeiten = executor.sequenz.get("zeitcode") if executor.sequenz else None
         if stelle is None or not zeiten:
             return
-        ziel = max(i for i, z in enumerate(zeiten) if z <= stelle + 0.05)
+        ziel = max((i for i, z in enumerate(zeiten) if z <= stelle + 0.05), default=0)
         ziel = min(ziel, len(executor.sequenz["cues"]) - 1)     # falls im Pult Cues gelöscht wurden
         if ziel != executor.index:
             executor.gehe_zu(ziel, jetzt)
 
     def _executor(self, executor: Executor, zustand: dict, jetzt: float) -> dict:
-        if executor.zeitcode:
+        if executor.zeitcode == "song":
+            song = getattr(self.show, "song", None)
+            stelle = song.stelle(jetzt) if song is not None and song.laeuft_auf(executor.nummer) else None
+            if stelle is not None:
+                self._zeitcode(executor, jetzt, stelle)
+        elif executor.zeitcode:
             self._zeitcode(executor, jetzt)
         cue = executor.cue()
         if cue is not None:
@@ -433,7 +523,10 @@ class Pult:
             zeit = cue.get("zeit_s") or 0.0
             folgen = cue.get("folgen_s")
             if folgen is not None and jetzt - executor.start >= zeit + folgen:
-                self.go(executor.nummer, jetzt)
+                if executor is self.tasten:
+                    executor.go(jetzt)          # Show-Tasten: zum Beispiel vom weißen Schlag in den Drop
+                else:
+                    self.go(executor.nummer, jetzt)
         else:
             ziel, zeit = {}, 0.0
             if executor.aus_seit is not None and jetzt - executor.aus_seit >= 1.0:
@@ -479,5 +572,9 @@ class Pult:
             "executoren": [{
                 "nummer": e.nummer, "sequenz": e.sequenz["name"] if e.sequenz else None,
                 "cues": [c["name"] for c in e.sequenz["cues"]] if e.sequenz else [],
-                "index": e.index, "fader": e.fader} for e in self.executoren],
+                "index": e.index, "fader": e.fader, "song": e.zeitcode == "song"} for e in self.executoren],
+            "tasten": {"look": self.look if self.tasten.index >= 0 else None, "farbe_1": self.farbe_1,
+                       "farbe_2": self.farbe_2, "halten": {a: s is not None for a, s in self.halten.items()},
+                       "tempo_quelle": self.tempo_quelle,
+                       "tempo_getippt": round(self.tempo_getippt, 1) if self.tempo_getippt else None},
         }

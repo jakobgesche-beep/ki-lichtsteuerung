@@ -35,6 +35,7 @@ from .pruefung import Pruefer, Vorgaben
 from .render import Eigenschaften, Renderer
 from .sicherheit import BlitzWaechter, Grenzen
 from .simulator import Simulator
+from .songspieler import SongSpieler
 from .szenen import loese_auf
 from .update import Aktualisierer
 from .version import VERSION
@@ -63,6 +64,9 @@ class Show:
         self.overrides = Overrides()
         self.pult = Pult(self, self.pfade.sequenzen, self.pfade.executoren)
         self.proben = Proben(self.pfade.proben)
+        self.song = SongSpieler(self)
+        self._beat = False                 # kam in diesem Bild ein Schlag? (für das Einrasten der Effekte)
+        self._letztes_tempo: Optional[float] = None
         self.aufnahme_name: Optional[str] = None
         self.aufnahme_marken = []
         self.automatik_an = True
@@ -112,7 +116,7 @@ class Show:
             self._einmessen_pruefen(jetzt)
             zustand = self._automatik(jetzt)
             if not self._test_laeuft():
-                zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm())
+                zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm(), self._beat)
                 self._blind_vorschau(zustand if self.pult.programmer.blind else None, jetzt)
             zustand = self._profil_grenzen(zustand, jetzt)
             zustand = self.overrides.anwenden(zustand, self.patch.geraete, self.warm_stellung)
@@ -211,16 +215,19 @@ class Show:
         return self.test_geraet is not None or bool(self.test_kanaele)
 
     def _automatik(self, jetzt: float) -> dict:
+        self._beat = False
         if self._test_laeuft():
             zustand = {}
             if self.test_geraet is not None:
                 zustand[self.test_geraet] = Eigenschaften(helligkeit=1.0, farbe=(1.0, 1.0, 1.0))
             return zustand
         if not self.automatik_an:
-            self.audio.abholen(jetzt)     # Beats trotzdem abholen, damit keiner nachträglich kommt
+            werte = self.audio.abholen(jetzt)     # Beats trotzdem abholen, damit keiner nachträglich kommt
+            self._beat = bool(werte is not None and werte.beat)
             return {}
         try:
             messwerte = self.audio.abholen(jetzt)
+            self._beat = bool(messwerte is not None and messwerte.beat)
             return self.engine.bewerte(messwerte, self.profil, jetzt, self.overrides.pause)
         except Exception:
             # Sicherer Rückfall: Auch ein Fehler in den Regeln führt zum Grundlicht.
@@ -228,8 +235,21 @@ class Show:
             return self.engine.bewerte(None, self.profil, jetzt)
 
     def _musik_bpm(self) -> float:
+        """Tempo für alle Effekte. Fällt der Ton aus, läuft das Licht im letzten Tempo weiter.
+
+        Reihenfolge: getippt (Tap) > Song-Start (Tempo der Probe, wie schnell die Band
+        gerade spielt) > gehörtes Tempo > zuletzt gehörtes oder getipptes > 120.
+        """
+        if self.pult.tempo_quelle == "tap" and self.pult.tempo_getippt:
+            return self.pult.tempo_getippt
+        song = self.song.tempo()
+        if song and 40 <= song <= 240:
+            return song
         werte = self.audio.aktuell()
-        return werte.tempo_bpm if werte and 40 <= werte.tempo_bpm <= 240 else 120.0
+        if werte and 40 <= werte.tempo_bpm <= 240:
+            self._letztes_tempo = werte.tempo_bpm
+            return werte.tempo_bpm
+        return self._letztes_tempo or self.pult.tempo_getippt or 120.0
 
     def _blind_vorschau(self, zustand: Optional[dict], jetzt: float) -> None:
         """Im Blind-Modus: Programmer nur in die 3D-Vorschau, nie an den Ausgang."""
@@ -289,6 +309,8 @@ class Show:
         except ValueError:
             self.profil = RUHE_PROFIL
         self.automatik_an = sitzung.get("automatik", True)
+        palette = self.profil.get("palette") or ["rot", "blau"]
+        self.pult.farbe_1, self.pult.farbe_2 = palette[0], palette[1 % len(palette)]
 
     def gobos_der_gruppe(self, gruppe: str) -> list:
         """Gobo-Namen, die alle Geräte der Gruppe haben (ohne "Offen")."""
@@ -324,6 +346,7 @@ class Show:
                     "test_laeuft": self._test_laeuft(), "version": VERSION,
                     "update": self.update.status(),
                     "pult": self.pult.status(), "automatik": self.automatik_an,
+                    "song": self.song.zustand(), "tempo": round(self._musik_bpm(), 1),
                     "aufnahme": {"name": self.aufnahme_name,
                                  "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
                                  "markierungen": len(self.aufnahme_marken)},

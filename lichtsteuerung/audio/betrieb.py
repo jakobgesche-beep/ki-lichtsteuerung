@@ -5,6 +5,7 @@ Die Engine geht dann aufs Grundlicht (Grundregel „Sicherer Rückfall").
 """
 from __future__ import annotations
 
+import logging
 import threading
 import time
 from dataclasses import replace
@@ -29,6 +30,7 @@ class AudioBetrieb:
         self.drop_abgeholt = 0
         self.aufnahme = None      # Liste von Blöcken, solange in der Probe aufgenommen wird
         self.beat_erkennung = None
+        self.zuhoerer = None      # zum Beispiel der Song-Folger: bekommt jeden Block mit
         self._thread: Optional[threading.Thread] = None
         self._stopp = threading.Event()
 
@@ -60,6 +62,12 @@ class AudioBetrieb:
                 if self.aufnahme is not None and len(self.aufnahme) < MAX_AUFNAHME_BLOECKE:
                     self.aufnahme.append(block.copy())
                 werte = analyse.verarbeite(block)
+                zuhoerer = self.zuhoerer
+                if zuhoerer is not None:
+                    try:
+                        zuhoerer(block, time.monotonic())
+                    except Exception:
+                        logging.exception("Zuhörer der Audio-Analyse")
                 if werte.beat:
                     self.beat_zaehler += 1
                 if werte.drop:
