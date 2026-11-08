@@ -2,6 +2,7 @@
 //   Oben: Song-Start. Einmal drücken, wenn die Band anfängt, dann läuft der ganze Song.
 //   Darunter: Look-Tasten, Farben, Halte-Tasten und Tap-Tempo. Die gehen immer, auch ohne Ton.
 import { api, senden, t } from "./api.js";
+import { Buehne3D } from "./buehne3d.js";
 import { abonnieren } from "./verbindung.js";
 
 const FARBWERT = {
@@ -25,6 +26,7 @@ const setze = (element, text) => { if (element.textContent !== text) element.tex
 export function showSeite(wurzel) {
   wurzel.innerHTML = `
     <div class="show">
+      <div class="show-oben">
       <section class="fenster songfenster"><header>Song-Start <span id="folger" class="chip"></span></header>
         <div class="inhalt">
           <div id="songliste" class="songliste"></div>
@@ -46,6 +48,9 @@ export function showSeite(wurzel) {
             die Teile von selbst weiter. Fällt der Ton aus, läuft der Song im Tempo der Probe weiter.</p>
         </div>
       </section>
+      <section class="fenster buehnenfenster"><header>Bühne live <span id="quelle" class="leise"></span></header>
+        <div class="drei-d show-buehne" id="drei"></div></section>
+      </div>
       <div class="show-unten">
         <section class="fenster"><header>Looks <span class="leise">Tasten 1–9 · 0 = Look aus</span></header>
           <div class="inhalt"><div class="looks" id="looks"></div></div></section>
@@ -53,13 +58,13 @@ export function showSeite(wurzel) {
           <section class="fenster"><header>Farben</header>
             <div class="inhalt"><div class="leise klein-titel">Farbe 1</div><div class="farbreihe" id="farbe_1"></div>
               <div class="leise klein-titel">Farbe 2</div><div class="farbreihe" id="farbe_2"></div></div></section>
-          <section class="fenster"><header>Halten <span class="leise">gedrückt halten</span></header>
-            <div class="inhalt"><div class="halten" id="halten"></div></div></section>
-          <section class="fenster"><header>Tempo <span id="tquelle" class="leise"></span></header>
-            <div class="inhalt tempo-box">
-              <div><span id="bpm" class="bpm">–</span> <span class="leise">BPM</span></div>
-              <button id="tap" class="tap">TAP <kbd>T</kbd></button>
-              <button id="vom-ton" class="klein">Tempo vom Ton</button>
+          <section class="fenster"><header>Halten · Tempo <span class="leise">gedrückt halten</span></header>
+            <div class="inhalt">
+              <div class="halten"><span id="halten" class="halten-tasten"></span>
+                <button id="tap" class="tap">TAP<kbd>T</kbd></button></div>
+              <div class="tempo-box"><span id="bpm" class="bpm">–</span> <span class="leise">BPM</span>
+                <span id="tquelle" class="leise"></span>
+                <button id="vom-ton" class="klein">Tempo vom Ton</button></div>
             </div></section>
         </div>
       </div>
@@ -69,6 +74,8 @@ export function showSeite(wurzel) {
   let looks = [];
   let leistenStand = "";
   let letzterLive = null;
+  let buehne = null;
+  let beendet = false;
 
   async function laden() {
     const daten = await api("/show");
@@ -76,7 +83,8 @@ export function showSeite(wurzel) {
     looks = daten.looks;
     feld("songliste").innerHTML = songs.map((s) => `
       <button class="songknopf" data-song="${t(s.name)}">▶ <b>${t(s.name)}</b>
-        <span class="leise">${s.dauer_s ? minuten(s.dauer_s) : ""} · ${s.tempo_bpm ? Math.round(s.tempo_bpm) + " BPM" : ""} · ${s.teile.length} Teile</span></button>`).join("")
+        <span class="leise">${s.dauer_s ? minuten(s.dauer_s) : ""} · ${s.tempo_bpm ? Math.round(s.tempo_bpm) + " BPM" : ""} · ${s.teile.length} Teile</span>
+        ${s.alte_analyse ? `<span class="alt-hinweis">Alte Erkennung: in der Probe „Show neu bauen“ drücken</span>` : ""}</button>`).join("")
       || `<p class="leise">Noch keine Songs. In der Probe einen Song aufnehmen, dann erscheint er hier.</p>`;
     feld("looks").innerHTML = looks.map((l) => `
       <button class="look" data-look="${l.id}"><span class="look-name">${t(l.name)}</span>
@@ -104,8 +112,21 @@ export function showSeite(wurzel) {
       + `<i id="kopf" class="abspielkopf"></i>`;
   }
 
+  // Was steuert das Licht gerade? So sieht man, warum die Bühne so aussieht.
+  function quelleText(live) {
+    const tasten = live.pult.tasten;
+    const gehalten = Object.entries(tasten.halten).filter(([, an]) => an).map(([art]) => ({ flash: "Weiß voll", strobo: "Strobo", dunkel: "Dunkel" })[art]);
+    if (live.overrides.blackout) return "Blackout";
+    if (gehalten.length) return gehalten.join(" + ") + " (gehalten)";
+    if (tasten.look) return "Look: " + (looks.find((l) => l.id === tasten.look)?.name ?? tasten.look);
+    if (live.song?.laeuft) return `Song: ${live.song.name} · ${live.song.jetzt.name} ${live.song.jetzt.gruppe}`.trim();
+    return live.automatik ? "Automatik: " + live.engine : "Grundlicht";
+  }
+
   function zeigen(live) {
     letzterLive = live;
+    buehne?.setzeWerte(live.geraete);
+    setze(feld("quelle"), quelleText(live));
     const song = live.song;
     const laeuft = Boolean(song?.laeuft);
     feld("songlauf").hidden = !laeuft;
@@ -213,7 +234,10 @@ export function showSeite(wurzel) {
 
   const abmelden = abonnieren((live) => { if (live) zeigen(live); });
   laden();
+  api("/buehne").then((aufbau) => { if (!beendet) buehne = new Buehne3D(feld("drei"), aufbau, { nah: true }); });
   return () => {
+    beendet = true;
+    buehne?.beenden();
     abmelden();
     allesLoslassen();
     window.removeEventListener("blur", allesLoslassen);

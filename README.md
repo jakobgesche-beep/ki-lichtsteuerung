@@ -38,7 +38,7 @@ Oben wählst du die **View**, wie an einem Lichtpult:
 
 | View | Wofür |
 |---|---|
-| Show | **Live fahren:** Song-Start (ein Druck, dann läuft der ganze Song), Look-Tasten, Farben, Halte-Tasten, Tap-Tempo |
+| Show | **Live fahren:** Song-Start (ein Druck, dann läuft der ganze Song), Bühne live in 3D, Look-Tasten, Farben, Halte-Tasten, Tap-Tempo |
 | Live | 3D-Bühne, Cue-Liste (Klick springt zum Cue), Ton, Profil, Musik-Automatik, Executoren |
 | Programmieren | Pools mit Gruppen, Geräten, Farben, Positionen, Gobos und Effekten, Fixture-Sheet, Encoder, Speichern |
 | Probe | Song aufnehmen oder als Datei laden: Tempo und Songteile erkennen, Lichtshow bauen |
@@ -61,6 +61,7 @@ Englisch geht auch: `Fixture 1 Thru 3 At Full`. Zahlen tippen springt direkt in 
 
 - **Song-Start:** Den Song antippen, wenn die Band anfängt. Dann läuft der ganze Song von selbst durch. Das Programm hört mit und vergleicht mit der Probe-Aufnahme, so bleibt es auch dran, wenn die Band schneller oder langsamer spielt. Groß angezeigt: welcher Teil jetzt läuft, wie viele Takte und Sekunden noch, was danach kommt. Fällt der Ton aus, läuft der Song im Tempo der Probe weiter. Hört die Band mitten im Song auf, wartet das Programm.
 - **Korrigieren:** „Nächster Teil jetzt“ (Leertaste), „Teil zurück“ (←) oder einfach auf einen Teil in der Zeitleiste klicken. Der Song läuft von dort weiter.
+- **Bühne live:** Oben rechts zeigt die 3D-Bühne, was die Lichter gerade tun. Darüber steht, was das Licht steuert: gehaltene Taste, Look, Song oder Automatik.
 - **Look-Tasten 1 bis 9:** Ruhig, Strophe, Aufbau, Refrain, Höhepunkt, Drop!, Solo, Ballade, Schluss. Sie gehen immer, auch ganz ohne Musik-Erkennung. 0 = Look aus, dann ist wieder der Song oder die Automatik zu sehen.
 - **Farben:** Farbe 1 und Farbe 2 gelten für alle Looks, ein Druck ändert den laufenden Look mit.
 - **Halten:** Weiß voll (Taste F), Strobo und Dunkel gelten nur, solange du drückst.

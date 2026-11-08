@@ -63,9 +63,11 @@ class SongSpieler:
             sequenz = self.show.pult.sequenzen.lesen(name)
             if not sequenz or not sequenz.get("zeitcode") or not self.show.proben.ton_pfad(name).exists():
                 continue
-            karte = karte_aus(sequenz, self.show.proben.lesen(name))
+            analyse = self.show.proben.lesen(name)
+            karte = karte_aus(sequenz, analyse)
             ergebnis.append({"name": name, "tempo_bpm": karte.get("tempo_bpm"), "dauer_s": karte.get("dauer_s"),
-                             "teile": karte.get("teile", [])})
+                             "teile": karte.get("teile", []),
+                             "alte_analyse": (analyse or {}).get("version", 1) < 2})
         return ergebnis
 
     def _referenz(self, name: str) -> tuple:

@@ -152,10 +152,16 @@ td input[type=number] { width: 66px; }
   .antwort { display: none; }
 }
 
-/* View "Show": große Tasten zum Fahren der Show */
+/* View "Show": große Tasten zum Fahren der Show, daneben die Bühne live */
+.show-oben { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 8px; align-items: stretch; }
+.show-oben > .fenster { display: flex; flex-direction: column; }
+.show-oben .songfenster > .inhalt { flex: 1; }
+.drei-d.show-buehne { flex: 1; height: auto; min-height: clamp(200px, 31vh, 420px); }
+.buehnenfenster header .leise { text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--auswahl); }
 .show .songliste { display: flex; flex-wrap: wrap; gap: 6px; }
 .songknopf { padding: 12px 16px; font-size: 15px; text-align: left; display: flex; flex-direction: column; gap: 2px; min-width: 210px; }
 .songknopf.an { background: #1d4d2c; border-color: var(--gruen); }
+.alt-hinweis { font-size: 11px; color: #f0c94a; }
 .songlauf { margin-top: 10px; }
 .jetzt-zeile { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: end; }
 .klein-titel { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; margin: 4px 0 2px; }
@@ -182,16 +188,18 @@ td input[type=number] { width: 66px; }
 .look.an .look-text, .look.an kbd { color: #333; }
 .look.aus { border-style: dashed; }
 .farbreihe { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
-.farbe { width: 34px; height: 34px; padding: 0; background: var(--farbe); border: 2px solid var(--linie); }
+.farbe { width: 31px; height: 31px; padding: 0; background: var(--farbe); border: 2px solid var(--linie); }
 .farbe:hover:not(:disabled) { background: var(--farbe); filter: brightness(1.2); }
 .farbe.an { background: var(--farbe); border-color: var(--auswahl); box-shadow: 0 0 0 2px var(--auswahl); }
-.halten { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.halte { padding: 18px 4px; font-weight: 800; font-size: 14px; touch-action: none; user-select: none; }
+.halten { display: grid; grid-template-columns: 3fr 1fr; gap: 6px; }
+.halten-tasten { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.halte { padding: 14px 4px; font-weight: 800; font-size: 14px; touch-action: none; user-select: none; }
 .halte.an { background: #fff; color: #111; border-color: #fff; }
-.tempo-box { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.bpm { font-size: 30px; font-weight: 800; color: var(--auswahl); }
-.tap { padding: 14px 22px; font-weight: 800; font-size: 16px; touch-action: none; }
+.tempo-box { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.tempo-box button { margin-left: auto; }
+.bpm { font-size: 24px; font-weight: 800; color: var(--auswahl); }
+.tap { padding: 14px 4px; font-weight: 800; font-size: 15px; touch-action: none; }
 @media (max-width: 760px) {
-  .show-unten { grid-template-columns: 1fr; }
+  .show-oben, .show-unten { grid-template-columns: 1fr; }
   .jetzt-zeile { grid-template-columns: 1fr; }
 }

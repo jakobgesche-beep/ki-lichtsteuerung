@@ -144,6 +144,7 @@ def test_song_ueber_den_server(show):
     client = TestClient(erstelle_app(show))
     daten_ = client.get("/api/show").json()
     assert daten_["songs"][0]["name"] == "Band" and len(daten_["looks"]) == 9
+    assert daten_["songs"][0]["alte_analyse"] is False
     assert client.post("/api/song/start", json={"name": "Band"}).json()["laeuft"]
     assert client.post("/api/song/vor").status_code == 200
     assert client.post("/api/look/refrain").status_code == 200
