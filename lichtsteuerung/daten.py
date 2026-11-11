@@ -41,6 +41,7 @@ class Pfade:
         self.sitzung = self.wurzel / "daten" / "sitzung.json"
         self.audio = self.wurzel / "daten" / "audio"
         self.proben = self.wurzel / "daten" / "proben"
+        self.lokal = self.wurzel / "lokal.json"      # Claude-Schlüssel: bleibt auf diesem Rechner
 
 
 def datenordner() -> Path:

@@ -65,6 +65,9 @@ def selbsttest(adresse: str) -> None:
         import clr  # noqa: F401  unter Windows braucht das Fenster pythonnet
     from lichtsteuerung.dmx_ausgabe import EnttecOpenDmx
     EnttecOpenDmx.suchen()
+    import anthropic  # noqa: F401  der Licht-Chat muss sich laden lassen (auch ohne Schlüssel)
+    from lichtsteuerung.licht_chat import werkzeuge
+    assert len(werkzeuge()) == 2
     print("Selbsttest bestanden")
 
 

@@ -19,6 +19,7 @@ from typing import Optional
 
 from .audio import folgen
 from .audio.quellen import lade_datei
+from .pult import SONG_NUMMER
 
 
 def karte_aus(sequenz: dict, analyse: Optional[dict]) -> dict:
@@ -48,7 +49,7 @@ class SongSpieler:
         self.show = show
         self.folger: Optional[folgen.SongFolger] = None
         self.name: Optional[str] = None
-        self.nummer = 1
+        self.nummer = SONG_NUMMER
         self.karte: dict = {}
         self.zeitcode: list = []
         self.letzte_zeit: Optional[float] = None
@@ -81,7 +82,8 @@ class SongSpieler:
 
     # --- Bedienen -------------------------------------------------------
 
-    def starten(self, name: str, nummer: int = 1, jetzt: Optional[float] = None) -> None:
+    def starten(self, name: str, nummer: int = SONG_NUMMER, jetzt: Optional[float] = None) -> None:
+        """Der Song läuft auf einem eigenen Platz (nicht auf den Fadern), außer man nennt einen Fader."""
         sequenz = self.show.pult.sequenzen.lesen(name)
         if not sequenz or not sequenz.get("zeitcode"):
             raise ValueError(f"Zu „{name}“ gibt es keine Song-Show. In der Probe „Show neu bauen“ drücken.")
@@ -102,7 +104,8 @@ class SongSpieler:
             executor.zeitcode = "song"
             self.show.pult.nach_oben(executor, jetzt)
             self.show.pult.haupt = nummer - 1
-            self.show.pult.belegung_speichern()
+            if executor is not self.show.pult.song_platz:
+                self.show.pult.belegung_speichern()
         self.show.audio.zuhoerer = folger.hoeren
 
     def stoppen(self, jetzt: Optional[float] = None) -> None:

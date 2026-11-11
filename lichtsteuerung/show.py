@@ -30,7 +30,8 @@ from .katalog import Katalog
 from .overrides import Overrides
 from .patch import Patch
 from .probe import Proben, show_bauen
-from .pult import Pult
+from .licht_chat import LichtChat
+from .pult import Executor, Pult
 from .profile import Profile, RUHE_PROFIL, strobo_grenzen
 from .pruefung import Pruefer, Vorgaben
 from .render import Eigenschaften, Renderer
@@ -74,6 +75,9 @@ class Show:
         self.automatik_an = True
         self.vorschau = Vorschau(self)
         self.vorschau_geraete = None
+        self.chat = LichtChat(self)
+        self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
+        self.chat_vorschau_geraete = None
         self.blitze = BlitzWaechter()
         self.vorschau_blitze = BlitzWaechter()
         self.blitzt = False
@@ -110,6 +114,7 @@ class Show:
             self.engine = Engine(self.patch, self.buehne, self.positionen, self.grenzen)
             self.pult.aufbauen()
             self.vorschau_pruefer = Pruefer(self.patch, self.buehne, self.grenzen)
+            self.chat_pruefer = Pruefer(self.patch, self.buehne, self.grenzen)
             ziel, _ = loese_auf([{"gruppe": GRUPPE_BEWEGUNG, "position": WARM_POSITION}],
                                 self.patch, self.buehne, self.positionen)
             self.warm_stellung = {i: (e.pan, e.tilt) for i, e in ziel.items() if e.pan is not None}
@@ -151,6 +156,11 @@ class Show:
             self.blitzt = blitzt or bool(self.software_blitzt)
             self.meldungen = meldungen + self.pult.meldungen
             self.letztes_bild = bytes(bild)
+            try:
+                self._chat_vorschau(jetzt)
+            except Exception:
+                logging.exception("Vorschau des Licht-Chats")
+                self.chat_vorschau_geraete = None
             return self.letztes_bild
 
     def test_setzen(self, geraet: Optional[str], kanaele: dict) -> None:
@@ -352,6 +362,24 @@ class Show:
         bild, _, _ = self.vorschau_pruefer.pruefe(bild, Vorgaben(strobo_max_hz=hz, strobo_max_dauer_s=dauer), jetzt)
         self.vorschau_geraete = self.simulator.lies(bytes(bild))
 
+    def _chat_vorschau(self, jetzt: float) -> None:
+        """Licht-Chat: Der Vorschlag läuft nur in der 3D-Vorschau, nie am Ausgang (Grundregel)."""
+        entwurf = self.chat.entwurf
+        if entwurf is None:
+            self.chat_vorschau_geraete = None
+            return
+        platz = self.chat_platz
+        platz.sequenz = entwurf["sequenz"]
+        platz.index = max(0, min(entwurf["cue"], len(entwurf["sequenz"]["cues"]) - 1))
+        zustand, effekte, _ = platz.tracking(self.patch, self.buehne, self.positionen)
+        for effekt in effekte:
+            zustand = self.pult.effekte.anwenden(effekt, zustand)
+        zustand = self._profil_grenzen(zustand, jetzt, eigener_waechter=True)
+        bild = self.renderer.bild(zustand)
+        hz, dauer = self.grenzen.strobo_max_hz, self.grenzen.strobo_max_dauer_s
+        bild, _, _ = self.chat_pruefer.pruefe(bild, Vorgaben(strobo_max_hz=hz, strobo_max_dauer_s=dauer), jetzt)
+        self.chat_vorschau_geraete = self.simulator.lies(bytes(bild))
+
     def _profil_grenzen(self, zustand: dict, jetzt: float, eigener_waechter: bool = False) -> dict:
         grenze = self.profil["max_helligkeit"]
         waechter = self.vorschau_blitze if eigener_waechter else self.blitze
@@ -402,6 +430,26 @@ class Show:
         palette = self.profil.get("palette") or ["rot", "blau"]
         self.pult.farbe_1, self.pult.farbe_2 = palette[0], palette[1 % len(palette)]
 
+    def faehigkeiten(self, geraet: dict) -> dict:
+        """Was die Bedienung (und der Licht-Chat) zu einem Gerät wissen muss."""
+        kanaele = [k for _, k in self.patch.typ(geraet).kanaele_im_modus(geraet["modus"])]
+        typen = {k["typ"] for k in kanaele}
+        grad = {k["typ"]: k.get("grad") for k in kanaele if k["typ"] in ("pan", "tilt")}
+        gobos, farbrad = [], []
+        for kanal in kanaele:
+            plaetze = [b for b in kanal.get("bereiche", []) if b["typ"] == "platz"]
+            if kanal["typ"] == "gobo":
+                gobos = [b["name"] for b in plaetze]
+            if kanal["typ"] == "farbrad":
+                farbrad = [{"name": b.get("name"), "farbe": b.get("farbe")} for b in plaetze if b.get("farbe")]
+        return {"id": geraet["id"], "name": geraet["name"], "gruppen": self.patch.gruppen_von(geraet),
+                "dimmer": "dimmer" in typen or bool(typen & {"rot", "gruen", "blau", "weiss"}),
+                "farbe": "mischung" if typen & {"rot", "gruen", "blau"} else "rad" if farbrad else None,
+                "farbrad": farbrad, "beweglich": "pan" in typen or "tilt" in typen, "gobos": gobos,
+                "pan_grad": grad.get("pan"), "tilt_grad": grad.get("tilt"),
+                "nummer": self.patch.geraete.index(geraet) + 1,
+                "drehung": any(b["typ"] == "drehung" for k in kanaele for b in k.get("bereiche", []))}
+
     def gobos_der_gruppe(self, gruppe: str) -> list:
         """Gobo-Namen, die alle Geräte der Gruppe haben (ohne "Offen")."""
         listen = []
@@ -441,6 +489,9 @@ class Show:
                                  "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
                                  "markierungen": len(self.aufnahme_marken)},
                     "vorschau": {"geraete": self.vorschau_geraete},
+                    "chat_vorschau": ({"geraete": self.chat_vorschau_geraete, "cue": self.chat.entwurf["cue"]}
+                                      if self.chat_vorschau_geraete is not None and self.chat.entwurf else None),
+                    "chat_denkt": self.chat.denkt,
                     "strobo_erlaubt": self.profil["strobo"] != "aus",
                     "hazer_erlaubt": self.profil["hazer"],
                     "audio": {"quelle": self.audio.name, "fehler": self.audio.fehler,

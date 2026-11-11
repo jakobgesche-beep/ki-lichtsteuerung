@@ -85,7 +85,7 @@ export function probeSeite(wurzel) {
 
   wurzel.addEventListener("click", async (ereignis) => {
     const d = ereignis.target.dataset;
-    if (d.ansehen) await senden(`/proben/${encodeURIComponent(d.ansehen)}/abspielen`, { executor: 1 });
+    if (d.ansehen) await senden(`/proben/${encodeURIComponent(d.ansehen)}/abspielen`);
     if (d.neu) {
       meldung("Baue die Show neu …");
       await senden(`/proben/${encodeURIComponent(d.neu)}/neu`);

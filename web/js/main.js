@@ -2,7 +2,7 @@
 // Unten ist immer die Befehlszeile, oben immer die Not-Tasten.
 import { showSeite } from "./show.js";
 import { liveSeite } from "./live.js";
-import { programmierenSeite } from "./programmieren.js";
+import { pultSeite } from "./pult.js";
 import { probeSeite } from "./probe.js";
 import { profileSeite } from "./profile.js";
 import { patchSeite } from "./patch.js";
@@ -14,8 +14,8 @@ import { abonnieren } from "./verbindung.js";
 
 const views = [
   ["Show", showSeite],
+  ["Pult", pultSeite],
   ["Live", liveSeite],
-  ["Programmieren", programmierenSeite],
   ["Probe", probeSeite],
   ["Setup", null, [["Patch", patchSeite], ["Profile", profileSeite], ["Katalog", katalogSeite], ["DMX-Test", dmxTestSeite]]],
 ];

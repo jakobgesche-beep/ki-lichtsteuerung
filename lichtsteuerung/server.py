@@ -28,7 +28,7 @@ from . import showtasten, patchplan
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
-from .pult import EFFEKT_ARTEN, pruefe_effekt
+from .pult import EFFEKT_ARTEN, SONG_NUMMER, pruefe_effekt
 from .szenen import pruefe_werte
 from .show import Show
 
@@ -58,23 +58,7 @@ def patch_antwort(show: Show) -> dict:
 
 def geraet_faehigkeiten(show: Show, geraet: dict) -> dict:
     """Was die Bedienung zu einem Gerät wissen muss, damit sie nur Passendes anbietet."""
-    kanaele = [k for _, k in show.patch.typ(geraet).kanaele_im_modus(geraet["modus"])]
-    typen = {k["typ"] for k in kanaele}
-    grad = {k["typ"]: k.get("grad") for k in kanaele if k["typ"] in ("pan", "tilt")}
-    gobos, farbrad = [], []
-    for kanal in kanaele:
-        plaetze = [b for b in kanal.get("bereiche", []) if b["typ"] == "platz"]
-        if kanal["typ"] == "gobo":
-            gobos = [b["name"] for b in plaetze]
-        if kanal["typ"] == "farbrad":
-            farbrad = [{"name": b.get("name"), "farbe": b.get("farbe")} for b in plaetze if b.get("farbe")]
-    return {"id": geraet["id"], "name": geraet["name"], "gruppen": show.patch.gruppen_von(geraet),
-            "dimmer": "dimmer" in typen or bool(typen & {"rot", "gruen", "blau", "weiss"}),
-            "farbe": "mischung" if typen & {"rot", "gruen", "blau"} else "rad" if farbrad else None,
-            "farbrad": farbrad, "beweglich": "pan" in typen or "tilt" in typen, "gobos": gobos,
-            "pan_grad": grad.get("pan"), "tilt_grad": grad.get("tilt"),
-            "nummer": show.patch.geraete.index(geraet) + 1,
-            "drehung": any(b["typ"] == "drehung" for k in kanaele for b in k.get("bereiche", []))}
+    return show.faehigkeiten(geraet)
 
 
 def erstelle_app(show: Optional[Show] = None) -> FastAPI:
@@ -336,6 +320,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         if fehler:
             raise ValueError(" ".join(fehler))
         with show.sperre:
+            show.pult.merke_programmer()
             show.pult.programmer.setzen(geraete, werte)
         return show.pult.status()
 
@@ -347,18 +332,22 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         if fehler:
             raise ValueError(" ".join(fehler))
         with show.sperre:
+            show.pult.merke_programmer()
             show.pult.programmer.effekt_dazu(effekt)
         return show.pult.status()
 
     @app.delete("/api/programmer/effekt/{nummer}")
     def programmer_effekt_weg(nummer: int):
         with show.sperre:
+            show.pult.merke_programmer()
             del show.pult.programmer.effekte[nummer]
         return show.pult.status()
 
     @app.post("/api/programmer/leeren")
     def programmer_leeren():
         with show.sperre:
+            if not show.pult.programmer.ist_leer():
+                show.pult.merke_programmer()
             show.pult.programmer.leeren()
         return show.pult.status()
 
@@ -374,6 +363,60 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             show.automatik_an = bool(auftrag.get("an"))
         show._sitzung_speichern()
         return {"automatik": show.automatik_an}
+
+    # --- Licht-Chat: Vorschlag nur in der Vorschau, gespeichert erst bei Übernehmen ---------
+
+    @app.get("/api/chat")
+    def chat_lesen():
+        return show.chat.status()
+
+    @app.post("/api/chat")
+    def chat_senden(auftrag: dict = Body(...)):
+        """Dauert mit Claude ein paar Sekunden. Die Show läuft in der Zeit ganz normal weiter."""
+        return show.chat.senden(str(auftrag.get("text", "")))
+
+    @app.post("/api/chat/neu")
+    def chat_neu():
+        show.chat.neu()
+        return show.chat.status()
+
+    @app.post("/api/chat/vorschau")
+    def chat_vorschau(auftrag: dict = Body(...)):
+        show.chat.vorschau_cue(int(auftrag.get("cue", 0)))
+        return show.chat.status()
+
+    @app.post("/api/chat/uebernehmen")
+    def chat_uebernehmen(auftrag: dict = Body(default={})):
+        fader = auftrag.get("fader")
+        ergebnis = show.chat.uebernehmen(int(fader) if fader else None, auftrag.get("name") or None)
+        return {**show.chat.status(), "ergebnis": ergebnis, "pult": show.pult.status()}
+
+    @app.post("/api/chat/verwerfen")
+    def chat_verwerfen():
+        show.chat.verwerfen()
+        return show.chat.status()
+
+    @app.post("/api/ki/schluessel")
+    def ki_schluessel(auftrag: dict = Body(...)):
+        """Der Schlüssel wird nur gespeichert, nie zurückgegeben (die Oberfläche sieht nur den Anfang)."""
+        show.chat.schluessel.speichern(str(auftrag.get("schluessel", "")))
+        return show.chat.status()
+
+    @app.delete("/api/ki/schluessel")
+    def ki_schluessel_weg():
+        show.chat.schluessel.loeschen()
+        return show.chat.status()
+
+    @app.get("/api/sequenzen")
+    def sequenzen_pool():
+        """Der Sequenzen-Pool: Name, Anzahl Cues und auf welchen Fadern sie liegt."""
+        pool = []
+        for name in show.pult.sequenzen.namen():
+            sequenz = show.pult.sequenzen.lesen(name) or {"cues": []}
+            pool.append({"name": name, "cues": len(sequenz.get("cues", [])), "song": bool(sequenz.get("zeitcode")),
+                         "fader": [e.nummer for e in show.pult.executoren
+                                   if e.sequenz and e.sequenz["name"] == name]})
+        return {"sequenzen": pool}
 
     @app.get("/api/sequenzen/{name}")
     def sequenz_lesen(name: str):
@@ -391,11 +434,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.delete("/api/sequenzen/{name}")
     def sequenz_loeschen(name: str):
         with show.sperre:
-            for executor in show.pult.executoren:
-                if executor.sequenz and executor.sequenz["name"] == name:
-                    executor.belegen(None)
-            show.pult.sequenzen.loeschen(name)
-            show.pult.belegung_speichern()
+            show.pult.sequenz_loeschen(name)
         return {"sequenzen": show.pult.sequenzen.namen()}
 
     @app.post("/api/sequenzen/{name}/speichern")
@@ -406,6 +445,21 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
                                               float(auftrag.get("zeit_s", 2)), auftrag.get("folgen_s"),
                                               auftrag.get("nummer"))
         return sequenz
+
+    @app.post("/api/sequenzen/{name}/cue/{nummer}/aendern")
+    def cue_aendern(name: str, nummer: int, felder: dict = Body(...)):
+        with show.sperre:
+            return show.pult.cue_aendern(name, nummer, felder)
+
+    @app.post("/api/sequenzen/{name}/cue/{nummer}/verschieben")
+    def cue_verschieben(name: str, nummer: int, auftrag: dict = Body(...)):
+        with show.sperre:
+            return show.pult.cue_verschieben(name, nummer, int(auftrag.get("richtung", 1)))
+
+    @app.delete("/api/sequenzen/{name}/cue/{nummer}")
+    def cue_loeschen(name: str, nummer: int):
+        with show.sperre:
+            return show.pult.cue_loeschen(name, nummer)
 
     @app.post("/api/sequenzen/{name}/cue/{nummer}/laden")
     def cue_laden(name: str, nummer: int):
@@ -418,14 +472,36 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     @app.post("/api/executor/{nummer}/belegen")
     def executor_belegen(nummer: int, auftrag: dict = Body(...)):
-        name = auftrag.get("sequenz")
-        sequenz = show.pult.sequenzen.lesen(name) if name else None
-        if name and sequenz is None:
-            raise ValueError(f"Sequenz {name!r} gibt es nicht.")
+        """Assign: {"sequenz": Name}, {"gruppe": Name}, {"art": "tempo"} oder {} für frei."""
         with show.sperre:
-            show.pult.executor(nummer).belegen(sequenz)
-            show.pult.belegung_speichern()
+            if auftrag.get("sequenz"):
+                show.pult.zuweisen(nummer, "sequenz", auftrag["sequenz"])
+            elif auftrag.get("gruppe"):
+                show.pult.zuweisen(nummer, "gruppe", auftrag["gruppe"])
+            elif auftrag.get("art") == "tempo":
+                show.pult.zuweisen(nummer, "tempo")
+            else:
+                show.pult.zuweisen(nummer, None)
         return show.pult.status()
+
+    @app.post("/api/executor/{nummer}/label")
+    def executor_label(nummer: int, auftrag: dict = Body(...)):
+        with show.sperre:
+            show.pult.label_setzen(nummer, str(auftrag.get("label", "")))
+        return show.pult.status()
+
+    @app.post("/api/executor/{nummer}/speichern")
+    def executor_speichern(nummer: int, auftrag: dict = Body(default={})):
+        """Store auf einen Fader: Programmer als neuer Cue (leerer Fader: neue Sequenz)."""
+        with show.sperre:
+            sequenz = show.pult.speichern_auf(nummer, auftrag.get("cue_name") or None, float(auftrag.get("zeit_s", 2)))
+        return {"sequenz": sequenz["name"], "cues": len(sequenz["cues"]), "status": show.pult.status()}
+
+    @app.post("/api/executor/{nummer}/update")
+    def executor_update(nummer: int):
+        with show.sperre:
+            sequenz = show.pult.aktualisieren(nummer)
+        return {"sequenz": sequenz["name"], "status": show.pult.status()}
 
     @app.post("/api/executor/{nummer}/{aktion}")
     def executor_aktion(nummer: int, aktion: str, auftrag: dict = Body(default={})):
@@ -441,13 +517,39 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             elif aktion == "aus":
                 if show.song.laeuft_auf(nummer):
                     show.song.stoppen(jetzt)
-                executor.aus(jetzt)
+                show.pult.aus(nummer, jetzt)
             elif aktion == "goto":
                 show.pult.goto(nummer, int(auftrag["index"]), jetzt)
             elif aktion == "fader":
-                executor.fader = max(0.0, min(1.0, float(auftrag["wert"])))
+                show.pult.fader_setzen(nummer, float(auftrag["wert"]), jetzt)
+            elif aktion == "flash":
+                show.pult.flash(nummer, bool(auftrag.get("an", True)), jetzt)
             else:
                 raise ValueError(f"Unbekannte Aktion {aktion!r}.")
+        return show.pult.status()
+
+    @app.post("/api/grand")
+    def grand_master(auftrag: dict = Body(...)):
+        with show.sperre:
+            show.pult.grand_setzen(float(auftrag["wert"]), time.monotonic())
+        return show.pult.status()
+
+    @app.post("/api/pult/seite")
+    def fader_seite(auftrag: dict = Body(...)):
+        with show.sperre:
+            show.pult.seite_setzen(int(auftrag["seite"]))
+        return show.pult.status()
+
+    @app.post("/api/oops")
+    def oops():
+        with show.sperre:
+            text = show.pult.rueckgaengig()
+        return {"antwort": text, "status": show.pult.status()}
+
+    @app.post("/api/highlight")
+    def highlight(auftrag: dict = Body(default={})):
+        with show.sperre:
+            show.pult.highlight = bool(auftrag.get("an", not show.pult.highlight))
         return show.pult.status()
 
     @app.post("/api/go/{richtung}")
@@ -514,7 +616,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.post("/api/proben/{name}/abspielen")
     def probe_abspielen(name: str, auftrag: dict = Body(default={})):
         """Spielt die Aufnahme ab, das Licht folgt genau den erkannten Stellen."""
-        nummer = int(auftrag.get("executor", 1))
+        nummer = int(auftrag.get("executor", SONG_NUMMER))     # eigener Platz: die Fader bleiben, wie sie sind
         show.song.stoppen()
         sequenz = show.pult.sequenzen.lesen(name)
         if sequenz is None:
@@ -528,7 +630,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             executor.belegen(sequenz)
             executor.zeitcode = True
             show.pult.go(nummer, time.monotonic())
-            show.pult.belegung_speichern()
+            if executor is not show.pult.song_platz:
+                show.pult.belegung_speichern()
         return show.pult.status()
 
     @app.delete("/api/proben/{name}")
@@ -546,7 +649,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.post("/api/song/start")
     def song_start(auftrag: dict = Body(...)):
         """Einmal drücken, wenn die Band anfängt: Der ganze Song läuft von selbst durch."""
-        show.song.starten(str(auftrag.get("name", "")), int(auftrag.get("executor", 1)))
+        show.song.starten(str(auftrag.get("name", "")), int(auftrag.get("executor", SONG_NUMMER)))
         return show.song.zustand()
 
     @app.post("/api/song/teil")

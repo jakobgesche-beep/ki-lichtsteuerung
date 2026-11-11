@@ -83,11 +83,7 @@ tr.rot td { background: #44201d; }
 .kachel.farbe { color: #000; font-weight: 600; text-shadow: 0 0 3px rgba(255,255,255,.6); }
 .kachel.farbe .nr { color: rgba(0,0,0,.6); }
 
-/* Programmieren */
-.programmieren { display: grid; gap: 8px; grid-template-columns: minmax(230px, 1fr) minmax(300px, 1.3fr) minmax(320px, 1.6fr); align-items: start; }
-.programmieren .spalte { display: flex; flex-direction: column; gap: 0; min-width: 0; }
-@media (max-width: 1100px) { .programmieren { grid-template-columns: 1fr 1fr; } .programmieren .spalte.rechts { grid-column: span 2; } }
-@media (max-width: 700px) { .programmieren { grid-template-columns: minmax(0, 1fr); } .programmieren .spalte.rechts { grid-column: auto; } }
+/* Fixture-Sheet und Encoder (auch im Pult-Tab benutzt) */
 .sheet td, .sheet th { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .sheet tr { cursor: pointer; }
 .sheet tr.gewaehlt td { color: var(--auswahl); }
@@ -113,18 +109,6 @@ tr.rot td { background: #44201d; }
 .pegel { display: flex; align-items: center; gap: 8px; margin-top: 5px; font-size: 12px; color: var(--leise); }
 .pegel span { width: 56px; }
 .pegel i { display: block; height: 7px; background: var(--blau); }
-
-/* Executoren: wie die Fader-Reihe am Pult */
-.executoren { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 4px; }
-.executor { background: #111214; border: 1px solid var(--linie); border-radius: 3px; padding: 6px; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
-.executor.laeuft { border-color: var(--gruen); }
-.executor.haupt { box-shadow: inset 0 3px 0 var(--auswahl); }
-.executor select, .executor input { width: 100%; }
-.executor select { padding: 4px; font-size: 12px; }
-.executor .cue-name { font-size: 12px; color: var(--leise); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 16px; }
-.executor.laeuft .cue-name { color: #b8f0c8; }
-.tasten3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; }
-.tasten3 button { padding: 9px 0; font-size: 12px; font-weight: 600; }
 
 /* Befehlszeile unten, immer da */
 .befehlsleiste { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: #050505; border-top: 1px solid var(--linie); }
@@ -203,3 +187,130 @@ td input[type=number] { width: 66px; }
   .show-oben, .show-unten { grid-template-columns: 1fr; }
   .jetzt-zeile { grid-template-columns: 1fr; }
 }
+
+/* Fader-Leiste: 10 Fader pro Seite, rechts Seiten und Grand Master (auch auf Live und Probe) */
+.faderleiste { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px; }
+.fader-reihe { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 4px; }
+.ex { display: flex; flex-direction: column; gap: 3px; min-width: 0; padding: 4px; background: #111214; border: 1px solid var(--linie); border-top: 3px solid #3a3d42; border-radius: 3px; }
+.ex.art-sequenz { border-top-color: var(--blau); }
+.ex.art-gruppe { border-top-color: #c9a227; }
+.ex.art-tempo { border-top-color: #9b6bd6; }
+.ex.frei { opacity: .62; }
+.ex.laeuft { border-color: var(--gruen); border-top-color: var(--gruen); }
+.ex.haupt { box-shadow: inset 0 0 0 1px var(--auswahl); }
+.ex.stumm .regler-fuellung { background: #5a1c18; }
+.ex-kopf { display: flex; align-items: baseline; gap: 4px; cursor: pointer; min-width: 0; font-size: 12px; font-weight: 700; }
+.ex-nr { color: var(--leise); font-size: 11px; }
+.ex-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ex-art { font-size: 9px; color: var(--leise); letter-spacing: .04em; }
+.ex-cue, .ex-next { font-size: 11px; color: var(--leise); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 14px; cursor: pointer; }
+.ex.laeuft .ex-cue { color: #b8f0c8; }
+.ex-mitte { display: flex; align-items: stretch; gap: 4px; flex: 1; min-height: 0; }
+.ex-wert { align-self: flex-end; font-size: 12px; font-variant-numeric: tabular-nums; min-width: 26px; text-align: right; color: var(--text); }
+.ex-tasten { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+.ex-tasten button { padding: 6px 0; font-size: 11px; font-weight: 700; touch-action: none; user-select: none; }
+.ex-tasten button[data-taste="go"] { background: #22344a; border-color: #2f4f73; }
+.ex-tasten button.flash.an { background: #fff; color: #111; border-color: #fff; }
+.regler { position: relative; flex: 1; min-height: 64px; cursor: ns-resize; touch-action: none; outline: none; border-radius: 3px; }
+.regler:focus-visible { box-shadow: 0 0 0 2px var(--blau); }
+.regler-spur { position: absolute; left: 50%; top: 7px; bottom: 7px; width: 6px; margin-left: -3px; background: #050506; border: 1px solid #2c2f33; border-radius: 3px; }
+.regler-fuellung { position: absolute; left: 50%; bottom: 7px; width: 6px; margin-left: -3px; max-height: calc(100% - 14px); background: var(--blau); border-radius: 3px; pointer-events: none; }
+.ex.art-gruppe .regler-fuellung { background: #c9a227; }
+.ex.art-tempo .regler-fuellung { background: #9b6bd6; }
+.regler-griff { position: absolute; left: 50%; width: 34px; height: 14px; margin-left: -17px; background: #c9ccd1; border: 1px solid #000; border-radius: 2px; box-shadow: inset 0 -2px 0 #8d9196; pointer-events: none; }
+.regler.zieht .regler-griff, .regler:hover .regler-griff { background: #fff; }
+.fader-rechts { display: flex; gap: 4px; }
+.seiten { display: flex; flex-direction: column; gap: 3px; }
+.seiten button { padding: 5px 8px; font-size: 11px; font-weight: 700; flex: 1; }
+.grand { display: flex; flex-direction: column; gap: 3px; width: 64px; padding: 4px; background: #111214; border: 1px solid var(--linie); border-top: 3px solid #c8372d; border-radius: 3px; }
+.grand .regler-fuellung { background: #c8372d; }
+.grand.warn { box-shadow: inset 0 0 0 1px #c8372d; }
+.grand .ex-wert { text-align: center; align-self: center; }
+@media (max-width: 1000px) { .fader-reihe { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+/* View "Pult": alles auf einem Bildschirm wie an einem großen Pult */
+.pultplatz { display: grid; grid-template-rows: minmax(0, 1fr) auto clamp(150px, 27vh, 230px); gap: 6px; min-height: 560px; }
+.pultplatz .fenster { margin: 0; display: flex; flex-direction: column; min-height: 0; }
+.pultplatz .fenster > .inhalt { flex: 1; min-height: 0; overflow: auto; }
+.pp-oben { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 300px; gap: 6px; min-height: 0; }
+.pp-oben:has(.pp-chat.zu) { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) 34px; }
+.pp-links, .pp-mitte { display: grid; gap: 6px; min-height: 0; }
+.pp-links { grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+.pp-mitte { grid-template-rows: minmax(0, 1.25fr) minmax(0, 1fr); }
+.pp-pools { padding: 6px; gap: 6px; overflow: auto; }
+.pool-zeile { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 6px; align-items: start; }
+.pool-titel { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #c5c8cc; padding-top: 4px; }
+.pool.klein { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 3px; }
+.pool.klein .kachel { min-height: 40px; padding: 12px 3px 3px; font-size: 11px; }
+.kachel .unten { display: block; font-size: 9px; color: var(--leise); margin-top: 1px; }
+.kachel.quelle { border-color: #9b6bd6; background: #2a1f3a; }
+.kachel.mini { min-height: 34px; padding: 4px 8px; }
+.pool.farben { grid-template-columns: repeat(6, minmax(46px, 1fr)); gap: 3px; flex: 1; }
+.pool.farben .kachel { min-height: 34px; padding: 11px 2px 2px; font-size: 10px; word-break: normal; overflow-wrap: anywhere; }
+.feature-reiter { display: flex; flex-wrap: wrap; gap: 2px; }
+.feature-reiter button { padding: 3px 9px; font-size: 11px; font-weight: 700; text-transform: none; letter-spacing: 0; }
+.pp-feature > header { text-transform: none; }
+.feature-zeile { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
+.feature-spalte { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 150px; }
+.enc { margin: 0; padding: 4px 7px; background: #111214; border: 1px solid var(--linie); border-radius: 3px; min-width: 150px; flex: 1; }
+.enc .wert { float: right; color: var(--text); font-variant-numeric: tabular-nums; }
+.enc select { margin-top: 2px; width: 100%; padding: 2px 4px; }
+.mischer { max-width: 220px; }
+.mischfarbe { display: block; height: 14px; border-radius: 2px; border: 1px solid #000; }
+.laufend { font-size: 11px; justify-content: space-between; padding: 3px 6px; background: #1b2d40; border-radius: 3px; }
+#grundriss { width: 300px; max-width: 100%; height: auto; border-radius: 3px; cursor: crosshair; }
+.pp-drei { flex: 1; height: auto; min-height: 120px; }
+.vorschau-titel { color: #e8d08a; }
+#programmer-text.prog-an { color: var(--programmer); }
+.pp-sheet .cueliste td { padding: 3px 6px; font-size: 12px; }
+.sheet-tabelle input { padding: 2px 4px; font-size: 12px; width: 100%; }
+.sheet-tabelle input[type=number] { width: 58px; }
+.pp-tasten { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.pp-tasten button { padding: 6px 12px; font-weight: 700; font-size: 12px; min-width: 74px; }
+.pp-tasten button.wartet { background: #9b6bd6; border-color: #9b6bd6; color: #fff; }
+.pp-modus { color: #d6c2f2; font-size: 12px; margin-left: 6px; }
+.pultplatz.zielwahl .ex, .pultplatz.zielwahl .kachel[data-sequenz], .pultplatz.zielwahl .kachel[data-gruppe], .pultplatz.zielwahl .kachel[data-tempo] { outline: 1px dashed #9b6bd6; outline-offset: -2px; }
+.pp-fader { min-height: 0; display: grid; }
+.pp-fader .faderleiste, .pp-fader .fader-reihe { min-height: 0; }
+
+/* Licht-Chat */
+.pp-chat { overflow: hidden; }
+.pp-chat > header .zeile { gap: 3px; }
+.chat-art { font-size: 10px; padding: 1px 6px; border-radius: 3px; background: #3a3d42; color: var(--leise); text-transform: none; letter-spacing: 0; margin-left: 4px; }
+.chat-art.an { background: #1d4d2c; color: #b8f0c8; }
+.chat-verlauf { flex: 1; min-height: 0; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 5px; }
+.chat-zeile { padding: 6px 8px; border-radius: 4px; font-size: 12px; line-height: 1.35; white-space: pre-wrap; overflow-wrap: anywhere; max-width: 95%; }
+.chat-zeile.du { align-self: flex-end; background: #22344a; }
+.chat-zeile.ki { align-self: flex-start; background: #26282b; }
+.chat-zeile.hinweis { align-self: stretch; color: var(--leise); background: transparent; border: 1px dashed #3a3d42; }
+.chat-zeile.denkt { align-self: flex-start; color: var(--leise); animation: blinken 1.2s ease-in-out infinite; }
+@keyframes blinken { 50% { opacity: .35; } }
+.chat-entwurf { padding: 6px; border-top: 1px solid var(--linie); background: #1c1a10; display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
+.entwurf-kopf { display: flex; gap: 6px; align-items: baseline; justify-content: space-between; }
+.vorschau-schild { font-size: 10px; color: #111; background: #e8d08a; padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
+.entwurf-cues { display: flex; flex-wrap: wrap; gap: 3px; }
+.chat-entwurf select { padding: 3px 4px; font-size: 12px; max-width: 150px; }
+.chat-eingabe { display: flex; gap: 4px; padding: 6px; border-top: 1px solid var(--linie); }
+.chat-eingabe textarea { flex: 1; resize: none; font-size: 12px; padding: 5px 7px; }
+.chat-eingabe button { padding: 6px 10px; }
+.chat-schluessel { padding: 4px 6px 6px; border-top: 1px solid var(--linie); font-size: 11px; }
+.chat-schluessel summary { cursor: pointer; color: var(--leise); }
+.chat-schluessel p { margin: 4px 0; }
+.pp-chat.zu > :not(header) { display: none; }
+.pp-chat.zu > header { writing-mode: vertical-rl; padding: 8px 4px; height: 100%; justify-content: flex-start; }
+.pp-chat.zu #chat-neu { display: none; }
+
+@media (max-width: 1250px) {
+  .pp-oben { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+  .pp-chat { grid-column: span 2; min-height: 260px; }
+  .pp-oben:has(.pp-chat.zu) { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+  .pultplatz { height: auto !important; grid-template-rows: auto auto auto; }
+  .pp-links, .pp-mitte { grid-template-rows: auto auto; }
+  .pp-drei { min-height: 240px; }
+  .pp-fader { height: 230px; }
+}
+@media (max-width: 760px) {
+  .pp-oben { grid-template-columns: minmax(0, 1fr); }
+  .pp-chat { grid-column: auto; }
+}
+.ex.frei .regler, .ex.frei .ex-tasten { visibility: hidden; }

@@ -68,12 +68,14 @@ export function liveSeite(wurzel) {
   }
 
   function cuesZeigen(pult) {
-    const executor = pult.executoren[pult.haupt - 1];
-    const stand = JSON.stringify([executor.nummer, executor.sequenz, executor.cues, executor.index]);
+    const executor = pult.haupt_info;
+    const cues = pult.haupt_cues;
+    const stand = JSON.stringify([executor.nummer, executor.sequenz, cues, executor.index]);
     if (stand === cueStand) return;
     cueStand = stand;
-    feld("cue-titel").textContent = executor.sequenz ? `Executor ${executor.nummer}: ${executor.sequenz}` : `Executor ${executor.nummer}: frei`;
-    feld("cues").innerHTML = executor.cues.map((name, i) => `
+    const platz = executor.song ? "Song" : `Fader ${executor.nummer}`;
+    feld("cue-titel").textContent = executor.sequenz ? `${platz}: ${executor.sequenz}` : `${platz}: frei`;
+    feld("cues").innerHTML = cues.map((name, i) => `
       <tr data-goto="${i}" class="${i === executor.index ? "aktiv" : ""} ${i === executor.index + 1 ? "naechster" : ""}">
         <td style="width:34px">${i + 1}</td><td>${t(name)}</td></tr>`).join("")
       || `<tr><td class="leise">Eine Sequenz unten auf einen Executor legen, dann Go+.</td></tr>`;

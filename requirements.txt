@@ -8,3 +8,4 @@ pyftdi>=0.55
 libusb-package>=1.0
 certifi
 pywebview>=5; sys_platform == "darwin" or sys_platform == "win32"
+anthropic>=0.125,<1     # Licht-Chat mit Claude (nur mit Schlüssel und Internet, nie für die Show)

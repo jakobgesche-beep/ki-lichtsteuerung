@@ -19,6 +19,7 @@ Gespeichert werden immer Eigenschaften, nie DMX-Zahlen.
 """
 from __future__ import annotations
 
+import copy
 import math
 from pathlib import Path
 from typing import Optional
@@ -104,9 +105,26 @@ class Effekte:
         self.musik_beats = 0.0          # gezählte Beats seit Start, läuft mit dem Musiktempo
         self.zeit = 0.0
         self.winkel = {}                # letzte Stellung pro Gerät, für kurze Wege
+        # Tempo-Fader: alle Effekte schneller oder langsamer (0,25- bis 4-mal).
+        # "versatz" sorgt dafür, dass beim Schieben nichts springt.
+        self.faktor = 1.0
+        self.versatz = 0.0
+        self.zeit_skaliert = 0.0
+
+    def faktor_setzen(self, faktor: float) -> None:
+        if faktor != self.faktor:
+            self.versatz += self.musik_beats * (self.faktor - faktor)
+            self.faktor = faktor
+
+    def effekt_beats(self, tempo) -> float:
+        """Wie viele Beats ein Effekt schon gelaufen ist (mit Tempo-Fader)."""
+        if tempo == "musik":
+            return self.musik_beats * self.faktor + self.versatz
+        return self.zeit_skaliert * tempo / 60.0
 
     def takt(self, dauer: float, musik_bpm: float, beat: bool = False) -> None:
         self.zeit += dauer
+        self.zeit_skaliert += dauer * self.faktor
         self.musik_beats += dauer * musik_bpm / 60.0
         if beat:
             # Einrasten: Die Effekt-Uhr wird sanft auf den gehörten Schlag gezogen,
@@ -129,9 +147,7 @@ class Effekte:
         """Legt einen Effekt über den Zustand. Gibt den neuen Zustand zurück."""
         ergebnis = dict(zustand)
         geraete = self.geraete(effekt)
-        tempo = effekt.get("tempo", "musik")
-        beats = self.musik_beats if tempo == "musik" else self.zeit * tempo / 60.0
-        runden = beats / effekt.get("beats", 4)
+        runden = self.effekt_beats(effekt.get("tempo", "musik")) / effekt.get("beats", 4)
         for nummer, geraet in enumerate(geraete):
             versatz = effekt.get("verteilung", 0.0) * nummer / max(len(geraete), 1)
             phase = (runden + versatz) % 1.0
@@ -248,12 +264,35 @@ class Programmer:
 
 # --- Sequenzen und Executoren ------------------------------------------------------
 
+SEITEN = 4                      # Fader-Seiten, wie die Pages am Pult
+PRO_SEITE = 10                  # Fader pro Seite
+ANZAHL_EXECUTOREN = SEITEN * PRO_SEITE
+SONG_NUMMER = 99                # eigener Platz für Song-Start: nimmt keinem Fader etwas weg
+FLASH_MAX_S = 20.0              # eine hängende Flash-Taste geht von selbst aus
+EXECUTOR_ARTEN = {"sequenz": "Sequenz", "gruppe": "Gruppen-Master", "tempo": "Tempo"}
+
+
+def tempo_faktor(fader: float) -> float:
+    """Tempo-Fader: ganz unten 0,25-mal, in der Mitte normal, ganz oben 4-mal so schnell."""
+    if abs(fader - 0.5) < 0.03:
+        return 1.0
+    return 2.0 ** ((max(0.0, min(1.0, fader)) - 0.5) * 4.0)
+
+
 class Executor:
-    """Spielt eine Sequenz. Go+ und Go- wie am echten Pult."""
+    """Ein Platz mit Fader und Tasten. Darauf liegt eine Sequenz, ein Gruppen-Master oder der Tempo-Fader.
+
+        Sequenz          Go+, Go-, Flash, Aus. Fader hoch startet sie, Fader ganz runter schaltet sie aus.
+        Gruppen-Master   Der Fader regelt die Helligkeit einer Gruppe. Flash: Gruppe voll. Aus: Gruppe dunkel.
+        Tempo            Der Fader macht alle Effekte langsamer oder schneller. Learn: im Takt tippen.
+    """
 
     def __init__(self, nummer: int):
         self.nummer = nummer
+        self.art: Optional[str] = None      # "sequenz", "gruppe", "tempo" oder None (frei)
         self.sequenz: Optional[dict] = None
+        self.gruppe: Optional[str] = None
+        self.label: Optional[str] = None
         self.index = -1               # -1: noch kein Cue, also aus
         self.fader = 1.0
         self.start = 0.0
@@ -262,14 +301,45 @@ class Executor:
         self.aus_seit: Optional[float] = None
         self.reihenfolge = 0          # wer zuletzt Go hatte, liegt oben
         self.zeitcode = False         # beim Nachspielen der Probe: Cues folgen der Aufnahme
+        self.flash_seit: Optional[float] = None
+        self.flash_startete = False   # Flash hat die Sequenz eingeschaltet: Loslassen schaltet sie wieder aus
+        self.sofort = False           # diese Überblendung ohne Zeit (Flash)
+        self.stumm = False            # Gruppen-Master: Gruppe aus
 
     @property
     def aktiv(self) -> bool:
-        return self.index >= 0 or self.aus_seit is not None
+        return self.sequenz is not None and (self.index >= 0 or self.aus_seit is not None)
 
     def belegen(self, sequenz: Optional[dict]) -> None:
         self.sequenz, self.index, self.vorher, self.zuletzt, self.aus_seit = sequenz, -1, {}, {}, None
-        self.zeitcode = False
+        self.art = "sequenz" if sequenz else None
+        self.gruppe, self.label, self.zeitcode, self.stumm = None, None, False, False
+        self.flash_seit, self.flash_startete, self.sofort = None, False, False
+
+    def belegen_gruppe(self, gruppe: str) -> None:
+        self.belegen(None)
+        self.art, self.gruppe, self.fader = "gruppe", gruppe, 1.0
+
+    def belegen_tempo(self) -> None:
+        self.belegen(None)
+        self.art, self.fader = "tempo", 0.5
+
+    def eintrag(self) -> Optional[dict]:
+        """So steht die Belegung in der Datei."""
+        if self.art is None:
+            return None
+        eintrag = {"art": self.art, "fader": round(self.fader, 3)}
+        if self.sequenz:
+            eintrag["sequenz"] = self.sequenz["name"]
+        if self.gruppe:
+            eintrag["gruppe"] = self.gruppe
+        if self.label:
+            eintrag["label"] = self.label
+        return eintrag
+
+    def wirksam(self) -> float:
+        """Der Fader, wie er gerade wirkt: Flash zählt als ganz oben."""
+        return 1.0 if self.flash_seit is not None else self.fader
 
     def go(self, jetzt: float, schritt: int = 1) -> bool:
         if not self.sequenz or not self.sequenz["cues"]:
@@ -280,17 +350,21 @@ class Executor:
         if neu < 0:
             return False
         self.vorher = dict(self.zuletzt)
-        self.index, self.start, self.aus_seit = neu, jetzt, None
+        self.index, self.start, self.aus_seit, self.sofort = neu, jetzt, None, False
         return True
 
     def gehe_zu(self, index: int, jetzt: float) -> None:
         self.vorher = dict(self.zuletzt)
-        self.index, self.start, self.aus_seit = index, jetzt, None
+        self.index, self.start, self.aus_seit, self.sofort = index, jetzt, None, False
 
     def aus(self, jetzt: float) -> None:
         if self.index >= 0:
             self.vorher = dict(self.zuletzt)
-            self.index, self.start, self.aus_seit = -1, jetzt, jetzt
+            self.index, self.start, self.aus_seit, self.sofort = -1, jetzt, jetzt, False
+
+    def sofort_aus(self) -> None:
+        """Ohne Ausblenden aus, zum Beispiel beim Loslassen von Flash."""
+        self.index, self.aus_seit, self.vorher, self.zuletzt, self.sofort = -1, None, {}, {}, False
 
     def cue(self) -> Optional[dict]:
         return self.sequenz["cues"][self.index] if self.sequenz and self.index >= 0 else None
@@ -314,7 +388,13 @@ class Pult:
         self.programmer = Programmer()
         self.auswahl = []              # gewählte Geräte, wie die gelbe Auswahl bei grandMA
         self.executoren = [Executor(n) for n in range(1, ANZAHL_EXECUTOREN + 1)]
+        self.song_platz = Executor(SONG_NUMMER)
         self.haupt = 0                 # dieser Executor hört auf die Leertaste
+        self.seite = 1                 # welche Fader-Seite die Oberfläche zeigt
+        self.grand = 1.0               # Grand Master: Helligkeit von allem
+        self.highlight = False         # gewählte Geräte hell und weiß, zum Finden auf der Bühne
+        self.oops = []                 # Rückgängig: Schritte mit dem Stand von vorher
+        self._speichern_ab: Optional[float] = None
         self.zaehler = 0
         self.meldungen = []
         self.effekte = None
@@ -327,25 +407,66 @@ class Pult:
         self.tipps = []
         self.tempo_getippt: Optional[float] = None
         self.tempo_quelle = "ton"         # "ton": vom Mikrofon, "tap": getippt
-        belegung = daten.lese_json(self.belegung_pfad, {"executoren": []})["executoren"]
-        for executor, name in zip(self.executoren, belegung):
-            if name:
-                executor.belegen(self.sequenzen.lesen(name))
+        roh = daten.lese_json(self.belegung_pfad, {"executoren": []})
+        self.grand = max(0.0, min(1.0, float(roh.get("grand", 1.0))))
+        self._eintraege_anwenden(roh.get("executoren", []))
+
+    def _eintraege_anwenden(self, eintraege: list) -> None:
+        """Belegung aus der Datei (oder aus dem Rückgängig-Stapel) auf die Fader legen."""
+        for executor, eintrag in zip(self.executoren, list(eintraege) + [None] * len(self.executoren)):
+            if isinstance(eintrag, str):          # ältere Versionen speicherten nur den Namen
+                eintrag = {"art": "sequenz", "sequenz": eintrag}
+            if not isinstance(eintrag, dict):
+                executor.belegen(None)
+                continue
+            art = eintrag.get("art")
+            sequenz = self.sequenzen.lesen(eintrag.get("sequenz") or "") if art == "sequenz" else None
+            if art == "sequenz" and sequenz is not None:
+                if not (executor.sequenz and executor.sequenz["name"] == sequenz["name"]):
+                    executor.belegen(sequenz)
+            elif art == "gruppe" and eintrag.get("gruppe"):
+                if executor.art != "gruppe" or executor.gruppe != eintrag["gruppe"]:
+                    executor.belegen_gruppe(eintrag["gruppe"])
+            elif art == "tempo":
+                if executor.art != "tempo":
+                    executor.belegen_tempo()
+            else:
+                executor.belegen(None)
+                continue
+            executor.label = eintrag.get("label")
+            if isinstance(eintrag.get("fader"), (int, float)):
+                executor.fader = max(0.0, min(1.0, float(eintrag["fader"])))
+        self._tempo_anwenden()
 
     def aufbauen(self) -> None:
         self.effekte = Effekte(self.show.patch, self.show.buehne, self.show.positionen)
+        self._tempo_anwenden()
 
     def belegung_speichern(self) -> None:
-        daten.schreibe_json(self.belegung_pfad, {"executoren": [
-            e.sequenz["name"] if e.sequenz else None for e in self.executoren]})
+        self._speichern_ab = None
+        daten.schreibe_json(self.belegung_pfad, {"executoren": [e.eintrag() for e in self.executoren],
+                                                 "grand": round(self.grand, 3)})
 
     def executor(self, nummer: int) -> Executor:
+        if nummer == SONG_NUMMER:
+            return self.song_platz
         if not 1 <= nummer <= ANZAHL_EXECUTOREN:
-            raise ValueError(f"Executor {nummer} gibt es nicht.")
+            raise ValueError(f"Fader {nummer} gibt es nicht (1 bis {ANZAHL_EXECUTOREN}).")
         return self.executoren[nummer - 1]
+
+    # --- Fader und ihre Tasten ----------------------------------------------
 
     def go(self, nummer: int, jetzt: float, schritt: int = 1) -> None:
         executor = self.executor(nummer)
+        if executor.art == "gruppe":
+            executor.stumm = False if schritt > 0 else executor.stumm
+            return
+        if executor.art == "tempo":
+            if schritt > 0:
+                self.tap(jetzt)
+            return
+        if executor.sequenz is None:
+            raise ValueError(f"Auf Fader {nummer} liegt nichts. Erst eine Sequenz zuweisen (Assign) oder speichern (Store).")
         self.haupt = nummer - 1
         song = getattr(self.show, "song", None)
         if executor.zeitcode == "song" and song is not None and song.laeuft_auf(nummer):
@@ -362,6 +483,265 @@ class Pult:
             executor.go(jetzt)
         self.zaehler += 1
         executor.reihenfolge = self.zaehler
+
+    def aus(self, nummer: int, jetzt: float) -> None:
+        executor = self.executor(nummer)
+        if executor.art == "gruppe":
+            executor.stumm = not executor.stumm          # Aus-Taste beim Gruppen-Master: dunkel und wieder an
+        elif executor.art == "tempo":
+            self.fader_setzen(nummer, 0.5, jetzt)        # Tempo wieder normal
+        else:
+            executor.aus(jetzt)
+
+    def fader_setzen(self, nummer: int, wert: float, jetzt: float) -> None:
+        """Fader schieben. Bei Sequenzen wie am Pult: hoch startet, ganz runter schaltet aus."""
+        executor = self.executor(nummer)
+        alt, executor.fader = executor.fader, max(0.0, min(1.0, float(wert)))
+        if executor.art == "sequenz" and executor.zeitcode is False:
+            if alt <= 0.0 < executor.fader and executor.index < 0:
+                if executor.go(jetzt):
+                    self.haupt = nummer - 1
+                    self.nach_oben(executor, jetzt, umschalten=False)
+            elif executor.fader <= 0.0 < alt and executor.index >= 0:
+                executor.aus(jetzt)
+        if executor.art == "tempo":
+            self._tempo_anwenden()
+        self._speichern_ab = jetzt + 1.5      # nicht bei jeder Bewegung auf die Platte schreiben
+
+    def flash(self, nummer: int, an: bool, jetzt: float) -> None:
+        """Flash: solange gedrückt, steht der Fader ganz oben (bei Gruppen: Gruppe voll)."""
+        executor = self.executor(nummer)
+        if executor.art == "tempo":
+            if an:
+                self.tap(jetzt)
+            return
+        if executor.art is None:
+            raise ValueError(f"Auf Fader {nummer} liegt nichts.")
+        if not an:
+            self._flash_loslassen(executor)
+            return
+        if executor.flash_seit is not None:
+            return
+        executor.flash_seit = jetzt
+        if executor.art == "sequenz":
+            if executor.index < 0 and executor.go(jetzt):
+                executor.flash_startete, executor.sofort = True, True
+            self.nach_oben(executor, jetzt, umschalten=False)
+
+    def _flash_loslassen(self, executor: Executor) -> None:
+        executor.flash_seit = None
+        if executor.flash_startete:
+            executor.flash_startete = False
+            executor.sofort_aus()
+
+    def grand_setzen(self, wert: float, jetzt: float) -> None:
+        self.grand = max(0.0, min(1.0, float(wert)))
+        self._speichern_ab = jetzt + 1.5
+
+    def seite_setzen(self, seite: int) -> None:
+        self.seite = max(1, min(SEITEN, int(seite)))
+
+    def _tempo_anwenden(self) -> None:
+        if self.effekte is None:
+            return
+        tempo = next((e for e in self.executoren if e.art == "tempo"), None)
+        self.effekte.faktor_setzen(tempo_faktor(tempo.fader) if tempo else 1.0)
+
+    # --- Zuweisen, Speichern, Update, Label, Löschen (wie Assign/Store/Update am Pult) ---
+
+    def zuweisen(self, nummer: int, art: Optional[str], ziel: Optional[str] = None, zusammen: bool = False) -> None:
+        """Legt etwas auf einen Fader. art None macht ihn frei. zusammen: ein Oops-Schritt mit dem vorigen."""
+        executor = self.executor(nummer)
+        if executor is self.song_platz:
+            raise ValueError("Der Song-Platz wird nur über Song-Start belegt.")
+        sequenz = None
+        if art == "sequenz":
+            sequenz = self.sequenzen.lesen(str(ziel or ""))
+            if sequenz is None:
+                raise ValueError(f"Sequenz „{ziel}“ gibt es nicht.")
+        elif art == "gruppe":
+            if ziel not in self.show.patch.gruppen():
+                raise ValueError(f"Gruppe „{ziel}“ gibt es nicht. Es gibt: {', '.join(self.show.patch.gruppen())}.")
+        elif art not in ("tempo", None):
+            raise ValueError(f"Unbekannte Fader-Art {art!r}.")
+        self.merke_belegung(zusammen=zusammen)
+        if art == "sequenz":
+            executor.belegen(sequenz)
+        elif art == "gruppe":
+            executor.belegen_gruppe(ziel)
+        elif art == "tempo":
+            for andere in self.executoren:          # es gibt nur einen Tempo-Fader
+                if andere.art == "tempo":
+                    andere.belegen(None)
+            executor.belegen_tempo()
+        else:
+            executor.belegen(None)
+        self._tempo_anwenden()
+        self.belegung_speichern()
+
+    def label_setzen(self, nummer: int, text: str) -> None:
+        executor = self.executor(nummer)
+        if executor.art is None:
+            raise ValueError(f"Auf Fader {nummer} liegt nichts.")
+        self.merke_belegung()
+        executor.label = str(text).strip()[:24] or None
+        self.belegung_speichern()
+
+    def neuer_sequenzname(self, basis: str = "Sequenz") -> str:
+        namen = set(self.sequenzen.namen())
+        nummer = 1
+        while f"{basis} {nummer}" in namen:
+            nummer += 1
+        return f"{basis} {nummer}"
+
+    def speichern_auf(self, nummer: int, cue_name: Optional[str] = None, zeit_s: float = 2.0) -> dict:
+        """Store auf einen Fader: Programmer als neuer Cue. Leerer Fader bekommt eine neue Sequenz."""
+        executor = self.executor(nummer)
+        if executor.art in ("gruppe", "tempo"):
+            raise ValueError(f"Auf Fader {nummer} liegt ein {EXECUTOR_ARTEN[executor.art]}. Erst löschen (Delete).")
+        if self.programmer.ist_leer():
+            raise ValueError("Der Programmer ist leer: erst Geräte wählen und Werte setzen.")
+        name = executor.sequenz["name"] if executor.sequenz else self.neuer_sequenzname()
+        anzahl = len(executor.sequenz["cues"]) if executor.sequenz else 0
+        sequenz = self.cue_speichern(name, cue_name or f"Cue {anzahl + 1}", zeit_s, None)
+        if executor.sequenz is None:
+            self.merke_belegung(zusammen=True)
+            executor.belegen(sequenz)
+            self.belegung_speichern()
+        return sequenz
+
+    def aktualisieren(self, nummer: int) -> dict:
+        """Update: Programmer in den gerade laufenden Cue dieses Faders einarbeiten."""
+        executor = self.executor(nummer)
+        if executor.sequenz is None or executor.index < 0:
+            raise ValueError("Update geht nur auf einen laufenden Cue: erst Go drücken.")
+        if self.programmer.ist_leer():
+            raise ValueError("Der Programmer ist leer: erst Werte setzen, dann Update.")
+        sequenz = copy.deepcopy(self.sequenzen.lesen(executor.sequenz["name"]) or executor.sequenz)
+        cue = sequenz["cues"][executor.index]
+        neu = self.programmer.als_cue(cue["name"])
+        werte = [dict(w) for w in cue.get("werte", [])]
+        for wert in neu["werte"]:
+            vorhanden = next((w for w in werte if w.get("geraet") == wert["geraet"]), None)
+            if vorhanden is None:
+                werte.append(dict(wert))
+                continue
+            if any(k in wert for k in ("position", "punkt", "pan", "tilt")):
+                for alt in ("position", "punkt", "pan", "tilt"):
+                    vorhanden.pop(alt, None)
+            vorhanden.update(wert)
+        cue["werte"] = werte
+        if neu["effekte"]:
+            effekte = [dict(e) for e in cue.get("effekte", [])]
+            for effekt in neu["effekte"]:
+                sorte = effekt_sorte(effekt["art"])
+                effekte = [e for e in effekte if not (effekt_sorte(e["art"]) == sorte and e.get("ziel") == effekt.get("ziel"))]
+                effekte.append(effekt)
+            cue["effekte"] = effekte
+        self.sequenz_speichern(sequenz)
+        return sequenz
+
+    def _sequenz_mit_cue(self, name: str, nummer: int) -> dict:
+        sequenz = self.sequenzen.lesen(name)
+        if sequenz is None:
+            raise ValueError(f"Sequenz „{name}“ gibt es nicht.")
+        if not 1 <= nummer <= len(sequenz["cues"]):
+            raise ValueError(f"Cue {nummer} gibt es in „{name}“ nicht.")
+        return copy.deepcopy(sequenz)
+
+    def cue_aendern(self, name: str, nummer: int, felder: dict) -> dict:
+        """Name, Überblendzeit und Folgen-Zeit eines Cues ändern (wie im Sequence Sheet)."""
+        sequenz = self._sequenz_mit_cue(name, nummer)
+        cue = sequenz["cues"][nummer - 1]
+        if "name" in felder:
+            cue["name"] = str(felder["name"]).strip()[:60] or cue["name"]
+        if "zeit_s" in felder:
+            cue["zeit_s"] = max(0.0, min(600.0, float(felder["zeit_s"])))
+        if "folgen_s" in felder:
+            wert = felder["folgen_s"]
+            cue["folgen_s"] = None if wert in (None, "") else max(0.0, min(600.0, float(wert)))
+        self.sequenz_speichern(sequenz)
+        return sequenz
+
+    def cue_loeschen(self, name: str, nummer: int) -> dict:
+        sequenz = self._sequenz_mit_cue(name, nummer)
+        if sequenz.get("zeitcode"):
+            raise ValueError("Diese Sequenz gehört zu einem Song. Cues dort nicht löschen, sondern in der Probe „Show neu bauen“.")
+        del sequenz["cues"][nummer - 1]
+        if not sequenz["cues"]:
+            raise ValueError("Der letzte Cue bleibt. Ganze Sequenz löschen geht im Sequenzen-Pool.")
+        self.sequenz_speichern(sequenz)
+        return sequenz
+
+    def cue_verschieben(self, name: str, nummer: int, richtung: int) -> dict:
+        sequenz = self._sequenz_mit_cue(name, nummer)
+        ziel = nummer - 1 + (1 if richtung > 0 else -1)
+        if not 0 <= ziel < len(sequenz["cues"]):
+            return sequenz
+        cues = sequenz["cues"]
+        cues[nummer - 1], cues[ziel] = cues[ziel], cues[nummer - 1]
+        self.sequenz_speichern(sequenz)
+        return sequenz
+
+    def sequenz_loeschen(self, name: str) -> None:
+        if self.sequenzen.lesen(name) is None:
+            raise ValueError(f"Sequenz „{name}“ gibt es nicht.")
+        self.merke_sequenz(name)
+        self.merke_belegung(zusammen=True)
+        for executor in self.executoren:
+            if executor.sequenz and executor.sequenz["name"] == name:
+                executor.belegen(None)
+        self.sequenzen.loeschen(name)
+        self.belegung_speichern()
+
+    # --- Oops: Rückgängig -------------------------------------------------------
+
+    def _merken(self, eintrag: tuple, zusammen: bool) -> None:
+        if zusammen and self.oops:
+            self.oops[-1].append(eintrag)
+        else:
+            self.oops.append([eintrag])
+        del self.oops[:-50]
+
+    def merke_sequenz(self, name: str, zusammen: bool = False) -> None:
+        self._merken(("sequenz", name, copy.deepcopy(self.sequenzen.lesen(name))), zusammen)
+
+    def merke_belegung(self, zusammen: bool = False) -> None:
+        self._merken(("belegung", [e.eintrag() for e in self.executoren], self.grand), zusammen)
+
+    def merke_programmer(self, zusammen: bool = False) -> None:
+        self._merken(("programmer", copy.deepcopy(self.programmer.werte), copy.deepcopy(self.programmer.effekte),
+                      list(self.auswahl)), zusammen)
+
+    def rueckgaengig(self) -> str:
+        """Oops: Macht den letzten Schritt rückgängig (Speichern, Löschen, Zuweisen, Programmer)."""
+        if not self.oops:
+            raise ValueError("Es gibt nichts zum Rückgängigmachen.")
+        texte = []
+        for eintrag in reversed(self.oops.pop()):
+            if eintrag[0] == "sequenz":
+                _, name, alt = eintrag
+                if alt is None:
+                    self.sequenzen.loeschen(name)
+                    for executor in self.executoren:
+                        if executor.sequenz and executor.sequenz["name"] == name:
+                            executor.belegen(None)
+                    self.belegung_speichern()
+                else:
+                    self.sequenzen.schreiben(alt)
+                    self._sequenz_auffrischen(alt)
+                texte.append(f"Sequenz {name}")
+            elif eintrag[0] == "belegung":
+                _, eintraege, grand = eintrag
+                self._eintraege_anwenden(eintraege)
+                self.grand = grand
+                self.belegung_speichern()
+                texte.append("Fader-Belegung")
+            elif eintrag[0] == "programmer":
+                _, werte, effekte, auswahl = eintrag
+                self.programmer.werte, self.programmer.effekte, self.auswahl = werte, effekte, auswahl
+                texte.append("Programmer")
+        return "Rückgängig: " + ", ".join(dict.fromkeys(texte))
 
     # --- Show-Tasten ------------------------------------------------------
 
@@ -445,12 +825,18 @@ class Pult:
         self.zaehler += 1
         executor.reihenfolge = self.zaehler
 
-    def sequenz_speichern(self, sequenz: dict) -> None:
+    def sequenz_speichern(self, sequenz: dict, merken: bool = True) -> None:
         fehler = pruefe_sequenz(sequenz, self.show.patch, self.show.positionen)
         if fehler:
             raise ValueError(" ".join(fehler))
+        if merken:
+            self.merke_sequenz(sequenz["name"])
         self.sequenzen.schreiben(sequenz)
-        for executor in self.executoren:
+        self._sequenz_auffrischen(sequenz)
+
+    def _sequenz_auffrischen(self, sequenz: dict) -> None:
+        """Fader mit dieser Sequenz bekommen den neuen Stand."""
+        for executor in self.executoren + [self.song_platz]:
             if executor.sequenz and executor.sequenz["name"] == sequenz["name"]:
                 executor.sequenz = sequenz
                 executor.index = min(executor.index, len(sequenz["cues"]) - 1)
@@ -472,25 +858,68 @@ class Pult:
     # --- Ein Bild ---------------------------------------------------------
 
     def anwenden(self, zustand: dict, jetzt: float, musik_bpm: float, beat: bool = False) -> dict:
-        """Legt Executoren, Show-Tasten, Programmer und Halte-Tasten über die Automatik."""
+        """Legt Executoren, Show-Tasten, Programmer, Gruppen-Master, Halte-Tasten und Grand Master
+        über die Automatik."""
         dauer = 0.0 if self.letzte_zeit is None else max(0.0, jetzt - self.letzte_zeit)
         self.letzte_zeit = jetzt
         self.effekte.takt(dauer, musik_bpm, beat)
         self.meldungen = []
-        aktive = sorted((e for e in self.executoren + [self.tasten] if e.aktiv), key=lambda e: e.reihenfolge)
+        for executor in self.executoren:
+            if executor.flash_seit is not None and jetzt - executor.flash_seit > FLASH_MAX_S:
+                self._flash_loslassen(executor)        # hängende Flash-Taste
+        aktive = sorted((e for e in self.executoren + [self.song_platz, self.tasten] if e.aktiv),
+                        key=lambda e: e.reihenfolge)
         for executor in aktive:
             zustand = self._executor(executor, zustand, jetzt)
-        if not self.programmer.blind and not self.programmer.ist_leer():
-            zustand, meldungen = self.programmer.ausgabe(zustand, *self._welt(), self.effekte)
-            self.meldungen += meldungen
+        if not self.programmer.blind:
+            if not self.programmer.ist_leer():
+                zustand, meldungen = self.programmer.ausgabe(zustand, *self._welt(), self.effekte)
+                self.meldungen += meldungen
+            zustand = self._hervorheben(zustand)
+        zustand = self._gruppen_master(zustand)
         grenzen = getattr(self.show, "grenzen", None)
         strobo_hz = min(3.0, grenzen.strobo_max_hz) if grenzen is not None else 3.0
-        return showtasten.halten_anwenden(zustand, self._halten_jetzt(jetzt), self.show.patch, strobo_hz)
+        zustand = showtasten.halten_anwenden(zustand, self._halten_jetzt(jetzt), self.show.patch, strobo_hz)
+        if self.grand < 1.0:
+            zustand = {i: e.kopie(helligkeit=e.helligkeit * self.grand) for i, e in zustand.items()}
+        if self._speichern_ab is not None and jetzt >= self._speichern_ab:
+            try:
+                self.belegung_speichern()
+            except OSError:
+                self._speichern_ab = jetzt + 5.0
+        return zustand
+
+    def _hervorheben(self, zustand: dict) -> dict:
+        """Highlight: Die gewählten Geräte leuchten hell und weiß."""
+        if not self.highlight or not self.auswahl:
+            return zustand
+        ergebnis = dict(zustand)
+        for geraet_id in self.auswahl:
+            alt = ergebnis.get(geraet_id, Eigenschaften())
+            ergebnis[geraet_id] = alt.kopie(helligkeit=1.0, farbe=(1.0, 1.0, 1.0), gobo="Offen",
+                                            gobo_drehung=0.0, strobo_hz=0.0)
+        return ergebnis
+
+    def _gruppen_master(self, zustand: dict) -> dict:
+        master = [e for e in self.executoren if e.art == "gruppe" and e.gruppe]
+        if not master:
+            return zustand
+        ergebnis = dict(zustand)
+        for executor in master:
+            for geraet in self.show.patch.in_gruppe(executor.gruppe):
+                alt = ergebnis.get(geraet["id"])
+                if executor.flash_seit is not None:
+                    alt = alt or Eigenschaften(farbe=(1.0, 1.0, 1.0))
+                    ergebnis[geraet["id"]] = alt.kopie(helligkeit=1.0)
+                elif alt is not None:
+                    stufe = 0.0 if executor.stumm else executor.fader
+                    ergebnis[geraet["id"]] = alt.kopie(helligkeit=alt.helligkeit * stufe)
+        return ergebnis
 
     def vorschau(self, zustand: dict) -> dict:
         """Was der Programmer zeigen würde. Für Blind und später für die KI."""
         ergebnis, _ = self.programmer.ausgabe(zustand, *self._welt(), self.effekte)
-        return ergebnis
+        return self._hervorheben(ergebnis)
 
     def _welt(self) -> tuple:
         return self.show.patch, self.show.buehne, self.show.positionen
@@ -532,7 +961,7 @@ class Pult:
             if executor.aus_seit is not None and jetzt - executor.aus_seit >= 1.0:
                 executor.aus_seit, executor.vorher = None, {}
                 return zustand
-        anteil = 1.0 if zeit <= 0 else min(1.0, (jetzt - executor.start) / zeit)
+        anteil = 1.0 if zeit <= 0 or executor.sofort else min(1.0, (jetzt - executor.start) / zeit)
         if cue is None:
             anteil = min(1.0, (jetzt - executor.aus_seit) / 1.0)
         bild = {}
@@ -550,13 +979,14 @@ class Pult:
             else:
                 bild[geraet_id] = mischen(alt, neu, anteil)
         executor.zuletzt = bild
+        fader = executor.wirksam()
         ergebnis = dict(zustand)
         for geraet_id, e in bild.items():
             unten = ergebnis.get(geraet_id, Eigenschaften(farbe=e.farbe, pan=e.pan, tilt=e.tilt))
-            gemischt = mischen(unten, e, executor.fader)
-            ergebnis[geraet_id] = gemischt.kopie(gobo=e.gobo if executor.fader > 0.5 else unten.gobo,
-                                                 gobo_drehung=e.gobo_drehung if executor.fader > 0.5 else unten.gobo_drehung,
-                                                 strobo_hz=e.strobo_hz if executor.fader >= 1 else 0.0)
+            gemischt = mischen(unten, e, fader)
+            ergebnis[geraet_id] = gemischt.kopie(gobo=e.gobo if fader > 0.5 else unten.gobo,
+                                                 gobo_drehung=e.gobo_drehung if fader > 0.5 else unten.gobo_drehung,
+                                                 strobo_hz=e.strobo_hz if fader >= 1 else 0.0)
         return ergebnis
 
     def _weg_gesperrt(self, geraet_id: str, alt: Eigenschaften, neu: Eigenschaften) -> bool:
@@ -565,14 +995,46 @@ class Pult:
         pruefer = getattr(self.show, "pruefer", None)
         return pruefer is not None and not pruefer.weg_frei(geraet_id, (alt.pan, alt.tilt), (neu.pan, neu.tilt))
 
+    def anzeigename(self, executor: Executor) -> str:
+        if executor.label:
+            return executor.label
+        if executor.sequenz:
+            return executor.sequenz["name"]
+        if executor.art == "gruppe":
+            return executor.gruppe or ""
+        return "Tempo" if executor.art == "tempo" else ""
+
+    def executor_info(self, executor: Executor) -> dict:
+        """Was die Fader-Leiste über einen Fader wissen muss (ohne die ganze Cue-Liste)."""
+        cues = executor.sequenz["cues"] if executor.sequenz else []
+        info = {"nummer": executor.nummer, "art": executor.art, "name": self.anzeigename(executor),
+                "label": executor.label, "sequenz": executor.sequenz["name"] if executor.sequenz else None,
+                "gruppe": executor.gruppe, "index": executor.index, "anzahl": len(cues),
+                "fader": round(executor.fader, 3), "flash": executor.flash_seit is not None,
+                "stumm": executor.stumm, "song": executor.zeitcode == "song"}
+        if 0 <= executor.index < len(cues):
+            info["cue"] = cues[executor.index]["name"]
+        if cues:
+            info["naechster"] = cues[executor.index + 1 if executor.index + 1 < len(cues) else 0]["name"]
+        if executor.art == "tempo":
+            info["faktor"] = round(tempo_faktor(executor.fader), 2)
+        return info
+
     def status(self) -> dict:
+        try:
+            haupt = self.executor(self.haupt + 1)
+        except ValueError:
+            haupt = self.executoren[0]
         return {
             "haupt": self.haupt + 1, "blind": self.programmer.blind, "auswahl": self.auswahl,
             "programmer": {"werte": self.programmer.werte, "effekte": self.programmer.effekte},
-            "executoren": [{
-                "nummer": e.nummer, "sequenz": e.sequenz["name"] if e.sequenz else None,
-                "cues": [c["name"] for c in e.sequenz["cues"]] if e.sequenz else [],
-                "index": e.index, "fader": e.fader, "song": e.zeitcode == "song"} for e in self.executoren],
+            "executoren": [self.executor_info(e) for e in self.executoren],
+            "song_platz": self.executor_info(self.song_platz),
+            "haupt_info": self.executor_info(haupt),
+            "haupt_cues": [c["name"] for c in haupt.sequenz["cues"]] if haupt.sequenz else [],
+            "seite": self.seite, "seiten": SEITEN, "pro_seite": PRO_SEITE,
+            "grand": round(self.grand, 3), "highlight": self.highlight, "oops": len(self.oops),
+            "effekt_tempo": round(self.effekte.faktor, 2) if self.effekte else 1.0,
             "tasten": {"look": self.look if self.tasten.index >= 0 else None, "farbe_1": self.farbe_1,
                        "farbe_2": self.farbe_2, "halten": {a: s is not None for a, s in self.halten.items()},
                        "tempo_quelle": self.tempo_quelle,
