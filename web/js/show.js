@@ -206,7 +206,13 @@ export function showSeite(wurzel) {
     const ziel = ereignis.target.closest("button, [data-teil]");
     if (!ziel) return;
     const d = ziel.dataset;
-    if (d.song) await senden("/song/start", { name: d.song });
+    if (d.song) {
+      // Aus Versehen auf den laufenden Song getippt? Dann nicht einfach von vorn anfangen.
+      const song = letzterLive?.song;
+      const laeuftSchon = song?.laeuft && song.name === d.song && song.folger?.art !== "bereit";
+      if (laeuftSchon && !confirm(`„${d.song}“ läuft gerade. Von vorn beginnen?`)) return;
+      await senden("/song/start", { name: d.song });
+    }
     if (d.look) await senden("/look/" + d.look);
     if (d.farbe) await senden("/farben", { ["farbe_" + d.nummer]: d.farbe });
     if (d.teil !== undefined) await senden("/song/teil", { index: Number(d.teil) });

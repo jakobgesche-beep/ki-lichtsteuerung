@@ -101,7 +101,7 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Gemessen statt geraten:** 12 künstliche Songs (Pop, Rock, Ballade, EDM, Punk, Swing, Weihnachtslied ohne Schlagzeug), jeweils als „Probe“ und als „Live“-Fassung (4 % schneller, zum Ende 3 % schneller, ungenaues Timing, Handy-Lautsprecher, Raum, Publikum). Tempo: 24 von 24 richtig, Beats: 97 % getroffen, Takt-Eins: 24 von 24. Die alte Erkennung hatte auf den ersten 16 dieser Aufnahmen 3 Tempi richtig und 67 % der Beats.
 - **Songteile sind schwerer:** Die Grenzen kommen aus Lautstärke und Klang, die Buchstaben aus dem Vergleich der Akkordfolgen. Auf den künstlichen Songs werden gut ein Drittel der Teil-Wechsel exakt gefunden, die gefundenen stimmen zu 84 %. Kurze Überleitungen (4 Takte) gehen oft im Nachbarteil auf. Beim echten Song „Hh“ lagen die gefundenen Wechsel bei 69, 119, 144 und 181 s, die D-Markierungen bei 69, 120, 144 und 181 s.
 - **Halbes oder doppeltes Tempo** ist bei schnellen Songs Geschmackssache (Boulevard of Broken Dreams: 83 oder 167 BPM). Das Programm entscheidet nach der Snare. Fürs Licht ist beides brauchbar.
-- **Song-Folger:** Im harten Test (7 % Tempo-Unterschied, Publikum, Handy-Klang) lag der Teil-Wechsel im Mittel 2 s daneben, eine reine Uhr 2,7 s. Bei normalem Tempo eher 1 s. Spielt die Band einen Teil öfter oder lässt einen aus, merkt das der Folger nicht sicher: dann „Nächster Teil“ oder auf den Teil klicken. Mit echter Band ist das noch nicht ausprobiert.
+- **Song-Folger:** in 2.0.0 neu gebaut, siehe „Song-Folger 2.0“ unten.
 - **Leise Intros:** Der Musikanfang wird gegen das Rauschen der ersten Sekunde der Aufnahme gemessen. Darum vor dem Song kurz Stille aufnehmen.
 - **Show-Tasten** bauen ihre Looks aus den Gruppen Spots, Farb-PARs und Strobo. Der Strobo blitzt nur, wenn er eingemessen ist und die Prüfung es erlaubt. Halte-Tasten gehen nach 20 s von selbst aus, falls das Loslassen nicht ankommt.
 - **Effekte rasten auf den Beat ein:** Jeder gehörte Schlag zieht die Effekt-Uhr ein Stück nach, so liegt der Puls auf dem Beat. Welcher der Schläge die Takt-Eins ist, weiß live nur der Song-Start.
@@ -117,8 +117,46 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Getestet nur automatisch** auf einem Windows-Server bei GitHub: alle Tests, Bau, stille Installation, Selbsttest der installierten App, das Update-Skript. Nicht getestet: ein echter Windows-Laptop, das Fenster selbst (Edge WebView2), Mikrofon, Enttec.
 - **Das Fenster** nutzt Edge WebView2 (in Windows 10/11 meist schon drin). Fehlt es, öffnet sich die Oberfläche im Browser.
 - **Nicht signiert:** Windows warnt beim ersten Start („Weitere Informationen“, „Trotzdem ausführen“).
-- **Enttec:** Unter Windows braucht pyftdi den WinUSB-Treiber (Zadig). Danach ist das Enttec für andere Programme mit FTDI-Treiber nicht mehr sichtbar.
+- **Enttec:** Ab 2.0.0 geht es über den normalen FTDI-Treiber (ftd2xx.dll), Zadig ist nicht mehr nötig. Siehe „Konzert-Sicherheit“.
 - **Updates** laden den neuen Installer, prüfen die Prüfsumme und installieren ihn still, sobald die App geschlossen ist.
+
+## Pult im Stil großer Lichtpulte (ab 2.0.0)
+
+- **Kleiner als grandMA3, gleiche Arbeitsweise:** Pools, Feature-Leiste mit Encodern, Programmer (live oder Blind), Store/Update/Assign/Delete/Label/Edit, Oops, Clear, Highlight, Befehlszeile. Nicht nachgebaut: eigene Gruppen speichern (die Gruppen kommen aus dem Patch), Preset-Pools zum Speichern (Farben, Positionen und Gobos gibt es als feste Pools), Makros, Timecode-Fenster, mehrere Bildschirme.
+- **40 Fader auf 4 Seiten** (je 10). Fader-Arten: Sequenz, Gruppen-Master, Tempo. Wechselt man die Seite, laufen die Fader der anderen Seite weiter.
+- **Fader hoch startet, ganz runter schaltet aus** (wie AutoStart/AutoStop). Flash schaltet ohne Überblendzeit ein und beim Loslassen wieder aus; eine hängende Flash-Taste geht nach 20 s von selbst aus.
+- **Grand Master** wirkt auf alles außer den Not-Tasten (Warmweiß bei einer Rede bleibt hell). Er wird gespeichert, damit er nach einem Neustart gleich steht; der Konzert-Check warnt, wenn er nicht auf 100 % steht.
+- **Tempo-Fader:** Mitte normal, unten ein Viertel, oben das Vierfache. Es gibt nur einen. Er wirkt auf alle Effekte (auch die der Show-Tasten), nicht auf den Software-Strobo.
+- **Oops** merkt sich die letzten 50 Schritte (Speichern, Löschen, Zuweisen, Programmer). Speichern auf einen leeren Fader ist ein Schritt.
+- **Song-Sequenzen** (aus der Probe) lassen im Pult keine Cues löschen oder verschieben, weil sonst die Zeiten nicht mehr zu den Cues passen. Namen und Zeiten ändern geht, die Teile stellt man in der Probe richtig.
+
+## Licht-Chat (ab 2.0.0, Schritt 8)
+
+- **Modell:** `claude-opus-5-5`, Denken adaptiv mit `effort: medium`, Werkzeuge mit festem Schema (`strict`), Zwischenspeicher für den gleichbleibenden Anfang, und der Rückfall `fallbacks: "default"`: Lehnt das Modell eine Anfrage ab, beantwortet sie die Schnittstelle mit einem anderen Claude-Modell. In `lokal.json` lässt sich mit `"modell"` ein anderes Modell eintragen.
+- **Nur zwei Werkzeuge** statt der sechs aus der Beschreibung: `vorschlag_machen` (Sequenz mit Cues und gewünschtem Fader, deckt Szene, Cue, Cue ändern und Fader belegen ab) und `sequenz_lesen`. Die Vorschau zeigt das Programm selbst. Keins der Werkzeuge kann etwas live schalten oder speichern.
+- **Prüfung:** Jeder Vorschlag geht durch `pruefe_sequenz` und zusätzlich durch Strobo-Grenze, Gobo-Namen, Positionen und Bewegung nur für bewegliche Gruppen. Fehler gehen an Claude zurück, höchstens 4 Anfragen pro Nachricht.
+- **Sparsam:** Nach einem gültigen Vorschlag wird keine weitere Anfrage gestellt. Ein Gespräch beginnt nach 40 Nachrichten neu (der Verlauf wird nie gekürzt oder verändert). Die Kosten-Anzeige rechnet mit den Preisen von Claude Opus 5.5 und ist nur ungefähr.
+- **Ohne Internet** versteht ein eingebauter, einfacher Leser kurze Sätze (Gruppen, Farben, Helligkeit, Positionen, Effekte, langsam/schnell, Zeit, Fader). Er ist bewusst einfach und sagt, wenn er etwas nicht versteht.
+- **Nicht getestet:** eine echte Anfrage an Claude (es gab beim Bau keinen Schlüssel). Geprüft ist der ganze Ablauf mit nachgebauten Antworten, auch Fehler, Ablehnung und kein Internet.
+
+## Song-Folger 2.0 (ab 2.0.0)
+
+- **Warum neu:** Gemessen an der echten Aufnahme „Hh“ (Probe vom 07.11.) mit daraus gebauten Live-Fassungen lag der alte Folger schon bei 5 % schnellerer Band 3 bis 4 s daneben (Teilwechsel im Mittel 3,9 s), bei 4 % langsamer 3 s. Ursache: Sein Vergleich mittelte über den ganzen bisherigen Weg und konnte einen frühen Fehler nicht mehr loswerden; außerdem kam jede Messung 0,1 s zu spät.
+- **Wie er jetzt hört:** Die letzten 4 s der Band werden mit allen Stellen der Probe in der Nähe verglichen, in sieben Tempi (±6 % um das zuletzt gemessene). Alle 0,5 s wird zusätzlich im ganzen Song gesucht; gesprungen wird nur, wenn die jetzige Stelle deutlich schlechter passt als sonst und eine andere so gut wie beim normalen Mithören, 2 s lang.
+- **Gemessen** (Teilwechsel, Mittel der Abweichung, Start pünktlich / 1,5 s zu spät / 3 s zu früh): gleiches Spiel 0,01 s; 5 % schneller 0,03 s; 4 % langsamer 0,05 s; Tempo steigt ab der Mitte um 7 % 0,03 s; anderer Klang (Bass, Hall, Publikum 10 dB unter der Band, 3 % schneller) siehe unten; Teil ausgelassen: alle Wechsel genau, nur der Wechsel am ausgelassenen Teil 5 bis 7 s spät; Refrain wiederholt: rund 2 s Bridge-Licht, dann zurück im Refrain.
+- **Grenzen:** Sehr lautes Publikum (nur 3 dB leiser als die Band) und Start, bevor die Band spielt, kann den Anfang verfehlen; dann „Nächster Teil“ oder auf den Teil klicken. Mit einer echten Band live ist das weiter nicht ausprobiert. Die künstlichen Live-Fassungen ändern die Akkorde nicht; spielt die Band ein Solo, das es in der Probe nicht gab, läuft die Uhr weiter.
+- **Start:** Ein klarer Einsatz (10 dB lauter als vorher) startet die Uhr genau dort. Ist es beim Drücken schon laut, läuft die Uhr ab 0,7 s vor dem Drücken, und in den ersten 15 s wird am Inhalt nachgeprüft (springt, wenn eine andere Stelle am Song-Anfang 1,5 s lang eindeutig passt). Song nochmal drücken heißt „jetzt los“. Kommt gar kein Ton an, läuft die Uhr ab dem Drücken.
+- **Rechenzeit:** im Mittel unter 1 ms pro Tonblock, Spitzen (Suche im ganzen Song) um 20 ms; der Puffer des Eingangs fängt das auf.
+
+## Konzert-Sicherheit (ab 2.0.0)
+
+- **Enttec, drei Wege:** FTDI-Treiber (Windows, ftd2xx.dll per ctypes), USB direkt (pyftdi/libusb, Mac oder Windows mit Zadig), serieller Port des eingebauten Treibers (Mac `/dev/cu.usbserial-…`, Windows COM). Der erste, der klappt, wird benutzt. Das Enttec DMX USB Pro wird am Namen erkannt und bekommt fertige Pakete. Alles nur gegen nachgebaute Treiber getestet, kein echtes Enttec.
+- **30 DMX-Pakete pro Sekunde** (vorher 40): 512 Kanäle brauchen 23 ms auf der Leitung, und vor jedem Break muss das vorige Paket draußen sein. Die Show rechnet weiter 40 Bilder pro Sekunde.
+- **Wackelkontakt:** Reißt die Verbindung ab, läuft die Show im Simulator weiter und die Ausgabe sucht jede Sekunde neu; danach sendet sie von selbst weiter. Der Knopf bleibt dabei auf „an“.
+- **Ton-Eingang:** Unter Windows erscheint jedes Gerät nur einmal (WASAPI mit automatischer Umrechnung, sonst MME, nie WDM-KS). Kann ein Gerät 44,1 kHz nicht, wird umgerechnet. Reißt der Eingang ab, wird er alle 2 s neu geöffnet (Geräteliste neu einlesen, Gerät am Namen wiederfinden). Die gewählte Quelle wird gemerkt und nach einem Neustart von selbst wieder geöffnet; DMX bleibt nach einem Neustart trotzdem aus.
+- **Ruhezustand:** Solange das Programm läuft, schlafen Rechner und Bildschirm nicht ein. Ein zugeklapptes MacBook schläft trotzdem.
+- **Sicherung:** bei jedem Start eine kleine Sicherung (ohne Aufnahmen, die letzten 10), „Show sichern“ mit allem. Laden geht beim nächsten Start, vorher wird gesichert. Kaputte Sequenz-, Proben- oder Gerätedateien werden übersprungen und stehen im Logbuch, statt den Start zu verhindern. JSON wird mit fsync geschrieben.
+- **Konzert-Check** schaltet nie etwas selbst (außer dem DMX-Knopf, wenn man ihn drückt).
 
 ## Mac-App, Website und Updates
 
@@ -135,7 +173,7 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 
 | Schritt | Wo es andockt |
 |---|---|
-| 8 Licht-Chat | Die Werkzeuge bedienen das Pult: `programmer.setzen`, `effekt_dazu`, Blind-Modus an, dann zeigt die Vorschau das Ergebnis. Gespeichert wird erst mit `cue_speichern`, wenn der Mensch zustimmt. Der Key gehört in `lokal.json`, die Git ignoriert |
+| 8 Licht-Chat | **Fertig in 2.0.0** (`licht_chat.py`), siehe oben |
 | 9 Profile per API | `entwurf_setzen("profil", ...)` samt Prüfung und Speichern gibt es schon und ist getestet |
 | 10 X32 | Das Modul setzt `show.overrides` oder einen eigenen Rede-Eingang und liest `x32.json`. Audio vom X32 läuft schon über `audio.quellen.Eingang` mit Kanalwahl |
 | 11 Klick-Positionen | `pantilt.py`, `szenen.zeige_auf` und die Versatz-Felder in `stage.json` sind fertig und getestet. Es fehlt nur die Oberfläche |
