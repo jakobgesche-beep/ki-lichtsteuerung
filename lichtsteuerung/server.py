@@ -791,15 +791,21 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.post("/api/sicherung/export")
     def sicherung_export(auftrag: dict = Body(default={})):
         stempel = time.strftime("%Y-%m-%d_%H-%M")
-        ziel = sicherung.downloads_ordner() / f"Lichtsteuerung-Show-{stempel}.zip"
-        pfad = sicherung.exportieren(show.pfade.wurzel, ziel, bool(auftrag.get("mit_proben", True)))
+        name = f"Lichtsteuerung-Show-{stempel}.zip"
+        mit_proben = bool(auftrag.get("mit_proben", True))
+        try:
+            pfad = sicherung.exportieren(show.pfade.wurzel, sicherung.downloads_ordner() / name, mit_proben)
+        except PermissionError:
+            # Der Mac kann den Zugriff auf "Downloads" verweigern: dann in den Ordner der Sicherungen
+            pfad = sicherung.exportieren(show.pfade.wurzel, show.pfade.wurzel / sicherung.SICHERUNGEN / name, mit_proben)
         return {"pfad": str(pfad), "groesse_mb": round(pfad.stat().st_size / 1024 ** 2, 1)}
 
     @app.post("/api/sicherung/zeigen")
     def sicherung_zeigen(auftrag: dict = Body(...)):
         """Die gesicherte Datei im Finder oder Explorer zeigen (nur Dateien, die wir selbst geschrieben haben)."""
         pfad = Path(str(auftrag.get("pfad", "")))
-        if pfad.parent != sicherung.downloads_ordner() or not pfad.name.startswith("Lichtsteuerung-Show-") or not pfad.is_file():
+        erlaubt = {sicherung.downloads_ordner(), show.pfade.wurzel / sicherung.SICHERUNGEN}
+        if pfad.parent not in erlaubt or not pfad.name.startswith("Lichtsteuerung-Show-") or not pfad.is_file():
             raise ValueError("Diese Datei kann ich nicht zeigen.")
         import subprocess
         import sys as _sys
