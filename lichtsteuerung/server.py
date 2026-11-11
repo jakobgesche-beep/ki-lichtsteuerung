@@ -608,6 +608,12 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             raise ValueError(str(fehler)) from fehler
         return {"analyse": show.proben.lesen(name), "sequenz": show.show_aus_probe(name)}
 
+    @app.post("/api/proben/{name}/teile")
+    def probe_teile(name: str, auftrag: dict = Body(...)):
+        """Songteile von Hand richtigstellen (Name, Stärke, Grenzen). Danach "Show neu bauen"."""
+        return show.proben.teile_aendern(name, str(auftrag.get("aktion", "")), int(auftrag.get("index", 0)),
+                                         auftrag.get("wert"))
+
     @app.post("/api/proben/{name}/neu")
     def probe_neu_bauen(name: str):
         return show.show_aus_probe(name)
@@ -621,7 +627,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         if sequenz is None:
             raise ValueError("Zu dieser Probe gibt es noch keine Sequenz.")
         try:
-            show.audio.starten(quellen.Datei(show.proben.ton_pfad(name)), f"Probe: {name}")
+            show.audio.starten(quellen.Datei(show.proben.ton_pfad(name), float(auftrag.get("ab_s", 0) or 0)),
+                               f"Probe: {name}")
         except quellen.AudioFehler as fehler:
             raise ValueError(str(fehler)) from fehler
         with show.sperre:
@@ -677,6 +684,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             show.song.teil_vor()
         elif aktion == "zurueck":
             show.song.teil_zurueck()
+        elif aktion == "los":
+            show.song.jetzt_los()
         else:
             raise ValueError(f"Unbekannte Aktion {aktion!r}.")
         return show.song.zustand()

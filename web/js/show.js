@@ -14,6 +14,7 @@ const FARBNAME = {
   pink: "Pink", weiss: "Weiß", warmweiss: "Warmweiß",
 };
 const FOLGER = {
+  bereit: ["warn", "wartet auf die Band … (Song nochmal drücken = jetzt los)"],
   hoert: ["an", "hört mit ✓"],
   unsicher: ["", "hört mit, noch unsicher"],
   uhr: ["warn", "kein Ton: läuft nach Uhr"],

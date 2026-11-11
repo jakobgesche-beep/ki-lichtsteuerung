@@ -70,6 +70,7 @@ tr.rot td { background: #44201d; }
 .liste div { padding: 5px 8px; cursor: pointer; }
 .liste div:hover { background: var(--kachel-hover); }
 .liste div.gewaehlt { background: #3a3315; color: var(--auswahl); }
+#toast.ok { background: #1d4d2c; }
 #toast { position: fixed; left: 16px; right: 16px; bottom: 64px; max-width: 560px; margin: 0 auto; padding: 10px 14px; background: var(--rot); color: #fff; border-radius: 3px; z-index: 50; }
 
 /* Pools: Kacheln mit Nummer oben links, wie im Pult */
@@ -314,3 +315,8 @@ td input[type=number] { width: 66px; }
   .pp-chat { grid-column: auto; }
 }
 .ex.frei .regler, .ex.frei .ex-tasten { visibility: hidden; }
+
+/* Probe: Teile richtigstellen */
+.teile-editor { margin-top: 8px; padding: 8px; background: #111214; border: 1px solid var(--linie); border-radius: 3px; }
+.teile-editor td { padding: 3px 6px; }
+.teile-editor select { padding: 2px 4px; font-size: 12px; }

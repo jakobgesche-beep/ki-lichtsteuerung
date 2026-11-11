@@ -24,10 +24,11 @@ export function t(text) {
   return element.innerHTML;
 }
 
-export function meldung(text) {
+export function meldung(text, art = "fehler") {
   document.getElementById("toast")?.remove();
   const element = document.createElement("div");
   element.id = "toast";
+  if (art === "ok") element.className = "ok";
   element.textContent = text;
   document.body.append(element);
   setTimeout(() => element.remove(), 6000);

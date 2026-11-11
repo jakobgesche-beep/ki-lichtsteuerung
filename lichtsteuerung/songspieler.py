@@ -83,7 +83,15 @@ class SongSpieler:
     # --- Bedienen -------------------------------------------------------
 
     def starten(self, name: str, nummer: int = SONG_NUMMER, jetzt: Optional[float] = None) -> None:
-        """Der Song läuft auf einem eigenen Platz (nicht auf den Fadern), außer man nennt einen Fader."""
+        """Der Song läuft auf einem eigenen Platz (nicht auf den Fadern), außer man nennt einen Fader.
+
+        Die Uhr beginnt erst, wenn die Band wirklich spielt. Ein zweiter Druck, während der Song
+        noch auf die Band wartet, heißt: jetzt geht es los (zum Beispiel bei einem sehr leisen Anfang).
+        """
+        jetzt = time.monotonic() if jetzt is None else jetzt
+        if self.folger is not None and self.name == name and self.folger.bereit:
+            self.folger.jetzt_los(jetzt)
+            return
         sequenz = self.show.pult.sequenzen.lesen(name)
         if not sequenz or not sequenz.get("zeitcode"):
             raise ValueError(f"Zu „{name}“ gibt es keine Song-Show. In der Probe „Show neu bauen“ drücken.")
@@ -91,10 +99,9 @@ class SongSpieler:
             raise ValueError(f"Zu „{name}“ fehlt die Probe-Aufnahme. Ohne sie geht nur das Drücken von Hand.")
         merkmale, pegel = self._referenz(name)
         folger = folgen.SongFolger(merkmale, pegel)
-        jetzt = time.monotonic() if jetzt is None else jetzt
         with self.show.sperre:
             self.stoppen(jetzt)
-            folger.starten()
+            folger.starten(jetzt=jetzt)
             self.folger, self.name, self.nummer = folger, name, nummer
             self.karte = karte_aus(sequenz, self.show.proben.lesen(name))
             self.zeitcode = list(sequenz["zeitcode"])
@@ -121,6 +128,10 @@ class SongSpieler:
                 executor.zeitcode = False
                 executor.aus(jetzt)
         self.folger, self.name = None, None
+
+    def jetzt_los(self, jetzt: Optional[float] = None) -> None:
+        if self.folger is not None:
+            self.folger.jetzt_los(time.monotonic() if jetzt is None else jetzt)
 
     def laeuft_auf(self, nummer: int) -> bool:
         return self.folger is not None and self.nummer == nummer

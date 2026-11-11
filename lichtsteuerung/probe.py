@@ -296,6 +296,92 @@ def aufbau_cue(teil: dict, gruppen: list, farbe: str) -> dict:
     return {"name": f"Aufbau {teil['gruppe']}", "zeit_s": 2.0, "folgen_s": None, "werte": werte, "effekte": effekte}
 
 
+TEIL_NAMEN = ["Intro", "Strophe", "Überleitung", "Refrain", "Bridge", "Solo", "Zwischenteil", "Aufbau", "Drop",
+              "Finale", "Schluss"]
+KLASSEN = ["ruhig", "mittel", "stark", "hoehepunkt"]
+
+
+def _takte_zaehlen(einsen: list, start: float, ende: float) -> int:
+    return max(1, sum(1 for e in einsen if start - 0.05 <= e < ende - 0.05))
+
+
+def _auf_takt(einsen: list, zeit: float) -> float:
+    """Zur nächsten Takt-Eins (wenn es welche gibt)."""
+    if not einsen:
+        return round(zeit, 2)
+    return float(min(einsen, key=lambda e: abs(e - zeit)))
+
+
+def teile_aendern(analyse: dict, aktion: str, index: int, wert=None) -> dict:
+    """Songteile von Hand richtigstellen. Grenzen liegen immer auf einer Takt-Eins.
+
+        name / klasse   Teil umbenennen (Refrain, Strophe ...) oder Stärke ändern (wie viel Licht)
+        verschieben     Anfang des Teils um wert Takte (-1 oder +1) verschieben
+        teilen          Teil in der Mitte teilen (wert: Zeit in Sekunden, sonst die Mitte)
+        verbinden       Teil mit dem nächsten zusammenlegen
+        marken          Deine D-Marken aus der Aufnahme werden die Grenzen
+    """
+    analyse = {**analyse, "teile": [dict(t) for t in analyse["teile"]]}
+    teile = analyse["teile"]
+    einsen = list(analyse.get("einsen_s") or [])
+    if aktion != "marken" and not 0 <= index < len(teile):
+        raise ValueError("Diesen Teil gibt es nicht.")
+    if aktion == "name":
+        name = str(wert or "").strip()
+        if not name or len(name) > 24:
+            raise ValueError("Der Name ist leer oder zu lang.")
+        teile[index]["name"] = name
+    elif aktion == "klasse":
+        if wert not in KLASSEN:
+            raise ValueError(f"Stärke muss eine von {', '.join(KLASSEN)} sein.")
+        teile[index]["klasse"] = wert
+    elif aktion == "verschieben":
+        if index == 0:
+            raise ValueError("Der Anfang des ersten Teils ist der Song-Anfang.")
+        schritt = 1 if (wert or 1) > 0 else -1
+        start = teile[index]["start"]
+        if einsen:
+            nummer = min(range(len(einsen)), key=lambda i: abs(einsen[i] - start))
+            neu = einsen[max(0, min(len(einsen) - 1, nummer + schritt))]
+        else:
+            neu = start + schritt * 240.0 / max(analyse.get("tempo_bpm", 120), 40)
+        if not teile[index - 1]["start"] + 0.5 < neu < teile[index]["ende"] - 0.5:
+            raise ValueError("Weiter geht es nicht: Der Teil wäre sonst leer.")
+        teile[index]["start"] = teile[index - 1]["ende"] = round(float(neu), 3)
+    elif aktion == "teilen":
+        teil = teile[index]
+        zeit = _auf_takt(einsen, float(wert) if wert is not None else (teil["start"] + teil["ende"]) / 2)
+        if not teil["start"] + 0.5 < zeit < teil["ende"] - 0.5:
+            raise ValueError("Der Teil ist zu kurz zum Teilen.")
+        neu = {**teil, "start": round(zeit, 3)}
+        teil["ende"] = round(zeit, 3)
+        teile.insert(index + 1, neu)
+    elif aktion == "verbinden":
+        if index + 1 >= len(teile):
+            raise ValueError("Nach dem letzten Teil kommt keiner mehr.")
+        teile[index]["ende"] = teile[index + 1]["ende"]
+        del teile[index + 1]
+    elif aktion == "marken":
+        marken = sorted(_auf_takt(einsen, m) for m in analyse.get("markiert_s") or [])
+        anfang, ende = teile[0]["start"], teile[-1]["ende"]
+        grenzen = [anfang] + [m for m in dict.fromkeys(marken) if anfang + 1.0 < m < ende - 1.0] + [ende]
+        if len(grenzen) < 3:
+            raise ValueError("In dieser Aufnahme gibt es keine D-Marken. Taste D während der Aufnahme setzt welche.")
+        alt = teile
+        teile = []
+        for von, bis in zip(grenzen, grenzen[1:]):
+            # Name und Stärke vom alten Teil, der hier am meisten Zeit hat
+            vorbild = max(alt, key=lambda t: min(t["ende"], bis) - max(t["start"], von))
+            teile.append({**vorbild, "start": round(von, 3), "ende": round(bis, 3)})
+        analyse["teile"] = teile
+    else:
+        raise ValueError(f"Unbekannte Änderung {aktion!r}.")
+    for teil in analyse["teile"]:
+        teil["takte"] = _takte_zaehlen(einsen, teil["start"], teil["ende"]) if einsen else teil.get("takte")
+    analyse["von_hand"] = True
+    return analyse
+
+
 class Proben:
     """Ablage der Aufnahmen und Analysen in daten/proben/."""
 
@@ -328,13 +414,23 @@ class Proben:
         """Ältere Analysen (vor der neuen Erkennung) noch einmal machen. Markierungen bleiben."""
         alt = self.lesen(name)
         pfad = self.ton_pfad(name)
-        if alt is None or alt.get("version", 1) >= ANALYSE_VERSION or not pfad.exists():
-            return alt
+        if alt is None or alt.get("von_hand") or alt.get("version", 1) >= ANALYSE_VERSION or not pfad.exists():
+            return alt          # von Hand Richtiggestelltes bleibt immer
         analyse = analysieren(lade_datei(pfad), alt.get("name", name))
         if alt.get("markiert_s"):
             analyse["markiert_s"] = alt["markiert_s"]
         daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
         return analyse
+
+    def teile_aendern(self, name: str, aktion: str, index: int, wert=None) -> dict:
+        alt = self.lesen(name)
+        if alt is None:
+            raise ValueError(f"Probe {name!r} gibt es nicht.")
+        if alt.get("version", 1) < ANALYSE_VERSION:
+            alt = self.neu_analysieren(name) or alt
+        neu = teile_aendern(alt, aktion, int(index), wert)
+        daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", neu)
+        return neu
 
     def aus_datei(self, name: str, pfad: Path) -> dict:
         return self.speichern(name, lade_datei(pfad))

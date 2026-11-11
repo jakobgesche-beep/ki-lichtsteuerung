@@ -4,6 +4,9 @@ import { Buehne3D } from "./buehne3d.js";
 import { abonnieren } from "./verbindung.js";
 
 const setzeText = (element, text) => { if (element.textContent !== text) element.textContent = text; };
+const NAMEN = ["Intro", "Strophe", "Überleitung", "Refrain", "Bridge", "Solo", "Zwischenteil", "Aufbau", "Drop", "Finale", "Schluss"];
+const KLASSEN = [["ruhig", "ruhig"], ["mittel", "mittel"], ["stark", "stark"], ["hoehepunkt", "Höhepunkt"]];
+const genau = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, "0")}`;
 const minuten = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
 
 export function probeSeite(wurzel) {
@@ -36,6 +39,8 @@ export function probeSeite(wurzel) {
   let buehne = null;
   let beendet = false;
   let nimmtAuf = false;
+  const offen = new Set();          // bei diesen Songs ist der Teile-Editor offen
+  const geaendert = new Set();      // hier wurde etwas richtiggestellt, die Show ist noch die alte
 
   async function songsZeigen() {
     const { proben } = await api("/proben");
@@ -50,11 +55,52 @@ export function probeSeite(wurzel) {
         <p class="zeile">
           <button data-ansehen="${t(p.name)}" class="haupt">Probe ansehen</button>
           <button data-neu="${t(p.name)}">Show neu bauen</button>
+          <button data-editor="${t(p.name)}" class="${offen.has(p.name) ? "an" : ""}">Teile richtigstellen</button>
           <button data-weg="${t(p.name)}" class="gefahr">Löschen</button></p>
+        ${offen.has(p.name) ? editor(p) : ""}
         <p class="leise">Die Show liegt als Sequenz „${t(p.name)}“ im Pult. Dort kannst du jeden Cue ändern.
           Live: auf der Seite „Show“ einmal Start drücken, wenn die Band anfängt. Der Song läuft dann von selbst durch.</p>
       </div>`).join("") || `<p class="leise">Noch keine Songs aufgenommen.</p>`;
   }
+
+  // Teile von Hand richtigstellen: Name, Stärke, Grenzen auf Takt-Einsen, deine D-Marken als Grenzen
+  function editor(p) {
+    const n = t(p.name);
+    return `<div class="teile-editor">
+      <p class="leise">Hör dir die Stellen an („▶ ab hier“) und stell die Teile richtig. Grenzen liegen immer auf einer Takt-Eins.
+        Danach <b>Show neu bauen</b>, dann gilt es für Song-Start und Probe ansehen.${p.von_hand ? " · <b>Von Hand richtiggestellt.</b>" : ""}</p>
+      ${geaendert.has(p.name) ? `<div class="meldung gelb zeile">Geändert. Damit es für den Song gilt:
+        <button data-neu="${n}" class="haupt">Show neu bauen</button></div>` : ""}
+      ${p.markiert_s?.length ? `<p><button data-teile="${n}" data-aktion="marken" data-index="0">Deine ${p.markiert_s.length} D-Marken als Teilgrenzen nehmen</button></p>` : ""}
+      <div class="tabelle-huelle"><table>
+        <tr><th>#</th><th>Start</th><th>Takte</th><th>Name</th><th>Stärke</th><th></th></tr>
+        ${p.teile.map((teil, i) => `<tr>
+          <td>${i + 1}</td><td style="white-space:nowrap">${genau(teil.start)}</td><td>${teil.takte ?? ""}</td>
+          <td><select data-teil-name="${n}" data-index="${i}">${[...new Set([teil.name, ...NAMEN])].map((x) =>
+            `<option ${x === teil.name ? "selected" : ""}>${t(x)}</option>`).join("")}</select> <span class="leise">${t(teil.gruppe ?? "")}</span></td>
+          <td><select data-teil-klasse="${n}" data-index="${i}">${KLASSEN.map(([k, text]) =>
+            `<option value="${k}" ${k === teil.klasse ? "selected" : ""}>${text}</option>`).join("")}</select></td>
+          <td class="zeile" style="flex-wrap:nowrap">
+            <button class="klein" data-hoeren="${n}" data-ab="${teil.start}" title="Aufnahme ab diesem Teil abspielen, das Licht läuft mit">▶ ab hier</button>
+            ${i > 0 ? `<button class="klein" data-teile="${n}" data-aktion="verschieben" data-index="${i}" data-wert="-1" title="Anfang einen Takt früher">◀ Takt</button>
+              <button class="klein" data-teile="${n}" data-aktion="verschieben" data-index="${i}" data-wert="1" title="Anfang einen Takt später">Takt ▶</button>` : ""}
+            <button class="klein" data-teile="${n}" data-aktion="teilen" data-index="${i}" title="In der Mitte teilen">Teilen</button>
+            ${i + 1 < p.teile.length ? `<button class="klein" data-teile="${n}" data-aktion="verbinden" data-index="${i}" title="Mit dem nächsten Teil zusammenlegen">+ nächster</button>` : ""}
+          </td></tr>`).join("")}
+      </table></div></div>`;
+  }
+
+  async function teileAendern(name, aktion, index, wert) {
+    await senden(`/proben/${encodeURIComponent(name)}/teile`, { aktion, index: Number(index), wert });
+    geaendert.add(name);
+    songsZeigen();
+  }
+
+  feld("songs").addEventListener("change", (ereignis) => {
+    const d = ereignis.target.dataset;
+    if (d.teilName) teileAendern(d.teilName, "name", d.index, ereignis.target.value).catch(() => {});
+    if (d.teilKlasse) teileAendern(d.teilKlasse, "klasse", d.index, ereignis.target.value).catch(() => {});
+  });
 
   feld("aufnahme").onclick = async () => {
     if (!nimmtAuf) {
@@ -64,7 +110,7 @@ export function probeSeite(wurzel) {
       feld("aufnahme").textContent = "Analysiere …";
       try {
         const { analyse } = await senden("/proben/stopp");
-        meldung(`Fertig: ${analyse.teile.length} Songteile erkannt, ${analyse.tempo_bpm} BPM.`);
+        meldung(`Fertig: ${analyse.teile.length} Songteile erkannt, ${analyse.tempo_bpm} BPM.`, "ok");
         feld("name").value = "";
       } finally { feld("aufnahme").disabled = false; }
       songsZeigen();
@@ -75,7 +121,7 @@ export function probeSeite(wurzel) {
     const datei = feld("datei").files[0];
     if (!datei) return;
     const name = feld("name").value.trim() || datei.name.replace(/\.[^.]+$/, "");
-    meldung("Analysiere „" + name + "“ …");
+    meldung("Analysiere „" + name + "“ …", "ok");
     await api(`/proben/datei?name=${encodeURIComponent(name)}&datei=${encodeURIComponent(datei.name)}`, { method: "POST", body: datei });
     feld("datei").value = "";
     songsZeigen();
@@ -86,10 +132,14 @@ export function probeSeite(wurzel) {
   wurzel.addEventListener("click", async (ereignis) => {
     const d = ereignis.target.dataset;
     if (d.ansehen) await senden(`/proben/${encodeURIComponent(d.ansehen)}/abspielen`);
+    if (d.hoeren) await senden(`/proben/${encodeURIComponent(d.hoeren)}/abspielen`, { ab_s: Number(d.ab) });
+    if (d.editor) { offen.has(d.editor) ? offen.delete(d.editor) : offen.add(d.editor); songsZeigen(); }
+    if (d.teile) await teileAendern(d.teile, d.aktion, d.index, d.wert !== undefined ? Number(d.wert) : undefined);
     if (d.neu) {
-      meldung("Baue die Show neu …");
+      meldung("Baue die Show neu …", "ok");
       await senden(`/proben/${encodeURIComponent(d.neu)}/neu`);
-      meldung("Show neu gebaut.");
+      geaendert.delete(d.neu);
+      meldung("Show neu gebaut.", "ok");
       songsZeigen();
     }
     if (d.weg && confirm(`Aufnahme „${d.weg}“ löschen? Die Sequenz im Pult bleibt.`)) {

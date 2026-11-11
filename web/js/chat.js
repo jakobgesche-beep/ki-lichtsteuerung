@@ -116,7 +116,7 @@ export function lichtChat(huelle, { nachUebernehmen } = {}) {
         const fader = Number(feld("entwurf-fader").value) || null;
         const antwort = await senden("/chat/uebernehmen", { fader });
         zeichnen(antwort);
-        meldung(fader ? `Liegt jetzt auf Fader ${fader}. Fader hoch oder Go+ drücken.` : "Liegt jetzt im Sequenzen-Pool.");
+        meldung(fader ? `Liegt jetzt auf Fader ${fader}. Fader hoch oder Go+ drücken.` : "Liegt jetzt im Sequenzen-Pool.", "ok");
         nachUebernehmen?.(antwort);
       } else if (k.id === "chat-schluessel-speichern") {
         zeichnen(await senden("/ki/schluessel", { schluessel: feld("chat-schluessel-wert").value }));

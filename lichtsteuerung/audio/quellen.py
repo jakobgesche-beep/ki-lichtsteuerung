@@ -147,8 +147,9 @@ def lade_datei(pfad: Path) -> np.ndarray:
 
 
 class Datei(_Schleife):
-    def __init__(self, pfad: Path):
+    def __init__(self, pfad: Path, ab_s: float = 0.0):
         super().__init__(lade_datei(pfad))
+        self.stelle = int(max(0.0, ab_s) * ABTASTRATE) % max(1, len(self.ton))
 
 
 # Unter Windows steht jedes Gerät mehrmals in der Liste (einmal pro Schnittstelle). Wir zeigen jedes nur
