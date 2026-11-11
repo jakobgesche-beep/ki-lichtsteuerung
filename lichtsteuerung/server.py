@@ -25,7 +25,7 @@ from .farben import FARBNAMEN
 from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
-from . import showtasten, patchplan, sicherung
+from . import konzertcheck, showtasten, patchplan, sicherung
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
@@ -659,6 +659,12 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         return {"proben": show.proben.namen()}
 
     # --- Show: Song-Start und Show-Tasten ------------------------------------
+
+    @app.get("/api/check")
+    def konzert_check():
+        """Konzert-Check: was bereit ist und was noch fehlt."""
+        with show.sperre:
+            return {"punkte": konzertcheck.pruefen(show)}
 
     @app.get("/api/show")
     def show_lesen():

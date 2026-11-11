@@ -320,3 +320,17 @@ td input[type=number] { width: 66px; }
 .teile-editor { margin-top: 8px; padding: 8px; background: #111214; border: 1px solid var(--linie); border-radius: 3px; }
 .teile-editor td { padding: 3px 6px; }
 .teile-editor select { padding: 2px 4px; font-size: 12px; }
+
+/* Konzert-Check auf der Show-Seite */
+.check-knopf { cursor: pointer; border: 0; }
+.chip.gelb { background: #4a3d12; color: #f0d98a; }
+.songfenster { position: relative; }
+.check-liste { position: absolute; right: 8px; top: 34px; z-index: 15; width: min(560px, 92%); max-height: 60vh; overflow-y: auto;
+  background: #141517; border: 1px solid var(--linie); border-radius: 4px; padding: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.6); }
+.check-punkt { display: flex; gap: 8px; align-items: flex-start; padding: 5px 6px; border-bottom: 1px solid #26282b; font-size: 12px; }
+.check-punkt:last-child { border-bottom: 0; }
+.check-punkt button { margin-left: auto; white-space: nowrap; }
+.check-zeichen { font-weight: 800; width: 14px; text-align: center; }
+.check-punkt.ok .check-zeichen { color: #7fdc9c; }
+.check-punkt.hinweis .check-zeichen { color: #f0c94a; }
+.check-punkt.problem .check-zeichen { color: #ff8a80; }

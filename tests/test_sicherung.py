@@ -103,3 +103,18 @@ def test_kaputte_dateien_halten_den_start_nicht_auf(wurzel):
     show = Show(daten.Pfade(wurzel, daten.PROJEKT / "catalog"))
     assert "Intro" in show.pult.sequenzen.namen() and show.pult.sequenzen.lesen("Kaputt") is None
     assert show.katalog.kaputt
+
+
+def test_konzert_check_sagt_was_fehlt(wurzel):
+    from lichtsteuerung import konzertcheck
+    show = Show(daten.Pfade(wurzel, daten.PROJEKT / "catalog"))
+    punkte = konzertcheck.pruefen(show)
+    themen = {p["thema"]: p["stufe"] for p in punkte if p["stufe"] != "ok"}
+    assert themen["Ton"] == "problem"                     # kein Eingang gewählt
+    assert "DMX" in themen
+    show.overrides.blackout = True
+    show.pult.grand = 0.5
+    texte = " ".join(p["text"] for p in konzertcheck.pruefen(show))
+    assert "Blackout ist an" in texte and "Grand Master steht auf 50 %" in texte
+    with TestClient(erstelle_app(show)) as client:
+        assert client.get("/api/check").json()["punkte"]

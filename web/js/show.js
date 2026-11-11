@@ -29,7 +29,9 @@ export function showSeite(wurzel) {
   wurzel.innerHTML = `
     <div class="show">
       <div class="show-oben">
-      <section class="fenster songfenster"><header>Song-Start <span id="folger" class="chip"></span></header>
+      <section class="fenster songfenster"><header>Song-Start <span class="zeile"><span id="folger" class="chip"></span>
+        <button id="check-knopf" class="chip check-knopf" title="Ist alles bereit fürs Konzert?">Konzert-Check …</button></span></header>
+        <div id="check-liste" class="check-liste" hidden></div>
         <div class="inhalt">
           <div id="songliste" class="songliste"></div>
           <div id="songlauf" class="songlauf" hidden>
@@ -174,6 +176,31 @@ export function showSeite(wurzel) {
     feld("vom-ton").hidden = tasten.tempo_quelle !== "tap";
   }
 
+  // --- Konzert-Check: läuft mit, sagt, was fehlt ------------------------------
+  const STUFE = { ok: "✓", hinweis: "!", problem: "✗" };
+  async function checkLaden() {
+    let punkte;
+    try { punkte = (await api("/check")).punkte; } catch { return; }
+    const probleme = punkte.filter((p) => p.stufe === "problem").length;
+    const hinweise = punkte.filter((p) => p.stufe === "hinweis").length;
+    const knopf = feld("check-knopf");
+    const text = probleme ? `Check: ${probleme} Problem${probleme > 1 ? "e" : ""}` : hinweise ? `Check: ${hinweise} Hinweis${hinweise > 1 ? "e" : ""}` : "Check: alles bereit ✓";
+    setze(knopf, text);
+    knopf.className = `chip check-knopf ${probleme ? "warn" : hinweise ? "gelb" : "an"}`;
+    const html = punkte.map((p) => `<div class="check-punkt ${p.stufe}"><span class="check-zeichen">${STUFE[p.stufe]}</span>
+      <span><b>${t(p.thema)}</b> ${t(p.text)}</span>${p.aktion === "dmx_ein" ? `<button class="klein haupt" data-check="dmx_ein">DMX einschalten</button>` : ""}</div>`).join("");
+    if (feld("check-liste").dataset.inhalt !== html) {
+      feld("check-liste").innerHTML = html;
+      feld("check-liste").dataset.inhalt = html;
+    }
+  }
+  feld("check-knopf").onclick = () => { feld("check-liste").hidden = !feld("check-liste").hidden; checkLaden(); };
+  feld("check-liste").addEventListener("click", async (ereignis) => {
+    if (ereignis.target.dataset.check === "dmx_ein") { await senden("/dmx/ein").catch(() => {}); checkLaden(); }
+  });
+  checkLaden();
+  const checkUhr = setInterval(checkLaden, 3000);
+
   // --- Bedienen ------------------------------------------------------------
   wurzel.addEventListener("click", async (ereignis) => {
     const ziel = ereignis.target.closest("button, [data-teil]");
@@ -238,6 +265,7 @@ export function showSeite(wurzel) {
   laden();
   api("/buehne").then((aufbau) => { if (!beendet) buehne = new Buehne3D(feld("drei"), aufbau, { nah: true }); });
   return () => {
+    clearInterval(checkUhr);
     beendet = true;
     buehne?.beenden();
     abmelden();

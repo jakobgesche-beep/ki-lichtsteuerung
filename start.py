@@ -129,6 +129,8 @@ def main() -> None:
         show.stopp()
         os._exit(code)
     show.update.im_hintergrund_pruefen()
+    from lichtsteuerung import wachhalten
+    wachhalten.einschalten()             # der Laptop schläft nicht ein, solange das Programm läuft
     if daten.ALS_APP:
         app_fenster(adresse, show, server)
         return
