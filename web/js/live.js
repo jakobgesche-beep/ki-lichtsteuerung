@@ -44,7 +44,7 @@ export function liveSeite(wurzel) {
       <option value="aus">Aus</option>
       <option value="test">Testsignal (120 BPM)</option>
       <option value="test_drop">Testsong mit Aufbau und Drop</option>
-      ${eingaenge.map((e) => `<option value="eingang:${e.nummer}">Eingang: ${t(e.name)}</option>`).join("")}
+      ${eingaenge.map((e) => `<option value="eingang:${e.nummer}" data-name="${t(e.name).replace(/"/g, "&quot;")}">Eingang: ${t(e.name)}</option>`).join("")}
       ${dateien.map((d) => `<option value="datei:${t(d)}">Datei: ${t(d)}</option>`).join("")}
       <option value="neu">Audiodatei wählen …</option>`;
   }
@@ -101,7 +101,13 @@ export function liveSeite(wurzel) {
     if (span.textContent !== updateText) span.textContent = updateText;
     const ton = live.audio;
     const werte = ton.werte;
-    if (ton.quelle === "Testsignal" && feld("quelle").value === "aus") feld("quelle").value = "test";
+    if (!feld("quelle").matches(":focus")) {
+      // Die Auswahl zeigt, was wirklich läuft (auch nach einem Neustart, wenn der Eingang von selbst aufging)
+      const laeuft = ton.quelle?.startsWith("Eingang: ")
+        ? [...feld("quelle").options].find((o) => o.dataset.name === ton.quelle.slice(9))?.value
+        : ton.quelle === "Testsignal" ? "test" : ton.quelle === "aus" ? "aus" : null;
+      if (laeuft && feld("quelle").value !== laeuft) feld("quelle").value = laeuft;
+    }
     feld("ton").textContent = ton.fehler ?? (werte ? `${Math.round(werte.tempo_bpm)} BPM · ${ton.quelle}` : "Kein Ton");
     feld("m-bass").style.width = `${(werte?.bass ?? 0) * 100}%`;
     feld("m-energie").style.width = `${(werte?.energie ?? 0) * 100}%`;

@@ -59,7 +59,7 @@ export function dmxTestSeite(wurzel) {
 
   async function status() {
     const dmx = await api("/dmx");
-    feld("status").textContent = dmx.fehler ?? (dmx.eingeschaltet
+    feld("status").textContent = dmx.fehler ?? (dmx.eingeschaltet && dmx.weg ? `An (${dmx.weg}), sendet laufend.` : dmx.eingeschaltet
       ? "Eingeschaltet: Die Werte gehen an die Lichter."
       : dmx.enttec_gefunden ? "Aus. Enttec gefunden." : "Aus. Kein Enttec gefunden, alles läuft im Simulator.");
     feld("ein").disabled = dmx.eingeschaltet || !dmx.enttec_gefunden;

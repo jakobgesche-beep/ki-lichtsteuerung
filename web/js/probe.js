@@ -2,7 +2,6 @@
 import { api, senden, t, meldung } from "./api.js";
 import { Buehne3D } from "./buehne3d.js";
 import { abonnieren } from "./verbindung.js";
-import { executorLeiste } from "./executoren.js";
 
 const setzeText = (element, text) => { if (element.textContent !== text) element.textContent = text; };
 const minuten = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
@@ -30,9 +29,10 @@ export function probeSeite(wurzel) {
         <div id="songs"></div>
       </div>
     </div>
-    <div class="kasten"><h2>Executoren</h2><div id="executoren"></div></div>`;
+    <div class="kasten" id="laeuft-kasten" hidden><h2>Probe ansehen läuft</h2>
+      <p class="zeile"><span id="laeuft"></span> <button id="ansehen-stopp" class="gefahr">Stopp</button></p>
+      <p class="leise">Stopp beendet das Licht der Probe und öffnet wieder deine eigentliche Tonquelle (zum Beispiel das X32).</p></div>`;
   const feld = (id) => wurzel.querySelector("#" + id);
-  const leiste = executorLeiste(feld("executoren"));
   let buehne = null;
   let beendet = false;
   let nimmtAuf = false;
@@ -68,7 +68,6 @@ export function probeSeite(wurzel) {
         feld("name").value = "";
       } finally { feld("aufnahme").disabled = false; }
       songsZeigen();
-      leiste.laden();
     }
   };
 
@@ -80,8 +79,9 @@ export function probeSeite(wurzel) {
     await api(`/proben/datei?name=${encodeURIComponent(name)}&datei=${encodeURIComponent(datei.name)}`, { method: "POST", body: datei });
     feld("datei").value = "";
     songsZeigen();
-    leiste.laden();
   };
+
+  feld("ansehen-stopp").onclick = () => senden("/proben/ansehen/stopp");
 
   wurzel.addEventListener("click", async (ereignis) => {
     const d = ereignis.target.dataset;
@@ -101,7 +101,10 @@ export function probeSeite(wurzel) {
   const abmelden = abonnieren((live) => {
     if (!live) return;
     buehne?.setzeWerte(live.geraete);
-    leiste.zeigen(live.pult);
+    const platz = live.pult.song_platz;
+    const ansehen = live.audio.quelle?.startsWith("Probe:") && platz.sequenz && !platz.song;
+    feld("laeuft-kasten").hidden = !ansehen;
+    if (ansehen) setzeText(feld("laeuft"), `${platz.sequenz}: Cue ${platz.index + 1}/${platz.anzahl} ${platz.cue ?? ""}`);
     nimmtAuf = Boolean(live.aufnahme.name);
     // Nur ändern, wenn sich etwas ändert: Wird ein Knopf beim Drücken neu beschriftet,
     // verwirft der Browser den Klick. Das war der Grund, warum "Aufnahme starten" nicht ging.

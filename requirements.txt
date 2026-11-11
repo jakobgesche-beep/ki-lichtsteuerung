@@ -2,9 +2,10 @@
 numpy>=1.24
 fastapi>=0.110
 uvicorn[standard]>=0.29
-sounddevice>=0.4
+sounddevice>=0.5       # WASAPI mit automatischer Umrechnung (Windows)
 soundfile>=0.12
 pyftdi>=0.55
+pyserial>=3.5          # Enttec über den seriellen Port (Mac-Treiber, Windows-COM)
 libusb-package>=1.0
 certifi
 pywebview>=5; sys_platform == "darwin" or sys_platform == "win32"

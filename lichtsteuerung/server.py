@@ -219,9 +219,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     @app.get("/api/dmx")
     def dmx_status():
-        return {"eingeschaltet": show.ausgabe.eingeschaltet,
-                "enttec_gefunden": show.ausgabe.enttec_gefunden(),
-                "fehler": show.ausgabe.fehler, "bild": list(show.letztes_bild)}
+        return {**show.ausgabe.status(), "enttec_gefunden": show.ausgabe.enttec_gefunden(),
+                "bild": list(show.letztes_bild)}
 
     @app.post("/api/dmx/ein")
     def dmx_ein():
@@ -634,6 +633,18 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
                 show.pult.belegung_speichern()
         return show.pult.status()
 
+    @app.post("/api/proben/ansehen/stopp")
+    def probe_ansehen_stopp():
+        """Probe ansehen beenden: Licht aus dem Song-Platz nehmen, die eigentliche Tonquelle wieder öffnen."""
+        jetzt = time.monotonic()
+        with show.sperre:
+            platz = show.pult.song_platz
+            if platz.zeitcode is True:
+                platz.zeitcode = False
+                platz.aus(jetzt)
+        show.audio_quelle_setzen(show.audio_auftrag or {"art": "aus"}, merken=False)
+        return show.pult.status()
+
     @app.delete("/api/proben/{name}")
     def probe_loeschen(name: str):
         show.proben.loeschen(name)
@@ -717,26 +728,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     @app.post("/api/audio/quelle")
     def audio_quelle(auftrag: dict = Body(...)):
-        art = auftrag.get("art", "aus")
-        try:
-            if art == "aus":
-                show.audio.stoppen()
-            elif art == "test":
-                show.audio.starten(quellen.Testsignal(float(auftrag.get("bpm", 120))), "Testsignal")
-            elif art == "test_drop":
-                show.audio.starten(quellen.Testsignal(128, "drop"), "Testsong mit Drop")
-            elif art == "datei":
-                name = Path(auftrag["name"]).name     # nie aus dem Ordner hinaus
-                show.audio.starten(quellen.Datei(show.pfade.audio / name), name)
-            elif art == "eingang":
-                nummer = auftrag.get("geraet")
-                kanaele = tuple(auftrag.get("kanaele", (1,)))
-                show.audio.starten(quellen.Eingang(nummer, kanaele), "Eingang")
-            else:
-                raise ValueError(f"Unbekannte Audioquelle: {art}")
-        except quellen.AudioFehler as fehler:
-            raise ValueError(str(fehler)) from fehler
-        return {"quelle": show.audio.name}
+        """Tonquelle wählen. Sie wird gemerkt und nach einem Neustart von selbst wieder geöffnet."""
+        return {"quelle": show.audio_quelle_setzen(auftrag)}
 
     @app.post("/api/audio/hochladen")
     async def audio_hochladen(anfrage: Request, name: str):

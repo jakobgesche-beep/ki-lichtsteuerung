@@ -17,11 +17,13 @@ import logging
 import math
 import threading
 import time
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
 
 from . import daten
+from .audio import quellen
 from .audio.betrieb import AudioBetrieb
 from .buehne import Buehne
 from .dmx_ausgabe import BILDER_PRO_SEKUNDE, DmxAusgabe
@@ -73,6 +75,7 @@ class Show:
         self.aufnahme_name: Optional[str] = None
         self.aufnahme_marken = []
         self.automatik_an = True
+        self.audio_auftrag: Optional[dict] = None
         self.vorschau = Vorschau(self)
         self.vorschau_geraete = None
         self.chat = LichtChat(self)
@@ -417,7 +420,46 @@ class Show:
         self._sitzung_speichern()
 
     def _sitzung_speichern(self) -> None:
-        daten.schreibe_json(self.pfade.sitzung, {"profil": self.profil["name"], "automatik": self.automatik_an})
+        daten.schreibe_json(self.pfade.sitzung, {"profil": self.profil["name"], "automatik": self.automatik_an,
+                                                 "audio": self.audio_auftrag})
+
+    def audio_quelle_setzen(self, auftrag: dict, merken: bool = True) -> str:
+        """Tonquelle wählen. Gemerkt wird sie, damit sie nach einem Neustart von selbst wieder da ist."""
+        art = auftrag.get("art", "aus")
+        try:
+            if art == "aus":
+                self.audio.stoppen()
+            elif art == "test":
+                self.audio.starten(quellen.Testsignal(float(auftrag.get("bpm", 120))), "Testsignal")
+            elif art == "test_drop":
+                self.audio.starten(quellen.Testsignal(128, "drop"), "Testsong mit Drop")
+            elif art == "datei":
+                name = Path(auftrag["name"]).name     # nie aus dem Ordner hinaus
+                self.audio.starten(quellen.Datei(self.pfade.audio / name), name)
+                auftrag = {"art": "datei", "name": name}
+            elif art == "eingang":
+                kanaele = tuple(int(k) for k in (auftrag.get("kanaele") or (1,)))
+                quelle = quellen.Eingang(auftrag.get("geraet"), kanaele, name=auftrag.get("name"), api=auftrag.get("api"))
+                self.audio.starten(quelle, f"Eingang: {quelle.geraet_name}")
+                auftrag = {"art": "eingang", "name": quelle.geraet_name, "api": quelle.api_name, "kanaele": list(kanaele)}
+            else:
+                raise ValueError(f"Unbekannte Audioquelle: {art}")
+        except quellen.AudioFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        if merken:
+            self.audio_auftrag = {"art": "aus"} if art == "aus" else auftrag
+            self._sitzung_speichern()
+        return self.audio.name
+
+    def _audio_wiederherstellen(self) -> None:
+        """Nach dem Start: den zuletzt gewählten Eingang wieder öffnen (DMX bleibt trotzdem aus)."""
+        auftrag = self.audio_auftrag
+        if not auftrag or auftrag.get("art") in (None, "aus"):
+            return
+        try:
+            self.audio_quelle_setzen(auftrag, merken=False)
+        except Exception as fehler:
+            self.audio.fehler = f"Der zuletzt gewählte Ton-Eingang ging nicht auf ({fehler}). Auf der Live-Seite neu wählen."
 
     def _sitzung_laden(self) -> None:
         """Nach einem Neustart: Letztes Profil und Executor-Belegung kommen zurück. DMX bleibt aus."""
@@ -427,6 +469,7 @@ class Show:
         except ValueError:
             self.profil = RUHE_PROFIL
         self.automatik_an = sitzung.get("automatik", True)
+        self.audio_auftrag = sitzung.get("audio") if isinstance(sitzung.get("audio"), dict) else None
         palette = self.profil.get("palette") or ["rot", "blau"]
         self.pult.farbe_1, self.pult.farbe_2 = palette[0], palette[1 % len(palette)]
 
@@ -477,7 +520,8 @@ class Show:
         with self.sperre:
             werte = self.audio.aktuell()
             return {"geraete": self.simulator.lies(self.letztes_bild),
-                    "dmx_ein": self.ausgabe.eingeschaltet, "meldungen": sorted(set(self.meldungen)),
+                    "dmx_ein": self.ausgabe.eingeschaltet, "dmx": self.ausgabe.status(),
+                    "meldungen": sorted(set(self.meldungen)),
                     "profil": self.profil["name"], "engine": self.engine.zustand_text,
                     "reagiert": self.profil["beat_reaktion"] > 0,
                     "overrides": vars(self.overrides), "blitzt": self.blitzt,
@@ -509,6 +553,7 @@ class Show:
         self._stopp.clear()
         self._thread = threading.Thread(target=self._schleife, name="Show", daemon=True)
         self._thread.start()
+        threading.Thread(target=self._audio_wiederherstellen, name="Ton wieder öffnen", daemon=True).start()
 
     def stopp(self) -> None:
         self._stopp.set()

@@ -63,8 +63,9 @@ def selbsttest(adresse: str) -> None:
     import webview  # noqa: F401  das eigene Fenster muss sich laden lassen
     if sys.platform == "win32":
         import clr  # noqa: F401  unter Windows braucht das Fenster pythonnet
-    from lichtsteuerung.dmx_ausgabe import EnttecOpenDmx
-    EnttecOpenDmx.suchen()
+    from lichtsteuerung.dmx_ausgabe import standard_wege
+    for weg in standard_wege():
+        weg.suchen()                     # jeder Weg zum Enttec muss sich laden lassen (ohne Gerät: leere Liste)
     import anthropic  # noqa: F401  der Licht-Chat muss sich laden lassen (auch ohne Schlüssel)
     from lichtsteuerung.licht_chat import werkzeuge
     assert len(werkzeuge()) == 2

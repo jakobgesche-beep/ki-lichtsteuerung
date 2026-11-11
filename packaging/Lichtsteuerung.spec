@@ -11,7 +11,7 @@ daten = [(str(WURZEL / name), name) for name in ("web", "catalog", "profile", "c
 daten += [(str(WURZEL / name), ".") for name in
           ("fixtures.json", "stage.json", "positions.json", "x32.json", "sicherheit.json")]
 binaries, versteckt = [], collect_submodules("uvicorn") + collect_submodules("lichtsteuerung")
-for paket in ("webview", "sounddevice", "soundfile", "libusb_package", "certifi", "pyftdi", "usb", "anthropic"):
+for paket in ("webview", "sounddevice", "soundfile", "libusb_package", "certifi", "pyftdi", "usb", "serial", "anthropic"):
     d, b, v = collect_all(paket)
     daten += d
     binaries += b

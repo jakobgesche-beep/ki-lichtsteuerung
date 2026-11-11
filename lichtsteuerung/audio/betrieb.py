@@ -31,6 +31,7 @@ class AudioBetrieb:
         self.aufnahme = None      # Liste von Blöcken, solange in der Probe aufgenommen wird
         self.beat_erkennung = None
         self.zuhoerer = None      # zum Beispiel der Song-Folger: bekommt jeden Block mit
+        self.wieder_verbunden = 0
         self._thread: Optional[threading.Thread] = None
         self._stopp = threading.Event()
 
@@ -58,7 +59,13 @@ class AudioBetrieb:
             analyse = Analyse()
             self.beat_erkennung = analyse.beat.name
             while not stopp.is_set():
-                block = quelle.lies()
+                try:
+                    block = quelle.lies()
+                except Exception as fehler:
+                    quelle = self._neu_verbinden(quelle, stopp, fehler)
+                    if quelle is None:
+                        return
+                    continue
                 if self.aufnahme is not None and len(self.aufnahme) < MAX_AUFNAHME_BLOECKE:
                     self.aufnahme.append(block.copy())
                 werte = analyse.verarbeite(block)
@@ -75,6 +82,25 @@ class AudioBetrieb:
                 self.messwerte, self.zeitpunkt = werte, time.monotonic()
         except Exception as fehler:
             self.fehler = str(fehler)
+
+    def _neu_verbinden(self, quelle, stopp: threading.Event, fehler: Exception):
+        """Eingang weg (USB-Kabel, Treiber): alle 2 Sekunden neu öffnen. Bis dahin Grundlicht (Rückfall)."""
+        neu_oeffnen = getattr(quelle, "neu_oeffnen", None)
+        if neu_oeffnen is None:
+            raise fehler
+        self.fehler = f"Ton weg ({fehler}). Das Programm öffnet den Eingang von selbst neu."
+        self.messwerte = None
+        logging.warning("Audio-Eingang weg: %s", fehler)
+        while not stopp.wait(2.0):
+            try:
+                quelle = neu_oeffnen()
+            except Exception:
+                continue
+            self.quelle, self.fehler = quelle, None
+            self.wieder_verbunden += 1
+            logging.info("Audio-Eingang wieder da")
+            return quelle
+        return None
 
     def aufnahme_starten(self) -> None:
         if self.quelle is None:

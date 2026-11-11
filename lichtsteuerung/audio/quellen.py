@@ -151,37 +151,123 @@ class Datei(_Schleife):
         super().__init__(lade_datei(pfad))
 
 
+# Unter Windows steht jedes Gerät mehrmals in der Liste (einmal pro Schnittstelle). Wir zeigen jedes nur
+# einmal, in der besten Schnittstelle: WASAPI (wenig Verzögerung, rechnet die Abtastrate selbst um), sonst MME.
+API_VORRANG = ("Windows WASAPI", "MME", "Windows DirectSound", "Core Audio", "ALSA")
+API_NIE = ("Windows WDM-KS",)
+
+
+def _sounddevice():
+    import sounddevice
+    return sounddevice
+
+
 def eingaenge() -> list:
-    """Alle Audio-Eingänge des Rechners für die Auswahl in der Oberfläche."""
+    """Alle Audio-Eingänge des Rechners für die Auswahl in der Oberfläche (jedes Gerät nur einmal)."""
     try:
-        import sounddevice
-        return [{"nummer": i, "name": g["name"], "kanaele": g["max_input_channels"]}
-                for i, g in enumerate(sounddevice.query_devices()) if g["max_input_channels"] > 0]
+        sd = _sounddevice()
+        apis = [h["name"] for h in sd.query_hostapis()]
+        alle = [{"nummer": i, "name": g["name"], "kanaele": g["max_input_channels"], "api": apis[g["hostapi"]]}
+                for i, g in enumerate(sd.query_devices()) if g["max_input_channels"] > 0]
     except Exception:
         return []
+    alle = [e for e in alle if e["api"] not in API_NIE]
+    rang = {api: i for i, api in enumerate(API_VORRANG)}
+    beste = {}
+    for eintrag in sorted(alle, key=lambda e: rang.get(e["api"], 99)):
+        schluessel = eintrag["name"][:31].strip().lower()      # MME kürzt Namen auf 31 Zeichen
+        if not any(schluessel.startswith(k) or k.startswith(schluessel) for k in beste):
+            beste[schluessel] = eintrag
+    return sorted(beste.values(), key=lambda e: e["nummer"])
+
+
+def geraet_suchen(name: str, api: Optional[str] = None) -> Optional[int]:
+    """Findet ein Gerät nach Namen wieder (die Nummern ändern sich, wenn USB-Geräte dazukommen)."""
+    for eintrag in eingaenge():
+        if eintrag["name"] == name and (api is None or eintrag["api"] == api):
+            return eintrag["nummer"]
+    for eintrag in eingaenge():
+        if eintrag["name"][:31] == name[:31]:
+            return eintrag["nummer"]
+    return None
+
+
+class Umrechner:
+    """Rechnet Ton von einer anderen Abtastrate auf unsere um (lineare Zwischenwerte, Block für Block)."""
+
+    def __init__(self, von: float, nach: float = ABTASTRATE):
+        self.schritt = von / nach           # so viele Eingangs-Werte pro neuem Wert
+        self.stelle = 0.0                   # wo der nächste neue Wert im kommenden Block liegt
+        self.letzter = 0.0
+
+    def __call__(self, block: np.ndarray) -> np.ndarray:
+        laenge = len(block)
+        if laenge == 0:
+            return np.zeros(0, np.float32)
+        anzahl = int(np.floor((laenge - 1 - self.stelle) / self.schritt)) + 1 if self.stelle <= laenge - 1 else 0
+        stellen = self.stelle + np.arange(max(anzahl, 0)) * self.schritt
+        mit_vorigem = np.concatenate([[self.letzter], block])
+        neu = np.interp(stellen + 1.0, np.arange(laenge + 1), mit_vorigem)
+        self.stelle = (stellen[-1] + self.schritt if anzahl > 0 else self.stelle) - laenge
+        self.letzter = float(block[-1])
+        return neu.astype(np.float32)
 
 
 class Eingang:
-    """Mikrofon oder X32. Beim X32 wählt `kanaele` das Paar aus (zum Beispiel 31 und 32)."""
+    """Mikrofon oder X32. Beim X32 wählt `kanaele` das Paar aus (zum Beispiel 31 und 32).
 
-    def __init__(self, geraet: Optional[int] = None, kanaele: tuple = (1,)):
+    Öffnet mit 44,1 kHz. Kann das Gerät das nicht, nimmt es seine eigene Abtastrate und rechnet um.
+    """
+
+    def __init__(self, geraet: Optional[int] = None, kanaele: tuple = (1,), name: Optional[str] = None,
+                 api: Optional[str] = None):
         try:
-            import sounddevice
+            sd = _sounddevice()
         except Exception as fehler:
             raise AudioFehler(f"Audio-Eingang nicht verfügbar: {fehler}") from fehler
+        if name is not None:
+            gefunden = geraet_suchen(name, api)
+            if gefunden is None:
+                raise AudioFehler(f"Der Eingang „{name}“ ist nicht da. Ist das Gerät angesteckt?")
+            geraet = gefunden
+        try:
+            info = sd.query_devices(geraet, "input")
+            self.geraet_name = info["name"]
+            self.api_name = sd.query_hostapis(info["hostapi"])["name"]
+        except Exception as fehler:
+            raise AudioFehler(f"Audio-Eingang nicht gefunden: {fehler}") from fehler
+        self.kanaele = tuple(kanaele)
         self.warteschlange = queue.Queue(maxsize=32)
-        self.auswahl = [k - 1 for k in kanaele]
+        self.auswahl = [k - 1 for k in self.kanaele]
+        self.puffer = np.zeros(0, np.float32)
+        self.umrechner: Optional[Umrechner] = None
+        zusatz = sd.WasapiSettings(auto_convert=True) if self.api_name == "Windows WASAPI" else None
 
         def angekommen(daten, _anzahl, _zeit, _status):
-            try:
-                self.warteschlange.put_nowait(daten[:, self.auswahl].mean(axis=1).copy())
-            except queue.Full:
-                pass     # Lieber einen Block verlieren als hinterherhinken.
+            mono = daten[:, self.auswahl].mean(axis=1)
+            if self.umrechner is not None:
+                mono = self.umrechner(mono)
+            self.puffer = np.concatenate([self.puffer, mono.astype(np.float32)])
+            while len(self.puffer) >= BLOCK:
+                block, self.puffer = self.puffer[:BLOCK].copy(), self.puffer[BLOCK:]
+                try:
+                    self.warteschlange.put_nowait(block)
+                except queue.Full:
+                    pass     # Lieber einen Block verlieren als hinterherhinken.
+
+        def oeffnen(rate):
+            return sd.InputStream(device=geraet, channels=max(self.kanaele), samplerate=rate, blocksize=0,
+                                  dtype="float32", callback=angekommen, latency="low", extra_settings=zusatz)
 
         try:
-            self.strom = sounddevice.InputStream(
-                device=geraet, channels=max(kanaele), samplerate=ABTASTRATE, blocksize=BLOCK,
-                dtype="float32", callback=angekommen)
+            try:
+                self.strom = oeffnen(ABTASTRATE)
+            except Exception:
+                eigene = float(info.get("default_samplerate") or 48000)
+                if abs(eigene - ABTASTRATE) < 1:
+                    raise
+                self.umrechner = Umrechner(eigene)
+                self.strom = oeffnen(eigene)
             self.strom.start()
         except Exception as fehler:
             raise AudioFehler(f"Audio-Eingang lässt sich nicht öffnen: {fehler}") from fehler
@@ -193,5 +279,19 @@ class Eingang:
             raise AudioFehler("Vom Audio-Eingang kommt nichts mehr.") from None
 
     def schliessen(self) -> None:
-        self.strom.stop()
-        self.strom.close()
+        try:
+            self.strom.stop()
+            self.strom.close()
+        except Exception:
+            pass
+
+    def neu_oeffnen(self) -> "Eingang":
+        """Nach einem Abriss (USB-Kabel): Geräteliste neu einlesen und dasselbe Gerät wieder öffnen."""
+        self.schliessen()
+        try:
+            sd = _sounddevice()
+            sd._terminate()
+            sd._initialize()
+        except Exception:
+            pass
+        return Eingang(kanaele=self.kanaele, name=self.geraet_name, api=self.api_name)
