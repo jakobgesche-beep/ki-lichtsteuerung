@@ -12,3 +12,6 @@ lokal.json
 .DS_Store
 build/
 dist/
+# Sicherungen der Show (Setup -> Sicherung) und eine bereitgelegte Show-Datei
+sicherungen/
+daten/show_beim_start_laden.zip

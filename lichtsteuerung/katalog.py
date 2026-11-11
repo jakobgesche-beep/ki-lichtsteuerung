@@ -22,6 +22,8 @@ im Programm kein einziger Modellname vor.
 """
 from __future__ import annotations
 
+import logging
+
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
@@ -141,10 +143,16 @@ class Katalog:
         if self.eingebaut:
             # Auch mitgelieferte eigene Einträge (zum Beispiel der Strobo ohne Namen)
             orte = [self.eingebaut / "ofl", self.eingebaut / "importiert", self.eingebaut / "eigene"] + orte
+        self.kaputt = []
         for ort in orte:
             for pfad in sorted(ort.glob("*/*.json")):
-                eintrag = daten.lese_json(pfad)
-                self.typen[eintrag["id"]] = Geraetetyp(eintrag)
+                try:
+                    eintrag = daten.lese_json(pfad)
+                    self.typen[eintrag["id"]] = Geraetetyp(eintrag)
+                except Exception:
+                    # Eine kaputte Gerätedatei darf den Start nie verhindern: überspringen und melden
+                    logging.exception("Kaputter Katalog-Eintrag %s", pfad)
+                    self.kaputt.append(pfad.name)
 
     def typ(self, typ_id: str) -> Geraetetyp:
         try:

@@ -43,6 +43,13 @@ def starte_server(show: Show, host: str, port: int) -> uvicorn.Server:
     return server
 
 
+def _sicher(aufgabe, *argumente) -> None:
+    try:
+        aufgabe(*argumente)
+    except Exception:
+        logging.exception("Automatische Sicherung")
+
+
 def beenden(show: Show, server: uvicorn.Server) -> None:
     server.should_exit = True
     time.sleep(0.3)
@@ -98,6 +105,11 @@ def main() -> None:
         pfade = daten.standard_pfade()
         logging.basicConfig(filename=pfade.wurzel / "logbuch.txt", level=logging.INFO, encoding="utf-8")
     show = Show()
+    if not args.selbsttest:
+        # Bei jedem Start eine kleine Sicherung der Show (die letzten 10 bleiben, ohne Aufnahmen)
+        from lichtsteuerung import sicherung
+        threading.Thread(target=lambda: _sicher(sicherung.automatisch_sichern, show.pfade.wurzel),
+                         name="Sicherung", daemon=True).start()
     port = freier_port(args.port)
     adresse = f"http://localhost:{port}"
     server = starte_server(show, "0.0.0.0" if args.netz else "127.0.0.1", port)

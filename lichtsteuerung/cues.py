@@ -14,10 +14,17 @@ class Sammlung:
         self.ordner = Path(ordner)
 
     def namen(self) -> list:
-        return sorted(daten.lese_json(p)["name"] for p in self.ordner.glob("*.json"))
+        """Alle Namen. Eine kaputte Datei wird übersprungen (steht im Logbuch), statt alles anzuhalten."""
+        namen = []
+        for pfad in self.ordner.glob("*.json"):
+            inhalt = daten.lese_json_sicher(pfad)
+            if isinstance(inhalt, dict) and isinstance(inhalt.get("name"), str):
+                namen.append(inhalt["name"])
+        return sorted(namen)
 
     def lesen(self, name: str) -> Optional[dict]:
-        return daten.lese_json(self.ordner / f"{daten.dateiname(name)}.json")
+        inhalt = daten.lese_json_sicher(self.ordner / f"{daten.dateiname(name)}.json")
+        return inhalt if isinstance(inhalt, dict) and isinstance(inhalt.get("cues", []), list) else None
 
     def schreiben(self, inhalt: dict) -> None:
         daten.schreibe_json(self.ordner / f"{daten.dateiname(inhalt['name'])}.json", inhalt)

@@ -89,7 +89,7 @@ class SongSpieler:
         noch auf die Band wartet, heißt: jetzt geht es los (zum Beispiel bei einem sehr leisen Anfang).
         """
         jetzt = time.monotonic() if jetzt is None else jetzt
-        if self.folger is not None and self.name == name and self.folger.bereit:
+        if self.folger is not None and self.name == name and (self.folger.bereit or self.folger.sucht_anfang):
             self.folger.jetzt_los(jetzt)
             return
         sequenz = self.show.pult.sequenzen.lesen(name)

@@ -15,6 +15,7 @@ const FARBNAME = {
 };
 const FOLGER = {
   bereit: ["warn", "wartet auf die Band … (Song nochmal drücken = jetzt los)"],
+  sucht: ["warn", "sucht die Stelle im Song … (Song nochmal drücken = jetzt los)"],
   hoert: ["an", "hört mit ✓"],
   unsicher: ["", "hört mit, noch unsicher"],
   uhr: ["warn", "kein Ton: läuft nach Uhr"],

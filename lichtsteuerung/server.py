@@ -6,6 +6,7 @@ Prüfungen wie alles andere. Es gibt hier keinen Weg an der Prüfung vorbei.
 from __future__ import annotations
 
 import asyncio
+import threading
 import time
 import webbrowser
 import xml.etree.ElementTree as ElementTree
@@ -24,7 +25,7 @@ from .farben import FARBNAMEN
 from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
-from . import showtasten, patchplan
+from . import showtasten, patchplan, sicherung
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
@@ -778,6 +779,61 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         return {"zustand": "installiert"}
 
     # --- Patchplan zum Ausdrucken ------------------------------------------
+
+    # --- Sicherung: Show als eine Datei, zum Beispiel vom MacBook zum Windows-Laptop -------
+
+    @app.post("/api/sicherung/export")
+    def sicherung_export(auftrag: dict = Body(default={})):
+        stempel = time.strftime("%Y-%m-%d_%H-%M")
+        ziel = sicherung.downloads_ordner() / f"Lichtsteuerung-Show-{stempel}.zip"
+        pfad = sicherung.exportieren(show.pfade.wurzel, ziel, bool(auftrag.get("mit_proben", True)))
+        return {"pfad": str(pfad), "groesse_mb": round(pfad.stat().st_size / 1024 ** 2, 1)}
+
+    @app.post("/api/sicherung/zeigen")
+    def sicherung_zeigen(auftrag: dict = Body(...)):
+        """Die gesicherte Datei im Finder oder Explorer zeigen (nur Dateien, die wir selbst geschrieben haben)."""
+        pfad = Path(str(auftrag.get("pfad", "")))
+        if pfad.parent != sicherung.downloads_ordner() or not pfad.name.startswith("Lichtsteuerung-Show-") or not pfad.is_file():
+            raise ValueError("Diese Datei kann ich nicht zeigen.")
+        import subprocess
+        import sys as _sys
+        if _sys.platform == "darwin":
+            subprocess.Popen(["open", "-R", str(pfad)])
+        elif _sys.platform == "win32":
+            subprocess.Popen(["explorer", "/select,", str(pfad)])
+        return {}
+
+    @app.post("/api/sicherung/import")
+    async def sicherung_import(anfrage: Request):
+        """Show-Datei hochladen. Übernommen wird sie beim nächsten Start (vorher wird gesichert)."""
+        zwischen = show.pfade.wurzel / "daten" / "show_hochgeladen.zip"
+        zwischen.parent.mkdir(parents=True, exist_ok=True)
+        groesse = 0
+        try:
+            with open(zwischen, "wb") as datei:
+                async for stueck in anfrage.stream():
+                    groesse += len(stueck)
+                    if groesse > sicherung.MAX_GROESSE:
+                        raise ValueError("Die Datei ist zu groß.")
+                    datei.write(stueck)
+            uebersicht = sicherung.vormerken(show.pfade.wurzel, zwischen)
+        finally:
+            zwischen.unlink(missing_ok=True)
+        return {**uebersicht, "text": "Die Show wird beim nächsten Start geladen. Jetzt das Programm schließen und neu öffnen."}
+
+    @app.get("/api/sicherung")
+    def sicherung_status():
+        ordner = show.pfade.wurzel / sicherung.SICHERUNGEN
+        return {"vorgemerkt": sicherung.vorgemerkt(show.pfade.wurzel), "ordner": str(ordner),
+                "sicherungen": sorted((p.name for p in ordner.glob("*.zip")), reverse=True)[:12] if ordner.is_dir() else []}
+
+    @app.post("/api/beenden")
+    def programm_beenden():
+        """Programm schließen (zum Beispiel, damit eine geladene Show übernommen wird). Die Lichter gehen aus."""
+        if show.update.beenden is None:
+            raise ValueError("Beenden geht nur im laufenden Programm.")
+        threading.Timer(0.5, show.update.beenden).start()
+        return {}
 
     @app.get("/patchplan")
     def patchplan_seite():

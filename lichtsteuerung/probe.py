@@ -389,10 +389,16 @@ class Proben:
         self.ordner = Path(ordner)
 
     def namen(self) -> list:
-        return sorted(daten.lese_json(p)["name"] for p in self.ordner.glob("*.json"))
+        namen = []
+        for pfad in self.ordner.glob("*.json"):
+            inhalt = daten.lese_json_sicher(pfad)
+            if isinstance(inhalt, dict) and isinstance(inhalt.get("name"), str):
+                namen.append(inhalt["name"])
+        return sorted(namen)
 
     def lesen(self, name: str) -> Optional[dict]:
-        return daten.lese_json(self.ordner / f"{daten.dateiname(name)}.json")
+        inhalt = daten.lese_json_sicher(self.ordner / f"{daten.dateiname(name)}.json")
+        return inhalt if isinstance(inhalt, dict) else None
 
     def ton_pfad(self, name: str) -> Path:
         return self.ordner / f"{daten.dateiname(name)}.wav"

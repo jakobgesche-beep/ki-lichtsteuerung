@@ -51,6 +51,9 @@ VERZOEGERUNG_S = FENSTER / ABTASTRATE   # ein Messpunkt beschreibt den Ton bis j
 SPRUNG_NACH_S = 2.5
 STILLE_WARTEN_S = 3.0      # so lange Stille, dann wartet die Uhr auf die Band
 REAKTION_S = 0.7           # spielt die Band schon beim Drücken: so viel früher hat sie wohl angefangen
+ANFANG_SUCHEN_S = 12.0     # ohne klaren Einsatz: so weit hinter dem Song-Anfang wird nach der Stelle gesucht
+ANFANG_SICHER_S = 1.5      # so lange muss eine gefundene Stelle stimmen, dann läuft die Uhr
+ANFANG_AUFGEBEN_S = 8.0    # findet sich nichts: dann läuft die Uhr ab dem Drücken
 
 
 def _chroma_filter() -> np.ndarray:
@@ -196,6 +199,10 @@ class SongFolger:
         self.sprung_ziel: Optional[float] = None
         self.sprung_mal = 0
         self.sofort_springen = False
+        self.sucht_anfang = False             # laut, aber ohne klaren Einsatz: Stelle am Inhalt suchen
+        self.such_seit = 0.0
+        self.such_treffer = 0
+        self.such_letzte: Optional[float] = None
         self.erwartet = self.pos              # wo die Band ungefähr sein müsste (läuft gleichmäßig weiter)
         self.typisch: Optional[float] = None  # wie gut die Band zur Probe passt, wenn alles stimmt
 
@@ -212,7 +219,8 @@ class SongFolger:
     def jetzt_los(self, jetzt: float) -> None:
         """Von Hand: Die Band spielt jetzt (zum Beispiel, wenn sie sehr leise anfängt)."""
         with self.sperre:
-            if self.bereit:
+            if self.bereit or self.sucht_anfang:
+                self.sucht_anfang = False
                 self._losgehen(jetzt, jetzt)
 
     def setzen(self, stelle: float) -> None:
@@ -257,11 +265,16 @@ class SongFolger:
         self.erwartet += self.rate_lang
         self._abgleichen()
         self.zaehler += 1
-        if self.zaehler % UEBERALL_ALLE == 0 and len(self.fenster) >= W // 2:
+        if self.zaehler % UEBERALL_ALLE == 0 and len(self.fenster) >= W // 2 and not self.sucht_anfang:
             self._ueberall_suchen()
 
     def _band_spielt(self, pegel: float, jetzt: float) -> bool:
-        """Nach Start: Spielt die Band schon? Fast durchgehend deutlich lauter als vorher, oder so laut wie Musik."""
+        """Nach Start: Spielt die Band schon?
+
+        Klarer Einsatz (fast durchgehend 10 dB lauter als vorher): Die Uhr läuft ab diesem Moment.
+        Nur laut, ohne Einsatz (Band spielt schon beim Drücken, oder das Publikum ist laut): Die Stelle
+        wird am Inhalt gesucht (Akkorde und Rhythmus wie am Song-Anfang der Probe), erst dann läuft die Uhr.
+        """
         if not self.gedrueckt:
             self.gedrueckt = jetzt
         self.start_pegel.append((jetzt, pegel))
@@ -271,16 +284,24 @@ class SongFolger:
             return False
         leistung = 10 ** (werte / 10)
         glatt = 10 * np.log10(np.convolve(leistung, np.ones(breite) / breite, mode="valid") + 1e-12)
-        schwelle = min(float(glatt.min()) + 10.0, max(-55.0, self.ref_laut - 18.0))
-        laut = werte > schwelle
-        if laut[-breite:].mean() < 0.7:
-            return False
-        i = len(laut) - breite
-        while i > 0 and laut[max(0, i - breite):i].mean() >= 0.5:
-            i -= 1
-        beginn = self.start_pegel[i][0] if i > 0 else self.start_pegel[0][0] - REAKTION_S
-        self._losgehen(beginn, jetzt)
-        return True
+        boden = float(glatt.min())
+        einsatz = werte > boden + 10.0
+        if einsatz[-breite:].mean() >= 0.7:
+            i = len(einsatz) - breite
+            while i > 0 and einsatz[max(0, i - breite):i].mean() >= 0.5:
+                i -= 1
+            if i > 0:
+                self._losgehen(self.start_pegel[i][0], jetzt)
+                return True
+        laut = werte > max(-55.0, self.ref_laut - 18.0)
+        if laut[-breite:].mean() >= 0.7:
+            self.bereit = False
+            self.sucht_anfang, self.such_seit, self.such_treffer, self.such_letzte = True, jetzt, 0, None
+            self.stelle = self.anfang
+            self.pos = self.erwartet = self.anfang * RATE - 1
+            self.fenster = []
+            return True
+        return False
 
     def _losgehen(self, beginn: float, jetzt: float) -> None:
         self.bereit = False
@@ -325,6 +346,9 @@ class SongFolger:
         breite = int(SUCHE_S * RATE)
         mitte = self.erwartet
         e_von, e_bis = max(0, int(mitte) - breite), min(self.n - 1, int(mitte) + breite)
+        if self.sucht_anfang:
+            e_von = max(0, int((self.anfang - 1.0) * RATE))
+            e_bis = min(self.n - 1, int((self.anfang + ANFANG_SUCHEN_S) * RATE))
         if e_bis <= e_von:
             return
         raten = np.clip(self.rate_lang * (1 + TEMPO_SCHRITTE), 0.75, 1.3)
@@ -334,7 +358,7 @@ class SongFolger:
         tabelle = np.vstack([self._entlang(kosten, von, enden, r) for r in raten])
         # Weiter wie bisher ist wahrscheinlicher als ein Sprung: In Songs wiederholt sich vieles.
         abweichung = (enden - mitte) / RATE
-        bewertung = tabelle + 0.01 * abweichung ** 2
+        bewertung = tabelle + (0.0 if self.sucht_anfang else 0.01) * abweichung ** 2
         t, e = np.unravel_index(int(np.argmin(bewertung)), bewertung.shape)
         beste = float(tabelle[t, e])
         # Feiner als ein Messpunkt: Parabel durch die Nachbarn
@@ -350,6 +374,9 @@ class SongFolger:
         anderswo = tabelle[:, weg]
         abstand = float(anderswo.min() - beste) if anderswo.size else 1.0
         eindeutig = float(np.clip((abstand - 0.01) * 10.0, 0.0, 1.0))
+        if self.sucht_anfang:
+            self._anfang_einrasten(neu, eindeutig, anzahl)
+            return
         nah = abs(neu - self.pos) < 0.5 * RATE        # rückt die Schätzung gleichmäßig vor?
         self.eindeutig += (eindeutig - self.eindeutig) * 0.1
         voll = min(1.0, anzahl / (2 * RATE))          # erst nach 2 s Band ganz sicher
@@ -364,6 +391,17 @@ class SongFolger:
         if self.sicher > 0.6 and anzahl >= W // 2:
             self.rate_lang += (float(raten[t]) - self.rate_lang) * 0.05
             self.typisch = beste if self.typisch is None else self.typisch + (beste - self.typisch) * 0.02
+
+    def _anfang_einrasten(self, neu: float, eindeutig: float, anzahl: int) -> None:
+        """Beim Suchen des Anfangs: Erst wenn eine Stelle eindeutig ist und gleichmäßig weiterläuft, gilt sie."""
+        stetig = self.such_letzte is not None and abs(neu - (self.such_letzte + self.rate_lang)) < 0.3 * RATE
+        self.such_letzte = neu
+        self.such_treffer = self.such_treffer + 1 if (stetig and eindeutig > 0.4) else 0
+        if self.such_treffer >= int(ANFANG_SICHER_S * RATE) and anzahl >= int(2 * RATE):
+            self.sucht_anfang = False
+            self.pos = self.erwartet = neu
+            self.stelle = self.gehoert = neu / RATE + VERZOEGERUNG_S
+            self.sicher, self.eindeutig = 0.6, max(self.eindeutig, 0.5)
 
     def _ueberall_suchen(self) -> None:
         """Passt eine ganz andere Stelle im Song deutlich besser? (Teil ausgelassen oder wiederholt)"""
@@ -416,6 +454,12 @@ class SongFolger:
                     self.pos = self.erwartet = self.stelle * RATE - 1
                 else:
                     return self.stelle
+            if self.sucht_anfang:
+                if jetzt - self.such_seit < ANFANG_AUFGEBEN_S:
+                    return self.stelle           # die Uhr läuft erst, wenn die Stelle gefunden ist
+                self.sucht_anfang = False        # nichts Eindeutiges: ab dem Drücken laufen lassen
+                self.stelle = self.anfang + (jetzt - self.gedrueckt) + REAKTION_S
+                self.pos = self.erwartet = self.stelle * RATE - 1
             ton_da = self.zuletzt_ton is not None and jetzt - self.zuletzt_ton < 0.5
             if ton_da and self.stille_seit >= STILLE_WARTEN_S and not self._probe_still(self.stelle):
                 self.wartet = True               # Band hat aufgehört: warten, bis sie weiterspielt
@@ -451,6 +495,8 @@ class SongFolger:
         ton_da = self.zuletzt_ton is not None and jetzt - self.zuletzt_ton < 0.5
         if self.bereit:
             art = "bereit"
+        elif self.sucht_anfang:
+            art = "sucht"
         elif not ton_da:
             art = "uhr"
         elif self.wartet:

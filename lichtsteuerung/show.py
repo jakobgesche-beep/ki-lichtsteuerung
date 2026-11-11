@@ -535,7 +535,7 @@ class Show:
                     "vorschau": {"geraete": self.vorschau_geraete},
                     "chat_vorschau": ({"geraete": self.chat_vorschau_geraete, "cue": self.chat.entwurf["cue"]}
                                       if self.chat_vorschau_geraete is not None and self.chat.entwurf else None),
-                    "chat_denkt": self.chat.denkt,
+                    "chat_denkt": self.chat.denkt, "start_meldungen": daten.START_MELDUNGEN,
                     "strobo_erlaubt": self.profil["strobo"] != "aus",
                     "hazer_erlaubt": self.profil["hazer"],
                     "audio": {"quelle": self.audio.name, "fehler": self.audio.fehler,

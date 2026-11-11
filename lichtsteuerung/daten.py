@@ -70,13 +70,37 @@ def einrichten(ziel: Path, vorlage: Path = PROJEKT) -> None:
             shutil.copytree(vorlage / name, ziel / name)
 
 
+START_MELDUNGEN = []      # zum Beispiel "Show geladen": zeigt die Oberfläche einmal an
+
+
 def standard_pfade() -> Pfade:
-    """Im Projektordner die Dateien dort, in der App der eigene Datenordner."""
+    """Im Projektordner die Dateien dort, in der App der eigene Datenordner.
+
+    Liegt eine Show-Datei zum Laden bereit (Setup → Sicherung), wird sie jetzt übernommen,
+    bevor irgendetwas geöffnet ist.
+    """
+    from . import sicherung
+    ordner = datenordner() if ALS_APP else PROJEKT
+    try:
+        meldung = sicherung.beim_start_laden(ordner)
+        if meldung:
+            START_MELDUNGEN.append(meldung)
+    except Exception as fehler:          # eine kaputte Datei darf den Start nie verhindern
+        START_MELDUNGEN.append(f"Die bereitgelegte Show konnte nicht geladen werden: {fehler}")
     if not ALS_APP:
         return Pfade()
-    ordner = datenordner()
     einrichten(ordner)
     return Pfade(ordner, PROJEKT / "catalog")
+
+
+def lese_json_sicher(pfad: Path, standard: Any = None) -> Any:
+    """Wie lese_json, aber eine kaputte Datei gibt `standard` zurück (und landet im Logbuch)."""
+    try:
+        return lese_json(pfad, standard)
+    except (ValueError, OSError):
+        import logging
+        logging.exception("Kaputte Datei %s", pfad)
+        return standard
 
 
 def lese_json(pfad: Path, standard: Any = None) -> Any:
@@ -100,6 +124,8 @@ def schreibe_json(pfad: Path, inhalt: Any) -> None:
         with os.fdopen(griff, "w", encoding="utf-8") as datei:
             json.dump(inhalt, datei, ensure_ascii=False, indent=2)
             datei.write("\n")
+            datei.flush()
+            os.fsync(datei.fileno())      # wirklich auf der Platte, bevor umbenannt wird (Strom weg!)
         os.replace(hilfsdatei, pfad)
     except BaseException:
         if os.path.exists(hilfsdatei):

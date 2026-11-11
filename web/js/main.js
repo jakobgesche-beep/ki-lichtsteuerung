@@ -8,6 +8,7 @@ import { profileSeite } from "./profile.js";
 import { patchSeite } from "./patch.js";
 import { katalogSeite } from "./katalog.js";
 import { dmxTestSeite } from "./dmxtest.js";
+import { sicherungSeite } from "./sicherung.js";
 import { tastenLeiste } from "./tasten.js";
 import { befehlszeile } from "./befehl.js";
 import { abonnieren } from "./verbindung.js";
@@ -17,7 +18,7 @@ const views = [
   ["Pult", pultSeite],
   ["Live", liveSeite],
   ["Probe", probeSeite],
-  ["Setup", null, [["Patch", patchSeite], ["Profile", profileSeite], ["Katalog", katalogSeite], ["DMX-Test", dmxTestSeite]]],
+  ["Setup", null, [["Patch", patchSeite], ["Profile", profileSeite], ["Katalog", katalogSeite], ["DMX-Test", dmxTestSeite], ["Sicherung", sicherungSeite]]],
 ];
 
 const inhalt = document.getElementById("inhalt");
