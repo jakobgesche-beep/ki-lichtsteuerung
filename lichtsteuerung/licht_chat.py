@@ -321,7 +321,8 @@ def _effekt_art(wort: str) -> Optional[str]:
     return next((art for stamm, art in EFFEKT_STAEMME if wort.startswith(stamm)), None)
 
 
-BEISPIELE = "„Spots blau, langsamer Kreis“, „PARs rot, pulsieren im Beat“, „alles warmweiß 60 %“, „Farbwechsel rot blau auf Fader 3“"
+BEISPIELE = ("„Spots blau, langsamer Kreis“, „PARs rot, pulsieren im Beat“, „alles warmweiß 60 %“, "
+             "„Party mit Strobo auf Fader 3“, „alle Lichter wirbeln durcheinander“, „ruhige Ballade“")
 
 
 def _abdeckende_gruppen(show, gruppen: list) -> list:
@@ -335,10 +336,62 @@ def _abdeckende_gruppen(show, gruppen: list) -> list:
     return auswahl
 
 
+# Stile: ein Wort, ein ganzer Look (Farben, Bewegung der Köpfe, was die PARs machen)
+STILE = {
+    "pop": {"name": "Pop", "farben": ["pink", "cyan"], "bewegung": "acht", "beats": 8, "pars": "puls"},
+    "rock": {"name": "Rock", "farben": ["rot", "weiss"], "bewegung": "schwenk", "beats": 8, "pars": "puls"},
+    "party": {"name": "Party", "farben": ["pink", "cyan", "lila", "gelb"], "bewegung": "kreis", "beats": 4,
+              "pars": "wechsel", "durcheinander": True},
+    "ballade": {"name": "Ballade", "farben": ["warmweiss", "gold"], "bewegung": None, "beats": 16, "pars": "welle",
+                "hell": 0.7},
+    "weihnachten": {"name": "Weihnachten", "farben": ["gold", "rot"], "bewegung": None, "beats": 16, "pars": "welle",
+                    "hell": 0.8},
+    "jazz": {"name": "Jazz", "farben": ["lila", "gold"], "bewegung": None, "beats": 16, "pars": "welle", "hell": 0.6},
+}
+STIL_WOERTER = {"pop": "pop", "popmusik": "pop", "rock": "rock", "rockig": "rock", "metal": "rock", "punk": "rock",
+                "party": "party", "disco": "party", "club": "party", "techno": "party", "edm": "party", "rave": "party",
+                "ballade": "ballade", "romantisch": "ballade", "gefuehlvoll": "ballade", "kuschelig": "ballade",
+                "weihnachten": "weihnachten", "weihnachtlich": "weihnachten", "festlich": "weihnachten",
+                "jazz": "jazz", "jazzig": "jazz", "lounge": "jazz"}
+# Bewegung ohne genaue Angabe: Köpfe kreisen, jeder etwas anders ("durcheinander")
+WIRBEL_WOERTER = ("wirbeln", "wirbelt", "wirbel", "durcheinander", "chaos", "chaotisch", "kreuz", "quer",
+                  "drehen", "dreht", "bewegen", "bewegt", "bewegung", "tanzen", "tanzt", "fliegen", "rumfliegen")
+STROBO_WOERTER = ("strobo", "stroboskop", "strobe", "blitzen", "blitzt", "blitze", "blitz", "flackern")
+ALLE_WOERTER = ("alle", "alles", "komplett", "ganze", "buehne", "lichter", "licht", "lampen", "scheinwerfer")
+TEMPO_LANGSAM = ("langsam", "ruhig", "sanft", "gemuetlich", "gemaechlich", "entspannt")
+TEMPO_SCHNELL = ("schnell", "wild", "hektisch", "zackig", "flott", "rasant")
+
+
+def _wortschatz() -> list:
+    woerter = set(FARB_WOERTER) | set(EFFEKT_WOERTER) | set(STIL_WOERTER) | set(WIRBEL_WOERTER) | set(STROBO_WOERTER)
+    woerter |= set(ALLE_WOERTER) | set(TEMPO_LANGSAM) | set(TEMPO_SCHNELL)
+    for synonyme, _ in GRUPPEN_WOERTER:
+        woerter |= set(synonyme)
+    return sorted(w for w in woerter if len(w) >= 4)
+
+
+WORTSCHATZ = _wortschatz()
+
+
+def _korrigieren(wort: str, gruppen_namen: list) -> str:
+    """Tippfehler verzeihen: "srobo" -> "strobo", "wirbelnd" -> "wirbeln". Kurze Wörter bleiben, wie sie sind."""
+    if len(wort) < 5 or wort in WORTSCHATZ or wort in gruppen_namen or wort.isdigit():
+        return wort
+    import difflib
+    treffer = difflib.get_close_matches(wort, WORTSCHATZ + gruppen_namen, n=1, cutoff=0.8)
+    return treffer[0] if treffer else wort
+
+
 def einfach_verstehen(show, text: str) -> Optional[dict]:
-    """Versteht kurze Sätze ohne Internet. Gibt einen Vorschlag zurück oder None."""
+    """Versteht kurze Sätze ohne Internet. Gibt einen Vorschlag zurück oder None.
+
+    Kennt: Gruppen (Spots, PARs, Strobo, alle Lichter), Farben, Helligkeit (60 %, halb, voll), Positionen,
+    Effekte (Kreis, Acht, Schwenk, Welle, Puls, Farbwechsel), Stile (Pop, Rock, Party, Ballade, Weihnachten,
+    Jazz), "durcheinander/wirbeln", langsam/schnell, "in 3 Sekunden", "auf Fader 4". Tippfehler verzeiht er.
+    """
     w = welt(show)
     vorhanden = list(w["gruppen"])
+    gruppen_namen = [_grundform(g) for g in vorhanden]
     licht = _abdeckende_gruppen(show, [g for g in vorhanden if g not in ("Strobo", "Dunst")])
     satz = _grundform(text)
     fader = None
@@ -351,13 +404,24 @@ def einfach_verstehen(show, text: str) -> Optional[dict]:
     if treffer:
         zeit = float(treffer.group(1).replace(",", "."))
         satz = satz.replace(treffer.group(0), " ")
-    werte, effekte, verstanden = {}, [], []
+    werte, effekte, verstanden, notizen, stil_namen = {}, [], [], [], []
     gruppen_vorher: list = []
-    for teil in re.split(r"[,;.]|\bund\b|\bdazu\b|\bmit\b", satz):
-        woerter = re.findall(r"[a-z0-9#%\-]+", teil)
+
+    def effekt_setzen(art: str, gruppe: str, beats: float, **mehr) -> None:
+        nonlocal effekte
+        effekt = {"art": art, "ziel": {"gruppe": gruppe}, "tempo": "musik", "beats": beats, "verteilung": 0.5, **mehr}
+        bewegung = art in BEWEGUNGS_ARTEN
+        effekte = [e for e in effekte if not (e["ziel"] == effekt["ziel"] and (e["art"] in BEWEGUNGS_ARTEN) == bewegung
+                                              and e["art"] != "farbwechsel" and art != "farbwechsel")]
+        effekte = [e for e in effekte if not (e["ziel"] == effekt["ziel"] and e["art"] == art)]
+        effekte.append(effekt)
+
+    for teil in re.split(r"[,;.]|\bund\b|\bdazu\b|\bmit\b|\bwo\b", satz):
+        woerter = [_korrigieren(x, gruppen_namen) for x in re.findall(r"[a-z0-9#%\-]+", teil)]
         if not woerter:
             continue
         gruppen = []
+        strobo = any(x in STROBO_WOERTER for x in woerter)
         for wort in woerter:
             direkt = [g for g in vorhanden if wort == _grundform(g)]
             if direkt:
@@ -366,14 +430,20 @@ def einfach_verstehen(show, text: str) -> Optional[dict]:
             for synonyme, ziele in GRUPPEN_WOERTER:
                 if wort in synonyme:
                     gruppen += [z for z in ziele if z in vorhanden and z not in gruppen][:1]
-            if wort in ("alle", "alles", "komplett", "ganze", "buehne"):
+            if wort in ALLE_WOERTER:
                 gruppen += [g for g in licht if g not in gruppen]
-            if wort.startswith(("blitz", "strob")) and "Strobo" not in vorhanden:
-                return None                     # Strobo gewünscht, aber keiner gepatcht
+        if strobo and "Strobo" not in vorhanden:
+            notizen.append("Einen Strobo gibt es im Patch nicht.")
         gruppen = gruppen or gruppen_vorher or licht
-        gruppen_vorher = gruppen
+        if strobo and "Strobo" in vorhanden and "Strobo" not in gruppen:
+            gruppen = gruppen + ["Strobo"]
+        gruppen_vorher = [g for g in gruppen if g != "Strobo"] or gruppen
         farben = [FARB_WOERTER[x] for x in woerter if x in FARB_WOERTER]
         farben += [x for x in woerter if re.fullmatch(r"#[0-9a-f]{6}", x)]
+        stile = [STILE[STIL_WOERTER[x]] for x in woerter if x in STIL_WOERTER]
+        stil = stile[0] if stile else None
+        if stil:
+            stil_namen.append(stil["name"])
         hell = None
         prozent = re.search(r"(\d{1,3})\s*(?:%|prozent)", teil)
         if prozent:
@@ -386,59 +456,96 @@ def einfach_verstehen(show, text: str) -> Optional[dict]:
             hell = 0.3
         elif any(x in woerter for x in ("dunkel", "aus", "schwarz")):
             hell = 0.0
-        tempo_beats = 16 if any(x.startswith(("langsam", "ruhig", "sanft", "gemuetlich")) for x in woerter) else \
-            2 if any(x.startswith(("schnell", "wild", "hektisch", "zackig")) for x in woerter) else None
+        if hell is None and stil:
+            hell = stil.get("hell")
+        langsam = any(x.startswith(TEMPO_LANGSAM) for x in woerter)
+        schnell = any(x.startswith(TEMPO_SCHNELL) for x in woerter)
         positionen = [p for p in w["positionen"] if _grundform(p) in teil]
         effekt_arten = list(dict.fromkeys(art for art in map(_effekt_art, woerter) if art))
-        strobo = any(x in woerter for x in ("blitzen", "blitzt", "blitze", "strobo", "stroboskop", "strobe"))
+        wirbel = any(x in WIRBEL_WOERTER for x in woerter) or bool(stil and stil.get("durcheinander"))
+        if not farben and stil:
+            farben = list(stil["farben"])
+        if not farben and wirbel and not effekt_arten:
+            farben = ["pink", "cyan", "lila", "gelb"]
         for gruppe in gruppen:
             info = w["gruppen"][gruppe]
             wert = werte.setdefault(gruppe, {"gruppe": gruppe})
-            if farben and "farbwechsel" not in effekt_arten and gruppe != "Strobo":
-                wert["farbe"] = farben[0]
-                if len(farben) > 1 and len(gruppen) > 1:
-                    wert["farbe"] = farben[gruppen.index(gruppe) % len(farben)]
+            if gruppe == "Strobo":
+                if strobo:
+                    wert["strobo_hz"] = min(2.0, w["strobo_max_hz"])
+                    wert["helligkeit"] = 1.0
+                continue
+            wechsel = "farbwechsel" in effekt_arten or (not info["beweglich"] and (wirbel or (stil and stil["pars"] == "wechsel")))
+            if farben and not wechsel:
+                wert["farbe"] = farben[(licht.index(gruppe) if gruppe in licht else 0) % len(farben)] \
+                    if len(farben) > 1 and len(gruppen) > 1 else farben[0]
             if hell is not None:
                 wert["helligkeit"] = hell
             if positionen and info["beweglich"]:
                 wert["position"] = positionen[0]
-            if strobo and gruppe == "Strobo":
-                wert["strobo_hz"] = min(2.0, w["strobo_max_hz"])
-                wert.setdefault("helligkeit", 1.0)
-            for art in effekt_arten:
+            beats_bewegung = 16 if langsam else 4 if schnell else 8
+            arten = list(effekt_arten)
+            if info["beweglich"] and not any(a in BEWEGUNGS_ARTEN for a in arten):
+                if wirbel:
+                    arten.append("kreis")
+                elif stil and stil["bewegung"]:
+                    arten.append(stil["bewegung"])
+            if not info["beweglich"] and stil and not arten:
+                arten.append({"puls": "dimmer_puls", "welle": "dimmer_welle", "wechsel": "farbwechsel"}[stil["pars"]])
+            if wechsel and "farbwechsel" not in arten:
+                arten.append("farbwechsel")
+            for art in arten:
                 if art in BEWEGUNGS_ARTEN and not info["beweglich"]:
                     continue
-                effekt = {"art": art, "ziel": {"gruppe": gruppe}, "tempo": "musik",
-                          "beats": tempo_beats or (8 if art in BEWEGUNGS_ARTEN else 4), "verteilung": 0.5}
                 if art in BEWEGUNGS_ARTEN:
-                    effekt["groesse"] = 0.5
+                    mehr = {"groesse": 0.6 if wirbel else 0.5}
                     if positionen:
-                        effekt["mitte"] = positionen[0]
-                if art == "farbwechsel":
-                    effekt["farben"] = farben if len(farben) >= 2 else ["rot", "blau", "lila", "gold"]
-                if art == "dimmer_welle":
-                    effekt["tiefe"] = 0.6
-                effekte = [e for e in effekte if not (e["ziel"] == effekt["ziel"]
-                                                        and (e["art"] in BEWEGUNGS_ARTEN) == (art in BEWEGUNGS_ARTEN)
-                                                        and e["art"] != "farbwechsel" and art != "farbwechsel")]
-                effekte.append(effekt)
+                        mehr["mitte"] = positionen[0]
+                    effekt_setzen(art, gruppe, (stil["beats"] if stil and not (langsam or schnell) else beats_bewegung),
+                                  **mehr)
+                    if wirbel:
+                        effekte[-1]["verteilung"] = 1.0       # jeder Kopf anders: durcheinander
+                elif art == "farbwechsel":
+                    effekt_setzen(art, gruppe, 2 if schnell or wirbel else 4,
+                                  farben=farben if len(farben) >= 2 else ["rot", "blau", "lila", "gold"])
+                elif art == "dimmer_welle":
+                    effekt_setzen(art, gruppe, 16 if langsam or (stil and stil["beats"] >= 16) else 8, tiefe=0.6)
+                else:
+                    effekt_setzen(art, gruppe, 1 if art == "dimmer_puls" else 4)
         verstanden += farben + effekt_arten + positionen + (["Helligkeit"] if hell is not None else []) \
-            + (["Strobo"] if strobo else [])
+            + (["Strobo"] if strobo else []) + (["Wirbel"] if wirbel else []) + ([stil["name"]] if stil else [])
     if not verstanden:
         return None
     for wert in werte.values():
         if "helligkeit" not in wert:
             wert["helligkeit"] = 1.0 if wert["gruppe"] != "Strobo" else 0.0
-    teile = [farbe.capitalize() for farbe in dict.fromkeys(v.get("farbe") for v in werte.values())
-             if farbe and not farbe.startswith("#")]
-    teile += [EFFEKT_ARTEN[e["art"]] for e in effekte]
-    name = " ".join(dict.fromkeys(teile))[:30].strip() or "Look"
+    wirbelt = any(e["art"] in BEWEGUNGS_ARTEN and e.get("verteilung") == 1.0 for e in effekte)
+    if stil_namen:
+        name = " ".join(dict.fromkeys(stil_namen))
+    elif wirbelt:
+        name = "Wirbel"
+    else:
+        teile = [farbe.capitalize() for farbe in dict.fromkeys(v.get("farbe") for v in werte.values())
+                 if farbe and not farbe.startswith("#")]
+        teile += [EFFEKT_ARTEN[e["art"]] for e in effekte]
+        name = " ".join(dict.fromkeys(teile))
+    zusatz = " mit Strobo" if any("strobo_hz" in v for v in werte.values()) else ""
+    name = (name[:30 - len(zusatz)].strip() or "Look") + zusatz
     cue = {"name": name, "zeit_s": zeit, "folgen_s": None, "werte": list(werte.values()), "effekte": effekte}
-    erklaerung = ", ".join(f"{v['gruppe']}: {v.get('farbe', '–')} {round(v['helligkeit'] * 100)} %"
-                           for v in werte.values())
+    beschreibung = []
+    for v in werte.values():
+        if "strobo_hz" in v:
+            beschreibung.append(f"{v['gruppe']} blitzt ({v['strobo_hz']:g} pro Sekunde)")
+        else:
+            beschreibung.append(f"{v['gruppe']}: {v.get('farbe', 'bunt')} {round(v['helligkeit'] * 100)} %"
+                                + (f", auf {v['position']}" if v.get("position") else ""))
+    erklaerung = ", ".join(beschreibung)
     if effekte:
-        erklaerung += ". Effekte: " + ", ".join(f"{EFFEKT_ARTEN[e['art']]} ({e['ziel']['gruppe']})" for e in effekte)
-    return {"sequenz": {"name": name, "cues": [cue]}, "erklaerung": erklaerung + ".", "fader": fader, "ersetzt": False}
+        erklaerung += ". Effekte: " + ", ".join(
+            f"{'Wirbel (Kreis, jeder Kopf anders)' if e.get('verteilung') == 1.0 and e['art'] in BEWEGUNGS_ARTEN else EFFEKT_ARTEN[e['art']]}"
+            f" ({e['ziel']['gruppe']})" for e in effekte)
+    erklaerung += "." + ("".join(" " + n for n in dict.fromkeys(notizen)) if notizen else "")
+    return {"sequenz": {"name": name, "cues": [cue]}, "erklaerung": erklaerung, "fader": fader, "ersetzt": False}
 
 
 # --- Der Chat --------------------------------------------------------------------
@@ -533,7 +640,8 @@ class LichtChat:
             if self.schluessel.lesen():
                 self._mit_claude(text)
             else:
-                self._einfach(text, "Kein Claude-Schlüssel eingetragen: Ich verstehe nur einfache Sätze.")
+                self._einfach(text, "Ohne Claude-Schlüssel verstehe ich einfache Sätze: Gruppen, Farben, Effekte, "
+                                    "Stile wie Pop, Rock, Party, Ballade. Für freie Sätze unten den Schlüssel eintragen.")
         finally:
             self.denkt = False
             self._sperre.release()

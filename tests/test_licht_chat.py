@@ -217,3 +217,18 @@ def test_chat_ueber_den_server(show):
         assert client.post("/api/ki/schluessel", json={"schluessel": SCHLUESSEL}).json()["ki"]["bereit"]
         assert SCHLUESSEL not in client.get("/api/chat").text
         assert client.delete("/api/ki/schluessel").json()["ki"]["bereit"] is False
+
+
+def test_einfach_versteht_tippfehler_stile_und_wirbel(show):
+    # Der Satz, den der Nutzer wirklich geschrieben hat (mit Tippfehlern)
+    vorschlag = einfach_verstehen(show, "baue eine rop position mit srobo und wo alle Lichter durcheinander wirbeln")
+    assert vorschlag is not None and vorschlag["sequenz"]["name"].startswith("Wirbel")
+    cue = vorschlag["sequenz"]["cues"][0]
+    bewegung = [e for e in cue["effekte"] if e["art"] == "kreis"]
+    assert bewegung and bewegung[0]["verteilung"] == 1.0                    # jeder Kopf anders
+    assert any(e["art"] == "farbwechsel" for e in cue["effekte"])           # PARs bunt
+    assert pruefen(show, vorschlag["sequenz"]) == []
+    pop = einfach_verstehen(show, "Pop Look auf Fader 2")
+    assert pop["sequenz"]["name"] == "Pop" and pop["fader"] == 2
+    assert einfach_verstehen(show, "ruhige Ballade")["sequenz"]["cues"][0]["effekte"][0]["art"] == "dimmer_welle"
+    assert einfach_verstehen(show, "Wie spät ist es?") is None
