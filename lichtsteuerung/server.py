@@ -677,6 +677,18 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.song.starten(str(auftrag.get("name", "")), int(auftrag.get("executor", SONG_NUMMER)))
         return show.song.zustand()
 
+    @app.post("/api/setlist")
+    def setlist(auftrag: dict = Body(...)):
+        """Reihenfolge der Songs fürs Konzert und wie die Song-Erkennung arbeitet."""
+        show.song.setlist_setzen(auftrag.get("reihenfolge"), auftrag.get("modus"))
+        return show.song.erkennung_zustand()
+
+    @app.post("/api/song/vorschlag")
+    def song_vorschlag():
+        """Knopf "Klingt nach …, starten"."""
+        show.song.vorschlag_starten()
+        return show.song.zustand()
+
     @app.post("/api/song/teil")
     def song_teil(auftrag: dict = Body(...)):
         """Klick auf einen Teil in der Zeitleiste: Der Song läuft ab dort weiter."""

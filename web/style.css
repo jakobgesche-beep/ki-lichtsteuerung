@@ -334,3 +334,17 @@ td input[type=number] { width: 66px; }
 .check-punkt.ok .check-zeichen { color: #7fdc9c; }
 .check-punkt.hinweis .check-zeichen { color: #f0c94a; }
 .check-punkt.problem .check-zeichen { color: #ff8a80; }
+
+/* Song-Erkennung und Setlist auf der Show-Seite */
+.erkennung { margin-bottom: 6px; gap: 8px; }
+.segment { display: inline-flex; }
+.segment button { padding: 3px 9px; font-size: 12px; border-radius: 0; margin-left: -1px; }
+.segment button:first-child { border-radius: 3px 0 0 3px; }
+.segment button:last-child { border-radius: 0 3px 3px 0; }
+.erkennung-text { min-height: 16px; margin-bottom: 6px; }
+.vorschlag { margin-bottom: 6px; }
+.vorschlag-knopf { width: 100%; padding: 12px; font-size: 16px; font-weight: 800; background: #c9a227; border-color: #c9a227; color: #111; animation: blinken 1.4s ease-in-out infinite; }
+.vorschlag-knopf:hover:not(:disabled) { background: #e0b62c; }
+.songplatz { display: flex; gap: 4px; align-items: stretch; }
+.songplatz .ordnen { display: flex; flex-direction: column; gap: 2px; justify-content: center; }
+.setlist-nr { display: inline-block; min-width: 18px; color: var(--leise); font-size: 12px; font-weight: 700; }

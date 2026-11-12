@@ -31,6 +31,7 @@ class AudioBetrieb:
         self.aufnahme = None      # Liste von Blöcken, solange in der Probe aufgenommen wird
         self.beat_erkennung = None
         self.zuhoerer = None      # zum Beispiel der Song-Folger: bekommt jeden Block mit
+        self.mithoerer = []       # weitere, zum Beispiel die Song-Erkennung
         self.wieder_verbunden = 0
         self._thread: Optional[threading.Thread] = None
         self._stopp = threading.Event()
@@ -69,10 +70,12 @@ class AudioBetrieb:
                 if self.aufnahme is not None and len(self.aufnahme) < MAX_AUFNAHME_BLOECKE:
                     self.aufnahme.append(block.copy())
                 werte = analyse.verarbeite(block)
-                zuhoerer = self.zuhoerer
-                if zuhoerer is not None:
+                jetzt = time.monotonic()
+                for zuhoerer in [self.zuhoerer] + list(self.mithoerer):
+                    if zuhoerer is None:
+                        continue
                     try:
-                        zuhoerer(block, time.monotonic())
+                        zuhoerer(block, jetzt)
                     except Exception:
                         logging.exception("Zuhörer der Audio-Analyse")
                 if werte.beat:

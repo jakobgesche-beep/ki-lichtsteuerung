@@ -9,6 +9,15 @@
     Stopp          Der Executor blendet aus, die Automatik übernimmt wieder.
 
 Angezeigt wird immer: welcher Teil gerade läuft, wie lange noch, und was danach kommt.
+
+Song-Erkennung (der Clou): Das Programm hört auch zwischen den Songs zu und erkennt, welcher geprobte
+Song gespielt wird (audio/erkennen.py). Die Setlist sagt, welcher Song als Nächstes dran ist:
+
+    Automatisch    Der erwartete Song startet von selbst, sobald er sicher erkannt ist, an der richtigen
+                   Stelle (auch wenn das Erkennen ein paar Sekunden gedauert hat).
+                   Ein anderer Song startet nie von selbst: Es erscheint "Klingt nach …, starten?".
+    Vorschlagen    Jeder erkannte Song erscheint nur als großer Knopf.
+    Aus            Nur von Hand.
 """
 from __future__ import annotations
 
@@ -17,9 +26,13 @@ import math
 import time
 from typing import Optional
 
-from .audio import folgen
+from . import daten
+from .audio import erkennen, folgen
 from .audio.quellen import lade_datei
 from .pult import SONG_NUMMER
+
+MODI = ("automatisch", "vorschlagen", "aus")
+VORSCHLAG_S = 20.0          # so lange bleibt ein Vorschlag stehen
 
 
 def karte_aus(sequenz: dict, analyse: Optional[dict]) -> dict:
@@ -54,6 +67,16 @@ class SongSpieler:
         self.zeitcode: list = []
         self.letzte_zeit: Optional[float] = None
         self._merkmale = {}          # Name -> (Dateistand, Merkmale, Pegel), damit Start schnell geht
+        self.erkenner = erkennen.SongErkenner()
+        self.zuletzt_gespielt: Optional[str] = None
+        self.vorschlag: Optional[dict] = None       # {"name", "stelle", "zeit"}: "Klingt nach …"
+        self.meldung: Optional[str] = None          # zum Beispiel "Erkannt: Hh, läuft"
+        self.setlist_pfad = show.pfade.sequenzen.parent / "setlist.json"
+        roh = daten.lese_json_sicher(self.setlist_pfad, {}) or {}
+        self.reihenfolge = [n for n in roh.get("reihenfolge", []) if isinstance(n, str)]
+        self.modus = roh.get("modus") if roh.get("modus") in MODI else "automatisch"
+        self._liste: list = []
+        self._liste_stand = -99.0
 
     # --- Welche Songs gibt es ---------------------------------------------
 
@@ -82,14 +105,15 @@ class SongSpieler:
 
     # --- Bedienen -------------------------------------------------------
 
-    def starten(self, name: str, nummer: int = SONG_NUMMER, jetzt: Optional[float] = None) -> None:
+    def starten(self, name: str, nummer: int = SONG_NUMMER, jetzt: Optional[float] = None,
+                stelle: Optional[float] = None) -> None:
         """Der Song läuft auf einem eigenen Platz (nicht auf den Fadern), außer man nennt einen Fader.
 
         Die Uhr beginnt erst, wenn die Band wirklich spielt. Ein zweiter Druck, während der Song
         noch auf die Band wartet, heißt: jetzt geht es los (zum Beispiel bei einem sehr leisen Anfang).
         """
         jetzt = time.monotonic() if jetzt is None else jetzt
-        if self.folger is not None and self.name == name and self.folger.bereit:
+        if self.folger is not None and self.name == name and self.folger.bereit and stelle is None:
             self.folger.jetzt_los(jetzt)
             return
         sequenz = self.show.pult.sequenzen.lesen(name)
@@ -101,7 +125,8 @@ class SongSpieler:
         folger = folgen.SongFolger(merkmale, pegel)
         with self.show.sperre:
             self.stoppen(jetzt)
-            folger.starten(jetzt=jetzt)
+            folger.starten(stelle=stelle, jetzt=jetzt)       # mit Stelle: die Song-Erkennung weiß schon, wo wir sind
+            self.zuletzt_gespielt, self.vorschlag = name, None
             self.folger, self.name, self.nummer = folger, name, nummer
             self.karte = karte_aus(sequenz, self.show.proben.lesen(name))
             self.zeitcode = list(sequenz["zeitcode"])
@@ -171,6 +196,105 @@ class SongSpieler:
     def zu_cue(self, index: int) -> None:
         if self.folger is not None and 0 <= index < len(self.zeitcode):
             self.folger.setzen(self.zeitcode[index] + 0.01)
+
+    # --- Setlist und Song-Erkennung ------------------------------------------------
+
+    def setlist(self, frisch: bool = False) -> list:
+        """Die Reihenfolge fürs Konzert. Songs, die (noch) nicht drinstehen, kommen hinten dran.
+        (Höchstens alle 2 s neu von der Platte gelesen: Die Anzeige fragt 40-mal pro Sekunde.)"""
+        if frisch or time.monotonic() - self._liste_stand > 2.0:
+            vorhanden = [s["name"] for s in self.songs()]
+            self._liste = [n for n in self.reihenfolge if n in vorhanden] + [n for n in vorhanden if n not in self.reihenfolge]
+            self._liste_stand = time.monotonic()
+        return list(self._liste)
+
+    def setlist_setzen(self, reihenfolge: Optional[list] = None, modus: Optional[str] = None) -> None:
+        if reihenfolge is not None:
+            self.reihenfolge = [str(n) for n in reihenfolge]
+            self._liste_stand = -99.0
+        if modus is not None:
+            if modus not in MODI:
+                raise ValueError(f"Modus muss einer von {', '.join(MODI)} sein.")
+            self.modus = modus
+            if modus == "aus":
+                self.vorschlag = None
+        daten.schreibe_json(self.setlist_pfad, {"reihenfolge": self.reihenfolge, "modus": self.modus})
+
+    def erwartet(self) -> Optional[str]:
+        """Welcher Song laut Setlist als Nächstes dran ist."""
+        liste = self.setlist()
+        if not liste:
+            return None
+        if self.zuletzt_gespielt in liste:
+            i = liste.index(self.zuletzt_gespielt) + 1
+            return liste[i] if i < len(liste) else None
+        return liste[0]
+
+    def erkennen_vorbereiten(self) -> None:
+        """Die Erkennung kennt alle Songs mit Probe-Aufnahme (neu berechnet, wenn sich eine Aufnahme ändert)."""
+        vorhanden = set()
+        for song in self.songs():
+            name = song["name"]
+            vorhanden.add(name)
+            pfad = self.show.proben.ton_pfad(name)
+            stand = pfad.stat().st_mtime
+            if self._merkmale.get(name, (None,))[0] != stand or name not in self.erkenner.referenzen:
+                merkmale, _ = self._referenz(name)
+                self.erkenner.referenz(name, merkmale)
+        for name in list(self.erkenner.referenzen):
+            if name not in vorhanden:
+                self.erkenner.entfernen(name)
+        hoeren = self.erkenner.hoeren
+        if self.modus != "aus" and hoeren not in self.show.audio.mithoerer:
+            self.show.audio.mithoerer.append(hoeren)
+        elif self.modus == "aus" and hoeren in self.show.audio.mithoerer:
+            self.show.audio.mithoerer.remove(hoeren)
+
+    def _am_ende(self) -> bool:
+        """Ist der laufende Song durch (oder wartet die Band nach dem letzten Teil)?"""
+        if self.folger is None:
+            return True
+        teile = self.karte.get("teile", [])
+        dauer = float(self.karte.get("dauer_s") or 0.0)
+        letzter = teile[-1]["start"] if teile else dauer
+        return self.folger.stelle >= dauer - 3.0 or (self.folger.wartet and self.folger.stelle >= letzter)
+
+    def erkennen_takt(self, jetzt: Optional[float] = None) -> Optional[dict]:
+        """Alle 0,5 s (eigener Thread): Wird gerade ein geprobter Song gespielt? Startet oder schlägt vor."""
+        jetzt = time.monotonic() if jetzt is None else jetzt
+        if self.vorschlag and jetzt - self.vorschlag["zeit"] > VORSCHLAG_S:
+            self.vorschlag = None
+        if self.modus == "aus":
+            return None
+        laeuft_normal = self.folger is not None and not self._am_ende()
+        ergebnis = self.erkenner.pruefen(jetzt, ohne=self.name if self.folger is not None else None)
+        if ergebnis is None:
+            return None
+        name = ergebnis["name"]
+        if self.modus == "automatisch" and name == self.erwartet() and not laeuft_normal:
+            self.starten(name, jetzt=jetzt, stelle=ergebnis["stelle"])
+            self.meldung = f"Erkannt: {name}. Das Licht läuft mit (ab {int(ergebnis['stelle'] // 60)}:{int(ergebnis['stelle'] % 60):02d})."
+            return {**ergebnis, "gestartet": True}
+        # Unerwarteter Song (oder Modus Vorschlagen, oder ein ganz anderer Song mitten im laufenden): nur vorschlagen
+        self.vorschlag = {"name": name, "stelle": ergebnis["stelle"], "zeit": jetzt, "laeuft_anderer": laeuft_normal}
+        return {**ergebnis, "gestartet": False}
+
+    def vorschlag_starten(self, jetzt: Optional[float] = None) -> None:
+        """Der Knopf "Klingt nach …, starten": Die Stelle läuft seit dem Erkennen weiter."""
+        if not self.vorschlag:
+            raise ValueError("Es gibt gerade keinen erkannten Song.")
+        jetzt = time.monotonic() if jetzt is None else jetzt
+        vorschlag = self.vorschlag
+        stelle = vorschlag["stelle"] + max(0.0, jetzt - vorschlag["zeit"])
+        self.starten(vorschlag["name"], jetzt=jetzt, stelle=stelle)
+        self.meldung = f"{vorschlag['name']} läuft (von Hand bestätigt)."
+
+    def erkennung_zustand(self) -> dict:
+        letztes = self.erkenner.letztes or {}
+        return {"modus": self.modus, "setlist": self.setlist(), "erwartet": self.erwartet(),
+                "vorschlag": {k: v for k, v in self.vorschlag.items() if k != "zeit"} if self.vorschlag else None,
+                "meldung": self.meldung, "hoert": letztes.get("art") == "vergleicht",
+                "kandidat": letztes.get("name") if letztes.get("eindeutig") else None}
 
     # --- Jedes Bild ---------------------------------------------------------
 

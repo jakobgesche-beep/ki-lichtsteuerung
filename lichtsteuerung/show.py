@@ -529,6 +529,7 @@ class Show:
                     "update": self.update.status(),
                     "pult": self.pult.status(), "automatik": self.automatik_an,
                     "song": self.song.zustand(), "tempo": round(self._musik_bpm(), 1),
+                    "erkennung": self.song.erkennung_zustand(),
                     "aufnahme": {"name": self.aufnahme_name,
                                  "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
                                  "markierungen": len(self.aufnahme_marken)},
@@ -554,6 +555,7 @@ class Show:
         self._thread = threading.Thread(target=self._schleife, name="Show", daemon=True)
         self._thread.start()
         threading.Thread(target=self._audio_wiederherstellen, name="Ton wieder öffnen", daemon=True).start()
+        threading.Thread(target=self._erkennen_schleife, name="Song-Erkennung", daemon=True).start()
 
     def stopp(self) -> None:
         self._stopp.set()
@@ -561,6 +563,18 @@ class Show:
             self._thread.join(timeout=1.0)
         self.audio.stoppen()
         self.ausgabe.ausschalten()
+
+    def _erkennen_schleife(self) -> None:
+        """Song-Erkennung: alle 0,5 s vergleichen, alle 10 s neue oder geänderte Aufnahmen einlesen."""
+        vorbereitet = -99.0
+        while not self._stopp.wait(0.5):
+            try:
+                if time.monotonic() - vorbereitet > 10.0:
+                    vorbereitet = time.monotonic()
+                    self.song.erkennen_vorbereiten()
+                self.song.erkennen_takt()
+            except Exception:
+                logging.exception("Song-Erkennung")
 
     def _schleife(self) -> None:
         abstand = 1.0 / BILDER_PRO_SEKUNDE

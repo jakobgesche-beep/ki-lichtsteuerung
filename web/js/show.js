@@ -33,6 +33,17 @@ export function showSeite(wurzel) {
         <button id="check-knopf" class="chip check-knopf" title="Ist alles bereit fürs Konzert?">Konzert-Check …</button></span></header>
         <div id="check-liste" class="check-liste" hidden></div>
         <div class="inhalt">
+          <div class="erkennung zeile" id="erkennung">
+            <span class="leise">Song-Erkennung</span>
+            <span class="segment" id="modus">
+              <button data-modus="automatisch" title="Der nächste Song der Setlist startet von selbst, sobald er erkannt ist">Automatisch</button>
+              <button data-modus="vorschlagen" title="Erkannte Songs erscheinen nur als Knopf">Vorschlagen</button>
+              <button data-modus="aus">Aus</button></span>
+            <span id="erwartet" class="leise"></span>
+            <button id="reihenfolge" class="klein" title="Setlist: Reihenfolge der Songs fürs Konzert">Reihenfolge ändern</button>
+          </div>
+          <div id="vorschlag" class="vorschlag" hidden></div>
+          <div id="erkennung-text" class="leise erkennung-text"></div>
           <div id="songliste" class="songliste"></div>
           <div id="songlauf" class="songlauf" hidden>
             <div class="jetzt-zeile">
@@ -77,6 +88,8 @@ export function showSeite(wurzel) {
   let songs = [];
   let looks = [];
   let leistenStand = "";
+  let ordnen = false;              // Reihenfolge der Setlist ändern
+  let setlistStand = "";
   let letzterLive = null;
   let buehne = null;
   let beendet = false;
@@ -85,11 +98,7 @@ export function showSeite(wurzel) {
     const daten = await api("/show");
     songs = daten.songs;
     looks = daten.looks;
-    feld("songliste").innerHTML = songs.map((s) => `
-      <button class="songknopf" data-song="${t(s.name)}">▶ <b>${t(s.name)}</b>
-        <span class="leise">${s.dauer_s ? minuten(s.dauer_s) : ""} · ${s.tempo_bpm ? Math.round(s.tempo_bpm) + " BPM" : ""} · ${s.teile.length} Teile</span>
-        ${s.alte_analyse ? `<span class="alt-hinweis">Alte Erkennung: in der Probe „Show neu bauen“ drücken</span>` : ""}</button>`).join("")
-      || `<p class="leise">Noch keine Songs. In der Probe einen Song aufnehmen, dann erscheint er hier.</p>`;
+    songsZeigen(letzterLive?.erkennung?.setlist);
     feld("looks").innerHTML = looks.map((l) => `
       <button class="look" data-look="${l.id}"><span class="look-name">${t(l.name)}</span>
         <span class="look-text">${t(l.text)}</span><kbd>${l.taste}</kbd></button>`).join("")
@@ -127,8 +136,46 @@ export function showSeite(wurzel) {
     return live.automatik ? "Automatik: " + live.engine : "Grundlicht";
   }
 
+  // Songs in der Reihenfolge der Setlist, mit Nummer. Beim Ordnen: Pfeile zum Verschieben.
+  function songsZeigen(setlist) {
+    const reihenfolge = setlist?.length ? setlist : songs.map((s) => s.name);
+    const nachName = new Map(songs.map((s) => [s.name, s]));
+    const geordnet = reihenfolge.map((n) => nachName.get(n)).filter(Boolean)
+      .concat(songs.filter((s) => !reihenfolge.includes(s.name)));
+    const stand = JSON.stringify([geordnet.map((s) => s.name), ordnen, songs.map((s) => s.alte_analyse)]);
+    if (stand === setlistStand) return;
+    setlistStand = stand;
+    feld("songliste").innerHTML = geordnet.map((s, i) => `
+      <div class="songplatz">
+        <button class="songknopf" data-song="${t(s.name)}"><span><span class="setlist-nr">${i + 1}</span> ▶ <b>${t(s.name)}</b></span>
+          <span class="leise">${s.dauer_s ? minuten(s.dauer_s) : ""} · ${s.tempo_bpm ? Math.round(s.tempo_bpm) + " BPM" : ""} · ${s.teile.length} Teile</span>
+          ${s.alte_analyse ? `<span class="alt-hinweis">Alte Erkennung: in der Probe „Show neu bauen“ drücken</span>` : ""}</button>
+        ${ordnen ? `<span class="ordnen"><button class="klein" data-hoch="${i}" ${i === 0 ? "disabled" : ""}>↑</button>
+          <button class="klein" data-runter="${i}" ${i === geordnet.length - 1 ? "disabled" : ""}>↓</button></span>` : ""}
+      </div>`).join("")
+      || `<p class="leise">Noch keine Songs. In der Probe einen Song aufnehmen, dann erscheint er hier.</p>`;
+    feld("songliste").dataset.reihenfolge = JSON.stringify(geordnet.map((s) => s.name));
+  }
+
+  function erkennungZeigen(e) {
+    if (!e) return;
+    songsZeigen(e.setlist);
+    for (const knopf of feld("modus").querySelectorAll("[data-modus]")) knopf.classList.toggle("an", knopf.dataset.modus === e.modus);
+    setze(feld("erwartet"), e.modus === "aus" ? "" : e.erwartet ? `Als Nächstes: ${e.erwartet}` : "Setlist durch");
+    const text = e.modus === "aus" ? "Songs nur von Hand starten (antippen, wenn die Band anfängt)."
+      : e.kandidat ? `Erkennt gerade: ${e.kandidat} …`
+      : e.meldung ? e.meldung
+      : e.hoert ? "Hört zu …" : "Wartet auf Musik. Sobald die Band einen geprobten Song spielt, wird er erkannt.";
+    setze(feld("erkennung-text"), text);
+    const v = e.vorschlag;
+    feld("vorschlag").hidden = !v;
+    const html = v ? `<button class="vorschlag-knopf" id="vorschlag-start">Klingt nach „${t(v.name)}“${v.laeuft_anderer ? " (ein anderer Song läuft gerade)" : ""} · jetzt starten</button>` : "";
+    if (feld("vorschlag").dataset.inhalt !== html) { feld("vorschlag").innerHTML = html; feld("vorschlag").dataset.inhalt = html; }
+  }
+
   function zeigen(live) {
     letzterLive = live;
+    erkennungZeigen(live.erkennung);
     buehne?.setzeWerte(live.geraete);
     setze(feld("quelle"), quelleText(live));
     const song = live.song;
@@ -206,6 +253,19 @@ export function showSeite(wurzel) {
     const ziel = ereignis.target.closest("button, [data-teil]");
     if (!ziel) return;
     const d = ziel.dataset;
+    if (d.modus) { await senden("/setlist", { modus: d.modus }); return; }
+    if (ziel.id === "reihenfolge") { ordnen = !ordnen; ziel.classList.toggle("an", ordnen); setlistStand = ""; songsZeigen(letzterLive?.erkennung?.setlist); return; }
+    if (ziel.id === "vorschlag-start") { await senden("/song/vorschlag"); return; }
+    if (d.hoch !== undefined || d.runter !== undefined) {
+      const liste = JSON.parse(feld("songliste").dataset.reihenfolge || "[]");
+      const i = Number(d.hoch ?? d.runter);
+      const j = d.hoch !== undefined ? i - 1 : i + 1;
+      [liste[i], liste[j]] = [liste[j], liste[i]];
+      const neu = await senden("/setlist", { reihenfolge: liste });
+      setlistStand = "";
+      songsZeigen(neu.setlist);
+      return;
+    }
     if (d.song) {
       // Aus Versehen auf den laufenden Song getippt? Dann nicht einfach von vorn anfangen.
       const song = letzterLive?.song;
