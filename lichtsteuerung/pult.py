@@ -951,7 +951,9 @@ class Pult:
                 ziel = self.effekte.anwenden(effekt, ziel)
             zeit = cue.get("zeit_s") or 0.0
             folgen = cue.get("folgen_s")
-            if folgen is not None and jetzt - executor.start >= zeit + folgen:
+            # Läuft die Sequenz nach der Zeit (Song-Start, Probe ansehen), bestimmt nur die Stelle im Song
+            # den Cue. Ein Akzent darf dort nicht "Go" auslösen: Im Song-Modus hieße das "nächster Teil".
+            if folgen is not None and not executor.zeitcode and jetzt - executor.start >= zeit + folgen:
                 if executor is self.tasten:
                     executor.go(jetzt)          # Show-Tasten: zum Beispiel vom weißen Schlag in den Drop
                 else:

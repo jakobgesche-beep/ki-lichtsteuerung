@@ -58,15 +58,22 @@ def show(tmp_path):
     return s
 
 
+def look_von(sequenz, teil):
+    """Der Look-Cue eines Songteils (vor ihm kann ein kurzer Schlag-Akzent liegen)."""
+    nummer = sequenz["song"]["teile"][teil]["cue"]
+    return sequenz["cues"][nummer + 1] if sequenz["cues"][nummer]["name"] == "Schlag" else sequenz["cues"][nummer]
+
+
 def test_gebaute_show_ist_gueltig_und_gleiche_teile_sehen_gleich_aus(show, analyse):
     daten.schreibe_json(show.pfade.proben / "testsong.json", analyse)
     sequenz = show.show_aus_probe("Testsong")
     assert pruefe_sequenz(sequenz, show.patch, show.positionen) == []
-    assert len(sequenz["cues"]) == 6 and len(sequenz["zeitcode"]) == 6
-    assert sequenz["cues"][2]["werte"] == sequenz["cues"][4]["werte"]
-    assert sequenz["cues"][2]["effekte"] == sequenz["cues"][4]["effekte"]
-    assert sequenz["cues"][1]["werte"] != sequenz["cues"][2]["werte"]
-    assert "Takte" in sequenz["cues"][1]["name"]
+    assert len(sequenz["song"]["teile"]) == 6 and len(sequenz["zeitcode"]) == len(sequenz["cues"])
+    assert sequenz["zeitcode"] == sorted(sequenz["zeitcode"])
+    looks = [look_von(sequenz, i) for i in range(6)]
+    assert looks[2]["werte"] == looks[4]["werte"] and looks[2]["effekte"] == looks[4]["effekte"]
+    assert looks[1]["werte"] != looks[2]["werte"]
+    assert "Takte" in looks[1]["name"]
 
 
 def test_gebaute_show_bleibt_sicher(show, analyse):
@@ -97,7 +104,8 @@ def test_aufnahme_speichern_analysieren_und_nachspielen(show):
         assert status["executoren"][1]["sequenz"] == "Song 1" and show.pult.executor(2).zeitcode
         show.audio.quelle.stelle = int(70 * ABTASTRATE)    # Aufnahme steht bei 1:10
         show.baue_bild(1000.0)
-        assert show.pult.executor(2).index == 3
+        zeiten = antwort["sequenz"]["zeitcode"]
+        assert show.pult.executor(2).index == max(i for i, z in enumerate(zeiten) if z <= 70.05)
         client.post("/api/executor/2/go")                  # Go von Hand beendet das Mitlaufen
         assert not show.pult.executor(2).zeitcode
         show.audio.stoppen()
@@ -146,9 +154,9 @@ def test_probe_findet_drop_und_aufbau_und_merkt_markierung(show):
     assert "Drop" in namen and namen[namen.index("Drop") - 1] == "Aufbau"
     assert analyse["markiert_s"] == [round(zeit + 0.2, 2)]
     sequenz = show.show_aus_probe("Party")
-    drop_cue = sequenz["cues"][namen.index("Drop")]
+    drop_cue = look_von(sequenz, namen.index("Drop"))
     assert any(e["art"] == "acht" and e["beats"] == 4 for e in drop_cue["effekte"])
-    assert sequenz["cues"][namen.index("Aufbau")]["name"].startswith("Aufbau")
+    assert look_von(sequenz, namen.index("Aufbau"))["name"].startswith("Aufbau")
     assert pruefe_sequenz(sequenz, show.patch, show.positionen) == []
 
 

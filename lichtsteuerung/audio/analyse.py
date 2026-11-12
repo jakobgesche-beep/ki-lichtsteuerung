@@ -42,6 +42,7 @@ class Messwerte:
     vor_drop: bool = False     # die kurze Pause direkt vor dem Drop
     drop: bool = False         # genau jetzt schlägt der Drop ein (nur in einem Block wahr)
     intensitaet: float = 0.0   # 0 bis 1: wie stark diese Stelle im Vergleich zum Rest des Songs ist
+    schlag: bool = False       # ein großer Schlag der Band (Crash, gemeinsamer Schlag): nur in einem Block wahr
 
 
 class AubioBeatErkennung:
@@ -312,6 +313,10 @@ class Analyse:
         self.drops = DropErkennung(frequenzen)
         self.energie_verlauf = deque(maxlen=60 * 10)    # eine Minute, zehnmal pro Sekunde
         self.bis_energie_merken = 0
+        # Große Schläge: ein Einsatz, viel stärker als die Schläge der letzten 4 Sekunden
+        self.vorheriges = None
+        self.fluss_verlauf = deque(maxlen=int(4 * ABTASTRATE / BLOCK))
+        self.seit_schlag = 99.0
 
     def verarbeite(self, block: np.ndarray) -> Messwerte:
         dauer = len(block) / ABTASTRATE
@@ -331,6 +336,7 @@ class Analyse:
             self.werte[name] = ziel if ziel > alt else alt + (ziel - alt) * 0.15
 
         drop = self.drops.verarbeite(spektrum, self.masken, dauer)
+        schlag = self._schlag(spektrum, dauer)
 
         pegel = float(np.sqrt(np.mean(block ** 2)))
         self.pegel_glatt += (pegel - self.pegel_glatt) * 0.1
@@ -362,4 +368,23 @@ class Analyse:
                          mitte=self.werte["mitte"], hoehe=self.werte["hoehe"],
                          energie=min(1.0, self.energie), pegel=pegel, leise=leise and not self.drops.vor_drop,
                          rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
-                         vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3))
+                         vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3),
+                         schlag=schlag and not leise)
+
+    def _schlag(self, spektrum: np.ndarray, dauer: float) -> bool:
+        """Großer Schlag: plötzlich viel mehr Ton über alle Höhen (Becken, Band gemeinsam), 3-mal so stark
+        wie die üblichen Einsätze der letzten 4 Sekunden. Höchstens einer pro 2 Sekunden."""
+        logbetrag = np.log1p(spektrum[self.masken["hoehe"] | self.masken["mitte"]] * 10)
+        fluss = 0.0 if self.vorheriges is None else float(np.maximum(logbetrag - self.vorheriges, 0).sum())
+        self.vorheriges = logbetrag
+        self.seit_schlag += dauer
+        verlauf = self.fluss_verlauf
+        ist_schlag = False
+        if len(verlauf) == verlauf.maxlen:
+            werte = np.sort(np.asarray(verlauf))
+            ueblich = float(werte[-max(3, len(werte) // 20):].mean())     # so stark sind die normalen Schläge
+            ist_schlag = fluss > 2.5 * ueblich and fluss > 15.0 and self.seit_schlag >= 2.0
+        verlauf.append(fluss)
+        if ist_schlag:
+            self.seit_schlag = 0.0
+        return ist_schlag

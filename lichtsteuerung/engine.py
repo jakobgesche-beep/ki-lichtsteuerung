@@ -6,6 +6,7 @@ Bewegung und eine Art, im Beat zu pulsieren. So entsteht Ruhe statt Dauerwechsel
     Ein Look bleibt mindestens eine Phrase stehen (16 Beats).
     Er wechselt, wenn die Musik stärker oder ruhiger wird, oder nach 32 Beats.
     Ein Drop (plötzlich viel mehr Energie) wechselt sofort, mit einem Akzent.
+    Ein großer Schlag der Band (Crash, gemeinsamer Schlag) gibt einen Akzent, ohne den Look zu wechseln.
     Leise Stellen und Rede gehen auf das ruhige Grundlicht.
 
 Was im Look passiert:
@@ -140,6 +141,8 @@ class Engine:
             if messwerte.drop and profil["beat_reaktion"] >= 0.5 and not pause:
                 self.drop_zeit, self.drop_beat = jetzt, self.beats
                 self.musik_anteil = 1.0          # der Drop kommt sofort voll, ohne Überblenden
+            elif messwerte.schlag and profil["beat_reaktion"] >= 0.5 and not pause and self.stufe >= 1:
+                self.letzter_akzent = jetzt      # großer Schlag der Band: kurz doppelt hell, dann klingt es ab
         ruhig = (messwerte is None or pause or profil["beat_reaktion"] <= 0
                  or messwerte.leise or messwerte.rede)
         self._text_setzen(messwerte, pause, profil)   # Aufbau, Pause und Drop setzen ihn danach neu

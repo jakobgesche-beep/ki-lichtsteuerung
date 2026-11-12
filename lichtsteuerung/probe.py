@@ -24,7 +24,7 @@ from .audio import songanalyse
 from .audio.analyse import Analyse, EigeneBeatErkennung, beat_erkennung
 from .audio.quellen import ABTASTRATE, BLOCK, lade_datei
 
-ANALYSE_VERSION = 2
+ANALYSE_VERSION = 3          # 3: mit den großen Schlägen der Band (schlaege_s)
 KLASSEN = ("ruhig", "mittel", "stark", "hoehepunkt")
 
 
@@ -90,7 +90,7 @@ def analysieren(ton: np.ndarray, name: str) -> dict:
             teil["name"] = "Aufbau"
     return {"name": name, "dauer_s": erg["dauer_s"], "tempo_bpm": erg["tempo_bpm"], "teile": teile, "drops_s": drops,
             "musik_von_s": erg["musik_von_s"], "beats_s": erg["beats_s"], "einsen_s": erg["einsen_s"],
-            "version": ANALYSE_VERSION}
+            "schlaege_s": erg.get("schlaege_s", []), "version": ANALYSE_VERSION}
 
 
 def einordnen(teile: list) -> None:
@@ -174,6 +174,7 @@ LOOKS = {
 }
 ZEITEN_S = {"ruhig": 3.0, "mittel": 2.0, "stark": 1.0, "hoehepunkt": 0.0}
 AKZENT_S = 0.4            # so lange dauert ein Akzent, dann geht es von selbst weiter
+SCHLAG_S = 0.25           # ein Schlag-Akzent (großer Schlag der Band): kurz weiß, kein Strobo
 
 
 def look_cue(name: str, klasse: str, gruppen: list, farbe_a: str, farbe_b: str, gobo: Optional[str] = None,
@@ -254,11 +255,26 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optio
         gobo = gobos[nummer % len(gobos)] if gobos else None
         cue = look_cue(titel, klasse, gruppen, a, b, gobo, band, drop=teil["name"] == "Drop",
                        zeit_s=4.0 if teil["name"] == "Schluss" else None)
+        schlaege = schlaege_im_teil(analyse, teil, klasse)
+        if schlaege and abs(schlaege[0] - teil["start"]) <= 0.3:
+            # Der Teil beginnt mit einem großen Schlag: erst kurz weiß, dann der neue Look
+            karte[-1]["cue"] = len(cues)
+            cues.append(schlag_cue(gruppen))
+            zeitcode.append(teil["start"])
+            schlaege = schlaege[1:]
+            zeit_look = round(teil["start"] + SCHLAG_S, 2)
+        else:
+            zeit_look = teil["start"]
         cues.append(cue)
-        zeitcode.append(teil["start"])
-        for stelle in akzente_im_teil(analyse, teil):
-            cues += [akzent_cue(gruppen), {**cue, "name": cue["name"] + " weiter", "zeit_s": 0.5}]
-            zeitcode += [stelle, round(stelle + AKZENT_S, 2)]
+        zeitcode.append(zeit_look)
+        akzente = [(stelle, "akzent") for stelle in akzente_im_teil(analyse, teil)]
+        akzente += [(stelle, "schlag") for stelle in schlaege
+                    if all(abs(stelle - a) > 1.5 for a, _ in akzente) and stelle > zeit_look + 0.5]
+        for stelle, art in sorted(akzente):
+            dauer = AKZENT_S if art == "akzent" else SCHLAG_S
+            cues += [akzent_cue(gruppen) if art == "akzent" else schlag_cue(gruppen),
+                     {**cue, "name": cue["name"] + " weiter", "zeit_s": 0.5}]
+            zeitcode += [stelle, round(stelle + dauer, 2)]
     return {"name": analyse["name"], "cues": cues, "zeitcode": zeitcode,
             "farben": [farbe_a, farbe_b],
             "song": {"probe": analyse["name"], "tempo_bpm": analyse["tempo_bpm"], "dauer_s": analyse["dauer_s"],
@@ -274,6 +290,19 @@ def akzente_im_teil(analyse: dict, teil: dict) -> list:
         if teil["start"] + 0.5 < stelle < teil["ende"] - AKZENT_S and (not ergebnis or stelle - ergebnis[-1] > 1.0):
             ergebnis.append(stelle)
     return ergebnis
+
+
+def schlaege_im_teil(analyse: dict, teil: dict, klasse: str) -> list:
+    """Große Schläge der Band in diesem Teil (auch genau am Anfang). In ruhigen Teilen keine: Da passt kein Blitz."""
+    if klasse == "ruhig" or teil.get("name") in ("Intro", "Schluss", "Aufbau", "Überleitung", "Drop"):
+        return []
+    return [s for s in analyse.get("schlaege_s", []) if teil["start"] - 0.3 <= s < teil["ende"] - 0.5]
+
+
+def schlag_cue(gruppen: list) -> dict:
+    """Ein großer Schlag der Band: Spots und PARs kurz weiß und voll (ohne Strobo), dann weiter im Look."""
+    werte = [{"gruppe": g, "helligkeit": 1.0, "farbe": "weiss"} for g in ("Spots", "Farb-PARs") if g in gruppen]
+    return {"name": "Schlag", "zeit_s": 0.0, "folgen_s": SCHLAG_S, "werte": werte, "effekte": []}
 
 
 def akzent_cue(gruppen: list) -> dict:
@@ -420,11 +449,14 @@ class Proben:
         """Ältere Analysen (vor der neuen Erkennung) noch einmal machen. Markierungen bleiben."""
         alt = self.lesen(name)
         pfad = self.ton_pfad(name)
-        if alt is None or alt.get("von_hand") or alt.get("version", 1) >= ANALYSE_VERSION or not pfad.exists():
-            return alt          # von Hand Richtiggestelltes bleibt immer
+        if alt is None or alt.get("version", 1) >= ANALYSE_VERSION or not pfad.exists():
+            return alt
         analyse = analysieren(lade_datei(pfad), alt.get("name", name))
         if alt.get("markiert_s"):
             analyse["markiert_s"] = alt["markiert_s"]
+        if alt.get("von_hand"):
+            # Von Hand Richtiggestelltes bleibt immer: nur Neues (zum Beispiel die Schläge) kommt dazu.
+            analyse.update(teile=alt["teile"], von_hand=True)
         daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
         return analyse
 

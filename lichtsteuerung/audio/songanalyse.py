@@ -468,6 +468,52 @@ def grenzen_in_takten(ton: np.ndarray, einsen: np.ndarray) -> list:
 
 # --- Alles zusammen ------------------------------------------------------------------
 
+SCHLAG_STAERKE = 2.0      # so viel stärker als die üblichen Schläge drumherum
+SCHLAG_ABSTAND_S = 6.0    # höchstens ein großer Schlag pro 6 Sekunden
+SCHLAG_PRO_S = 1 / 15.0   # und insgesamt höchstens einer pro 15 Sekunden Song
+
+
+def schlaege_finden(log_baender: np.ndarray, beats: np.ndarray, anfang: float, ende: float) -> list:
+    """Die großen Schläge der Band: Crash-Becken, ein gemeinsamer Schlag, ein Einsatz nach einer Pause.
+
+    Ein Schlag ist viel stärker als die normalen Schläge in den 4 Sekunden drumherum, und dabei wird es
+    lauter oder es scheppert oben (Becken). Die stärksten zuerst, mit Abstand, auf den nächsten Beat gelegt.
+    Fürs Licht: kurzer weißer Akzent genau auf diesem Schlag."""
+    kurve = einsatz_kurve(log_baender)
+    hoch = _band_kurve(log_baender, FREQ_MITTEN > 3000.0)
+    pegel = pegel_db(log_baender)
+    glatt = np.convolve(pegel, np.ones(int(0.2 * RATE)) / int(0.2 * RATE), mode="same")
+    n = len(kurve)
+    hoch_grenze = float(np.percentile(hoch[int(anfang * RATE):int(ende * RATE)] if ende > anfang else hoch, 98))
+    umfeld = int(4 * RATE)
+    kandidaten = []
+    beginn = max(anfang, float(beats[0]) if len(beats) else anfang)     # der erste Ton ist kein "großer Schlag"
+    von, bis = int((beginn + 2.0) * RATE), int((ende - 1.0) * RATE)
+    for i in range(max(1, von), min(n - 1, bis)):
+        if kurve[i] <= 0 or kurve[i] < kurve[max(0, i - 15):i + 16].max():
+            continue                                   # nur der höchste Punkt in ±150 ms
+        rund = np.concatenate([kurve[max(0, i - umfeld):max(0, i - 30)], kurve[i + 30:i + umfeld]])
+        if len(rund) < RATE:
+            continue
+        ueblich = float(np.percentile(rund, 90)) + 1e-6
+        staerke = float(kurve[i] / ueblich)
+        vorher = glatt[max(0, i - int(0.6 * RATE)):max(1, i - int(0.1 * RATE))].mean()
+        nachher = glatt[i:i + int(0.3 * RATE)].mean()
+        if staerke >= SCHLAG_STAERKE and (nachher - vorher >= 4.0 or hoch[i] >= hoch_grenze):
+            kandidaten.append((staerke, i / RATE))
+    gewaehlt = []
+    grenze = max(1, int((ende - anfang) * SCHLAG_PRO_S))
+    for staerke, zeit in sorted(kandidaten, reverse=True):
+        if len(gewaehlt) >= grenze:
+            break
+        if all(abs(zeit - z) >= SCHLAG_ABSTAND_S for z in gewaehlt):
+            if len(beats):
+                naechster = float(beats[np.argmin(np.abs(beats - zeit))])
+                zeit = naechster if abs(naechster - zeit) <= 0.08 else zeit
+            gewaehlt.append(zeit)
+    return sorted(round(z, 3) for z in gewaehlt)
+
+
 def analysieren(ton: np.ndarray) -> dict:
     """Gibt Tempo, Beats, Takt-Einsen und Songteile zurück (Zeiten in Sekunden)."""
     dauer = len(ton) / ABTASTRATE
@@ -482,7 +528,7 @@ def analysieren(ton: np.ndarray) -> dict:
         tempo = float(60.0 / np.median(np.diff(beats)))
     ergebnis = {"tempo_bpm": round(tempo, 1), "dauer_s": round(dauer, 2), "musik_von_s": round(anfang, 2),
                 "musik_bis_s": round(ende, 2), "beats_s": [round(float(b), 3) for b in beats],
-                "einsen_s": [], "teile": []}
+                "einsen_s": [], "teile": [], "schlaege_s": schlaege_finden(lb, beats, anfang, ende)}
     if len(beats) < 16:
         ergebnis["teile"] = [{"start": 0.0, "ende": round(dauer, 2), "takte": 0, "gruppe": 0, "laut_db": 0.0}]
         return ergebnis

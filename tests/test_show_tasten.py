@@ -202,3 +202,22 @@ def test_songanalyse_tempo_beats_und_takte():
     assert beats[0] > 0.8                                  # kein Raster in der Stille davor
     assert np.std(np.diff(beats)) < 0.02
     assert len(ergebnis["einsen_s"]) == pytest.approx(len(beats) / 4, abs=1)
+
+
+def test_akzent_im_song_springt_nicht_einen_teil_weiter(show):
+    """Fehler bis 2.0.0: Ein Akzent-Cue (folgen_s) löste im Song-Modus "Go" aus, also "nächster Teil"."""
+    show.proben.speichern("Band", bandsong(), markierungen=[12.0])
+    sequenz = show.show_aus_probe("Band")
+    akzente = [i for i, c in enumerate(sequenz["cues"]) if c["name"] == "Akzent"]
+    assert akzente, "die D-Marke wird zum Akzent"
+    zeit = sequenz["zeitcode"][akzente[0]]
+    # Spielt die Band etwas langsamer, kommt das Ende des Akzents im Song später als 0,4 s Uhrzeit:
+    sequenz["zeitcode"][akzente[0] + 1] += 0.3
+    show.pult.sequenz_speichern(sequenz)
+    show.song.starten("Band", jetzt=0.0, stelle=zeit - 1.0)
+    for t in np.arange(0.0, 3.0, 0.025):
+        show.baue_bild(float(t))
+    stelle = show.song.folger.stelle
+    assert abs(stelle - (zeit + 2.0)) < 0.5                      # der Song läuft normal weiter
+    teil = show.song.zustand(3.0)["teil"]
+    assert show.song.karte["teile"][teil]["start"] <= stelle < show.song.karte["teile"][teil]["ende"]
