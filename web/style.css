@@ -335,6 +335,15 @@ td input[type=number] { width: 66px; }
 .check-punkt.hinweis .check-zeichen { color: #f0c94a; }
 .check-punkt.problem .check-zeichen { color: #ff8a80; }
 
+/* Generalprobe (gleiche Liste wie der Konzert-Check) */
+.gp-kopf { padding: 4px 6px 8px; font-size: 12px; }
+.gp-lauf { display: flex; gap: 8px; align-items: center; padding: 4px 6px 8px; border-bottom: 1px solid #26282b; }
+.gp-lauf .leise { flex: 1; }
+.gp-balken { width: 140px; height: 8px; background: var(--titel); border-radius: 4px; overflow: hidden; flex: none; }
+.gp-balken i { display: block; height: 100%; background: var(--blau); transition: width .4s; }
+.gp-zeit { padding: 6px 6px 2px; }
+.gp-zeile { color: var(--text); }
+
 /* Song-Erkennung und Setlist auf der Show-Seite */
 .erkennung { margin-bottom: 6px; gap: 8px; }
 .segment { display: inline-flex; }

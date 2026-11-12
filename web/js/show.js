@@ -30,8 +30,10 @@ export function showSeite(wurzel) {
     <div class="show">
       <div class="show-oben">
       <section class="fenster songfenster"><header>Song-Start <span class="zeile"><span id="folger" class="chip"></span>
+        <button id="gp-knopf" class="chip check-knopf" title="Generalprobe: Die Setlist mit veränderten Probe-Aufnahmen durchspielen">Generalprobe …</button>
         <button id="check-knopf" class="chip check-knopf" title="Ist alles bereit fürs Konzert?">Konzert-Check …</button></span></header>
         <div id="check-liste" class="check-liste" hidden></div>
+        <div id="gp-liste" class="check-liste gp-liste" hidden></div>
         <div class="inhalt">
           <div class="erkennung zeile" id="erkennung">
             <span class="leise">Song-Erkennung</span>
@@ -253,6 +255,64 @@ export function showSeite(wurzel) {
   checkLaden();
   const checkUhr = setInterval(checkLaden, 3000);
 
+  // --- Generalprobe: die Setlist mit veränderten Probe-Aufnahmen durchspielen ---------
+  let gpUhr = null;
+  const gpUhrAn = () => { if (!gpUhr) gpUhr = setInterval(gpLaden, 1000); };
+  async function gpLaden() {
+    let zustand;
+    try { zustand = await api("/generalprobe"); } catch { return; }
+    gpZeigen(zustand);
+    if (!zustand.laeuft && feld("gp-liste").hidden && gpUhr) { clearInterval(gpUhr); gpUhr = null; }
+  }
+  function gpZeigen(z) {
+    const e = z.ergebnis;
+    const minuten = Math.max(1, Math.round((z.dauer_schaetzung_s || 60) / 60));
+    let html = `<div class="gp-kopf"><b>Generalprobe</b> <span class="leise">Das Programm spielt alle Songs der Setlist mit
+      veränderten Probe-Aufnahmen durch (schneller oder langsamer, anderer Klang, Publikum) und zeigt, wo es unsicher ist.
+      Nicht während des Konzerts starten: Es braucht viel Rechenzeit.</span></div>`;
+    html += z.laeuft
+      ? `<div class="gp-lauf"><div class="gp-balken"><i style="width:${Math.round(z.fortschritt * 100)}%"></i></div>
+          <span class="leise">${t(z.schritt)}</span><button class="klein" data-gp="stopp">Abbrechen</button></div>`
+      : `<div class="gp-lauf"><button class="haupt" data-gp="start">Generalprobe starten</button>
+          <span class="leise">dauert etwa ${minuten} Minute${minuten > 1 ? "n" : ""}</span></div>`;
+    if (z.fehler) html += `<div class="check-punkt hinweis"><span class="check-zeichen">!</span><span>${t(z.fehler)}</span></div>`;
+    if (e) {
+      const geaendert = z.veraltet?.length ? ` · seitdem neu oder geändert: ${z.veraltet.map(t).join(", ")}` : "";
+      html += `<div class="leise gp-zeit">Letzte Generalprobe: ${t(e.zeit)}${geaendert}</div>`;
+      html += e.songs.map((s) => `<div class="check-punkt ${s.stufe}"><span class="check-zeichen">${STUFE[s.stufe]}</span>
+        <span><b>${t(s.name)}</b><br><span class="gp-zeile">Erkennung: ${t(s.erkennung.text)}</span><br>
+        <span class="gp-zeile">Licht: ${t(s.licht.text)}</span></span></div>`).join("");
+      if (e.rechner?.text) {
+        html += `<div class="check-punkt ${e.rechner.stufe}"><span class="check-zeichen">${STUFE[e.rechner.stufe]}</span><span>${t(e.rechner.text)}</span></div>`;
+      }
+      html += `<div class="leise gp-zeit">Grün heißt: gute Chancen. Eine echte Band spielt noch etwas anders als die veränderte Aufnahme.</div>`;
+    }
+    if (feld("gp-liste").dataset.inhalt !== html) {
+      feld("gp-liste").innerHTML = html;
+      feld("gp-liste").dataset.inhalt = html;
+    }
+    const rot = e ? e.songs.filter((s) => s.stufe === "problem").length : 0;
+    const gelb = e ? e.songs.filter((s) => s.stufe === "hinweis").length : 0;
+    setze(feld("gp-knopf"), z.laeuft ? `Generalprobe ${Math.round(z.fortschritt * 100)} %` : "Generalprobe …");
+    feld("gp-knopf").className = `chip check-knopf ${z.laeuft ? "gelb" : !e ? "" : rot ? "warn" : gelb ? "gelb" : "an"}`;
+  }
+  feld("gp-knopf").onclick = () => {
+    feld("gp-liste").hidden = !feld("gp-liste").hidden;
+    if (!feld("gp-liste").hidden) {
+      feld("check-liste").hidden = true;
+      gpLaden();
+      gpUhrAn();
+    }
+  };
+  feld("check-knopf").addEventListener("click", () => { feld("gp-liste").hidden = true; });
+  feld("gp-liste").addEventListener("click", async (ereignis) => {
+    const knopf = ereignis.target.closest("[data-gp]");
+    if (!knopf) return;
+    try { gpZeigen(await senden("/generalprobe/" + knopf.dataset.gp)); } catch { return; }
+    gpUhrAn();
+  });
+  gpLaden().then(() => { if (feld("gp-knopf").textContent.includes("%")) gpUhrAn(); });
+
   // --- Bedienen ------------------------------------------------------------
   wurzel.addEventListener("click", async (ereignis) => {
     const ziel = ereignis.target.closest("button, [data-teil]");
@@ -338,6 +398,7 @@ export function showSeite(wurzel) {
   api("/buehne").then((aufbau) => { if (!beendet) buehne = new Buehne3D(feld("drei"), aufbau, { nah: true }); });
   return () => {
     clearInterval(checkUhr);
+    clearInterval(gpUhr);
     beendet = true;
     buehne?.beenden();
     abmelden();

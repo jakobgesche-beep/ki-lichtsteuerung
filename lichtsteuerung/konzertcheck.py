@@ -8,7 +8,7 @@ from __future__ import annotations
 import datetime
 from pathlib import Path
 
-from . import sicherung, wachhalten
+from . import generalprobe, sicherung, wachhalten
 from .dmx_ausgabe import kein_enttec_text
 
 
@@ -52,6 +52,11 @@ def pruefen(show) -> list:
             punkt("Songs", "hinweis", f"„{song['name']}“: Teile noch nicht von Hand geprüft (Probe → Teile richtigstellen).")
         else:
             punkt("Songs", "ok", f"„{song['name']}“: bereit, {len(song['teile'])} Teile, von Hand geprüft.")
+
+    # Generalprobe: Wo war das Programm unsicher?
+    gp = generalprobe.check_punkt(show.generalprobe)
+    if gp:
+        punkt("Generalprobe", *gp)
 
     # Profil und Strobo
     punkt("Profil", "ok", f"Profil: {show.profil['name']}.")

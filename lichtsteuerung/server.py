@@ -666,6 +666,21 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         with show.sperre:
             return {"punkte": konzertcheck.pruefen(show)}
 
+    @app.get("/api/generalprobe")
+    def generalprobe_lesen():
+        """Generalprobe: Stand, Fortschritt und das letzte Ergebnis."""
+        return show.generalprobe.zustand()
+
+    @app.post("/api/generalprobe/start")
+    def generalprobe_start():
+        show.generalprobe.starten()
+        return show.generalprobe.zustand()
+
+    @app.post("/api/generalprobe/stopp")
+    def generalprobe_stopp():
+        show.generalprobe.abbrechen()
+        return show.generalprobe.zustand()
+
     @app.get("/api/show")
     def show_lesen():
         return {"songs": show.song.songs(), "looks": showtasten.LOOKS, "halten": showtasten.HALTEN,

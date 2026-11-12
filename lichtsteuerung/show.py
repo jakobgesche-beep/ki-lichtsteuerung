@@ -32,6 +32,7 @@ from .katalog import Katalog
 from .overrides import Overrides
 from .patch import Patch
 from .probe import Proben, show_bauen
+from .generalprobe import Generalprobe
 from .licht_chat import LichtChat
 from .zwischenlicht import Zwischenlicht
 from .pult import Executor, Pult
@@ -81,6 +82,7 @@ class Show:
         self.vorschau_geraete = None
         self.chat = LichtChat(self)
         self.zwischenlicht = Zwischenlicht(self)
+        self.generalprobe = Generalprobe(self)
         self.pult.extra.append(self.zwischenlicht.platz)
         self._messwerte = None
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
