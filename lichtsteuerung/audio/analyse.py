@@ -25,6 +25,7 @@ BAENDER = {"bass": (20, 150), "mitte": (150, 2000), "hoehe": (2000, 16000)}
 LEISE_PEGEL = 10 ** (-45 / 20)     # unter -45 dB gilt es als Stille
 RUHE_S = 0.8                       # so lange muss es still sein
 KEIN_BEAT_S = 3.0                  # so lange ohne Beat, bevor es Rede sein kann
+APPLAUS_FLACH = 0.45               # Klatschen ~0,6; Rockmusik höchstens ~0,35 (gemessen an "Hh")
 
 
 @dataclass
@@ -43,6 +44,7 @@ class Messwerte:
     drop: bool = False         # genau jetzt schlägt der Drop ein (nur in einem Block wahr)
     intensitaet: float = 0.0   # 0 bis 1: wie stark diese Stelle im Vergleich zum Rest des Songs ist
     schlag: bool = False       # ein großer Schlag der Band (Crash, gemeinsamer Schlag): nur in einem Block wahr
+    applaus: bool = False      # breites Rauschen ohne Töne, eine Weile lang: Klatschen
 
 
 class AubioBeatErkennung:
@@ -317,6 +319,9 @@ class Analyse:
         self.vorheriges = None
         self.fluss_verlauf = deque(maxlen=int(4 * ABTASTRATE / BLOCK))
         self.seit_schlag = 99.0
+        # Applaus: wie "flach" das Spektrum ist (Rauschen = 1, reine Töne = 0), über 1,5 s gemittelt
+        self.flach_maske = (frequenzen >= 400) & (frequenzen <= 8000)
+        self.flach = 0.0
 
     def verarbeite(self, block: np.ndarray) -> Messwerte:
         dauer = len(block) / ABTASTRATE
@@ -337,6 +342,9 @@ class Analyse:
 
         drop = self.drops.verarbeite(spektrum, self.masken, dauer)
         schlag = self._schlag(spektrum, dauer)
+        leistung = spektrum[self.flach_maske] ** 2 + 1e-12
+        flach_jetzt = float(np.exp(np.mean(np.log(leistung))) / np.mean(leistung))
+        self.flach += (flach_jetzt - self.flach) * min(1.0, dauer / 1.5)
 
         pegel = float(np.sqrt(np.mean(block ** 2)))
         self.pegel_glatt += (pegel - self.pegel_glatt) * 0.1
@@ -369,7 +377,8 @@ class Analyse:
                          energie=min(1.0, self.energie), pegel=pegel, leise=leise and not self.drops.vor_drop,
                          rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
                          vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3),
-                         schlag=schlag and not leise)
+                         schlag=schlag and not leise,
+                         applaus=bool(self.flach > APPLAUS_FLACH and self.pegel_glatt > LEISE_PEGEL))
 
     def _schlag(self, spektrum: np.ndarray, dauer: float) -> bool:
         """Großer Schlag: plötzlich viel mehr Ton über alle Höhen (Becken, Band gemeinsam), 3-mal so stark

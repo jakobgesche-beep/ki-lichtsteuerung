@@ -75,6 +75,7 @@ class SongSpieler:
         roh = daten.lese_json_sicher(self.setlist_pfad, {}) or {}
         self.reihenfolge = [n for n in roh.get("reihenfolge", []) if isinstance(n, str)]
         self.modus = roh.get("modus") if roh.get("modus") in MODI else "automatisch"
+        self.zwischenlicht_an = bool(roh.get("zwischenlicht", True))
         self._liste: list = []
         self._liste_stand = -99.0
 
@@ -208,7 +209,8 @@ class SongSpieler:
             self._liste_stand = time.monotonic()
         return list(self._liste)
 
-    def setlist_setzen(self, reihenfolge: Optional[list] = None, modus: Optional[str] = None) -> None:
+    def setlist_setzen(self, reihenfolge: Optional[list] = None, modus: Optional[str] = None,
+                       zwischenlicht: Optional[bool] = None) -> None:
         if reihenfolge is not None:
             self.reihenfolge = [str(n) for n in reihenfolge]
             self._liste_stand = -99.0
@@ -218,7 +220,10 @@ class SongSpieler:
             self.modus = modus
             if modus == "aus":
                 self.vorschlag = None
-        daten.schreibe_json(self.setlist_pfad, {"reihenfolge": self.reihenfolge, "modus": self.modus})
+        if zwischenlicht is not None:
+            self.zwischenlicht_an = bool(zwischenlicht)
+        daten.schreibe_json(self.setlist_pfad, {"reihenfolge": self.reihenfolge, "modus": self.modus,
+                                                "zwischenlicht": self.zwischenlicht_an})
 
     def erwartet(self) -> Optional[str]:
         """Welcher Song laut Setlist als Nächstes dran ist."""
@@ -256,8 +261,9 @@ class SongSpieler:
             return True
         teile = self.karte.get("teile", [])
         dauer = float(self.karte.get("dauer_s") or 0.0)
+        ende = min(dauer - 1.0, float(self.karte.get("musik_bis_s") or dauer) - 0.3)
         letzter = teile[-1]["start"] if teile else dauer
-        return self.folger.stelle >= dauer - 3.0 or (self.folger.wartet and self.folger.stelle >= letzter)
+        return self.folger.stelle >= ende or (self.folger.wartet and self.folger.stelle >= letzter)
 
     def erkennen_takt(self, jetzt: Optional[float] = None) -> Optional[dict]:
         """Alle 0,5 s (eigener Thread): Wird gerade ein geprobter Song gespielt? Startet oder schlägt vor."""
@@ -292,6 +298,7 @@ class SongSpieler:
     def erkennung_zustand(self) -> dict:
         letztes = self.erkenner.letztes or {}
         return {"modus": self.modus, "setlist": self.setlist(), "erwartet": self.erwartet(),
+                "zwischenlicht": self.zwischenlicht_an,
                 "vorschlag": {k: v for k, v in self.vorschlag.items() if k != "zeit"} if self.vorschlag else None,
                 "meldung": self.meldung, "hoert": letztes.get("art") == "vergleicht",
                 "kandidat": letztes.get("name") if letztes.get("eindeutig") else None}

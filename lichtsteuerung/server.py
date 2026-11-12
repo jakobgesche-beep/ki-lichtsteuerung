@@ -680,7 +680,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.post("/api/setlist")
     def setlist(auftrag: dict = Body(...)):
         """Reihenfolge der Songs fürs Konzert und wie die Song-Erkennung arbeitet."""
-        show.song.setlist_setzen(auftrag.get("reihenfolge"), auftrag.get("modus"))
+        show.song.setlist_setzen(auftrag.get("reihenfolge"), auftrag.get("modus"), auftrag.get("zwischenlicht"))
         return show.song.erkennung_zustand()
 
     @app.post("/api/song/vorschlag")

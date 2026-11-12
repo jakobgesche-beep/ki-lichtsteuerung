@@ -33,6 +33,7 @@ from .overrides import Overrides
 from .patch import Patch
 from .probe import Proben, show_bauen
 from .licht_chat import LichtChat
+from .zwischenlicht import Zwischenlicht
 from .pult import Executor, Pult
 from .profile import Profile, RUHE_PROFIL, strobo_grenzen
 from .pruefung import Pruefer, Vorgaben
@@ -79,6 +80,9 @@ class Show:
         self.vorschau = Vorschau(self)
         self.vorschau_geraete = None
         self.chat = LichtChat(self)
+        self.zwischenlicht = Zwischenlicht(self)
+        self.pult.extra.append(self.zwischenlicht.platz)
+        self._messwerte = None
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
         self.chat_vorschau_geraete = None
         self.blitze = BlitzWaechter()
@@ -146,6 +150,7 @@ class Show:
             self._einmessen_pruefen(jetzt)
             zustand = self._automatik(jetzt)
             if not self._test_laeuft():
+                self.zwischenlicht.takt(jetzt, self._messwerte)
                 zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm(), self._beat)
                 self._blind_vorschau(zustand if self.pult.programmer.blind else None, jetzt)
                 zustand = self._software_blitz(zustand, jetzt)
@@ -327,9 +332,11 @@ class Show:
         if not self.automatik_an:
             werte = self.audio.abholen(jetzt)     # Beats trotzdem abholen, damit keiner nachträglich kommt
             self._beat = bool(werte is not None and werte.beat)
+            self._messwerte = werte
             return {}
         try:
             messwerte = self.audio.abholen(jetzt)
+            self._messwerte = messwerte
             self._beat = bool(messwerte is not None and messwerte.beat)
             return self.engine.bewerte(messwerte, self.profil, jetzt, self.overrides.pause)
         except Exception:
@@ -529,7 +536,7 @@ class Show:
                     "update": self.update.status(),
                     "pult": self.pult.status(), "automatik": self.automatik_an,
                     "song": self.song.zustand(), "tempo": round(self._musik_bpm(), 1),
-                    "erkennung": self.song.erkennung_zustand(),
+                    "erkennung": self.song.erkennung_zustand(), "zwischenlicht": self.zwischenlicht.status(),
                     "aufnahme": {"name": self.aufnahme_name,
                                  "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
                                  "markierungen": len(self.aufnahme_marken)},

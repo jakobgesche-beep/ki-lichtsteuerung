@@ -401,6 +401,7 @@ class Pult:
         self.letzte_zeit: Optional[float] = None
         # Show-Tasten: ein eigener Executor (nicht unter den acht), dazu Halten und Tap
         self.tasten = Executor(0)
+        self.extra = []                 # weitere eigene Plätze, zum Beispiel das Zwischenlicht
         self.look: Optional[str] = None
         self.farbe_1, self.farbe_2 = "rot", "blau"
         self.halten = {art: None for art in showtasten.HALTEN}     # seit wann gedrückt
@@ -867,7 +868,7 @@ class Pult:
         for executor in self.executoren:
             if executor.flash_seit is not None and jetzt - executor.flash_seit > FLASH_MAX_S:
                 self._flash_loslassen(executor)        # hängende Flash-Taste
-        aktive = sorted((e for e in self.executoren + [self.song_platz, self.tasten] if e.aktiv),
+        aktive = sorted((e for e in self.executoren + [self.song_platz, self.tasten] + self.extra if e.aktiv),
                         key=lambda e: e.reihenfolge)
         for executor in aktive:
             zustand = self._executor(executor, zustand, jetzt)

@@ -278,7 +278,8 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optio
     return {"name": analyse["name"], "cues": cues, "zeitcode": zeitcode,
             "farben": [farbe_a, farbe_b],
             "song": {"probe": analyse["name"], "tempo_bpm": analyse["tempo_bpm"], "dauer_s": analyse["dauer_s"],
-                     "musik_von_s": analyse.get("musik_von_s", 0.0), "teile": karte},
+                     "musik_von_s": analyse.get("musik_von_s", 0.0), "musik_bis_s": analyse.get("musik_bis_s"),
+                     "teile": karte},
             "_hinweis": "Automatisch aus der Probe gebaut. Im Pult frei änderbar."}
 
 
