@@ -60,12 +60,13 @@ def _sekunden(wert: float) -> str:
 # --- Messen ----------------------------------------------------------------------
 
 def erkennung_messen(fassung: livefassung.LiveFassung, song: str, referenzen: dict,
-                     abbruch: Callable[[], bool] = lambda: False) -> dict:
+                     abbruch: Callable[[], bool] = lambda: False, weitere: Optional[dict] = None) -> dict:
     """Hört den Anfang der Live-Fassung wie zwischen zwei Songs: Wird der richtige Song erkannt, und wann?
 
     referenzen: Name -> Merkmale (wie SongErkenner.referenzen, also schon ausgedünnt)."""
     erkenner = erkennen.SongErkenner()
     erkenner.referenzen = referenzen
+    erkenner.weitere = dict(weitere or {})      # Mitschnitte und weitere Proben, wie beim Konzert
     ton = fassung.ton
     ende = min(len(ton), int((fassung.musik_ab_s + ERKENNEN_BIS_S) * RATE))
     naechste = PRUEFEN_ALLE_S
@@ -304,7 +305,7 @@ class Generalprobe:
                 fassung = livefassung.bauen(ton, von, bis, tempo=durchlauf["tempo"], anderer_mix=True,
                                             nachhall_s=durchlauf["nachhall_s"], publikum_db=durchlauf["publikum_db"],
                                             seed=durchlauf["seed"] + nummer)
-                erkennung = erkennung_messen(fassung, name, referenzen, self._abbruch)
+                erkennung = erkennung_messen(fassung, name, referenzen, self._abbruch, self.show.song.erkenner.weitere)
 
                 def weiter(anteil, schritt=schritt):
                     self.fortschritt = (schritt + 0.1 + 0.9 * anteil) / schritte

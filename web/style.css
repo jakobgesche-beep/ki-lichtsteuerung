@@ -344,6 +344,16 @@ td input[type=number] { width: 66px; }
 .gp-zeit { padding: 6px 6px 2px; }
 .gp-zeile { color: var(--text); }
 
+/* Weitere Aufnahmen (Probe) und Mitschnitt (Show) */
+.weitere { gap: 6px; margin: 6px 0; flex-wrap: wrap; }
+.weitere-chip { display: inline-flex; gap: 6px; align-items: center; }
+.weitere-chip button { padding: 0 6px; }
+label.datei-knopf { display: inline-block; margin: 0; padding: 2px 8px; border: 1px solid var(--linie); border-radius: 3px;
+  background: var(--kachel); color: var(--text); cursor: pointer; font-size: 11px; }
+label.datei-knopf:hover { background: var(--kachel-hover); }
+[hidden] { display: none !important; }
+.mitschnitt-an { color: #ff8a80; }
+
 /* Rückblick (Logbuch der Show) */
 .rb-tabelle { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 12px; }
 .rb-tabelle th { text-align: left; color: var(--leise); font-weight: 600; padding: 3px 6px; border-bottom: 1px solid var(--linie); }

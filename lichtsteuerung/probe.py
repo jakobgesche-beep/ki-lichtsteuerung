@@ -23,6 +23,7 @@ from . import daten
 from .audio import songanalyse
 from .audio.analyse import Analyse, EigeneBeatErkennung, beat_erkennung
 from .audio.quellen import ABTASTRATE, BLOCK, lade_datei
+from .weitere import WeitereAufnahmen
 
 ANALYSE_VERSION = 3          # 3: mit den großen Schlägen der Band (schlaege_s)
 KLASSEN = ("ruhig", "mittel", "stark", "hoehepunkt")
@@ -418,6 +419,7 @@ class Proben:
 
     def __init__(self, ordner: Path):
         self.ordner = Path(ordner)
+        self.weitere = WeitereAufnahmen(self.ordner)      # Mitschnitte und weitere Proben
 
     def namen(self) -> list:
         namen = []
@@ -485,6 +487,7 @@ class Proben:
     def loeschen(self, name: str) -> None:
         for endung in (".json", ".wav"):
             (self.ordner / f"{daten.dateiname(name)}{endung}").unlink(missing_ok=True)
+        self.weitere.alle_loeschen(name)
 
 
 __all__ = ["Proben", "analysieren", "show_bauen", "EigeneBeatErkennung"]

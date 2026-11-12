@@ -77,6 +77,8 @@ class SongSpieler:
         self.reihenfolge = [n for n in roh.get("reihenfolge", []) if isinstance(n, str)]
         self.modus = roh.get("modus") if roh.get("modus") in MODI else "automatisch"
         self.zwischenlicht_an = bool(roh.get("zwischenlicht", True))
+        self.mitschnitt_an = bool(roh.get("mitschnitt", True))     # Songs beim Konzert mitschneiden
+        self._weitere_merkmale: dict = {}          # Pfad -> (Dateistand, Merkmale) der weiteren Aufnahmen
         self.vorbei = False                         # das Publikum hat am Schluss geklatscht
         self.start_wie = "hand"                     # fürs Logbuch: von Hand, erkannt oder Vorschlag
         self._klatschen_seit: Optional[float] = None
@@ -223,7 +225,7 @@ class SongSpieler:
         return list(self._liste)
 
     def setlist_setzen(self, reihenfolge: Optional[list] = None, modus: Optional[str] = None,
-                       zwischenlicht: Optional[bool] = None) -> None:
+                       zwischenlicht: Optional[bool] = None, mitschnitt: Optional[bool] = None) -> None:
         if reihenfolge is not None:
             self.reihenfolge = [str(n) for n in reihenfolge]
             self._liste_stand = -99.0
@@ -235,8 +237,10 @@ class SongSpieler:
                 self.vorschlag = None
         if zwischenlicht is not None:
             self.zwischenlicht_an = bool(zwischenlicht)
+        if mitschnitt is not None:
+            self.mitschnitt_an = bool(mitschnitt)
         daten.schreibe_json(self.setlist_pfad, {"reihenfolge": self.reihenfolge, "modus": self.modus,
-                                                "zwischenlicht": self.zwischenlicht_an})
+                                                "zwischenlicht": self.zwischenlicht_an, "mitschnitt": self.mitschnitt_an})
 
     def erwartet(self) -> Optional[str]:
         """Welcher Song laut Setlist als Nächstes dran ist."""
@@ -259,6 +263,7 @@ class SongSpieler:
             if self._merkmale.get(name, (None,))[0] != stand or name not in self.erkenner.referenzen:
                 merkmale, _ = self._referenz(name)
                 self.erkenner.referenz(name, merkmale)
+            self._weitere_vorbereiten(name)
         for name in list(self.erkenner.referenzen):
             if name not in vorhanden:
                 self.erkenner.entfernen(name)
@@ -267,6 +272,19 @@ class SongSpieler:
             self.show.audio.mithoerer.append(hoeren)
         elif self.modus == "aus" and hoeren in self.show.audio.mithoerer:
             self.show.audio.mithoerer.remove(hoeren)
+
+    def _weitere_vorbereiten(self, name: str) -> None:
+        """Mitschnitte und weitere Proben eines Songs für die Erkennung (Merkmale nur neu, wenn neu)."""
+        liste = []
+        for pfad, zuordnung in self.show.proben.weitere.fuer_erkennung(name):
+            try:
+                stand = pfad.stat().st_mtime
+                if self._weitere_merkmale.get(str(pfad), (None,))[0] != stand:
+                    self._weitere_merkmale[str(pfad)] = (stand, folgen.merkmale_der_aufnahme(lade_datei(pfad))[0])
+                liste.append((self._weitere_merkmale[str(pfad)][1], zuordnung))
+            except Exception:
+                logging.exception("Weitere Aufnahme laden")
+        self.erkenner.weitere_setzen(name, liste)
 
     def _am_ende(self) -> bool:
         """Ist der laufende Song durch (oder wartet die Band nach dem letzten Teil, oder klatscht das Publikum)?"""
@@ -331,7 +349,7 @@ class SongSpieler:
     def erkennung_zustand(self) -> dict:
         letztes = self.erkenner.letztes or {}
         return {"modus": self.modus, "setlist": self.setlist(), "erwartet": self.erwartet(),
-                "zwischenlicht": self.zwischenlicht_an,
+                "zwischenlicht": self.zwischenlicht_an, "mitschnitt": self.mitschnitt_an,
                 "vorschlag": {k: v for k, v in self.vorschlag.items() if k != "zeit"} if self.vorschlag else None,
                 "meldung": self.meldung, "hoert": letztes.get("art") == "vergleicht",
                 "kandidat": letztes.get("name") if letztes.get("eindeutig") else None}

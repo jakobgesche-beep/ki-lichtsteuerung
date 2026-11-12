@@ -18,6 +18,9 @@ Tonart, im selben Tempo und mit fast denselben Akkorden wie ein geprobter. (Bis 
 bestimmte Töne aussah, siehe folgen.Merkmale.) Mit 6 statt 10 Sekunden und 2 statt 3 Sekunden Bestätigung gab es
 3 Fehlalarme in 8 Versuchen.
 
+Hat ein Song weitere Aufnahmen (Konzert-Mitschnitte, weitere Proben, siehe weitere.py), wird auch mit ihnen
+verglichen; es zählt die, die am besten passt. Ihre Stelle wird über die Zuordnung in die Probe umgerechnet.
+
 Lieber kein Song als der falsche: Spielt die Band etwas, das nicht geprobt wurde, wird nichts erkannt.
 Bei Stille, Reden oder Klatschen wird gar nicht erst verglichen.
 """
@@ -46,6 +49,7 @@ GEWICHT = (0.97 ** np.arange(int(FENSTER_S * RATE / SCHRITT))[::-1]).astype(np.f
 class SongErkenner:
     def __init__(self):
         self.referenzen: dict = {}          # Name -> Merkmale der Probe (jeder zweite Messpunkt)
+        self.weitere: dict = {}             # Name -> [(Merkmale, Zuordnung [[s Aufnahme, s Probe], ...])]
         self.sperre = threading.Lock()
         self.merkmale = folgen.Merkmale()
         self.fenster: deque = deque(maxlen=int(FENSTER_S * RATE))     # (Vektor, Pegel)
@@ -62,9 +66,16 @@ class SongErkenner:
         with self.sperre:
             self.referenzen[name] = np.ascontiguousarray(merkmale[::SCHRITT], np.float32)
 
+    def weitere_setzen(self, name: str, liste: list) -> None:
+        """Weitere Aufnahmen eines Songs: [(Merkmale, Zuordnung)], die Zuordnung in Sekunden."""
+        with self.sperre:
+            self.weitere[name] = [(np.ascontiguousarray(m[::SCHRITT], np.float32), np.asarray(z, float))
+                                  for m, z in liste if len(z) >= 2]
+
     def entfernen(self, name: str) -> None:
         with self.sperre:
             self.referenzen.pop(name, None)
+            self.weitere.pop(name, None)
 
     def zuruecksetzen(self) -> None:
         with self.sperre:
@@ -131,15 +142,27 @@ class SongErkenner:
         with self.sperre:
             band = self._musik_im_fenster()
             referenzen = {n: r for n, r in self.referenzen.items() if n != ohne}
+            weitere = {n: w for n, w in self.weitere.items() if n in referenzen}
         if band is None or not referenzen:
             self.kandidat, self.mal = None, 0
             self.letztes = {"art": "hoert" if band is None else "keine_songs"}
             return None
         ergebnisse = []
         for name, probe in referenzen.items():
-            treffer = self._song_vergleichen(band, probe)
-            if treffer is not None:
-                ergebnisse.append((treffer[0], name, treffer[1], treffer[2]))
+            treffer = [t for t in [self._song_vergleichen(band, probe)] if t is not None]
+            for merkmale, zuordnung in weitere.get(name, []):
+                t = self._song_vergleichen(band, merkmale)
+                if t is None:
+                    continue
+                # Stelle in der weiteren Aufnahme -> Stelle in der Probe (nur wo die Zuordnung etwas weiß)
+                sekunde = t[1] * SCHRITT / RATE + folgen.VERZOEGERUNG_S
+                if not zuordnung[0, 0] <= sekunde <= zuordnung[-1, 0]:
+                    continue
+                in_probe = float(np.interp(sekunde, zuordnung[:, 0], zuordnung[:, 1]))
+                treffer.append((t[0], int(round((in_probe - folgen.VERZOEGERUNG_S) * RATE / SCHRITT)), t[2]))
+            if treffer:
+                kosten, ende, schaerfe = min(treffer)
+                ergebnisse.append((kosten, name, ende, schaerfe))
         if not ergebnisse:
             return None
         ergebnisse.sort()

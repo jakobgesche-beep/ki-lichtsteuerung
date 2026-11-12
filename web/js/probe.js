@@ -52,6 +52,7 @@ export function probeSeite(wurzel) {
         ${(p.version ?? 1) < 2 ? `<div class="meldung gelb">Neue Song-Erkennung: „Show neu bauen“ drücken, dann wird diese Aufnahme neu analysiert (Tempo, Takte, Teile).</div>` : ""}
         ${(p.drops_s?.length || p.markiert_s?.length) ? `<p class="leise">Drops erkannt: ${(p.drops_s ?? []).map(minuten).join(", ") || "keiner"}
           ${p.markiert_s?.length ? ` · von dir markiert: ${p.markiert_s.map(minuten).join(", ")}` : ""}</p>` : ""}
+        ${weitereZeigen(p)}
         <p class="zeile">
           <button data-ansehen="${t(p.name)}" class="haupt">Probe ansehen</button>
           <button data-neu="${t(p.name)}">Show neu bauen</button>
@@ -61,6 +62,20 @@ export function probeSeite(wurzel) {
         <p class="leise">Die Show liegt als Sequenz „${t(p.name)}“ im Pult. Dort kannst du jeden Cue ändern.
           Live: auf der Seite „Show“ einmal Start drücken, wenn die Band anfängt. Der Song läuft dann von selbst durch.</p>
       </div>`).join("") || `<p class="leise">Noch keine Songs aufgenommen.</p>`;
+  }
+
+  // Weitere Aufnahmen (Konzert-Mitschnitte, weitere Proben): helfen der Song-Erkennung
+  function weitereZeigen(p) {
+    const n = t(p.name);
+    const liste = (p.weitere ?? []).map((w) => `<span class="chip weitere-chip ${w.zugeordnet ? "an" : ""}"
+        title="${w.zugeordnet ? `zugeordnet, ${Math.round(w.sicher * 100)} % sicher mitgehört` : "wird zugeordnet, sobald gerade kein Song läuft"}">
+        ${t(w.quelle)} ${t(w.zeit)}${w.zugeordnet ? "" : " · wird zugeordnet …"}
+        <button class="klein" data-weitere-weg="${n}" data-datei="${t(w.datei)}" title="Diese Aufnahme löschen">×</button></span>`).join(" ");
+    return `<div class="weitere zeile"><span class="leise">Weitere Aufnahmen (helfen der Song-Erkennung):</span>
+      ${liste || `<span class="leise">noch keine</span>`}
+      <button class="klein" data-weitere-auf="${n}" title="Den Song noch einmal aufnehmen, zum Beispiel in der Aula">● Weitere Aufnahme</button>
+      <label class="klein datei-knopf" title="Zum Beispiel ein Handy-Mitschnitt vom Konzert">Aus Datei …
+        <input type="file" accept="audio/*" data-weitere-datei="${n}" hidden></label></div>`;
   }
 
   // Teile von Hand richtigstellen: Name, Stärke, Grenzen auf Takt-Einsen, deine D-Marken als Grenzen
@@ -96,8 +111,18 @@ export function probeSeite(wurzel) {
     songsZeigen();
   }
 
-  feld("songs").addEventListener("change", (ereignis) => {
+  feld("songs").addEventListener("change", async (ereignis) => {
     const d = ereignis.target.dataset;
+    if (d.weitereDatei) {
+      const datei = ereignis.target.files[0];
+      if (!datei) return;
+      meldung("Lade die Aufnahme …", "ok");
+      try {
+        await api(`/proben/${encodeURIComponent(d.weitereDatei)}/weitere?datei=${encodeURIComponent(datei.name)}`, { method: "POST", body: datei });
+        meldung("Gespeichert. Sie wird zugeordnet, sobald gerade kein Song läuft.", "ok");
+      } finally { ereignis.target.value = ""; songsZeigen(); }
+      return;
+    }
     if (d.teilName) teileAendern(d.teilName, "name", d.index, ereignis.target.value).catch(() => {});
     if (d.teilKlasse) teileAendern(d.teilKlasse, "klasse", d.index, ereignis.target.value).catch(() => {});
   });
@@ -109,9 +134,13 @@ export function probeSeite(wurzel) {
       feld("aufnahme").disabled = true;
       feld("aufnahme").textContent = "Analysiere …";
       try {
-        const { analyse } = await senden("/proben/stopp");
-        meldung(`Fertig: ${analyse.teile.length} Songteile erkannt, ${analyse.tempo_bpm} BPM.`, "ok");
-        feld("name").value = "";
+        const antwort = await senden("/proben/stopp");
+        if (antwort.weitere) {
+          meldung("Weitere Aufnahme gespeichert. Sie wird zugeordnet, sobald gerade kein Song läuft.", "ok");
+        } else {
+          meldung(`Fertig: ${antwort.analyse.teile.length} Songteile erkannt, ${antwort.analyse.tempo_bpm} BPM.`, "ok");
+          feld("name").value = "";
+        }
       } finally { feld("aufnahme").disabled = false; }
       songsZeigen();
     }
@@ -142,6 +171,14 @@ export function probeSeite(wurzel) {
       meldung("Show neu gebaut.", "ok");
       songsZeigen();
     }
+    if (d.weitereAuf) {
+      await senden("/proben/aufnahme", { name: d.weitereAuf, weitere: true });
+      meldung(`Nimmt „${d.weitereAuf}“ noch einmal auf. Zum Beenden oben „Aufnahme beenden“ drücken.`, "ok");
+    }
+    if (d.weitereWeg && confirm("Diese weitere Aufnahme löschen?")) {
+      await api(`/proben/${encodeURIComponent(d.weitereWeg)}/weitere/${encodeURIComponent(d.datei)}`, { method: "DELETE" });
+      songsZeigen();
+    }
     if (d.weg && confirm(`Aufnahme „${d.weg}“ löschen? Die Sequenz im Pult bleibt.`)) {
       await api(`/proben/${encodeURIComponent(d.weg)}`, { method: "DELETE" });
       songsZeigen();
@@ -163,7 +200,7 @@ export function probeSeite(wurzel) {
       feld("aufnahme").textContent = text;
       feld("aufnahme").classList.toggle("aufnahme-an", nimmtAuf);
     }
-    setzeText(feld("zeit"), nimmtAuf ? `● ${live.aufnahme.name} ${minuten(live.aufnahme.sekunden)}` +
+    setzeText(feld("zeit"), nimmtAuf ? `● ${live.aufnahme.name}${live.aufnahme.weitere ? " (weitere Aufnahme)" : ""} ${minuten(live.aufnahme.sekunden)}` +
       (live.aufnahme.markierungen ? ` · ${live.aufnahme.markierungen}× Drop markiert` : "") : "");
     setzeText(feld("quelle"), live.audio.quelle === "aus"
       ? "Keine Tonquelle: auf der Live-Seite den Eingang (zum Beispiel X32 oder Mikrofon) wählen."

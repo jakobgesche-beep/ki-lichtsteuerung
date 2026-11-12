@@ -47,6 +47,9 @@ export function showSeite(wurzel) {
             <button id="reihenfolge" class="klein" title="Setlist: Reihenfolge der Songs fürs Konzert">Reihenfolge ändern</button>
             <label class="schalter" title="Nach dem Song hell und warm für den Applaus, danach ruhig bis zum nächsten Song">
               <input type="checkbox" id="zwischenlicht"> Applaus- und Pausenlicht</label>
+            <label class="schalter" title="Jeden Song mitschneiden, der mit Song-Start läuft. Hilft der Song-Erkennung beim nächsten Mal. Bleibt auf diesem Laptop.">
+              <input type="checkbox" id="mitschnitt"> Songs mitschneiden</label>
+            <span id="mitschnitt-an" class="leise mitschnitt-an"></span>
           </div>
           <div id="vorschlag" class="vorschlag" hidden></div>
           <div id="erkennung-text" class="leise erkennung-text"></div>
@@ -170,6 +173,7 @@ export function showSeite(wurzel) {
     songsZeigen(e.setlist);
     for (const knopf of feld("modus").querySelectorAll("[data-modus]")) knopf.classList.toggle("an", knopf.dataset.modus === e.modus);
     if (!feld("zwischenlicht").matches(":focus")) feld("zwischenlicht").checked = e.zwischenlicht !== false;
+    if (!feld("mitschnitt").matches(":focus")) feld("mitschnitt").checked = e.mitschnitt !== false;
     setze(feld("erwartet"), e.modus === "aus" ? "" : e.erwartet ? `Als Nächstes: ${e.erwartet}` : "Setlist durch");
     const text = e.modus === "aus" ? "Songs nur von Hand starten (antippen, wenn die Band anfängt)."
       : e.kandidat ? `Erkennt gerade: ${e.kandidat} …`
@@ -187,6 +191,7 @@ export function showSeite(wurzel) {
     erkennungZeigen(live.erkennung);
     buehne?.setzeWerte(live.geraete);
     setze(feld("quelle"), quelleText(live));
+    setze(feld("mitschnitt-an"), live.mitschnitt?.song ? "● schneidet mit" : live.mitschnitt?.status ?? "");
     const song = live.song;
     const laeuft = Boolean(song?.laeuft);
     feld("songlauf").hidden = !laeuft;
@@ -383,6 +388,7 @@ export function showSeite(wurzel) {
     if (d.teil !== undefined) await senden("/song/teil", { index: Number(d.teil) });
   });
   feld("zwischenlicht").onchange = () => senden("/setlist", { zwischenlicht: feld("zwischenlicht").checked });
+  feld("mitschnitt").onchange = () => senden("/setlist", { mitschnitt: feld("mitschnitt").checked });
   feld("vor").onclick = () => senden("/song/vor");
   feld("zurueck").onclick = () => senden("/song/zurueck");
   feld("stopp").onclick = () => senden("/song/stopp");

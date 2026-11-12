@@ -33,6 +33,7 @@ from .overrides import Overrides
 from .patch import Patch
 from .probe import Proben, show_bauen
 from .rueckblick import Rueckblick
+from .weitere import Mitschnitt
 from .generalprobe import Generalprobe
 from .licht_chat import LichtChat
 from .zwischenlicht import Zwischenlicht
@@ -77,6 +78,7 @@ class Show:
         self._letztes_tempo: Optional[float] = None
         self.aufnahme_name: Optional[str] = None
         self.aufnahme_marken = []
+        self.aufnahme_weitere = False          # die Aufnahme ist eine weitere Aufnahme eines Songs
         self.automatik_an = True
         self.audio_auftrag: Optional[dict] = None
         self.vorschau = Vorschau(self)
@@ -85,6 +87,7 @@ class Show:
         self.zwischenlicht = Zwischenlicht(self)
         self.generalprobe = Generalprobe(self)
         self.rueckblick = Rueckblick(self)
+        self.mitschnitt = Mitschnitt(self)
         self.pult.extra.append(self.zwischenlicht.platz)
         self._messwerte = None
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
@@ -161,6 +164,7 @@ class Show:
             else:
                 self.software_blitzt = set()
             self.rueckblick.takt(jetzt)
+            self.mitschnitt.takt(jetzt)
             zustand = self._profil_grenzen(zustand, jetzt)
             zustand = self.overrides.anwenden(zustand, self.patch.geraete, self.warm_stellung)
             bild = self.renderer.bild(zustand)
@@ -542,7 +546,8 @@ class Show:
                     "pult": self.pult.status(), "automatik": self.automatik_an,
                     "song": self.song.zustand(), "tempo": round(self._musik_bpm(), 1),
                     "erkennung": self.song.erkennung_zustand(), "zwischenlicht": self.zwischenlicht.status(),
-                    "aufnahme": {"name": self.aufnahme_name,
+                    "mitschnitt": {"song": self.mitschnitt.song, "status": self.mitschnitt.status},
+                    "aufnahme": {"name": self.aufnahme_name, "weitere": self.aufnahme_weitere,
                                  "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
                                  "markierungen": len(self.aufnahme_marken)},
                     "vorschau": {"geraete": self.vorschau_geraete},

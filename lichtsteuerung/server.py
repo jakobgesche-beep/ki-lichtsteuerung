@@ -564,18 +564,28 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     @app.get("/api/proben")
     def proben_lesen():
-        return {"proben": [show.proben.lesen(n) for n in show.proben.namen()],
-                "aufnahme": show.aufnahme_name}
+        proben = []
+        for name in show.proben.namen():
+            probe = show.proben.lesen(name)
+            if probe is not None:
+                probe["weitere"] = [{k: v for k, v in e.items() if k != "zuordnung"} | {"zugeordnet": bool(e.get("zuordnung"))}
+                                    for e in show.proben.weitere.liste(name)]
+                proben.append(probe)
+        return {"proben": proben, "aufnahme": show.aufnahme_name, "aufnahme_weitere": show.aufnahme_weitere}
 
     @app.post("/api/proben/aufnahme")
     def probe_aufnehmen(auftrag: dict = Body(...)):
         name = str(auftrag.get("name", "")).strip()
         if not name:
             raise ValueError("Bitte einen Namen für den Song eingeben.")
+        weitere = bool(auftrag.get("weitere"))
+        if weitere and show.proben.lesen(name) is None:
+            raise ValueError(f"Den Song „{name}“ gibt es noch nicht. Erst die Probe aufnehmen.")
         show.audio.aufnahme_starten()
         show.aufnahme_name = name
         show.aufnahme_marken = []
-        return {"aufnahme": name}
+        show.aufnahme_weitere = weitere
+        return {"aufnahme": name, "weitere": weitere}
 
     @app.post("/api/proben/markieren")
     def probe_markieren():
@@ -592,6 +602,9 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         if not name:
             raise ValueError("Es läuft keine Aufnahme.")
         marken, show.aufnahme_marken = show.aufnahme_marken, []
+        if show.aufnahme_weitere:
+            show.aufnahme_weitere = False
+            return {"weitere": show.proben.weitere.speichern(name, ton, "Aufnahme")}
         show.proben.speichern(name, ton, marken)
         return {"analyse": show.proben.lesen(name), "sequenz": show.show_aus_probe(name)}
 
@@ -608,6 +621,29 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         except quellen.AudioFehler as fehler:
             raise ValueError(str(fehler)) from fehler
         return {"analyse": show.proben.lesen(name), "sequenz": show.show_aus_probe(name)}
+
+    @app.post("/api/proben/{name}/weitere")
+    async def weitere_aus_datei(anfrage: Request, name: str, datei: str):
+        """Eine weitere Aufnahme eines Songs als Datei (zum Beispiel ein Handy-Mitschnitt vom Konzert)."""
+        if show.proben.lesen(name) is None:
+            raise ValueError(f"Den Song „{name}“ gibt es nicht.")
+        if Path(datei).suffix.lower() not in AUDIO_ENDUNGEN:
+            raise ValueError("Diese Dateiart kann das Programm nicht lesen.")
+        show.pfade.audio.mkdir(parents=True, exist_ok=True)
+        pfad = show.pfade.audio / ("weitere-" + Path(datei).name)
+        pfad.write_bytes(await anfrage.body())
+        try:
+            ton = quellen.lade_datei(pfad)
+        except quellen.AudioFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        finally:
+            pfad.unlink(missing_ok=True)
+        return {"weitere": show.proben.weitere.speichern(name, ton, "Datei")}
+
+    @app.delete("/api/proben/{name}/weitere/{datei}")
+    def weitere_loeschen(name: str, datei: str):
+        show.proben.weitere.loeschen(name, datei)
+        return {"weitere": len(show.proben.weitere.liste(name))}
 
     @app.post("/api/proben/{name}/teile")
     def probe_teile(name: str, auftrag: dict = Body(...)):
@@ -700,7 +736,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.post("/api/setlist")
     def setlist(auftrag: dict = Body(...)):
         """Reihenfolge der Songs fürs Konzert und wie die Song-Erkennung arbeitet."""
-        show.song.setlist_setzen(auftrag.get("reihenfolge"), auftrag.get("modus"), auftrag.get("zwischenlicht"))
+        show.song.setlist_setzen(auftrag.get("reihenfolge"), auftrag.get("modus"), auftrag.get("zwischenlicht"),
+                                 auftrag.get("mitschnitt"))
         return show.song.erkennung_zustand()
 
     @app.post("/api/song/vorschlag")
