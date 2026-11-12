@@ -15,7 +15,7 @@ daten += [(str(WURZEL / name), ".") for name in
 binaries, versteckt = [], collect_submodules("uvicorn") + collect_submodules("lichtsteuerung")
 # webview braucht unter Windows pythonnet (clr) für das Edge-Fenster
 for paket in ("webview", "sounddevice", "soundfile", "libusb_package", "certifi", "pyftdi", "usb", "serial",
-              "clr_loader", "pythonnet", "anthropic"):
+              "clr_loader", "pythonnet", "anthropic", "rtmidi"):
     try:
         d, b, v = collect_all(paket)
     except Exception:

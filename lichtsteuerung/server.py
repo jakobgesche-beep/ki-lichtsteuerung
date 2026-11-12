@@ -717,6 +717,41 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.generalprobe.abbrechen()
         return show.generalprobe.zustand()
 
+    # --- MIDI: Controller und Takt vom Schlagzeug ---------------------------
+
+    @app.get("/api/midi")
+    def midi_lesen():
+        return show.midi.zustand()
+
+    @app.post("/api/midi/geraet")
+    def midi_geraet(auftrag: dict = Body(...)):
+        show.midi.geraet_waehlen(auftrag.get("name") or None)
+        return show.midi.zustand()
+
+    @app.post("/api/midi/vorlage")
+    def midi_vorlage(auftrag: dict = Body(...)):
+        show.midi.vorlage_laden(str(auftrag.get("id", "")))
+        return show.midi.zustand()
+
+    @app.post("/api/midi/lernen")
+    def midi_lernen(auftrag: dict = Body(default={})):
+        """Aufgabe anklicken, dann am Gerät bewegen oder drücken. Ohne Aufgabe: Lernen abbrechen."""
+        show.midi.lernen_starten(auftrag.get("aufgabe"))
+        return show.midi.zustand()
+
+    @app.post("/api/midi/loeschen")
+    def midi_loeschen(auftrag: dict = Body(default={})):
+        if auftrag.get("alles"):
+            show.midi.alles_loeschen()
+        else:
+            show.midi.aufgabe_loeschen(str(auftrag.get("aufgabe", "")))
+        return show.midi.zustand()
+
+    @app.post("/api/midi/clock")
+    def midi_clock(auftrag: dict = Body(...)):
+        show.midi.clock_setzen(bool(auftrag.get("an")))
+        return show.midi.zustand()
+
     @app.get("/api/rueckblick")
     def rueckblick_lesen(tag: str = ""):
         """Rückblick: Logbuch eines Tages mit Zusammenfassung und Hinweisen zum Üben."""

@@ -12,6 +12,7 @@ Hier läuft alles zusammen. Ein Bild entsteht immer in dieser Reihenfolge:
 """
 from __future__ import annotations
 
+import dataclasses
 import json
 import logging
 import math
@@ -36,6 +37,7 @@ from .rueckblick import Rueckblick
 from .weitere import Mitschnitt
 from .generalprobe import Generalprobe
 from .licht_chat import LichtChat
+from .midi import Midi
 from .zwischenlicht import Zwischenlicht
 from .pult import Executor, Pult
 from .profile import Profile, RUHE_PROFIL, strobo_grenzen
@@ -88,6 +90,7 @@ class Show:
         self.generalprobe = Generalprobe(self)
         self.rueckblick = Rueckblick(self)
         self.mitschnitt = Mitschnitt(self)
+        self.midi = Midi(self)
         self.pult.extra.append(self.zwischenlicht.platz)
         self._messwerte = None
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
@@ -333,34 +336,44 @@ class Show:
 
     def _automatik(self, jetzt: float) -> dict:
         self._beat = False
+        clock_beat = self.midi.beat_abholen()          # MIDI-Clock: genaue Schläge statt gehörter
         if self._test_laeuft():
             zustand = {}
             if self.test_geraet is not None:
                 zustand[self.test_geraet] = Eigenschaften(helligkeit=1.0, farbe=(1.0, 1.0, 1.0))
             return zustand
         if not self.automatik_an:
-            werte = self.audio.abholen(jetzt)     # Beats trotzdem abholen, damit keiner nachträglich kommt
-            self._beat = bool(werte is not None and werte.beat)
+            werte = self._mit_clock(self.audio.abholen(jetzt), clock_beat)   # Beats trotzdem abholen
+            self._beat = bool(werte is not None and werte.beat) if clock_beat is None else clock_beat
             self._messwerte = werte
             return {}
         try:
-            messwerte = self.audio.abholen(jetzt)
+            messwerte = self._mit_clock(self.audio.abholen(jetzt), clock_beat)
             self._messwerte = messwerte
-            self._beat = bool(messwerte is not None and messwerte.beat)
+            self._beat = bool(messwerte is not None and messwerte.beat) if clock_beat is None else clock_beat
             return self.engine.bewerte(messwerte, self.profil, jetzt, self.overrides.pause)
         except Exception:
             # Sicherer Rückfall: Auch ein Fehler in den Regeln führt zum Grundlicht.
             logging.exception("Fehler in der Engine")
             return self.engine.bewerte(None, self.profil, jetzt)
 
+    def _mit_clock(self, messwerte, clock_beat: Optional[bool]):
+        """Läuft ein MIDI-Clock, gelten seine Schläge und sein Tempo (auch für die Automatik)."""
+        if clock_beat is None or messwerte is None:
+            return messwerte
+        return dataclasses.replace(messwerte, beat=clock_beat, tempo_bpm=self.midi.clock_bpm() or messwerte.tempo_bpm)
+
     def _musik_bpm(self) -> float:
         """Tempo für alle Effekte. Fällt der Ton aus, läuft das Licht im letzten Tempo weiter.
 
-        Reihenfolge: getippt (Tap) > Song-Start (Tempo der Probe, wie schnell die Band
+        Reihenfolge: getippt (Tap) > MIDI-Clock > Song-Start (Tempo der Probe, wie schnell die Band
         gerade spielt) > gehörtes Tempo > zuletzt gehörtes oder getipptes > 120.
         """
         if self.pult.tempo_quelle == "tap" and self.pult.tempo_getippt:
             return self.pult.tempo_getippt
+        clock = self.midi.clock_bpm()
+        if clock:
+            return clock
         song = self.song.tempo()
         if song and 40 <= song <= 240:
             return song
@@ -547,6 +560,7 @@ class Show:
                     "song": self.song.zustand(), "tempo": round(self._musik_bpm(), 1),
                     "erkennung": self.song.erkennung_zustand(), "zwischenlicht": self.zwischenlicht.status(),
                     "mitschnitt": {"song": self.mitschnitt.song, "status": self.mitschnitt.status},
+                    "midi": self.midi.kurz(),
                     "aufnahme": {"name": self.aufnahme_name, "weitere": self.aufnahme_weitere,
                                  "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
                                  "markierungen": len(self.aufnahme_marken)},
@@ -571,6 +585,7 @@ class Show:
         if self._thread is not None and self._thread.is_alive():
             return                                    # läuft schon (nie zwei Show-Threads)
         self.rueckblick.ereignis("programm", version=VERSION)
+        self.midi.starten()
         self._stopp.clear()
         self._thread = threading.Thread(target=self._schleife, name="Show", daemon=True)
         self._thread.start()
@@ -582,6 +597,7 @@ class Show:
         if self._thread is not None:
             self._thread.join(timeout=1.0)
         self.audio.stoppen()
+        self.midi.stoppen()
         self.ausgabe.ausschalten()
 
     def _erkennen_schleife(self) -> None:

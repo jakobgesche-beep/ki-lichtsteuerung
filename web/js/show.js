@@ -232,7 +232,7 @@ export function showSeite(wurzel) {
       knopf.classList.toggle("an", Boolean(tasten.halten[knopf.dataset.halten]));
     }
     setze(feld("bpm"), live.tempo ? String(Math.round(live.tempo)) : "–");
-    const quelle = tasten.tempo_quelle === "tap" ? "getippt" : laeuft ? "vom Song" : live.audio.werte ? "vom Ton" : "ohne Ton: letztes Tempo";
+    const quelle = tasten.tempo_quelle === "tap" ? "getippt" : live.midi?.clock_bpm ? "MIDI-Clock" : laeuft ? "vom Song" : live.audio.werte ? "vom Ton" : "ohne Ton: letztes Tempo";
     setze(feld("tquelle"), quelle);
     feld("vom-ton").hidden = tasten.tempo_quelle !== "tap";
   }

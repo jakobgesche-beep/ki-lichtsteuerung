@@ -11,7 +11,7 @@ daten = [(str(WURZEL / name), name) for name in ("web", "catalog", "profile", "c
 daten += [(str(WURZEL / name), ".") for name in
           ("fixtures.json", "stage.json", "positions.json", "x32.json", "sicherheit.json")]
 binaries, versteckt = [], collect_submodules("uvicorn") + collect_submodules("lichtsteuerung")
-for paket in ("webview", "sounddevice", "soundfile", "libusb_package", "certifi", "pyftdi", "usb", "serial", "anthropic"):
+for paket in ("webview", "sounddevice", "soundfile", "libusb_package", "certifi", "pyftdi", "usb", "serial", "anthropic", "rtmidi"):
     d, b, v = collect_all(paket)
     daten += d
     binaries += b
@@ -27,5 +27,5 @@ app = BUNDLE(sammlung, name="Lichtsteuerung.app", icon=str(WURZEL / "packaging/s
              info_plist={
                  "CFBundleShortVersionString": VERSION, "CFBundleVersion": VERSION,
                  "NSHighResolutionCapable": True, "LSMinimumSystemVersion": "12.0",
-                 "NSMicrophoneUsageDescription": "Die Lichtsteuerung analysiert den Ton, damit das Licht auf die Musik reagiert. Nichts wird gespeichert oder gesendet.",
+                 "NSMicrophoneUsageDescription": "Die Lichtsteuerung analysiert den Ton, damit das Licht auf die Musik reagiert. Aufnahmen (Proben, Mitschnitte) bleiben auf diesem Mac, nichts wird gesendet.",
              })
