@@ -681,6 +681,11 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.generalprobe.abbrechen()
         return show.generalprobe.zustand()
 
+    @app.get("/api/rueckblick")
+    def rueckblick_lesen(tag: str = ""):
+        """Rückblick: Logbuch eines Tages mit Zusammenfassung und Hinweisen zum Üben."""
+        return show.rueckblick.zusammenfassung(tag or None)
+
     @app.get("/api/show")
     def show_lesen():
         return {"songs": show.song.songs(), "looks": showtasten.LOOKS, "halten": showtasten.HALTEN,

@@ -78,6 +78,7 @@ class SongSpieler:
         self.modus = roh.get("modus") if roh.get("modus") in MODI else "automatisch"
         self.zwischenlicht_an = bool(roh.get("zwischenlicht", True))
         self.vorbei = False                         # das Publikum hat am Schluss geklatscht
+        self.start_wie = "hand"                     # fürs Logbuch: von Hand, erkannt oder Vorschlag
         self._klatschen_seit: Optional[float] = None
         self._liste: list = []
         self._liste_stand = -99.0
@@ -110,7 +111,7 @@ class SongSpieler:
     # --- Bedienen -------------------------------------------------------
 
     def starten(self, name: str, nummer: int = SONG_NUMMER, jetzt: Optional[float] = None,
-                stelle: Optional[float] = None) -> None:
+                stelle: Optional[float] = None, wie: str = "hand") -> None:
         """Der Song läuft auf einem eigenen Platz (nicht auf den Fadern), außer man nennt einen Fader.
 
         Die Uhr beginnt erst, wenn die Band wirklich spielt. Ein zweiter Druck, während der Song
@@ -133,6 +134,7 @@ class SongSpieler:
             self.zuletzt_gespielt, self.vorschlag = name, None
             self.folger, self.name, self.nummer = folger, name, nummer
             self.vorbei, self._klatschen_seit = False, None
+            self.start_wie = wie
             analyse = self.show.proben.lesen(name) or {}
             self.karte = dict(karte_aus(sequenz, analyse))
             if self.karte.get("musik_bis_s") is None:
@@ -182,6 +184,7 @@ class SongSpieler:
         teile = self.karte.get("teile", [])
         index = self._teil_index(self.folger.stelle)
         if index + 1 < len(teile):
+            self.show.rueckblick.korrektur("vor")
             self.folger.setzen(teile[index + 1]["start"] + 0.01)
 
     def teil_zurueck(self) -> None:
@@ -194,15 +197,18 @@ class SongSpieler:
         index = self._teil_index(self.folger.stelle)
         if self.folger.stelle - teile[index]["start"] < 3.0 and index > 0:
             index -= 1
+        self.show.rueckblick.korrektur("zurueck")
         self.folger.setzen(teile[index]["start"] + 0.01)
 
     def zu_teil(self, index: int) -> None:
         teile = self.karte.get("teile", [])
         if self.folger is not None and 0 <= index < len(teile):
+            self.show.rueckblick.korrektur("teil")
             self.folger.setzen(teile[index]["start"] + 0.01)
 
     def zu_cue(self, index: int) -> None:
         if self.folger is not None and 0 <= index < len(self.zeitcode):
+            self.show.rueckblick.korrektur("cue")
             self.folger.setzen(self.zeitcode[index] + 0.01)
 
     # --- Setlist und Song-Erkennung ------------------------------------------------
@@ -303,10 +309,12 @@ class SongSpieler:
             return None
         name = ergebnis["name"]
         if self.modus == "automatisch" and name == self.erwartet() and not laeuft_normal:
-            self.starten(name, jetzt=jetzt, stelle=ergebnis["stelle"])
+            self.starten(name, jetzt=jetzt, stelle=ergebnis["stelle"], wie="erkannt")
             self.meldung = f"Erkannt: {name}. Das Licht läuft mit (ab {int(ergebnis['stelle'] // 60)}:{int(ergebnis['stelle'] % 60):02d})."
             return {**ergebnis, "gestartet": True}
         # Unerwarteter Song (oder Modus Vorschlagen, oder ein ganz anderer Song mitten im laufenden): nur vorschlagen
+        if not self.vorschlag or self.vorschlag["name"] != name:
+            self.show.rueckblick.ereignis("vorschlag", song=name, laeuft_anderer=laeuft_normal)
         self.vorschlag = {"name": name, "stelle": ergebnis["stelle"], "zeit": jetzt, "laeuft_anderer": laeuft_normal}
         return {**ergebnis, "gestartet": False}
 
@@ -317,7 +325,7 @@ class SongSpieler:
         jetzt = time.monotonic() if jetzt is None else jetzt
         vorschlag = self.vorschlag
         stelle = vorschlag["stelle"] + max(0.0, jetzt - vorschlag["zeit"])
-        self.starten(vorschlag["name"], jetzt=jetzt, stelle=stelle)
+        self.starten(vorschlag["name"], jetzt=jetzt, stelle=stelle, wie="vorschlag")
         self.meldung = f"{vorschlag['name']} läuft (von Hand bestätigt)."
 
     def erkennung_zustand(self) -> dict:

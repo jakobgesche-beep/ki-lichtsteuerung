@@ -30,10 +30,12 @@ export function showSeite(wurzel) {
     <div class="show">
       <div class="show-oben">
       <section class="fenster songfenster"><header>Song-Start <span class="zeile"><span id="folger" class="chip"></span>
+        <button id="rb-knopf" class="chip check-knopf" title="Rückblick: Was lief wann, und wo war das Programm unsicher?">Rückblick …</button>
         <button id="gp-knopf" class="chip check-knopf" title="Generalprobe: Die Setlist mit veränderten Probe-Aufnahmen durchspielen">Generalprobe …</button>
         <button id="check-knopf" class="chip check-knopf" title="Ist alles bereit fürs Konzert?">Konzert-Check …</button></span></header>
         <div id="check-liste" class="check-liste" hidden></div>
         <div id="gp-liste" class="check-liste gp-liste" hidden></div>
+        <div id="rb-liste" class="check-liste gp-liste" hidden></div>
         <div class="inhalt">
           <div class="erkennung zeile" id="erkennung">
             <span class="leise">Song-Erkennung</span>
@@ -300,11 +302,12 @@ export function showSeite(wurzel) {
     feld("gp-liste").hidden = !feld("gp-liste").hidden;
     if (!feld("gp-liste").hidden) {
       feld("check-liste").hidden = true;
+      feld("rb-liste").hidden = true;
       gpLaden();
       gpUhrAn();
     }
   };
-  feld("check-knopf").addEventListener("click", () => { feld("gp-liste").hidden = true; });
+  feld("check-knopf").addEventListener("click", () => { feld("gp-liste").hidden = true; feld("rb-liste").hidden = true; });
   feld("gp-liste").addEventListener("click", async (ereignis) => {
     const knopf = ereignis.target.closest("[data-gp]");
     if (!knopf) return;
@@ -312,6 +315,43 @@ export function showSeite(wurzel) {
     gpUhrAn();
   });
   gpLaden().then(() => { if (feld("gp-knopf").textContent.includes("%")) gpUhrAn(); });
+
+  // --- Rückblick: Logbuch der Show (was lief, wie sicher, wo korrigiert) --------------
+  const datum = (tag) => tag.split("-").reverse().join(".");
+  const prozent = (wert) => (wert == null ? "–" : Math.round(wert * 100) + " %");
+  async function rbLaden(tag) {
+    let z;
+    try { z = await api("/rueckblick" + (tag ? "?tag=" + encodeURIComponent(tag) : "")); } catch { return; }
+    let html = `<div class="gp-kopf"><b>Rückblick</b> <span class="leise">Was lief wann, wie sicher das Programm mitgehört hat
+      und wo von Hand korrigiert wurde. So weiß man, was man in der Probe üben sollte.</span></div>`;
+    if (z.tage.length) {
+      html += `<div class="gp-lauf"><select id="rb-tag">${z.tage.map((d) => `<option value="${t(d)}" ${d === z.tag ? "selected" : ""}>${datum(d)}</option>`).join("")}</select>
+        <span class="leise">${z.songs.length} Song${z.songs.length === 1 ? "" : "s"}</span></div>`;
+    }
+    html += z.hinweise.map((h) => `<div class="check-punkt hinweis"><span class="check-zeichen">!</span><span>${t(h)}</span></div>`).join("");
+    if (z.songs.length) {
+      html += `<table class="rb-tabelle"><tr><th>Zeit</th><th>Song</th><th>Start</th><th>sicher</th><th>korrigiert</th><th>Ende</th></tr>`
+        + z.songs.map((s) => `<tr><td>${t(s.zeit.slice(0, 5))}</td><td><b>${t(s.song)}</b></td><td>${t(s.wie)}</td>
+          <td>${prozent(s.sicher)}</td><td>${Object.values(s.korrekturen).reduce((a, b) => a + b, 0)}</td><td>${t(s.ende)}</td></tr>`).join("")
+        + `</table>`;
+    } else {
+      html += `<p class="leise rb-leer">${z.tage.length ? "An diesem Tag lief kein Song bis zum Ende." : "Noch nichts aufgezeichnet. Sobald ein Song läuft, schreibt das Programm mit."}</p>`;
+    }
+    if (z.ereignisse.length) {
+      html += `<details class="rb-ablauf"><summary>Ablauf (${z.ereignisse.length} Einträge)</summary>`
+        + z.ereignisse.map((e) => `<div><span class="leise">${t(e.zeit)}</span> ${t(e.text)}</div>`).join("") + `</details>`;
+    }
+    feld("rb-liste").innerHTML = html;
+  }
+  feld("rb-knopf").onclick = () => {
+    feld("rb-liste").hidden = !feld("rb-liste").hidden;
+    if (!feld("rb-liste").hidden) {
+      feld("check-liste").hidden = true;
+      feld("gp-liste").hidden = true;
+      rbLaden();
+    }
+  };
+  feld("rb-liste").addEventListener("change", (e) => { if (e.target.id === "rb-tag") rbLaden(e.target.value); });
 
   // --- Bedienen ------------------------------------------------------------
   wurzel.addEventListener("click", async (ereignis) => {

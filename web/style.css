@@ -344,6 +344,15 @@ td input[type=number] { width: 66px; }
 .gp-zeit { padding: 6px 6px 2px; }
 .gp-zeile { color: var(--text); }
 
+/* Rückblick (Logbuch der Show) */
+.rb-tabelle { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 12px; }
+.rb-tabelle th { text-align: left; color: var(--leise); font-weight: 600; padding: 3px 6px; border-bottom: 1px solid var(--linie); }
+.rb-tabelle td { padding: 3px 6px; border-bottom: 1px solid #26282b; }
+.rb-ablauf { padding: 6px; font-size: 12px; }
+.rb-ablauf summary { cursor: pointer; color: var(--leise); margin-bottom: 4px; }
+.rb-ablauf div { padding: 1px 0; }
+.rb-leer { padding: 6px; }
+
 /* Song-Erkennung und Setlist auf der Show-Seite */
 .erkennung { margin-bottom: 6px; gap: 8px; }
 .segment { display: inline-flex; }

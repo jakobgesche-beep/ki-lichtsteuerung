@@ -32,6 +32,7 @@ from .katalog import Katalog
 from .overrides import Overrides
 from .patch import Patch
 from .probe import Proben, show_bauen
+from .rueckblick import Rueckblick
 from .generalprobe import Generalprobe
 from .licht_chat import LichtChat
 from .zwischenlicht import Zwischenlicht
@@ -83,6 +84,7 @@ class Show:
         self.chat = LichtChat(self)
         self.zwischenlicht = Zwischenlicht(self)
         self.generalprobe = Generalprobe(self)
+        self.rueckblick = Rueckblick(self)
         self.pult.extra.append(self.zwischenlicht.platz)
         self._messwerte = None
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
@@ -158,6 +160,7 @@ class Show:
                 zustand = self._software_blitz(zustand, jetzt)
             else:
                 self.software_blitzt = set()
+            self.rueckblick.takt(jetzt)
             zustand = self._profil_grenzen(zustand, jetzt)
             zustand = self.overrides.anwenden(zustand, self.patch.geraete, self.warm_stellung)
             bild = self.renderer.bild(zustand)
@@ -560,6 +563,9 @@ class Show:
     # --- Die Schleife -----------------------------------------------------
 
     def start(self) -> None:
+        if self._thread is not None and self._thread.is_alive():
+            return                                    # läuft schon (nie zwei Show-Threads)
+        self.rueckblick.ereignis("programm", version=VERSION)
         self._stopp.clear()
         self._thread = threading.Thread(target=self._schleife, name="Show", daemon=True)
         self._thread.start()
