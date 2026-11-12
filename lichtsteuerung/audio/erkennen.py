@@ -6,11 +6,17 @@ gilt ein Song erst, wenn
 
     er deutlich besser passt als jeder andere geprobte Song,
     die Stelle in ihm eindeutig ist (viel besser als der Rest desselben Songs),
-    und das 3 Sekunden lang so bleibt und dabei gleichmäßig weiterläuft wie eine Band.
+    und das 3 Sekunden lang so bleibt und dabei gleichmäßig weiterläuft wie eine Band
+    (die Stelle rückt mit der Zeit vor, höchstens 0,5 s plus 8 % daneben).
 
-Gemessen an 10 Kunstsongs und "Hh" (Live-Fassungen: gleich, 4 % schneller): 86 % richtig erkannt, im Mittel
-nach 9 Sekunden Musik, nie ein falscher Song; 4 fremde, ähnlich klingende Songs: kein einziger Fehlalarm.
-Mit 6 statt 10 Sekunden und 2 statt 3 Sekunden Bestätigung gab es dagegen 3 Fehlalarme in 8 Versuchen.
+Außerdem muss es im Mittel gut genug passen (Kosten höchstens 0,33; richtige Songs lagen bis 0,28).
+
+Gemessen an 10 Kunstsongs und "Hh" (Live-Fassungen: gleich, 4 % schneller, anderer Klang mit Hall und Publikum;
+Start nach 1 s, nach 30 s und mitten im Song): 98 von 99 richtig erkannt, im Mittel nach 9 Sekunden Musik, nie ein
+falscher Song. 4 fremde Kunstsongs und Publikum allein: 1 Fehlalarm von 17, bei einem fremden Song in derselben
+Tonart, im selben Tempo und mit fast denselben Akkorden wie ein geprobter. (Bis 2.1: 60 von 99, weil Rauschen wie
+bestimmte Töne aussah, siehe folgen.Merkmale.) Mit 6 statt 10 Sekunden und 2 statt 3 Sekunden Bestätigung gab es
+3 Fehlalarme in 8 Versuchen.
 
 Lieber kein Song als der falsche: Spielt die Band etwas, das nicht geprobt wurde, wird nichts erkannt.
 Bei Stille, Reden oder Klatschen wird gar nicht erst verglichen.
@@ -33,6 +39,7 @@ TEMPI = (0.94, 1.0, 1.06)
 SICHER_MAL = 6                     # so oft hintereinander gleich (alle 0,5 s geprüft): 3 Sekunden
 ABSTAND_SONGS = 0.04               # so viel besser als der zweitbeste Song
 SCHAERFE = 0.12                    # so viel besser als der Durchschnitt der anderen Stellen im selben Song
+MAX_KOSTEN = 0.33                  # so schlecht darf es im Mittel höchstens passen (richtige Songs: bis 0,28)
 GEWICHT = (0.97 ** np.arange(int(FENSTER_S * RATE / SCHRITT))[::-1]).astype(np.float32)
 
 
@@ -45,6 +52,7 @@ class SongErkenner:
         self.oben: Optional[float] = None   # lautester Pegel zuletzt (fällt langsam)
         self.kandidat: Optional[tuple] = None   # (Name, Ende in Messpunkten der Probe, Zeit)
         self.mal = 0
+        self.kosten_summe = 0.0
         self.letztes: Optional[dict] = None     # letzte Prüfung, für die Anzeige
         self.zuletzt_ton: Optional[float] = None
 
@@ -143,15 +151,25 @@ class SongErkenner:
         if not eindeutig:
             self.kandidat, self.mal = None, 0
             return None
-        # Läuft die Stelle gleichmäßig weiter wie eine Band? (Ende rückt um die vergangene Zeit vor)
+        # Läuft die Stelle gleichmäßig weiter wie eine Band? Gemessen ab der ersten Prüfung: Das Ende rückt um
+        # die vergangene Zeit vor, höchstens 0,5 s plus 8 % daneben (eine Band spielt nie viel schneller als geprobt).
         if self.kandidat is not None and self.kandidat[0] == name:
-            erwartet = self.kandidat[1] + (jetzt - self.kandidat[2]) * RATE / SCHRITT
-            self.mal = self.mal + 1 if abs(ende - erwartet) <= 1.0 * RATE / SCHRITT else 1
+            vergangen = jetzt - self.kandidat[2]
+            erwartet = self.kandidat[1] + vergangen * RATE / SCHRITT
+            if abs(ende - erwartet) <= (0.5 + 0.08 * vergangen) * RATE / SCHRITT:
+                self.mal += 1
+                self.kosten_summe += kosten
+            else:
+                self.mal, self.kandidat, self.kosten_summe = 1, (name, ende, jetzt), kosten
         else:
-            self.mal = 1
-        self.kandidat = (name, ende, jetzt)
+            self.mal, self.kandidat, self.kosten_summe = 1, (name, ende, jetzt), kosten
         if self.mal < SICHER_MAL:
             return None
-        self.mal = 0
+        mittel = self.kosten_summe / self.mal
+        self.mal, self.kosten_summe = 0, 0.0
+        if mittel > MAX_KOSTEN:
+            self.kandidat = None
+            return None
         stelle = ende * SCHRITT / RATE + folgen.VERZOEGERUNG_S
-        return {"name": name, "stelle": stelle, "schaerfe": round(schaerfe, 3), "abstand": round(abstand, 3)}
+        return {"name": name, "stelle": stelle, "schaerfe": round(schaerfe, 3), "abstand": round(abstand, 3),
+                "kosten": round(mittel, 3)}

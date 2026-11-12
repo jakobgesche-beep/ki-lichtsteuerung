@@ -92,3 +92,17 @@ def test_zweimal_druecken_heisst_jetzt_los():
     assert folger.zustand(0.25)["art"] == "bereit" and folger.takt(0.1, 0.3) == folger.anfang
     folger.jetzt_los(0.3)
     assert folger.takt(0.5, 0.8) > folger.anfang
+
+
+def test_von_hand_gesetzt_wird_nicht_mehr_am_anfang_nachgeprueft():
+    """Nach "Nächster Teil" darf die Anfangs-Prüfung die Stelle nicht wieder an den Song-Anfang ziehen."""
+    from lichtsteuerung.audio.folgen import SongFolger, merkmale_der_aufnahme
+    from lichtsteuerung.audio.quellen import erzeuge_takt
+    ton = erzeuge_takt(120, 40) * 0.5
+    folger = SongFolger(*merkmale_der_aufnahme(ton))
+    folger.starten(jetzt=0.0)
+    for a in range(0, 3 * 44100, 512):                 # beim Drücken schon laut: Anfang wird nachgeprüft
+        folger.hoeren(ton[a:a + 512], a / 44100)
+    assert folger.pruefen_bis > 0
+    folger.setzen(20.0)
+    assert folger.pruefen_bis == 0.0 and folger.stelle == 20.0

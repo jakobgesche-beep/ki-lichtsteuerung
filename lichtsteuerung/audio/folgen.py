@@ -56,17 +56,6 @@ ANFANG_SICHER_S = 1.5      # so lange muss eine andere Stelle eindeutig passen, 
 ANFANG_PRUEFEN_S = 15.0    # so lange nach dem Start wird nachgeprüft
 
 
-def _chroma_filter() -> np.ndarray:
-    freq = np.fft.rfftfreq(FENSTER, 1 / ABTASTRATE)
-    gueltig = (freq >= 80) & (freq <= 4000)
-    halbton = 69 + 12 * np.log2(np.maximum(freq, 1) / 440.0)
-    filter_ = np.zeros((12, len(freq)), np.float32)
-    for klasse in range(12):
-        abstand = (halbton - klasse + 6) % 12 - 6
-        filter_[klasse] = np.exp(-0.5 * (abstand / 0.4) ** 2) * gueltig
-    return filter_
-
-
 def _band_filter() -> np.ndarray:
     freq = np.fft.rfftfreq(FENSTER, 1 / ABTASTRATE)
     grenzen = (30, 150, 400, 1200, 3500, 11000)
@@ -76,9 +65,29 @@ def _band_filter() -> np.ndarray:
     return filter_ / np.maximum(filter_.sum(axis=1, keepdims=True), 1)
 
 
-CHROMA = _chroma_filter()
+TIEF_MIDI, HOCH_MIDI = 48, 108     # C3 bis H7: 5 ganze Oktaven, jede Tonklasse kommt gleich oft vor
+
+
+def _halbton_filter() -> np.ndarray:
+    """Ein Filter je Halbton. Jeder ist ein Mittelwert (nicht eine Summe) über seine FFT-Werte:
+    So zählt Rauschen in jeder Tonhöhe gleich viel, und oben (wo es viele FFT-Werte gibt) nicht mehr."""
+    freq = np.fft.rfftfreq(FENSTER, 1 / ABTASTRATE)
+    halbton = 69 + 12 * np.log2(np.maximum(freq, 1) / 440.0)
+    filter_ = np.zeros((HOCH_MIDI - TIEF_MIDI, len(freq)), np.float32)
+    for i, midi in enumerate(range(TIEF_MIDI, HOCH_MIDI)):
+        gewicht = np.exp(-0.5 * ((halbton - midi) / 0.4) ** 2) * (freq >= 30)
+        filter_[i] = gewicht / max(float(gewicht.sum()), 1e-9)
+    return filter_
+
+
+HALBTOENE = _halbton_filter()
 BAENDER = _band_filter()
 HANNING = np.hanning(FENSTER).astype(np.float32)
+
+
+def _glatt_ueber_halbtoene(werte: np.ndarray, breite: int = 13) -> np.ndarray:
+    kern = np.ones(breite, np.float32)
+    return np.convolve(werte, kern, mode="same") / np.convolve(np.ones_like(werte), kern, mode="same")
 
 
 class Merkmale:
@@ -101,9 +110,12 @@ class Merkmale:
     def _rahmen(self, stueck: np.ndarray) -> tuple:
         betrag = np.abs(np.fft.rfft(stueck * HANNING))
         with np.errstate(all="ignore"):         # numpy 2.0 auf dem Mac meldet hier Fehlalarme
-            chroma = np.log1p(100 * betrag) @ CHROMA.T
             baender = np.log10(((betrag ** 2) @ BAENDER.T) + 1e-10)
-        chroma = np.maximum(chroma - chroma.mean(), 0)
+            halbtoene = np.log1p(100 * (betrag @ HALBTOENE.T))
+        # Harmonie: Nur was über seine Nachbar-Halbtöne hinausragt, ist ein Ton. Rauschen (Publikum, Becken,
+        # verzerrte Gitarren) und die Klangfarbe fallen so weg, statt immer wie dieselben Töne auszusehen.
+        spitzen = np.maximum(halbtoene - _glatt_ueber_halbtoene(halbtoene), 0)
+        chroma = spitzen.reshape(-1, 12).sum(axis=0)
         chroma = chroma / (np.linalg.norm(chroma) + 1e-9)
         # Rhythmus: wo die Bänder plötzlich lauter werden
         einsatz = np.zeros_like(baender) if self.vorher is None else np.maximum(baender - self.vorher, 0)
@@ -230,6 +242,7 @@ class SongFolger:
             self.wartet = self.bereit = False
             self.fenster = []
             self.sprung_mal = 0
+            self.pruefen_bis = 0.0                # von Hand gesetzt: nicht mehr am Song-Anfang nachprüfen
 
     def stoppen(self) -> None:
         with self.sperre:
