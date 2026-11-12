@@ -141,6 +141,28 @@ def musik_bereich(log_baender: np.ndarray) -> tuple:
     return anfang / RATE, max(ende, anfang + 1) / RATE
 
 
+def musik_ende(log_baender: np.ndarray) -> float:
+    """Wo die Musik aufhört (Sekunden): Danach kommt bis zum Ende der Aufnahme nur noch Raumrauschen.
+
+    Fürs Applaus-Licht. Ein leises Outro zählt noch zur Musik: Verglichen wird mit dem leisesten
+    Rauschen am Anfang oder am Ende der Aufnahme (8 dB darüber ist Musik, wie beim Anfang).
+    """
+    pegel = pegel_db(log_baender)
+    n = len(pegel)
+    if n == 0:
+        return 0.0
+    breite = int(0.3 * RATE)
+    eins = np.ones(breite)
+    glatt = np.convolve(pegel, eins, mode="same") / np.convolve(np.ones(n), eins, mode="same")
+    rand = int(1.5 * RATE)
+    vorne, hinten = np.sort(glatt[:rand]), np.sort(glatt[-rand:])
+    grund = min(float(np.mean(vorne[: max(1, len(vorne) // 3)])), float(np.mean(hinten[: max(1, len(hinten) // 3)])))
+    if grund > np.percentile(glatt, 50) - 6.0:
+        return n / RATE                           # kein Rauschen zu sehen: Die Musik geht bis zum Schluss
+    laut = np.flatnonzero(glatt > grund + 8.0)
+    return (int(laut[-1]) + 1) / RATE if len(laut) else n / RATE
+
+
 def _autokorrelation(x: np.ndarray, max_lag: int) -> np.ndarray:
     spektrum = np.fft.rfft(x - x.mean(), 2 * len(x))
     ak = np.fft.irfft(np.abs(spektrum) ** 2)[:max_lag + 1]
@@ -527,7 +549,7 @@ def analysieren(ton: np.ndarray) -> dict:
     if len(beats) >= 8:
         tempo = float(60.0 / np.median(np.diff(beats)))
     ergebnis = {"tempo_bpm": round(tempo, 1), "dauer_s": round(dauer, 2), "musik_von_s": round(anfang, 2),
-                "musik_bis_s": round(ende, 2), "beats_s": [round(float(b), 3) for b in beats],
+                "musik_bis_s": round(musik_ende(lb), 2), "beats_s": [round(float(b), 3) for b in beats],
                 "einsen_s": [], "teile": [], "schlaege_s": schlaege_finden(lb, beats, anfang, ende)}
     if len(beats) < 16:
         ergebnis["teile"] = [{"start": 0.0, "ende": round(dauer, 2), "takte": 0, "gruppe": 0, "laut_db": 0.0}]

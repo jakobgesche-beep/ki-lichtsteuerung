@@ -85,3 +85,22 @@ def test_analyse_erkennt_klatschen_aber_nicht_musik():
         return werte.applaus
 
     assert applaus_am_ende(klatschen) and not applaus_am_ende(musik)
+
+
+def test_klatschen_im_schluss_beendet_den_song(show):
+    """Die Probe-Aufnahme geht nach dem Song noch weiter: Das Klatschen sagt, dass der Song vorbei ist."""
+    teile = show.song.songs()[0]["teile"]
+    show.song.starten("Band", jetzt=0.0, stelle=teile[-1]["start"] + 1.0)
+    laufen(show, 0.0, 2.0)
+    assert show.zwischenlicht.zustand == "aus"
+    klatschen = Messwerte(leise=False, applaus=True, energie=0.3)
+    laufen(show, 2.0, 4.0, klatschen)
+    assert show.zwischenlicht.zustand == "aus"                 # kurzes Klatschen: der Song läuft weiter
+    laufen(show, 4.0, 7.5, klatschen)
+    assert show.zwischenlicht.zustand == "applaus" and show.song._am_ende()
+
+
+def test_klatschen_mitten_im_song_beendet_ihn_nicht(show):
+    show.song.starten("Band", jetzt=0.0, stelle=5.0)
+    laufen(show, 0.0, 6.0, Messwerte(leise=False, applaus=True, energie=0.3))
+    assert show.zwischenlicht.zustand == "aus" and not show.song._am_ende()

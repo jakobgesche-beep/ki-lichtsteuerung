@@ -33,6 +33,7 @@ from .pult import SONG_NUMMER
 
 MODI = ("automatisch", "vorschlagen", "aus")
 VORSCHLAG_S = 20.0          # so lange bleibt ein Vorschlag stehen
+KLATSCHEN_ENDE_S = 3.0      # so lange Klatschen im Schluss des Songs: Der Song ist vorbei
 
 
 def karte_aus(sequenz: dict, analyse: Optional[dict]) -> dict:
@@ -76,6 +77,8 @@ class SongSpieler:
         self.reihenfolge = [n for n in roh.get("reihenfolge", []) if isinstance(n, str)]
         self.modus = roh.get("modus") if roh.get("modus") in MODI else "automatisch"
         self.zwischenlicht_an = bool(roh.get("zwischenlicht", True))
+        self.vorbei = False                         # das Publikum hat am Schluss geklatscht
+        self._klatschen_seit: Optional[float] = None
         self._liste: list = []
         self._liste_stand = -99.0
 
@@ -129,7 +132,11 @@ class SongSpieler:
             folger.starten(stelle=stelle, jetzt=jetzt)       # mit Stelle: die Song-Erkennung weiß schon, wo wir sind
             self.zuletzt_gespielt, self.vorschlag = name, None
             self.folger, self.name, self.nummer = folger, name, nummer
-            self.karte = karte_aus(sequenz, self.show.proben.lesen(name))
+            self.vorbei, self._klatschen_seit = False, None
+            analyse = self.show.proben.lesen(name) or {}
+            self.karte = dict(karte_aus(sequenz, analyse))
+            if self.karte.get("musik_bis_s") is None:
+                self.karte["musik_bis_s"] = analyse.get("musik_bis_s")   # Show noch vor Version 2.2 gebaut
             self.zeitcode = list(sequenz["zeitcode"])
             self.letzte_zeit = None
             executor = self.show.pult.executor(nummer)
@@ -256,14 +263,32 @@ class SongSpieler:
             self.show.audio.mithoerer.remove(hoeren)
 
     def _am_ende(self) -> bool:
-        """Ist der laufende Song durch (oder wartet die Band nach dem letzten Teil)?"""
-        if self.folger is None:
+        """Ist der laufende Song durch (oder wartet die Band nach dem letzten Teil, oder klatscht das Publikum)?"""
+        if self.folger is None or self.vorbei:
             return True
         teile = self.karte.get("teile", [])
         dauer = float(self.karte.get("dauer_s") or 0.0)
         ende = min(dauer - 1.0, float(self.karte.get("musik_bis_s") or dauer) - 0.3)
         letzter = teile[-1]["start"] if teile else dauer
         return self.folger.stelle >= ende or (self.folger.wartet and self.folger.stelle >= letzter)
+
+    def _im_schluss(self) -> bool:
+        """Im letzten Teil oder im letzten Viertel der Musik?"""
+        teile = self.karte.get("teile", [])
+        dauer = float(self.karte.get("musik_bis_s") or self.karte.get("dauer_s") or 0.0)
+        letzter = teile[-1]["start"] if teile else dauer
+        return self.folger is not None and self.folger.stelle >= min(letzter, 0.75 * dauer)
+
+    def klatschen(self, klatscht: bool, jetzt: float) -> None:
+        """Jedes Bild: Klatscht das Publikum 3 s lang im Schluss des Songs, ist der Song vorbei.
+        So kommt das Applaus-Licht pünktlich, auch wenn die Probe-Aufnahme danach noch weiterging."""
+        if self.folger is None or self.vorbei or not klatscht:
+            self._klatschen_seit = None
+            return
+        if self._klatschen_seit is None:
+            self._klatschen_seit = jetzt
+        if jetzt - self._klatschen_seit >= KLATSCHEN_ENDE_S and self._im_schluss():
+            self.vorbei = True
 
     def erkennen_takt(self, jetzt: Optional[float] = None) -> Optional[dict]:
         """Alle 0,5 s (eigener Thread): Wird gerade ein geprobter Song gespielt? Startet oder schlägt vor."""

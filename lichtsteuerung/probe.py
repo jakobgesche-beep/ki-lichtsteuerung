@@ -89,7 +89,8 @@ def analysieren(ton: np.ndarray, name: str) -> dict:
         elif naechster is not None and naechster.get("drop") and any(teil["start"] - 0.3 <= a < teil["ende"] for a in aufbau_starts):
             teil["name"] = "Aufbau"
     return {"name": name, "dauer_s": erg["dauer_s"], "tempo_bpm": erg["tempo_bpm"], "teile": teile, "drops_s": drops,
-            "musik_von_s": erg["musik_von_s"], "beats_s": erg["beats_s"], "einsen_s": erg["einsen_s"],
+            "musik_von_s": erg["musik_von_s"], "musik_bis_s": erg.get("musik_bis_s"),
+            "beats_s": erg["beats_s"], "einsen_s": erg["einsen_s"],
             "schlaege_s": erg.get("schlaege_s", []), "version": ANALYSE_VERSION}
 
 
@@ -450,7 +451,14 @@ class Proben:
         """Ältere Analysen (vor der neuen Erkennung) noch einmal machen. Markierungen bleiben."""
         alt = self.lesen(name)
         pfad = self.ton_pfad(name)
-        if alt is None or alt.get("version", 1) >= ANALYSE_VERSION or not pfad.exists():
+        if alt is None or not pfad.exists():
+            return alt
+        if alt.get("version", 1) >= ANALYSE_VERSION:
+            if alt.get("musik_bis_s") is None:
+                # Fehlte in Version 2.1: Wo die Musik aufhört (fürs Applaus-Licht). Schnell nachgerechnet.
+                ton = lade_datei(pfad)
+                alt["musik_bis_s"] = round(songanalyse.musik_ende(songanalyse.spektral_merkmale(ton)["baender"]), 2)
+                daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", alt)
             return alt
         analyse = analysieren(lade_datei(pfad), alt.get("name", name))
         if alt.get("markiert_s"):

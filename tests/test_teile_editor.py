@@ -62,3 +62,24 @@ def test_ueber_den_server_und_show_neu_bauen(tmp_path):
         assert sequenz["song"]["teile"][0]["name"] == "Solo"
         assert show.proben.neu_analysieren("Band")["teile"][0]["name"] == "Solo"     # bleibt beim Neubauen
         assert len(vorher["teile"]) >= 1
+
+
+def test_musik_ende_wird_gespeichert_und_bei_alten_proben_nachgerechnet(tmp_path):
+    """Fürs Applaus-Licht: Wo hört die Musik auf? Fehlte in Version 2.1 und wird beim Neubauen ergänzt."""
+    import numpy as np
+    from lichtsteuerung.audio.quellen import ABTASTRATE, erzeuge_takt
+    daten.einrichten(tmp_path / "d")
+    show = Show(daten.Pfade(tmp_path / "d", daten.PROJEKT / "catalog"))
+    stille = np.zeros(5 * ABTASTRATE, np.float32)
+    ton = np.concatenate([np.zeros(ABTASTRATE, np.float32), erzeuge_takt(120, 32) * 0.8, stille])
+    analyse = show.proben.speichern("Band", ton.astype(np.float32))
+    assert analyse["musik_bis_s"] is not None and analyse["musik_bis_s"] < analyse["dauer_s"] - 3.0
+    # So sah eine Probe aus Version 2.1 aus: ohne Musik-Ende
+    pfad = show.proben.ordner / "Band.json"
+    alt = daten.lese_json(pfad)
+    richtig = alt.pop("musik_bis_s")
+    daten.schreibe_json(pfad, alt)
+    assert show.proben.lesen("Band").get("musik_bis_s") is None
+    sequenz = show.show_aus_probe("Band")
+    assert abs(sequenz["song"]["musik_bis_s"] - richtig) < 0.05
+    assert abs(show.proben.lesen("Band")["musik_bis_s"] - richtig) < 0.05

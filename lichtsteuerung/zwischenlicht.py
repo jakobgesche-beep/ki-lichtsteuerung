@@ -1,6 +1,7 @@
 """Applaus- und Pausenlicht: Was das Licht zwischen den Songs macht, ohne dass jemand drücken muss.
 
-    Song zu Ende   (der Song-Folger ist am Ende, oder die Band hört nach dem letzten Teil auf)
+    Song zu Ende   (der Song-Folger ist am Ende, die Band hört nach dem letzten Teil auf,
+                   oder das Publikum klatscht im Schluss des Songs 3 s lang)
                    -> Applaus-Licht: die Bühne hell und warm, die Band gut zu sehen.
                    Es bleibt mindestens 6 s, solange geklatscht wird länger (höchstens 25 s).
     Danach         -> Pausenlicht: ruhig und warm, bis der nächste Song startet
@@ -85,6 +86,7 @@ class Zwischenlicht:
     def takt(self, jetzt: float, messwerte) -> None:
         """Jedes Bild (unter der Sperre der Show)."""
         song = self.show.song
+        song.klatschen(messwerte is not None and messwerte.applaus, jetzt)
         if not self.an:
             self.beenden(jetzt)
             return
