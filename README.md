@@ -64,7 +64,7 @@ Beim ersten Mal dauert es ein paar Minuten, danach geht der Browser von selbst a
 Schreib, was du sehen willst, zum Beispiel: „Spots langsam blau kreisen, PARs warmweiß atmen, auf Fader 3“. Der Vorschlag läuft erst nur in der **Vorschau** (Bühne zeigt „Vorschau Licht-Chat“), nichts geht live. Mit **Übernehmen** wird er gespeichert und auf den gewählten Fader gelegt, **Oops** nimmt beides zurück.
 
 - **Mit Claude** (freie Sätze, auch Abläufe und Änderungen an vorhandenen Sequenzen): unten im Chat den Schlüssel aus der [Claude Console](https://console.anthropic.com) eintragen (API Keys). Er liegt nur auf diesem Rechner (`lokal.json` im Datenordner) und kommt nie in eine Sicherung. In der Claude Console ein **Ausgabenlimit** setzen. Der Chat zeigt ungefähr, was er bisher gekostet hat. Benutzt wird `claude-opus-5-5`; lehnt Claude eine Anfrage ab, springt automatisch ein anderes Claude-Modell ein (Rückfall-Einstellung der Schnittstelle).
-- **Ohne Schlüssel oder ohne Internet** versteht der Chat einfache Sätze selbst: Gruppen, Farben, Helligkeit, Positionen, Effekte, „langsam/schnell“, „in 3 Sekunden“, „auf Fader 4“.
+- **Ohne Schlüssel oder ohne Internet** versteht der Chat einfache Sätze selbst und verzeiht Tippfehler: Gruppen („alle Lichter“), Farben, Helligkeit, Positionen, Effekte, Stile (Pop, Rock, Party, Ballade, Weihnachten, Jazz), „wirbeln/durcheinander“, Strobo, „langsam/schnell“, „in 3 Sekunden“, „auf Fader 4“.
 - Claude bekommt nur Lichtdaten (Geräte, Gruppen, Positionen, Sequenzen), nie Ton oder Bilder. Jeder Vorschlag läuft durch dieselbe Prüfung wie alles andere (Strobo-Grenze, Publikum, Gobos).
 
 ### Probe und Song-Start
@@ -77,6 +77,15 @@ Schreib, was du sehen willst, zum Beispiel: „Spots langsam blau kreisen, PARs 
 6. Korrigieren geht immer: „Nächster Teil jetzt“ (Leertaste), „Teil zurück“ (←) oder auf einen Teil in der Zeitleiste klicken.
 
 Song-Start und „Probe ansehen“ laufen auf einem eigenen Platz: Deine Fader im Pult bleiben, wie sie sind.
+
+**Song-Erkennung (Show-Seite):** Das Programm hört auch zwischen den Songs zu und erkennt, welcher geprobte Song gerade gespielt wird, meistens nach 6 bis 10 Sekunden Musik. Dann springt das Licht an genau die Stelle, an der die Band ist.
+
+- **Setlist:** „Reihenfolge ändern“ und mit den Pfeilen die Songs so ordnen, wie ihr sie spielt. Oben steht „Als Nächstes: …“.
+- **Automatisch:** Der Song, der laut Setlist als Nächstes dran ist, startet von selbst, sobald er sicher erkannt ist. Spielt die Band einen anderen geprobten Song, erscheint nur ein großer Knopf „Klingt nach …, jetzt starten“ (ein falscher Song startet nie von selbst).
+- **Vorschlagen:** Jeder erkannte Song erscheint nur als Knopf. **Aus:** nur von Hand.
+- Von Hand starten (Song antippen) geht immer und ist sofort da.
+
+**Akzente:** Die Probe findet die großen Schläge der Band (Crash-Becken, gemeinsame Schläge, Einsätze nach einer Pause). Dort blitzt das Licht kurz weiß auf, nicht in ruhigen Teilen. Auch die freie Musik-Automatik antwortet live auf große Schläge mit einem kurzen Aufleuchten. Ältere Proben bekommen die Schläge mit „Show neu bauen“.
 
 ### Show (live fahren)
 

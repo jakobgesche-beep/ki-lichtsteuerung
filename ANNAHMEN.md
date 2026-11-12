@@ -148,6 +148,17 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Start:** Ein klarer Einsatz (10 dB lauter als vorher) startet die Uhr genau dort. Ist es beim Drücken schon laut, läuft die Uhr ab 0,7 s vor dem Drücken, und in den ersten 15 s wird am Inhalt nachgeprüft (springt, wenn eine andere Stelle am Song-Anfang 1,5 s lang eindeutig passt). Song nochmal drücken heißt „jetzt los“. Kommt gar kein Ton an, läuft die Uhr ab dem Drücken.
 - **Rechenzeit:** im Mittel unter 1 ms pro Tonblock, Spitzen (Suche im ganzen Song) um 20 ms; der Puffer des Eingangs fängt das auf.
 
+## Song-Erkennung und Akzente (ab 2.1.0)
+
+- **Erkennung:** Die letzten 10 s werden mit allen Probe-Aufnahmen verglichen (gleiche Merkmale wie der Song-Folger, jeder zweite Messpunkt, Tempi ±6 %). Erkannt ist ein Song erst, wenn er um 0,04 besser passt als der zweitbeste Song, seine Stelle um 0,12 besser als der Durchschnitt des restlichen Songs, und das 3 s lang gleichmäßig weiterläuft. Bei Stille, Reden oder Klatschen (unter 75 % Musik im Fenster) wird nicht verglichen.
+- **Gemessen** an 10 Kunstsongs und „Hh“ (je gleich und 4 % schneller, Start nach 1 s oder mitten im Song): 86 % richtig, im Mittel nach 9 s, nie ein falscher Song. 4 fremde Kunstsongs, die mit ähnlichen Akkorden in derselben Tonart und im selben Tempo gebaut waren: kein Fehlalarm. Mit 6 s Fenster und 2 s Bestätigung gab es dagegen 3 Fehlalarme in 8 Versuchen.
+- **Grenzen:** Sehr viel Hall und Publikum (Raum-Mikrofon statt X32-Summe) verhindern das Erkennen meist (dann einfach von Hand starten). Zwei Songs mit denselben Akkorden in derselben Tonart und im selben Tempo kann die Erkennung verwechseln. Darum startet „Automatisch“ nur den Song, der laut Setlist als Nächstes dran ist; jeder andere erscheint nur als Knopf.
+- **Setlist** liegt in `cues/setlist.json` (kommt in jede Sicherung). Songs, die nicht drinstehen, kommen hinten dran. Nach einem Song ist der nächste in der Liste „erwartet“.
+- **Rechenzeit:** Die Erkennung läuft in einem eigenen Thread alle 0,5 s, rund 5 ms pro Song; bei Stille fast nichts.
+- **Schläge in der Probe:** ein Einsatz mindestens doppelt so stark wie die üblichen in den 4 s drumherum, dabei 4 dB lauter oder oben ein Scheppern (Becken). Höchstens einer pro 6 s und einer pro 15 s Song, auf den nächsten Beat gelegt. In „Hh“ lagen 7 von 16 gefundenen Schlägen auf deinen D-Marken (Teilwechsel).
+- **Schläge live:** Mitten und Höhen 2,5-mal stärker als die normalen Schläge der letzten 4 s, höchstens einer pro 2 s. Gleichmäßiger Takt allein gibt keinen Schlag.
+- **Fehler bis 2.0.0:** Ein Akzent im Song-Modus konnte „nächster Teil“ auslösen, wenn die Band langsamer als in der Probe spielte. Behoben, mit Test.
+
 ## Konzert-Sicherheit (ab 2.0.0)
 
 - **Enttec, drei Wege:** FTDI-Treiber (Windows, ftd2xx.dll per ctypes), USB direkt (pyftdi/libusb, Mac oder Windows mit Zadig), serieller Port des eingebauten Treibers (Mac `/dev/cu.usbserial-…`, Windows COM). Der erste, der klappt, wird benutzt. Das Enttec DMX USB Pro wird am Namen erkannt und bekommt fertige Pakete. Alles nur gegen nachgebaute Treiber getestet, kein echtes Enttec.
