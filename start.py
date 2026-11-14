@@ -74,6 +74,8 @@ def selbsttest(adresse: str) -> None:
     for weg in standard_wege():
         weg.suchen()                     # jeder Weg zum Enttec muss sich laden lassen (ohne Gerät: leere Liste)
     import anthropic  # noqa: F401  der Licht-Chat muss sich laden lassen (auch ohne Schlüssel)
+    import rtmidi
+    rtmidi.MidiIn().get_ports()          # MIDI muss sich laden lassen (ohne Gerät: leere Liste)
     from lichtsteuerung.licht_chat import werkzeuge
     assert len(werkzeuge()) == 2
     print("Selbsttest bestanden")
