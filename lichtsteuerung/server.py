@@ -25,7 +25,7 @@ from .farben import FARBNAMEN
 from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
-from . import konzertcheck, showtasten, patchplan, sicherung
+from . import daten, konzertcheck, showtasten, patchplan, sicherung
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .profile import pruefe_profil
@@ -183,8 +183,13 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         geraet = auftrag.get("geraet")
         if geraet is not None:
             show.patch.geraet(geraet)
-        show.test_setzen(geraet, kanaele)
-        return {"bild": list(show.baue_bild()), "meldungen": show.meldungen}
+        bewegen = auftrag.get("bewegen")
+        if bewegen is not None:
+            bewegen = tuple(int(k) if k else 0 for k in bewegen[:2])
+            if not all(0 <= k <= 512 for k in bewegen):
+                raise ValueError("Kanal 1 bis 512.")
+        show.test_setzen(geraet, kanaele, nur=bool(auftrag.get("nur")), bewegen=bewegen)
+        return {"bild": list(show.baue_bild()), "meldungen": show.meldungen, "nur": show.test_nur}
 
     @app.get("/api/strobos")
     def strobos():
@@ -235,6 +240,17 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def dmx_aus():
         show.ausgabe.ausschalten()
         return {"eingeschaltet": False}
+
+    @app.post("/api/dmx/art")
+    def dmx_art(auftrag: dict = Body(...)):
+        """Enttec-Art von Hand: auto, open (Open DMX) oder pro (DMX USB Pro). Gilt nur auf diesem Rechner."""
+        art = str(auftrag.get("art", "auto"))
+        try:
+            show.ausgabe.art_setzen(art)
+        except EnttecFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        daten.schreibe_json(show.pfade.wurzel / "daten" / "dmx.json", {"art": art})
+        return {**show.ausgabe.status(), "enttec_gefunden": show.ausgabe.enttec_gefunden()}
 
     # --- Override-Tasten ----------------------------------------------------
 

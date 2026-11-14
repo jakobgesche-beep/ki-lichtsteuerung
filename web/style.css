@@ -360,6 +360,13 @@ label.datei-knopf:hover { background: var(--kachel-hover); }
 .fern-adresse { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--auswahl); }
 .fern-pin { font-size: 22px; letter-spacing: .12em; color: var(--text); }
 
+/* Setup → DMX-Test → Ein Gerät testen */
+.gt-tabelle { width: 100%; border-collapse: collapse; font-size: 12px; }
+.gt-tabelle th { text-align: left; color: var(--leise); font-weight: 600; padding: 3px 6px; border-bottom: 1px solid var(--linie); }
+.gt-tabelle td { padding: 2px 6px; border-bottom: 1px solid #26282b; }
+.gt-tabelle input[type=range] { width: 100%; min-width: 120px; }
+.gt-tabelle select { padding: 2px 4px; font-size: 12px; }
+
 /* Setup → MIDI */
 .midi-tabelle { width: 100%; border-collapse: collapse; font-size: 12px; }
 .midi-tabelle th { text-align: left; color: var(--leise); font-weight: 600; padding: 3px 6px; border-bottom: 1px solid var(--linie); }

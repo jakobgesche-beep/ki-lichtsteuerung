@@ -58,6 +58,7 @@ WARM_POSITION = "Mitte"     # dorthin zeigen die Spots bei Warmweiß
 EINMESS_S = 3.0             # so lange blitzt der Strobo beim Einmessen
 SOFTWARE_BLITZ_S = 0.05     # so lange ist ein Blitz an, wenn das Programm selbst blitzt
 TEST_MAX_S = 120.0          # Ein vergessener DMX-Test endet von selbst.
+GERAET_TEST_S = 15 * 60.0   # "Ein Gerät testen" darf länger dauern (Anleitung lesen, ausprobieren)
 
 
 class Show:
@@ -69,6 +70,10 @@ class Show:
         self.positionen = daten.lese_json(self.pfade.positions, {"positionen": {}})["positionen"]
         self.grenzen = Grenzen.laden(self.pfade.sicherheit)
         self.ausgabe = ausgabe or DmxAusgabe()
+        art = (daten.lese_json_sicher(self.pfade.wurzel / "daten" / "dmx.json", {}) or {}).get("art", "auto")
+        if art in ("open", "pro"):
+            import lichtsteuerung.dmx_ausgabe as dmx_modul
+            dmx_modul.ART_ERZWUNGEN = art          # von Hand gewählte Enttec-Art (nur dieser Rechner)
         self.update = Aktualisierer(self)
         self.audio = AudioBetrieb()
         self.profile = Profile(self.pfade.profile)
@@ -110,6 +115,9 @@ class Show:
         self.test_geraet: Optional[str] = None
         self.test_kanaele = {}              # DMX-Kanal (ab 1) -> Wert
         self.test_seit: Optional[float] = None
+        self.test_nur = False               # "Ein Gerät testen": alle anderen Kanäle bleiben auf 0
+        self.test_max_s = TEST_MAX_S
+        self.test_bewegen: Optional[tuple] = None   # (Pan-Kanal, Tilt-Kanal): langsamer Kreis zum Testen
         self.pruefer: Optional[Pruefer] = None
         self.meldungen = []
         self.letztes_bild = bytes(512)
@@ -175,6 +183,8 @@ class Show:
             bild = self.renderer.bild(zustand)
             self._test_einmischen(bild)
             bild, meldungen, blitzt = self.pruefer.pruefe(bild, self._vorgaben(), jetzt)
+            if self.test_nur:
+                bild = self._nur_testgeraet(jetzt)
             self.blitzt = blitzt or bool(self.software_blitzt)
             self.meldungen = meldungen + self.pult.meldungen
             self.letztes_bild = bytes(bild)
@@ -185,14 +195,23 @@ class Show:
                 self.chat_vorschau_geraete = None
             return self.letztes_bild
 
-    def test_setzen(self, geraet: Optional[str], kanaele: dict) -> None:
+    def test_setzen(self, geraet: Optional[str], kanaele: dict, nur: bool = False,
+                    bewegen: Optional[tuple] = None) -> None:
+        """DMX-Test. nur=True ("Ein Gerät testen"): Nur diese Kanäle bekommen Werte, alle anderen bleiben auf 0,
+        damit kein Gerät aus dem Patch dazwischenfunkt. bewegen: (Pan-Kanal, Tilt-Kanal) fahren einen Kreis."""
         with self.sperre:
             self.test_geraet, self.test_kanaele = geraet, kanaele
+            self.test_nur, self.test_bewegen = bool(nur and (kanaele or bewegen)), bewegen if nur else None
+            self.test_max_s = GERAET_TEST_S if self.test_nur else TEST_MAX_S
             self.test_seit = time.monotonic()
 
+    def _test_ende(self) -> None:
+        self.test_geraet, self.test_kanaele, self.test_seit = None, {}, None
+        self.test_nur, self.test_bewegen = False, None
+
     def _test_pruefen(self, jetzt: float) -> None:
-        if self.test_seit is not None and time.monotonic() - self.test_seit > TEST_MAX_S:
-            self.test_geraet, self.test_kanaele, self.test_seit = None, {}, None
+        if self.test_seit is not None and time.monotonic() - self.test_seit > self.test_max_s:
+            self._test_ende()
 
     def strobo_einmessen(self, geraet_id: str, wert: int, jetzt: Optional[float] = None) -> None:
         """Lässt einen Strobo EINMESS_S Sekunden lang mit diesem Tempo-Wert blitzen."""
@@ -216,7 +235,7 @@ class Show:
     def _einmessen_pruefen(self, jetzt: float) -> None:
         ende = getattr(self, "einmessen_ende", None)
         if ende and jetzt >= ende[1]:
-            self.test_geraet, self.test_kanaele, self.test_seit = None, {}, None
+            self._test_ende()
             self.pruefer.einmessen_bis.pop(ende[0], None)
             self.einmessen_ende = None
 
@@ -334,7 +353,7 @@ class Show:
         return {"typ": basis, "text": f"{geraet['name']}: Einmessung zurückgenommen. Sein Strobo ist wieder gesperrt."}
 
     def _test_laeuft(self) -> bool:
-        return self.test_geraet is not None or bool(self.test_kanaele)
+        return self.test_geraet is not None or bool(self.test_kanaele) or self.test_nur
 
     def _automatik(self, jetzt: float) -> dict:
         self._beat = False
@@ -423,6 +442,22 @@ class Show:
             hell = waechter.begrenze(geraet_id, hell, jetzt, self.grenzen.strobo_max_hz)
             ergebnis[geraet_id] = e.kopie(helligkeit=hell)
         return ergebnis
+
+    def _nur_testgeraet(self, jetzt: float) -> bytearray:
+        """"Ein Gerät testen": nur seine Kanäle, alles andere 0. Blackout und Warmweiß machen es dunkel."""
+        bild = bytearray(512)
+        if self.overrides.blackout or self.overrides.warmweiss:
+            return bild
+        for kanal, wert in self.test_kanaele.items():
+            bild[kanal - 1] = wert
+        if self.test_bewegen:
+            pan, tilt = self.test_bewegen
+            winkel = 2 * math.pi * (time.monotonic() % 8.0) / 8.0      # ein Kreis in 8 Sekunden
+            if pan:
+                bild[pan - 1] = int(128 + 70 * math.sin(winkel))
+            if tilt:
+                bild[tilt - 1] = int(128 + 45 * math.cos(winkel))
+        return bild
 
     def _test_einmischen(self, bild: bytearray) -> None:
         """Rohe Testwerte gelten nur, solange keine Override-Taste gedrückt ist."""

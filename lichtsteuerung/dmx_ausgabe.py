@@ -39,7 +39,13 @@ def pro_paket(bild: bytes) -> bytes:
     return bytes([0x7E, 6, len(daten) & 0xFF, len(daten) >> 8]) + daten + b"\xE7"
 
 
+ART_ERZWUNGEN: Optional[str] = None     # "open" oder "pro": von Hand gewählt (Setup → DMX-Test), sonst erkannt
+
+
 def ist_pro(beschreibung: Optional[str]) -> bool:
+    """DMX USB Pro (hat einen eigenen Prozessor) oder Open DMX? Erkannt am Namen im USB, außer von Hand gewählt."""
+    if ART_ERZWUNGEN in ("open", "pro"):
+        return ART_ERZWUNGEN == "pro"
     return "PRO" in (beschreibung or "").upper()
 
 
@@ -382,6 +388,20 @@ class DmxAusgabe:
             else:
                 naechstes = time.monotonic()
 
+    def art_setzen(self, art: str) -> None:
+        """Enttec-Art von Hand: "auto", "open" (Open DMX) oder "pro" (DMX USB Pro). Verbindet neu, wenn es an ist."""
+        global ART_ERZWUNGEN
+        if art not in ("auto", "open", "pro"):
+            raise ValueError("Enttec-Art ist auto, open oder pro.")
+        ART_ERZWUNGEN = None if art == "auto" else art
+        if self.gewuenscht:
+            self.ausschalten()
+            self.einschalten()
+
     def status(self) -> dict:
+        protokoll = None
+        if self.geraet is not None:
+            protokoll = "DMX USB Pro" if getattr(self.geraet, "pro", False) else "Open DMX"
         return {"eingeschaltet": self.gewuenscht, "verbunden": self.verbunden, "weg": self.weg if self.verbunden else None,
-                "fehler": self.fehler, "gesendet": self.gesendet}
+                "fehler": self.fehler, "gesendet": self.gesendet, "protokoll": protokoll,
+                "art": ART_ERZWUNGEN or "auto"}
