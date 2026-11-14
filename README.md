@@ -39,11 +39,11 @@ Beim ersten Mal dauert es ein paar Minuten, danach geht der Browser von selbst a
 
 | View | Wofür |
 |---|---|
-| Show | **Live fahren:** Song-Start, Konzert-Check, Bühne live, Look-Tasten 1–9, Farben, Halte-Tasten, Tap-Tempo |
+| Show | **Live fahren:** Song-Start, Konzert-Check, **Generalprobe**, **Rückblick**, **Handy-Fernbedienung**, Bühne live, Look-Tasten 1–9, Farben, Halte-Tasten, Tap-Tempo |
 | Pult | **Programmieren wie an einem großen Pult:** Pools, Encoder, Cue-Liste, Pult-Tasten, 10 Fader pro Seite, Licht-Chat |
 | Live | Profil, Musik-Automatik, Ton-Quelle, Cue-Liste, Fader |
 | Probe | Songs aufnehmen, Teile erkennen und **von Hand richtigstellen**, Lichtshow bauen, „Probe ansehen“ |
-| Setup | Patch (mit Patchplan), Profile, Katalog, DMX-Test, **Sicherung** |
+| Setup | Patch (mit Patchplan), Profile, Katalog, DMX-Test (mit **Ein Gerät testen**), **MIDI**, **Sicherung** |
 
 ### Pult (wie MA, nur kleiner)
 
@@ -92,12 +92,29 @@ Song-Start und „Probe ansehen“ laufen auf einem eigenen Platz: Deine Fader i
 - **Konzert-Check** (oben im Song-Start): grün = bereit, gelb = ansehen, rot = so geht es nicht. Er prüft Enttec und DMX, Ton-Signal, alle Songs, Profil und Strobo-Schild, Not-Tasten, Grand Master, Programmer, Ruhezustand und die heutige Sicherung.
 - **Look-Tasten 1–9**, **Farben**, **Halten** (Weiß voll F, Strobo, Dunkel – nur solange gedrückt), **Tap** (T). Sie gehen immer, auch ganz ohne Musik-Erkennung. 0 = Look aus.
 - Die großen Tasten oben (Blackout, Warmweiß, Pause, Strobo aus) gelten auf jeder Seite und haben immer Vorrang.
+- **Applaus- und Pausenlicht** (Haken auf der Show-Seite): Ist ein Song zu Ende und das Publikum klatscht, wird die Bühne hell und warm. Hört das Klatschen auf, kommt ein ruhiges Pausenlicht, bis der nächste Song startet. Jede Look-Taste beendet es sofort.
+- **Songs mitschneiden** (Haken auf der Show-Seite): Jeder Song, der mit Song-Start läuft, wird mitgeschnitten (bleibt auf dem Laptop). Wenn gerade kein Song läuft, ordnet das Programm den Mitschnitt der Probe zu. Danach erkennt es den Song noch sicherer. Weitere Aufnahmen gehen auch in der Probe („Weitere Aufnahme“, „Aus Datei“).
+
+### Generalprobe, Rückblick, Handy (Show-Seite, oben)
+
+- **Generalprobe:** spielt jeden Song der Setlist zweimal so durch, wie er live klingen könnte (etwas schneller, anderer Mix, Publikum; dann langsamer, mit Hall und lautem Publikum). Für jeden Song gibt es eine Ampel: Wurde er erkannt und wie schnell, kamen die Teilwechsel pünktlich? Dauert etwa 15 Sekunden pro Song-Minute, nicht während des Konzerts starten. Der Konzert-Check zeigt das Ergebnis.
+- **Rückblick:** Logbuch des Abends: welcher Song wann lief und wie er gestartet wurde, wie sicher das Programm mitgehört hat, wo von Hand korrigiert wurde, Ton weg, DMX weg. Dazu Hinweise, was man in der Probe üben sollte.
+- **Handy …:** Fernbedienung einschalten, QR-Code mit dem Handy scannen (oder Adresse und 6-stellige PIN eintippen). Das Handy kann Looks, Farben, Halte-Tasten, Tap, Blackout, Song-Teile und die Songs der Setlist. Patch und Einstellungen sind von dort nie erreichbar. Handy und Laptop müssen im selben WLAN sein. Nach jedem Start ist die Fernbedienung aus.
+
+### MIDI (Setup → MIDI)
+
+- **MIDI-Controller** (zum Beispiel Akai APC mini) am USB: Gerät wählen, dann pro Aufgabe „Lernen“ drücken und am Gerät den Regler bewegen oder die Taste drücken. Fertige Belegungen gibt es für APC mini, Korg nanoKONTROL2 und Behringer X-Touch Mini (ohne Gerät gebaut, darum einmal ausprobieren). Ein echter Fader übernimmt erst, wenn er am Wert der Software vorbeikommt.
+- **MIDI-Clock:** Schickt die Band einen Click über MIDI, laufen alle Effekte genau in diesem Tempo. Tap geht trotzdem vor.
+
+### Ein Gerät testen (Setup → DMX-Test)
+
+Für den ersten Test mit einem neuen Gerät: Startadresse und Kanal-Anzahl (aus der Anleitung) eingeben, „Test starten“. Nur dieses Gerät bekommt Werte, alle anderen Kanäle bleiben auf 0. Pro Kanal eintragen, was er macht (Pan, Tilt, Dimmer, Rot …), dann helfen die Knöpfe Licht an, Rot, Grün, Blau, Mitte, Bewegen. „Speichern und patchen“ legt das Gerät als eigenen Typ an und patcht es auf die nächste freie Adresse. Reagiert gar nichts: am Gerät die Adresse („A001“) und den DMX-Betrieb prüfen, Kabel/Adapter (5-polig auf 3-polig) prüfen, oder oben die andere **Enttec-Art** (Open DMX oder DMX USB Pro) wählen.
 
 ## Ablauf vor jeder Veranstaltung
 
 1. Laptop ans **Netzteil**, Deckel offen lassen (das Programm verhindert den Ruhezustand, solange es läuft).
 2. Laptop per USB mit X32 und Enttec verbinden. Programm starten, Profil laden, auf **Live** den X32-Eingang als Quelle wählen (wird gemerkt).
-3. **Show → Konzert-Check** öffnen, bis alles grün ist (DMX einschalten geht dort mit einem Knopf).
+3. **Show → Konzert-Check** öffnen, bis alles grün ist (DMX einschalten geht dort mit einem Knopf). Nach der letzten Probe einmal die **Generalprobe** laufen lassen.
 4. **Setup → DMX-Test**: jedes Licht kurz einzeln an. Override-Tasten einmal ausprobieren.
 5. **Setup → Sicherung → Show sichern** auf einen USB-Stick. Dann geht es los.
 
@@ -146,7 +163,7 @@ Das braucht Internet und läuft nie während einer Show.
 
 ## Für das Tablet
 
-`./start.command --netz` macht die Oberfläche im Netzwerk erreichbar. Es gibt kein Passwort: Jeder im selben Netz kann das Licht bedienen. Also nur im eigenen Netz der Technik-AG benutzen.
+Am besten die **Handy-Fernbedienung** auf der Show-Seite benutzen (mit PIN, nur die Show-Tasten). `./start.command --netz` macht dagegen die ganze Oberfläche im Netzwerk erreichbar, ohne Passwort: Jeder im selben Netz kann dann alles bedienen. Also nur im eigenen Netz der Technik-AG und nur zum Entwickeln benutzen.
 
 ## Neue Version veröffentlichen
 
