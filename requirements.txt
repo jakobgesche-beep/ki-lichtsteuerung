@@ -11,3 +11,4 @@ certifi
 pywebview>=5; sys_platform == "darwin" or sys_platform == "win32"
 anthropic>=0.125,<1     # Licht-Chat mit Claude (nur mit Schlüssel und Internet, nie für die Show)
 python-rtmidi>=1.5.8,<2  # MIDI-Controller und MIDI-Clock (ohne Gerät tut es nichts)
+segno>=1.6,<2           # QR-Code für die Handy-Fernbedienung

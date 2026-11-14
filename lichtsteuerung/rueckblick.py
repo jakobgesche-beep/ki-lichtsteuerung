@@ -261,6 +261,10 @@ class Rueckblick:
             text = "DMX weg: Das Enttec antwortet nicht"
         elif art == "dmx_da":
             text = "DMX wieder da"
+        elif art == "fernbedienung":
+            text = ("Fernbedienung an" if e.get("an") else "Fernbedienung aus") if "an" in e else "Handy verbunden"
+        elif art == "mitschnitt":
+            text = f"Mitschnitt von {song}: {e.get('ergebnis', '')}"
         elif art == "programm":
             text = f"Programm gestartet (Version {e.get('version', '')})"
         else:

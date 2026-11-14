@@ -35,6 +35,7 @@ from .patch import Patch
 from .probe import Proben, show_bauen
 from .rueckblick import Rueckblick
 from .weitere import Mitschnitt
+from .fernbedienung import Fernbedienung
 from .generalprobe import Generalprobe
 from .licht_chat import LichtChat
 from .midi import Midi
@@ -91,6 +92,7 @@ class Show:
         self.rueckblick = Rueckblick(self)
         self.mitschnitt = Mitschnitt(self)
         self.midi = Midi(self)
+        self.fernbedienung = Fernbedienung(self)
         self.pult.extra.append(self.zwischenlicht.platz)
         self._messwerte = None
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
@@ -598,6 +600,7 @@ class Show:
             self._thread.join(timeout=1.0)
         self.audio.stoppen()
         self.midi.stoppen()
+        self.fernbedienung.ausschalten()
         self.ausgabe.ausschalten()
 
     def _erkennen_schleife(self) -> None:

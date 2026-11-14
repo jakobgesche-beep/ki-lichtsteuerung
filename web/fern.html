@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0c0d">
+<title>Licht-Fernbedienung</title>
+<style>
+  :root { --grund: #0c0c0d; --kachel: #222427; --linie: #34373b; --text: #e3e3e3; --leise: #8d9196;
+          --auswahl: #f2c200; --rot: #c8372d; --blau: #3f7fc0; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; background: var(--grund); color: var(--text);
+               font: 16px/1.3 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  body { padding: 12px 12px calc(24px + env(safe-area-inset-bottom)); max-width: 720px; margin: 0 auto; }
+  header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+  header b { color: var(--auswahl); font-size: 18px; }
+  #zeile { color: var(--leise); font-size: 14px; flex: 1; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--leise); margin: 16px 0 6px; }
+  button { font: inherit; color: var(--text); background: var(--kachel); border: 1px solid var(--linie);
+           border-radius: 6px; padding: 14px 8px; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  button:active { filter: brightness(1.4); }
+  button.an { background: var(--auswahl); color: #111; border-color: var(--auswahl); font-weight: 700; }
+  .raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+  .look small { display: block; color: var(--leise); font-size: 11px; margin-top: 2px; }
+  .look.an small { color: #333; }
+  .farben { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 8px; }
+  .farbe { height: 44px; background: var(--farbe); border: 3px solid transparent; }
+  button.farbe.an { background: var(--farbe); border-color: #fff; box-shadow: 0 0 0 2px var(--auswahl); }
+  .song { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 8px; align-items: center; }
+  #song { text-align: center; font-size: 15px; }
+  #song b { display: block; font-size: 18px; }
+  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .gefahr { border-color: var(--rot); color: #ff9a92; }
+  .gefahr.an { background: var(--rot); color: #fff; border-color: var(--rot); }
+  .haupt { background: var(--blau); border-color: var(--blau); color: #fff; }
+  #anmelden { margin-top: 30vh; text-align: center; }
+  #anmelden input { font: inherit; font-size: 28px; letter-spacing: .3em; text-align: center; width: 9em; padding: 10px;
+                    background: var(--kachel); color: var(--text); border: 1px solid var(--linie); border-radius: 6px; }
+  #fehler { color: #ff9a92; min-height: 1.5em; }
+  .leise { color: var(--leise); font-size: 13px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header><b>Licht</b> <span id="zeile">verbindet …</span></header>
+
+<section id="anmelden" hidden>
+  <p>PIN vom Laptop eingeben<br><span class="leise">(Show-Seite → Handy …)</span></p>
+  <p><input id="pin" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000000"></p>
+  <p><button id="los" class="haupt">Verbinden</button></p>
+  <p id="fehler"></p>
+</section>
+
+<main id="fern" hidden>
+  <div class="song">
+    <button data-song="zurueck">◀ Teil</button>
+    <div id="song">kein Song</div>
+    <button data-song="vor">Teil ▶</button>
+  </div>
+  <h2>Looks</h2>
+  <div class="raster" id="looks"></div>
+  <h2>Farbe 1</h2>
+  <div class="farben" id="farbe_1"></div>
+  <h2>Farbe 2</h2>
+  <div class="farben" id="farbe_2"></div>
+  <h2>Halten <span class="leise">(gedrückt halten)</span></h2>
+  <div class="raster" id="halten"></div>
+  <div class="zwei">
+    <button id="tap">TAP</button>
+    <button id="blackout" class="gefahr">Blackout</button>
+  </div>
+  <h2>Songs der Setlist</h2>
+  <div class="raster" id="songs"></div>
+  <div class="zwei"><button data-song="stopp" class="gefahr">■ Song stoppen</button><span></span></div>
+</main>
+
+<script>
+"use strict";
+const FARBWERT = { rot: "#ff2020", orange: "#ff8000", gelb: "#ffe000", gruen: "#20d040", cyan: "#00e0e0", blau: "#2050ff",
+  lila: "#9030ff", pink: "#ff30b0", weiss: "#ffffff", warmweiss: "#ffd9a0" };
+const $ = (id) => document.getElementById(id);
+const t = (text) => { const e = document.createElement("span"); e.textContent = text ?? ""; return e.innerHTML; };
+const merken = (wert) => { try { wert ? localStorage.setItem("fern-token", wert) : localStorage.removeItem("fern-token"); } catch (e) {} };
+let token = null;
+try { token = localStorage.getItem("fern-token"); } catch (e) {}
+let stand = "";
+let uhr = null;
+
+async function anfrage(pfad, daten, methode) {
+  const antwort = await fetch(pfad, {
+    method: methode || (daten === undefined ? "GET" : "POST"),
+    headers: { "Content-Type": "application/json", "X-Fern": token || "" },
+    body: daten === undefined ? undefined : JSON.stringify(daten),
+  });
+  const inhalt = await antwort.json().catch(() => ({}));
+  if (antwort.status === 401) { abgemeldet(inhalt.fehler); throw new Error("abgemeldet"); }
+  if (!antwort.ok) { $("zeile").textContent = inhalt.fehler || "Das hat nicht geklappt."; throw new Error("fehler"); }
+  return inhalt;
+}
+
+function abgemeldet(text) {
+  merken(null); token = null;
+  $("fern").hidden = true; $("anmelden").hidden = false;
+  $("zeile").textContent = "nicht verbunden";
+  if (text && text !== "Nicht angemeldet.") $("fehler").textContent = text;
+  clearInterval(uhr); uhr = null;
+}
+
+async function anmelden(pin) {
+  try {
+    const antwort = await fetch("/fern/anmelden", { method: "POST", headers: { "Content-Type": "application/json" },
+                                                     body: JSON.stringify({ pin }) });
+    const inhalt = await antwort.json().catch(() => ({}));
+    if (!antwort.ok) { $("fehler").textContent = inhalt.fehler || "Das hat nicht geklappt."; $("anmelden").hidden = false; return; }
+    token = inhalt.token; merken(token);
+    $("fehler").textContent = ""; $("anmelden").hidden = true;
+    starten();
+  } catch (e) { $("fehler").textContent = "Keine Verbindung zum Laptop."; $("anmelden").hidden = false; }
+}
+
+function zeigen(z) {
+  const neu = JSON.stringify([z.looks, z.farben, z.halten, z.setlist]);
+  if (neu !== stand) {
+    stand = neu;
+    $("looks").innerHTML = z.looks.map((l) => `<button class="look" data-look="${t(l.id)}">${t(l.name)}<small>${t(l.taste)}</small></button>`).join("")
+      + `<button class="look" data-look="aus">Look aus<small>0</small></button>`;
+    for (const nummer of [1, 2]) {
+      $("farbe_" + nummer).innerHTML = z.farben.map((f) => `<button class="farbe" data-farbe="${t(f)}" data-nummer="${nummer}"
+        style="--farbe:${FARBWERT[f] || "#888"}" aria-label="${t(f)}"></button>`).join("");
+    }
+    $("halten").innerHTML = Object.entries(z.halten).map(([art, name]) => `<button data-halten="${t(art)}">${t(name)}</button>`).join("");
+    $("songs").innerHTML = z.setlist.map((name, i) => `<button data-start="${t(name)}">${i + 1}. ${t(name)}</button>`).join("")
+      || `<span class="leise">Noch keine Songs.</span>`;
+  }
+  for (const k of document.querySelectorAll("[data-look]")) k.classList.toggle("an", k.dataset.look === z.look);
+  for (const k of document.querySelectorAll("[data-farbe]")) k.classList.toggle("an", z["farbe_" + k.dataset.nummer] === k.dataset.farbe);
+  for (const k of document.querySelectorAll("[data-halten]")) k.classList.toggle("an", Boolean(z.gehalten[k.dataset.halten]));
+  for (const k of document.querySelectorAll("[data-start]")) k.classList.toggle("an", z.song?.name === k.dataset.start);
+  $("blackout").classList.toggle("an", z.blackout);
+  $("song").innerHTML = z.song ? `<b>${t(z.song.name)}</b>${t(z.song.teil)} · danach ${t(z.song.danach)}` : "kein Song";
+  const look = z.looks.find((l) => l.id === z.look);
+  $("zeile").textContent = z.blackout ? "BLACKOUT" : look ? "Look: " + look.name
+    : z.zwischenlicht === "applaus" ? "Applaus-Licht" : z.zwischenlicht === "pause" ? "Pausenlicht"
+    : z.song ? "Song läuft" : "Automatik";
+}
+
+async function laden() {
+  try { zeigen(await anfrage("/fern/zustand")); } catch (e) { if (e.message !== "abgemeldet") $("zeile").textContent = "Laptop nicht erreichbar …"; }
+}
+
+function starten() {
+  $("fern").hidden = false;
+  laden();
+  if (!uhr) uhr = setInterval(laden, 1000);
+}
+
+document.addEventListener("click", async (e) => {
+  const k = e.target.closest("button");
+  if (!k || !token) return;
+  const d = k.dataset;
+  try {
+    if (d.look) zeigen(await anfrage("/fern/look/" + encodeURIComponent(d.look), {}));
+    if (d.farbe) zeigen(await anfrage("/fern/farben", { ["farbe_" + d.nummer]: d.farbe }));
+    if (d.song) zeigen(await anfrage("/fern/song/" + d.song, {}));
+    if (d.start && confirm(`„${d.start}“ jetzt starten?`)) zeigen(await anfrage("/fern/song/start", { name: d.start }));
+    if (k.id === "blackout") zeigen(await anfrage("/fern/blackout", {}));
+  } catch (fehler) { /* steht schon oben */ }
+});
+$("tap").addEventListener("pointerdown", () => { if (token) anfrage("/fern/tap", {}).catch(() => {}); });
+
+// Halten: an beim Drücken, aus beim Loslassen (auch wenn der Finger wegrutscht)
+const gehalten = new Set();
+function halten(art, an) {
+  if (an === gehalten.has(art)) return;
+  an ? gehalten.add(art) : gehalten.delete(art);
+  anfrage("/fern/halten/" + encodeURIComponent(art), { an }).catch(() => {});
+}
+$("halten").addEventListener("pointerdown", (e) => {
+  const k = e.target.closest("[data-halten]");
+  if (!k) return;
+  k.setPointerCapture?.(e.pointerId);
+  halten(k.dataset.halten, true);
+});
+for (const art of ["pointerup", "pointercancel", "lostpointercapture"]) {
+  $("halten").addEventListener(art, (e) => { const k = e.target.closest("[data-halten]"); if (k) halten(k.dataset.halten, false); });
+}
+$("halten").addEventListener("contextmenu", (e) => e.preventDefault());
+window.addEventListener("blur", () => [...gehalten].forEach((art) => halten(art, false)));
+document.addEventListener("visibilitychange", () => { if (document.hidden) [...gehalten].forEach((art) => halten(art, false)); });
+
+$("los").onclick = () => anmelden($("pin").value);
+$("pin").addEventListener("keydown", (e) => { if (e.key === "Enter") anmelden($("pin").value); });
+
+// Start: PIN aus dem QR-Code (dann aus der Adresszeile entfernen), sonst gemerkte Anmeldung, sonst PIN-Feld
+const adresse = new URL(location.href);
+const pin = adresse.searchParams.get("pin");
+if (pin) {
+  history.replaceState(null, "", location.pathname);
+  anmelden(pin);
+} else if (token) {
+  starten();
+} else {
+  abgemeldet();
+}
+</script>
+</body>
+</html>

@@ -30,12 +30,14 @@ export function showSeite(wurzel) {
     <div class="show">
       <div class="show-oben">
       <section class="fenster songfenster"><header>Song-Start <span class="zeile"><span id="folger" class="chip"></span>
+        <button id="fern-knopf" class="chip check-knopf" title="Fernbedienung: Looks und Farben vom Handy oder Tablet aus">Handy …</button>
         <button id="rb-knopf" class="chip check-knopf" title="Rückblick: Was lief wann, und wo war das Programm unsicher?">Rückblick …</button>
         <button id="gp-knopf" class="chip check-knopf" title="Generalprobe: Die Setlist mit veränderten Probe-Aufnahmen durchspielen">Generalprobe …</button>
         <button id="check-knopf" class="chip check-knopf" title="Ist alles bereit fürs Konzert?">Konzert-Check …</button></span></header>
         <div id="check-liste" class="check-liste" hidden></div>
         <div id="gp-liste" class="check-liste gp-liste" hidden></div>
         <div id="rb-liste" class="check-liste gp-liste" hidden></div>
+        <div id="fern-liste" class="check-liste gp-liste" hidden></div>
         <div class="inhalt">
           <div class="erkennung zeile" id="erkennung">
             <span class="leise">Song-Erkennung</span>
@@ -358,6 +360,58 @@ export function showSeite(wurzel) {
   };
   feld("rb-liste").addEventListener("change", (e) => { if (e.target.id === "rb-tag") rbLaden(e.target.value); });
 
+  // --- Fernbedienung: Handy oder Tablet im Saal (QR-Code und PIN) ---------------------
+  let fernUhr = null;
+  const listen = ["check-liste", "gp-liste", "rb-liste", "fern-liste"];
+  const nurDiese = (id) => listen.forEach((l) => { if (l !== id) feld(l).hidden = true; });
+  function fernZeigen(z) {
+    const kopf = `<div class="gp-kopf"><b>Handy als Fernbedienung</b> <span class="leise">Jemand im Saal drückt Looks, Farben,
+      Halte-Tasten und Song-Teile vom Handy oder Tablet aus. Patch und Einstellungen sind von dort nie erreichbar.</span></div>`;
+    let html = kopf + `<div class="gp-lauf"><button class="${z.an ? "gefahr" : "haupt"}" data-fern="${z.an ? "aus" : "an"}">
+      ${z.an ? "Fernbedienung ausschalten" : "Fernbedienung einschalten"}</button>
+      <span class="leise">${z.an ? `${z.handys} Handy${z.handys === 1 ? "" : "s"} verbunden` : "Aus (nach jedem Start aus)."}</span></div>`;
+    if (z.fehler) html += `<div class="check-punkt hinweis"><span class="check-zeichen">!</span><span>${t(z.fehler)}</span></div>`;
+    if (z.an && z.gesperrt) html += `<div class="check-punkt problem"><span class="check-zeichen">✗</span><span>Jemand hat viele falsche PINs probiert.
+      5 Minuten nimmt die Fernbedienung keine PIN an. Am besten „Neue PIN“ drücken.</span></div>`;
+    if (z.an && z.link) {
+      html += `<div class="fern-qr"><div class="fern-bild">${z.qr}</div><div>
+        <p>Mit der Kamera des Handys scannen. Oder im Browser des Handys öffnen:</p>
+        <p class="fern-adresse">${z.adressen.map(t).join("<br>")}</p>
+        <p>PIN: <b class="fern-pin">${t(z.pin.slice(0, 3))} ${t(z.pin.slice(3))}</b></p>
+        <p><button class="klein" data-fern="pin">Neue PIN (alle Handys abmelden)</button></p></div></div>
+        <p class="leise">Handy und Laptop müssen im selben WLAN sein (oder der Laptop im Hotspot des Handys).
+        Fragt der Rechner beim ersten Mal, ob das Programm Verbindungen annehmen darf: Erlauben.
+        Die Verbindung ist nicht verschlüsselt, darum nur im eigenen Netz benutzen.</p>`;
+    }
+    feld("fern-liste").innerHTML = html;
+    feld("fern-knopf").className = `chip check-knopf ${z.an ? (z.gesperrt ? "warn" : "an") : ""}`;
+    setze(feld("fern-knopf"), z.an ? `Handy an (${z.handys})` : "Handy …");
+  }
+  async function fernLaden() {
+    try { fernZeigen(await api("/fernbedienung")); } catch { /* Meldung kommt von api() */ }
+  }
+  feld("fern-knopf").onclick = () => {
+    feld("fern-liste").hidden = !feld("fern-liste").hidden;
+    if (!feld("fern-liste").hidden) {
+      nurDiese("fern-liste");
+      fernLaden();
+      fernUhr = fernUhr || setInterval(() => { if (!feld("fern-liste").hidden) fernLaden(); }, 2000);
+    }
+  };
+  feld("fern-liste").addEventListener("click", async (e) => {
+    const knopf = e.target.closest("[data-fern]");
+    if (!knopf) return;
+    const aktion = knopf.dataset.fern;
+    try {
+      if (aktion === "pin") fernZeigen(await senden("/fernbedienung/neue_pin"));
+      else fernZeigen(await senden("/fernbedienung", { an: aktion === "an" }));
+    } catch { /* Meldung kommt von senden() */ }
+  });
+  for (const id of ["check-knopf", "gp-knopf", "rb-knopf"]) {
+    feld(id).addEventListener("click", () => { feld("fern-liste").hidden = true; });
+  }
+  fernLaden();
+
   // --- Bedienen ------------------------------------------------------------
   wurzel.addEventListener("click", async (ereignis) => {
     const ziel = ereignis.target.closest("button, [data-teil]");
@@ -445,6 +499,7 @@ export function showSeite(wurzel) {
   return () => {
     clearInterval(checkUhr);
     clearInterval(gpUhr);
+    clearInterval(fernUhr);
     beendet = true;
     buehne?.beenden();
     abmelden();

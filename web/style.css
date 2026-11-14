@@ -354,6 +354,12 @@ label.datei-knopf:hover { background: var(--kachel-hover); }
 [hidden] { display: none !important; }
 .mitschnitt-an { color: #ff8a80; }
 
+/* Handy-Fernbedienung (QR-Code und PIN) */
+.fern-qr { display: flex; gap: 14px; align-items: flex-start; padding: 6px; font-size: 12px; }
+.fern-bild svg { width: 164px; height: 164px; display: block; border-radius: 4px; }
+.fern-adresse { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--auswahl); }
+.fern-pin { font-size: 22px; letter-spacing: .12em; color: var(--text); }
+
 /* Setup → MIDI */
 .midi-tabelle { width: 100%; border-collapse: collapse; font-size: 12px; }
 .midi-tabelle th { text-align: left; color: var(--leise); font-weight: 600; padding: 3px 6px; border-bottom: 1px solid var(--linie); }

@@ -717,6 +717,26 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.generalprobe.abbrechen()
         return show.generalprobe.zustand()
 
+    # --- Fernbedienung: Handy oder Tablet im Saal --------------------------
+
+    @app.get("/api/fernbedienung")
+    def fernbedienung_lesen():
+        return show.fernbedienung.zustand()
+
+    @app.post("/api/fernbedienung")
+    def fernbedienung_schalten(auftrag: dict = Body(...)):
+        if auftrag.get("an"):
+            show.fernbedienung.einschalten()
+        else:
+            show.fernbedienung.ausschalten()
+        return show.fernbedienung.zustand()
+
+    @app.post("/api/fernbedienung/neue_pin")
+    def fernbedienung_neue_pin():
+        """Neue PIN: Alle Handys sind abgemeldet."""
+        show.fernbedienung.neue_pin()
+        return show.fernbedienung.zustand()
+
     # --- MIDI: Controller und Takt vom Schlagzeug ---------------------------
 
     @app.get("/api/midi")

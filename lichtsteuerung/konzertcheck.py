@@ -6,6 +6,7 @@ für einfache Dinge einen Knopf an, zum Beispiel DMX einschalten).
 from __future__ import annotations
 
 import datetime
+import time
 from pathlib import Path
 
 from . import generalprobe, sicherung, wachhalten
@@ -57,6 +58,16 @@ def pruefen(show) -> list:
     gp = generalprobe.check_punkt(show.generalprobe)
     if gp:
         punkt("Generalprobe", *gp)
+
+    # Fernbedienung (Handy)
+    fern = show.fernbedienung
+    if fern.an:
+        if time.monotonic() < fern.gesperrt_bis:
+            punkt("Handy", "problem", "Jemand hat viele falsche PINs probiert. Die Fernbedienung nimmt 5 Minuten keine PIN an. "
+                                      "Lieber ausschalten und eine neue PIN nehmen.")
+        else:
+            handys = fern.handys_aktiv()
+            punkt("Handy", "ok", f"Fernbedienung ist an ({handys} Handy{'s' if handys != 1 else ''} verbunden).")
 
     # Profil und Strobo
     punkt("Profil", "ok", f"Profil: {show.profil['name']}.")
