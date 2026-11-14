@@ -213,7 +213,8 @@ class Fernbedienung:
                 "song": {"name": song["name"], "teil": f"{song['jetzt']['name']} {song['jetzt']['gruppe']}".strip(),
                          "danach": f"{song['naechster']['name']} {song['naechster']['gruppe']}".strip() if song["naechster"] else "Ende"}
                 if song.get("laeuft") else None,
-                "zwischenlicht": show.zwischenlicht.zustand}
+                "zwischenlicht": show.zwischenlicht.zustand, "follow_spot": show.follow_spot.zustand(),
+                "buehne": show.buehne.daten.get("buehne")}
 
     def _app_bauen(self) -> FastAPI:
         app = FastAPI(title="Licht-Fernbedienung", docs_url=None, redoc_url=None, openapi_url=None)
@@ -289,6 +290,16 @@ class Fernbedienung:
             with fern.show.sperre:
                 fern.show.overrides.umschalten("blackout")
             return fern.status()
+
+        @app.post("/fern/followspot")
+        def follow_spot(auftrag: dict = Body(...), x_fern: Optional[str] = Header(default=None)):
+            fern._pruefen(x_fern)
+            with fern.show.sperre:
+                if auftrag.get("aus"):
+                    fern.show.follow_spot.aus()
+                else:
+                    fern.show.follow_spot.setzen(float(auftrag["x"]), float(auftrag["y"]))
+            return fern.show.follow_spot.zustand()
 
         @app.post("/fern/song/{aktion}")
         def song(aktion: str, auftrag: dict = Body(default={}), x_fern: Optional[str] = Header(default=None)):

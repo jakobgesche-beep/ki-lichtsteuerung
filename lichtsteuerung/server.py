@@ -309,6 +309,57 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
                 "farben": list(FARBNAMEN), "effekte": EFFEKT_ARTEN,
                 "sequenzen": show.pult.sequenzen.namen(), "status": show.pult.status()}
 
+    # --- Positionen einmessen und Follow-Spot ----------------------------------
+
+    @app.get("/api/positionen")
+    def positionen_lesen():
+        roh = daten.lese_json_sicher(show.pfade.positions, {}) or {}
+        return {"positionen": show.positionen, "platzhalter": bool(roh.get("platzhalter")),
+                "buehne": show.buehne.daten.get("buehne"),
+                "koepfe": [{"id": g["id"], "name": g["name"]} for g in show.follow_spot.moegliche()],
+                "einmessen": show.einmessen.zustand()}
+
+    @app.post("/api/positionen")
+    def positionen_speichern(auftrag: dict = Body(...)):
+        show.positionen_setzen(auftrag.get("positionen") or {})
+        return positionen_lesen()
+
+    @app.post("/api/einmessen/{aktion}")
+    def einmessen(aktion: str, auftrag: dict = Body(default={})):
+        """Einen Kopf einmessen: start, hinfahren, schubsen, merken, ausrechnen, uebernehmen, ende."""
+        e = show.einmessen
+        with show.sperre:
+            if aktion == "start":
+                e.starten(str(auftrag.get("geraet", "")))
+            elif aktion == "hinfahren":
+                e.hinfahren(str(auftrag.get("position", "")))
+            elif aktion == "schubsen":
+                e.schubsen(float(auftrag.get("pan", 0)), float(auftrag.get("tilt", 0)))
+            elif aktion == "merken":
+                e.merken()
+            elif aktion == "ausrechnen":
+                e.ausrechnen()
+            elif aktion == "uebernehmen":
+                e.uebernehmen()
+            elif aktion == "ende":
+                e.beenden()
+            else:
+                raise ValueError("Unbekannte Aktion.")
+        return e.zustand()
+
+    @app.post("/api/followspot")
+    def follow_spot(auftrag: dict = Body(...)):
+        """Follow-Spot: Köpfe zeigen auf diesen Punkt (Meter, Kopfhöhe). Ohne Geräte: alle Moving Heads."""
+        with show.sperre:
+            show.follow_spot.setzen(float(auftrag["x"]), float(auftrag["y"]), auftrag.get("geraete"), auftrag.get("hell"))
+        return show.follow_spot.zustand()
+
+    @app.post("/api/followspot/aus")
+    def follow_spot_aus():
+        with show.sperre:
+            show.follow_spot.aus()
+        return show.follow_spot.zustand()
+
     # --- Eigene Gruppen und Presets (wie bei grandMA) -------------------------
 
     @app.post("/api/gruppen")

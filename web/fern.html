@@ -39,6 +39,8 @@
   #fehler { color: #ff9a92; min-height: 1.5em; }
   .leise { color: var(--leise); font-size: 13px; }
   [hidden] { display: none !important; }
+  #fs { width: 100%; height: auto; display: block; background: #070708; border: 1px solid var(--linie); border-radius: 6px;
+        touch-action: none; }
 </style>
 </head>
 <body>
@@ -69,6 +71,9 @@
     <button id="tap">TAP</button>
     <button id="blackout" class="gefahr">Blackout</button>
   </div>
+  <h2>Follow-Spot <span class="leise">(auf die Bühne tippen oder ziehen)</span></h2>
+  <canvas id="fs" width="600" height="320"></canvas>
+  <div class="zwei"><button id="fs-aus" class="gefahr">Follow-Spot aus</button><span></span></div>
   <h2>Songs der Setlist</h2>
   <div class="raster" id="songs"></div>
   <div class="zwei"><button data-song="stopp" class="gefahr">■ Song stoppen</button><span></span></div>
@@ -138,11 +143,51 @@ function zeigen(z) {
   for (const k of document.querySelectorAll("[data-start]")) k.classList.toggle("an", z.song?.name === k.dataset.start);
   $("blackout").classList.toggle("an", z.blackout);
   $("song").innerHTML = z.song ? `<b>${t(z.song.name)}</b>${t(z.song.teil)} · danach ${t(z.song.danach)}` : "kein Song";
+  if (z.buehne && !buehne) { buehne = z.buehne; }
+  if (!fsZiehen) { fsPunkt = z.follow_spot?.punkt ?? null; fsZeichnen(); }
   const look = z.looks.find((l) => l.id === z.look);
-  $("zeile").textContent = z.blackout ? "BLACKOUT" : look ? "Look: " + look.name
+  $("zeile").textContent = z.blackout ? "BLACKOUT" : z.follow_spot?.an ? "Follow-Spot an" : look ? "Look: " + look.name
     : z.zwischenlicht === "applaus" ? "Applaus-Licht" : z.zwischenlicht === "pause" ? "Pausenlicht"
     : z.song ? "Song läuft" : "Automatik";
 }
+
+// Follow-Spot: Draufsicht, Finger ziehen = die Köpfe folgen
+let buehne = null, fsPunkt = null, fsUnterwegs = false, fsWartet = null, fsZiehen = false;
+function fsZeichnen() {
+  const l = $("fs");
+  if (!buehne) return;
+  const z = l.getContext("2d");
+  const m = Math.min((l.width - 40) / buehne.breite_m, (l.height - 40) / buehne.tiefe_m);
+  const zuPixel = (x, y) => [l.width / 2 + x * m, 14 + (buehne.tiefe_m - y) * m];
+  z.fillStyle = "#070708"; z.fillRect(0, 0, l.width, l.height);
+  const [lx, oy] = zuPixel(-buehne.breite_m / 2, buehne.tiefe_m), [rx, uy] = zuPixel(buehne.breite_m / 2, 0);
+  z.fillStyle = "#1c1d20"; z.fillRect(lx, oy, rx - lx, uy - oy);
+  z.fillStyle = "#8d9196"; z.font = "16px sans-serif"; z.textAlign = "center"; z.fillText("Publikum", l.width / 2, l.height - 6);
+  if (fsPunkt) {
+    const [px, py] = zuPixel(fsPunkt[0], fsPunkt[1]);
+    z.fillStyle = "rgba(255,255,230,.25)"; z.beginPath(); z.arc(px, py, 26, 0, Math.PI * 2); z.fill();
+    z.fillStyle = "#fffbe6"; z.beginPath(); z.arc(px, py, 9, 0, Math.PI * 2); z.fill();
+  }
+  l.dataset.m = m;
+}
+async function fsSenden(x, y) {
+  if (fsUnterwegs) { fsWartet = [x, y]; return; }
+  fsUnterwegs = true;
+  try { await anfrage("/fern/followspot", { x, y }); } catch (e) {}
+  fsUnterwegs = false;
+  if (fsWartet) { const [wx, wy] = fsWartet; fsWartet = null; fsSenden(wx, wy); }
+}
+function fsBerechnen(e) {
+  const l = $("fs"), rand = l.getBoundingClientRect(), m = Number(l.dataset.m);
+  const px = (e.clientX - rand.left) * l.width / rand.width, py = (e.clientY - rand.top) * l.height / rand.height;
+  const x = Math.round(((px - l.width / 2) / m) * 100) / 100;
+  const y = Math.max(0, Math.round((buehne.tiefe_m - (py - 14) / m) * 100) / 100);
+  fsPunkt = [x, y]; fsZeichnen(); fsSenden(x, y);
+}
+$("fs").addEventListener("pointerdown", (e) => { if (!buehne || !token) return; fsZiehen = true; $("fs").setPointerCapture?.(e.pointerId); fsBerechnen(e); });
+$("fs").addEventListener("pointermove", (e) => { if (fsZiehen) fsBerechnen(e); });
+for (const art of ["pointerup", "pointercancel"]) $("fs").addEventListener(art, () => { fsZiehen = false; });
+$("fs-aus").addEventListener("click", () => { fsPunkt = null; fsZeichnen(); anfrage("/fern/followspot", { aus: true }).catch(() => {}); });
 
 async function laden() {
   try { zeigen(await anfrage("/fern/zustand")); } catch (e) { if (e.message !== "abgemeldet") $("zeile").textContent = "Laptop nicht erreichbar …"; }

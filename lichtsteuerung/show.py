@@ -35,6 +35,7 @@ from .patch import Patch
 from .probe import Proben, show_bauen
 from .rueckblick import Rueckblick
 from .weitere import Mitschnitt
+from .einmessen import Einmessen, FollowSpot
 from .fernbedienung import Fernbedienung
 from .generalprobe import Generalprobe
 from .licht_chat import LichtChat
@@ -98,6 +99,8 @@ class Show:
         self.mitschnitt = Mitschnitt(self)
         self.midi = Midi(self)
         self.fernbedienung = Fernbedienung(self)
+        self.einmessen = Einmessen(self)
+        self.follow_spot = FollowSpot(self)
         self.pult.extra.append(self.zwischenlicht.platz)
         self._messwerte = None
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
@@ -174,6 +177,8 @@ class Show:
                 zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm(), self._beat)
                 self._blind_vorschau(zustand if self.pult.programmer.blind else None, jetzt)
                 zustand = self._software_blitz(zustand, jetzt)
+                zustand = self.follow_spot.anwenden(zustand)     # Follow-Spot und Einmessen liegen über allem,
+                zustand = self.einmessen.anwenden(zustand)       # die Not-Tasten und Grenzen gelten trotzdem
             else:
                 self.software_blitzt = set()
             self.rueckblick.takt(jetzt)
@@ -559,6 +564,28 @@ class Show:
                 "nummer": self.patch.geraete.index(geraet) + 1,
                 "drehung": any(b["typ"] == "drehung" for k in kanaele for b in k.get("bereiche", []))}
 
+    def positionen_setzen(self, positionen: dict) -> None:
+        """Benannte Positionen ändern (Setup → Positionen). Alle Teile der Show benutzen dasselbe Verzeichnis."""
+        buehne = self.buehne.daten.get("buehne", {"breite_m": 8.0, "tiefe_m": 5.0})
+        neu = {}
+        for name, punkt in (positionen or {}).items():
+            name = str(name).strip()
+            if not name or len(name) > 40:
+                raise ValueError("Jede Position braucht einen Namen (höchstens 40 Zeichen).")
+            try:
+                x, y, z = (float(punkt[k]) for k in ("x", "y", "z"))
+            except (KeyError, TypeError, ValueError) as fehler:
+                raise ValueError(f"„{name}“: x, y und z müssen Zahlen sein (Meter).") from fehler
+            if abs(x) > buehne["breite_m"] / 2 + 3 or not -3 <= y <= buehne["tiefe_m"] + 3 or not 0 <= z <= 8:
+                raise ValueError(f"„{name}“ liegt zu weit weg von der Bühne.")
+            neu[name] = {"x": round(x, 2), "y": round(y, 2), "z": round(z, 2)}
+        with self.sperre:
+            self.positionen.clear()
+            self.positionen.update(neu)
+            daten.schreibe_json(self.pfade.positions, {"_hinweis": "Benannte Positionen auf der Bühne (Meter). "
+                                "x nach rechts vom Publikum aus, y in die Bühne, z nach oben (Kopfhöhe: Bühnenkante + 1,6 m).",
+                                "platzhalter": False, "positionen": self.positionen})
+
     def gobos_der_gruppe(self, gruppe: str) -> list:
         """Gobo-Namen, die alle Geräte der Gruppe haben (ohne "Offen")."""
         listen = []
@@ -597,7 +624,8 @@ class Show:
                     "song": self.song.zustand(), "tempo": round(self._musik_bpm(), 1),
                     "erkennung": self.song.erkennung_zustand(), "zwischenlicht": self.zwischenlicht.status(),
                     "mitschnitt": {"song": self.mitschnitt.song, "status": self.mitschnitt.status},
-                    "midi": self.midi.kurz(),
+                    "midi": self.midi.kurz(), "follow_spot": self.follow_spot.zustand(),
+                    "einmessen": self.einmessen.geraet["id"] if self.einmessen.geraet else None,
                     "aufnahme": {"name": self.aufnahme_name, "weitere": self.aufnahme_weitere,
                                  "sekunden": round(len(self.audio.aufnahme or []) * 512 / 44100, 1),
                                  "markierungen": len(self.aufnahme_marken)},

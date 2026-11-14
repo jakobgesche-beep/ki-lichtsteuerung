@@ -74,8 +74,14 @@ export function showSeite(wurzel) {
             die Teile von selbst weiter. Fällt der Ton aus, läuft der Song im Tempo der Probe weiter.</p>
         </div>
       </section>
-      <section class="fenster buehnenfenster"><header>Bühne live <span id="quelle" class="leise"></span></header>
-        <div class="drei-d show-buehne" id="drei"></div></section>
+      <section class="fenster buehnenfenster"><header>Bühne live <span class="zeile"><span id="quelle" class="leise"></span>
+        <button id="fs-knopf" class="chip check-knopf" title="Follow-Spot: in der Draufsicht ziehen, die Moving Heads folgen">Follow-Spot</button></span></header>
+        <div class="drei-d show-buehne" id="drei"></div>
+        <div id="fs-feld" class="fs-feld" hidden>
+          <canvas id="fs-leinwand" width="560" height="300"></canvas>
+          <div class="zeile"><span class="leise">Auf die Bühne tippen oder ziehen: Die Moving Heads zeigen dorthin (Kopfhöhe) und folgen.</span>
+            <button id="fs-aus" class="klein gefahr">Follow-Spot aus</button> <button id="fs-zu" class="klein">Schließen</button></div>
+        </div></section>
       </div>
       <div class="show-unten">
         <section class="fenster"><header>Looks <span class="leise">Tasten 1–9 · 0 = Look aus</span></header>
@@ -141,6 +147,7 @@ export function showSeite(wurzel) {
     const tasten = live.pult.tasten;
     const gehalten = Object.entries(tasten.halten).filter(([, an]) => an).map(([art]) => ({ flash: "Weiß voll", strobo: "Strobo", dunkel: "Dunkel" })[art]);
     if (live.overrides.blackout) return "Blackout";
+    if (live.follow_spot?.an) return "Follow-Spot (über allem, „Follow-Spot aus“ beendet)";
     if (gehalten.length) return gehalten.join(" + ") + " (gehalten)";
     if (tasten.look) return "Look: " + (looks.find((l) => l.id === tasten.look)?.name ?? tasten.look);
     if (live.zwischenlicht?.zustand === "applaus") return "Applaus-Licht (Song zu Ende)";
@@ -194,6 +201,8 @@ export function showSeite(wurzel) {
     buehne?.setzeWerte(live.geraete);
     setze(feld("quelle"), quelleText(live));
     setze(feld("mitschnitt-an"), live.mitschnitt?.song ? "● schneidet mit" : live.mitschnitt?.status ?? "");
+    feld("fs-knopf").className = `chip check-knopf ${live.follow_spot?.an ? "an" : ""}`;
+    if (!feld("fs-feld").hidden) fsZeichnen(live.follow_spot?.punkt);
     const song = live.song;
     const laeuft = Boolean(song?.laeuft);
     feld("songlauf").hidden = !laeuft;
@@ -238,6 +247,61 @@ export function showSeite(wurzel) {
     setze(feld("tquelle"), quelle);
     feld("vom-ton").hidden = tasten.tempo_quelle !== "tap";
   }
+
+  // --- Follow-Spot: in der Draufsicht ziehen, die Köpfe folgen ---------------------------
+  let fsDaten = null;
+  let fsZiehen = false;
+  let fsUnterwegs = false;
+  let fsWartet = null;
+  const fsMasstab = (l) => Math.min((l.width - 40) / fsDaten.buehne.breite_m, (l.height - 40) / fsDaten.buehne.tiefe_m);
+  const fsZuPixel = (l, x, y) => [l.width / 2 + x * fsMasstab(l), 14 + (fsDaten.buehne.tiefe_m - y) * fsMasstab(l)];
+  function fsZeichnen(punkt) {
+    const l = feld("fs-leinwand");
+    if (!fsDaten) return;
+    const z = l.getContext("2d"), b = fsDaten.buehne;
+    z.fillStyle = "#070708"; z.fillRect(0, 0, l.width, l.height);
+    const [lx, oy] = fsZuPixel(l, -b.breite_m / 2, b.tiefe_m), [rx, uy] = fsZuPixel(l, b.breite_m / 2, 0);
+    z.fillStyle = "#1c1d20"; z.fillRect(lx, oy, rx - lx, uy - oy);
+    z.strokeStyle = "#34373b"; z.strokeRect(lx, oy, rx - lx, uy - oy);
+    z.font = "11px sans-serif"; z.textAlign = "center"; z.fillStyle = "#8d9196";
+    z.fillText("Publikum", l.width / 2, l.height - 6);
+    for (const [name, p] of Object.entries(fsDaten.positionen)) {
+      const [px, py] = fsZuPixel(l, p.x, p.y);
+      z.fillStyle = "#c9a227"; z.beginPath(); z.arc(px, py, 3, 0, Math.PI * 2); z.fill();
+      z.fillStyle = "#8d9196"; z.fillText(name, px, py - 7);
+    }
+    if (punkt) {
+      const [px, py] = fsZuPixel(l, punkt[0], punkt[1]);
+      z.fillStyle = "rgba(255,255,230,.25)"; z.beginPath(); z.arc(px, py, 18, 0, Math.PI * 2); z.fill();
+      z.fillStyle = "#fffbe6"; z.beginPath(); z.arc(px, py, 6, 0, Math.PI * 2); z.fill();
+    }
+  }
+  async function fsSenden(x, y) {
+    if (fsUnterwegs) { fsWartet = [x, y]; return; }        // höchstens eine Anfrage gleichzeitig: bleibt flüssig
+    fsUnterwegs = true;
+    try { await senden("/followspot", { x, y }); } catch { /* Meldung kommt von senden() */ }
+    fsUnterwegs = false;
+    if (fsWartet) { const [wx, wy] = fsWartet; fsWartet = null; fsSenden(wx, wy); }
+  }
+  function fsPunkt(e) {
+    const l = feld("fs-leinwand"), rand = l.getBoundingClientRect();
+    const px = (e.clientX - rand.left) * l.width / rand.width, py = (e.clientY - rand.top) * l.height / rand.height;
+    const m = fsMasstab(l);
+    const x = Math.round(((px - l.width / 2) / m) * 100) / 100, y = Math.round((fsDaten.buehne.tiefe_m - (py - 14) / m) * 100) / 100;
+    fsZeichnen([x, Math.max(0, y)]);
+    fsSenden(x, y);
+  }
+  feld("fs-knopf").onclick = async () => {
+    if (!feld("fs-feld").hidden) { feld("fs-feld").hidden = true; return; }
+    try { fsDaten = await api("/positionen"); } catch { return; }
+    feld("fs-feld").hidden = false;
+    fsZeichnen(letzterLive?.follow_spot?.punkt);
+  };
+  feld("fs-zu").onclick = () => { feld("fs-feld").hidden = true; };
+  feld("fs-aus").onclick = () => senden("/followspot/aus").catch(() => {});
+  feld("fs-leinwand").addEventListener("pointerdown", (e) => { fsZiehen = true; feld("fs-leinwand").setPointerCapture?.(e.pointerId); fsPunkt(e); });
+  feld("fs-leinwand").addEventListener("pointermove", (e) => { if (fsZiehen) fsPunkt(e); });
+  for (const art of ["pointerup", "pointercancel"]) feld("fs-leinwand").addEventListener(art, () => { fsZiehen = false; });
 
   // --- Konzert-Check: läuft mit, sagt, was fehlt ------------------------------
   const STUFE = { ok: "✓", hinweis: "!", problem: "✗" };
