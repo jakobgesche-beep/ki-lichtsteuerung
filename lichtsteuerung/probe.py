@@ -14,6 +14,7 @@ Alles läuft ohne Internet.
 """
 from __future__ import annotations
 
+import threading
 from pathlib import Path
 from typing import Optional
 
@@ -285,21 +286,88 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optio
             "_hinweis": "Automatisch aus der Probe gebaut. Im Pult frei änderbar."}
 
 
+AKZENT_NAEHE_S = 0.15         # so nah beieinander gilt es als dieselbe Stelle (Abschalten, Verschieben)
+
+
+def _ist_aus(analyse: dict, stelle: float) -> bool:
+    return any(abs(stelle - aus) <= AKZENT_NAEHE_S for aus in analyse.get("akzente_aus", []))
+
+
+def _extra(analyse: dict, art: str) -> list:
+    return [float(e["zeit"]) for e in analyse.get("akzente_extra", []) if e.get("art") == art]
+
+
 def akzente_im_teil(analyse: dict, teil: dict) -> list:
-    """Markierte Stellen (Taste D) und erkannte Drops, die mitten in diesem Teil liegen."""
-    stellen = sorted(set(analyse.get("markiert_s", [])) | set(analyse.get("drops_s", [])))
+    """Markierte Stellen (Taste D), erkannte Drops und von Hand gesetzte Akzente, die mitten in diesem Teil liegen.
+    Abgeschaltete (Zeitleiste) fehlen."""
+    stellen = sorted(set(analyse.get("markiert_s", [])) | set(analyse.get("drops_s", [])) | set(_extra(analyse, "akzent")))
     ergebnis = []
     for stelle in stellen:
+        if _ist_aus(analyse, stelle):
+            continue
         if teil["start"] + 0.5 < stelle < teil["ende"] - AKZENT_S and (not ergebnis or stelle - ergebnis[-1] > 1.0):
             ergebnis.append(stelle)
     return ergebnis
 
 
 def schlaege_im_teil(analyse: dict, teil: dict, klasse: str) -> list:
-    """Große Schläge der Band in diesem Teil (auch genau am Anfang). In ruhigen Teilen keine: Da passt kein Blitz."""
+    """Große Schläge der Band in diesem Teil (auch genau am Anfang). In ruhigen Teilen keine: Da passt kein Blitz.
+    Von Hand gesetzte Schläge gelten überall, abgeschaltete nirgends."""
+    von_hand = [s for s in _extra(analyse, "schlag") if teil["start"] - 0.3 <= s < teil["ende"] - 0.5]
     if klasse == "ruhig" or teil.get("name") in ("Intro", "Schluss", "Aufbau", "Überleitung", "Drop"):
-        return []
-    return [s for s in analyse.get("schlaege_s", []) if teil["start"] - 0.3 <= s < teil["ende"] - 0.5]
+        erkannt = []
+    else:
+        erkannt = [s for s in analyse.get("schlaege_s", []) if teil["start"] - 0.3 <= s < teil["ende"] - 0.5]
+    return sorted(s for s in set(erkannt) | set(von_hand) if not _ist_aus(analyse, s))
+
+
+def akzente_alle(analyse: dict) -> list:
+    """Alle Akzente für die Zeitleiste: Zeit, Art (akzent/schlag), woher (Taste D, Drop, erkannt, von Hand), aus?"""
+    liste = [(s, "akzent", "Taste D") for s in analyse.get("markiert_s", [])]
+    liste += [(s, "akzent", "Drop") for s in analyse.get("drops_s", [])]
+    liste += [(s, "schlag", "erkannt") for s in analyse.get("schlaege_s", [])]
+    liste += [(float(e["zeit"]), e.get("art", "akzent"), "von Hand") for e in analyse.get("akzente_extra", [])]
+    return [{"zeit": round(float(z), 2), "art": art, "quelle": quelle, "aus": _ist_aus(analyse, z)}
+            for z, art, quelle in sorted(liste)]
+
+
+def akzent_aendern(analyse: dict, aktion: str, zeit: float, wert=None, art: str = "akzent") -> dict:
+    """Akzente in der Zeitleiste: aus, an, verschieben (wert = neue Zeit), neu (an dieser Zeit), weg (nur von Hand)."""
+    analyse = {**analyse, "akzente_aus": list(analyse.get("akzente_aus", [])),
+               "akzente_extra": [dict(e) for e in analyse.get("akzente_extra", [])]}
+    dauer = float(analyse.get("dauer_s") or 0.0)
+    zeit = float(zeit)
+    nah = lambda a, b: abs(a - b) <= AKZENT_NAEHE_S
+    von_hand = [e for e in analyse["akzente_extra"] if nah(float(e["zeit"]), zeit)]
+    if aktion == "aus":
+        analyse["akzente_aus"].append(round(zeit, 2))
+    elif aktion == "an":
+        analyse["akzente_aus"] = [a for a in analyse["akzente_aus"] if not nah(a, zeit)]
+    elif aktion in ("verschieben", "neu"):
+        ziel = float(wert) if aktion == "verschieben" else zeit
+        if not 0.0 <= ziel <= dauer:
+            raise ValueError("Diese Stelle liegt außerhalb des Songs.")
+        if aktion == "verschieben":
+            alte = next((a for a in akzente_alle(analyse) if nah(a["zeit"], zeit)), None)
+            if alte is None:
+                raise ValueError("An dieser Stelle ist kein Akzent.")
+            art = alte["art"]
+            if von_hand:
+                analyse["akzente_extra"] = [e for e in analyse["akzente_extra"] if e not in von_hand]
+            else:
+                analyse["akzente_aus"].append(round(zeit, 2))      # erkannter Akzent: alte Stelle aus, neue von Hand
+        if art not in ("akzent", "schlag"):
+            raise ValueError("Art ist akzent oder schlag.")
+        analyse["akzente_extra"].append({"zeit": round(ziel, 2), "art": art})
+        analyse["akzente_aus"] = [a for a in analyse["akzente_aus"] if not nah(a, ziel)]
+    elif aktion == "weg":
+        if not von_hand:
+            raise ValueError("Nur von Hand gesetzte Akzente lassen sich löschen. Erkannte schaltet man aus.")
+        analyse["akzente_extra"] = [e for e in analyse["akzente_extra"] if e not in von_hand]
+    else:
+        raise ValueError(f"Unbekannte Änderung {aktion!r}.")
+    analyse["von_hand"] = True
+    return analyse
 
 
 def schlag_cue(gruppen: list) -> dict:
@@ -367,6 +435,14 @@ def teile_aendern(analyse: dict, aktion: str, index: int, wert=None) -> dict:
         if wert not in KLASSEN:
             raise ValueError(f"Stärke muss eine von {', '.join(KLASSEN)} sein.")
         teile[index]["klasse"] = wert
+    elif aktion == "grenze":
+        # Zeitleiste: Grenze an diese Stelle gezogen (landet auf der nächsten Takt-Eins)
+        if index == 0:
+            raise ValueError("Der Anfang des ersten Teils ist der Song-Anfang.")
+        neu = _auf_takt(einsen, float(wert))
+        if not teile[index - 1]["start"] + 0.5 < neu < teile[index]["ende"] - 0.5:
+            raise ValueError("So weit geht es nicht: Ein Teil wäre sonst leer.")
+        teile[index]["start"] = teile[index - 1]["ende"] = round(float(neu), 3)
     elif aktion == "verschieben":
         if index == 0:
             raise ValueError("Der Anfang des ersten Teils ist der Song-Anfang.")
@@ -420,6 +496,9 @@ class Proben:
     def __init__(self, ordner: Path):
         self.ordner = Path(ordner)
         self.weitere = WeitereAufnahmen(self.ordner)      # Mitschnitte und weitere Proben
+        # Lesen-Ändern-Schreiben immer nacheinander: Sonst überschreibt eine lange Neu-Analyse eine Änderung,
+        # die währenddessen kam (zum Beispiel einen Akzent aus der Zeitleiste).
+        self.sperre = threading.RLock()
 
     def namen(self) -> list:
         namen = []
@@ -437,49 +516,85 @@ class Proben:
         return self.ordner / f"{daten.dateiname(name)}.wav"
 
     def speichern(self, name: str, ton: np.ndarray, markierungen: Optional[list] = None) -> dict:
-        import soundfile
-        if len(ton) < ABTASTRATE * 10:
-            raise ValueError("Die Aufnahme ist kürzer als 10 Sekunden. Läuft der Ton?")
-        self.ordner.mkdir(parents=True, exist_ok=True)
-        soundfile.write(str(self.ton_pfad(name)), ton, ABTASTRATE, subtype="PCM_16")
-        analyse = analysieren(ton, name)
-        if markierungen:
-            # Wo du "Drop!" gedrückt hast. Damit lässt sich die Erkennung auf echte Songs abstimmen.
-            analyse["markiert_s"] = [round(m, 2) for m in markierungen]
-        daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
-        return analyse
+        with self.sperre:
+            import soundfile
+            if len(ton) < ABTASTRATE * 10:
+                raise ValueError("Die Aufnahme ist kürzer als 10 Sekunden. Läuft der Ton?")
+            self.ordner.mkdir(parents=True, exist_ok=True)
+            soundfile.write(str(self.ton_pfad(name)), ton, ABTASTRATE, subtype="PCM_16")
+            analyse = analysieren(ton, name)
+            if markierungen:
+                # Wo du "Drop!" gedrückt hast. Damit lässt sich die Erkennung auf echte Songs abstimmen.
+                analyse["markiert_s"] = [round(m, 2) for m in markierungen]
+            daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
+            return analyse
 
     def neu_analysieren(self, name: str) -> Optional[dict]:
         """Ältere Analysen (vor der neuen Erkennung) noch einmal machen. Markierungen bleiben."""
-        alt = self.lesen(name)
-        pfad = self.ton_pfad(name)
-        if alt is None or not pfad.exists():
-            return alt
-        if alt.get("version", 1) >= ANALYSE_VERSION:
-            if alt.get("musik_bis_s") is None:
-                # Fehlte in Version 2.1: Wo die Musik aufhört (fürs Applaus-Licht). Schnell nachgerechnet.
-                ton = lade_datei(pfad)
-                alt["musik_bis_s"] = round(songanalyse.musik_ende(songanalyse.spektral_merkmale(ton)["baender"]), 2)
-                daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", alt)
-            return alt
-        analyse = analysieren(lade_datei(pfad), alt.get("name", name))
-        if alt.get("markiert_s"):
-            analyse["markiert_s"] = alt["markiert_s"]
-        if alt.get("von_hand"):
-            # Von Hand Richtiggestelltes bleibt immer: nur Neues (zum Beispiel die Schläge) kommt dazu.
-            analyse.update(teile=alt["teile"], von_hand=True)
-        daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
-        return analyse
+        with self.sperre:
+            alt = self.lesen(name)
+            pfad = self.ton_pfad(name)
+            if alt is None or not pfad.exists():
+                return alt
+            if alt.get("version", 1) >= ANALYSE_VERSION:
+                if alt.get("musik_bis_s") is None:
+                    # Fehlte in Version 2.1: Wo die Musik aufhört (fürs Applaus-Licht). Schnell nachgerechnet.
+                    ton = lade_datei(pfad)
+                    alt["musik_bis_s"] = round(songanalyse.musik_ende(songanalyse.spektral_merkmale(ton)["baender"]), 2)
+                    daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", alt)
+                return alt
+            analyse = analysieren(lade_datei(pfad), alt.get("name", name))
+            if alt.get("markiert_s"):
+                analyse["markiert_s"] = alt["markiert_s"]
+            if alt.get("von_hand"):
+                # Von Hand Richtiggestelltes bleibt immer: nur Neues (zum Beispiel die Schläge) kommt dazu.
+                analyse.update(teile=alt["teile"], von_hand=True)
+                for feld in ("akzente_aus", "akzente_extra"):     # Zeitleiste: abgeschaltete und gesetzte Akzente
+                    if alt.get(feld):
+                        analyse[feld] = alt[feld]
+            daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", analyse)
+            return analyse
 
     def teile_aendern(self, name: str, aktion: str, index: int, wert=None) -> dict:
-        alt = self.lesen(name)
-        if alt is None:
-            raise ValueError(f"Probe {name!r} gibt es nicht.")
-        if alt.get("version", 1) < ANALYSE_VERSION:
-            alt = self.neu_analysieren(name) or alt
-        neu = teile_aendern(alt, aktion, int(index), wert)
-        daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", neu)
-        return neu
+        with self.sperre:
+            alt = self.lesen(name)
+            if alt is None:
+                raise ValueError(f"Probe {name!r} gibt es nicht.")
+            if alt.get("version", 1) < ANALYSE_VERSION:
+                alt = self.neu_analysieren(name) or alt
+            neu = teile_aendern(alt, aktion, int(index), wert)
+            daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", neu)
+            return neu
+
+    def akzent_aendern(self, name: str, aktion: str, zeit: float, wert=None, art: str = "akzent") -> dict:
+        with self.sperre:
+            alt = self.lesen(name)
+            if alt is None:
+                raise ValueError(f"Probe {name!r} gibt es nicht.")
+            neu = akzent_aendern(alt, aktion, zeit, wert, art)
+            daten.schreibe_json(self.ordner / f"{daten.dateiname(name)}.json", neu)
+            return neu
+
+    def welle(self, name: str, punkte: int = 1200) -> dict:
+        """Lautstärke über den Song (für die Zeitleiste): 0 bis 1, punkte Werte."""
+        pfad = self.ton_pfad(name)
+        if not pfad.exists():
+            raise ValueError("Zu dieser Probe gibt es keine Aufnahme.")
+        stand = pfad.stat().st_mtime
+        merk = getattr(self, "_wellen", {})
+        self._wellen = merk
+        if name in merk and merk[name][0] == stand:
+            return merk[name][1]
+        ton = lade_datei(pfad)
+        punkte = max(100, min(4000, int(punkte)))
+        stueck = max(1, len(ton) // punkte)
+        rms = np.sqrt(np.mean(ton[: stueck * punkte].reshape(punkte, stueck) ** 2, axis=1))
+        db = 20 * np.log10(rms + 1e-6)
+        oben = float(np.percentile(db, 99))
+        werte = np.clip((db - (oben - 45.0)) / 45.0, 0.0, 1.0)
+        ergebnis = {"dauer_s": round(len(ton) / ABTASTRATE, 2), "punkte": [round(float(w), 3) for w in werte]}
+        merk[name] = (stand, ergebnis)
+        return ergebnis
 
     def aus_datei(self, name: str, pfad: Path) -> dict:
         return self.speichern(name, lade_datei(pfad))

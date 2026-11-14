@@ -28,6 +28,7 @@ from .katalog import KatalogFehler
 from . import daten, konzertcheck, showtasten, patchplan, sicherung
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
+from .probe import akzente_alle
 from .profile import pruefe_profil
 from .pult import EFFEKT_ARTEN, SONG_NUMMER, pruefe_effekt
 from .szenen import pruefe_werte
@@ -673,6 +674,7 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
             if probe is not None:
                 probe["weitere"] = [{k: v for k, v in e.items() if k != "zuordnung"} | {"zugeordnet": bool(e.get("zuordnung"))}
                                     for e in show.proben.weitere.liste(name)]
+                probe["akzente"] = akzente_alle(probe)
                 proben.append(probe)
         return {"proben": proben, "aufnahme": show.aufnahme_name, "aufnahme_weitere": show.aufnahme_weitere}
 
@@ -747,6 +749,18 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     def weitere_loeschen(name: str, datei: str):
         show.proben.weitere.loeschen(name, datei)
         return {"weitere": len(show.proben.weitere.liste(name))}
+
+    @app.get("/api/proben/{name}/welle")
+    def probe_welle(name: str):
+        """Lautstärke über den Song für die Zeitleiste."""
+        return show.proben.welle(name)
+
+    @app.post("/api/proben/{name}/akzente")
+    def probe_akzente(name: str, auftrag: dict = Body(...)):
+        """Zeitleiste: Akzent aus, an, verschieben, neu oder weg. Danach "Show neu bauen"."""
+        neu = show.proben.akzent_aendern(name, str(auftrag.get("aktion", "")), float(auftrag.get("zeit", 0)),
+                                         auftrag.get("wert"), str(auftrag.get("art", "akzent")))
+        return {**neu, "akzente": akzente_alle(neu)}
 
     @app.post("/api/proben/{name}/teile")
     def probe_teile(name: str, auftrag: dict = Body(...)):

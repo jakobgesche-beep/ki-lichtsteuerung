@@ -42,8 +42,132 @@ export function probeSeite(wurzel) {
   const offen = new Set();          // bei diesen Songs ist der Teile-Editor offen
   const geaendert = new Set();      // hier wurde etwas richtiggestellt, die Show ist noch die alte
 
+  // --- Zeitleiste mit Wellenform: Grenzen ziehen, Akzente aus/an/verschieben/neu --------------------
+  const wellen = new Map();          // Name -> {dauer_s, punkte}
+  const probenDaten = new Map();     // Name -> Probe (Teile, Akzente)
+  const KLASSE_FARBE = { ruhig: "63,127,192", mittel: "141,145,150", stark: "201,162,39", hoehepunkt: "200,55,45" };
+  let zug = null;
+
+  async function welleHolen(name) {
+    if (!wellen.has(name)) wellen.set(name, await api(`/proben/${encodeURIComponent(name)}/welle`));
+    return wellen.get(name);
+  }
+
+  function welleZeichnen(leinwand, p, welle) {
+    const z = leinwand.getContext("2d"), B = leinwand.width, H = leinwand.height, dauer = welle.dauer_s || 1;
+    const x = (zeit) => (zeit / dauer) * B;
+    z.fillStyle = "#0d0e10"; z.fillRect(0, 0, B, H);
+    z.font = "12px sans-serif"; z.textBaseline = "top";
+    for (const teil of p.teile) {
+      z.fillStyle = `rgba(${KLASSE_FARBE[teil.klasse] ?? KLASSE_FARBE.mittel},.22)`;
+      z.fillRect(x(teil.start), 0, x(teil.ende) - x(teil.start), H);
+      z.fillStyle = "#e3e3e3"; z.fillText(`${teil.name} ${teil.gruppe ?? ""}`.trim(), x(teil.start) + 4, 4);
+    }
+    z.fillStyle = "#8d9196";
+    const mitte = H * 0.5, hoehe = H * 0.32;
+    welle.punkte.forEach((w, i) => {
+      const px = (i / welle.punkte.length) * B;
+      z.fillRect(px, mitte - w * hoehe, Math.max(1, B / welle.punkte.length), Math.max(1, 2 * w * hoehe));
+    });
+    p.teile.slice(1).forEach((teil, i) => {
+      const gezogen = zug?.art === "grenze" && zug.index === i + 1 && zug.bewegt;
+      const px = x(gezogen ? zug.zeit : teil.start);
+      z.fillStyle = gezogen ? "#f2c200" : "#e3e3e3"; z.fillRect(px - 1, 0, 2, H);
+      z.fillRect(px - 5, 18, 10, 10);
+    });
+    z.fillStyle = "#f2c200";
+    for (const m of p.markiert_s ?? []) z.fillRect(x(m) - 1, 0, 3, 8);
+    for (const a of p.akzente ?? []) {
+      const gezogen = zug?.art === "akzent" && Math.abs(zug.alt - a.zeit) < 0.01 && zug.bewegt;
+      const px = x(gezogen ? zug.zeit : a.zeit), py = H - 14;
+      z.fillStyle = a.aus ? "#4a4d52" : gezogen ? "#f2c200" : "#ffffff";
+      z.beginPath();
+      if (a.art === "akzent") { z.moveTo(px, py - 8); z.lineTo(px + 7, py); z.lineTo(px, py + 8); z.lineTo(px - 7, py); }
+      else { z.moveTo(px, py - 8); z.lineTo(px + 7, py + 6); z.lineTo(px - 7, py + 6); }
+      z.closePath(); z.fill();
+      if (a.aus) { z.strokeStyle = "#ff8a80"; z.beginPath(); z.moveTo(px - 6, py - 6); z.lineTo(px + 6, py + 6); z.stroke(); }
+    }
+  }
+
+  async function wellenZeigen() {
+    for (const leinwand of feld("songs").querySelectorAll("canvas[data-welle]")) {
+      const name = leinwand.dataset.welle;
+      try { welleZeichnen(leinwand, probenDaten.get(name), await welleHolen(name)); } catch { /* keine Aufnahme */ }
+    }
+  }
+
+  function zeitAus(leinwand, e) {
+    const rand = leinwand.getBoundingClientRect(), welle = wellen.get(leinwand.dataset.welle);
+    const px = (e.clientX - rand.left) * leinwand.width / rand.width, py = (e.clientY - rand.top) * leinwand.height / rand.height;
+    return { px, py, zeit: Math.max(0, Math.min(welle.dauer_s, (px / leinwand.width) * welle.dauer_s)), proPixel: welle.dauer_s / leinwand.width };
+  }
+
+  feld("songs").addEventListener("pointerdown", (e) => {
+    const leinwand = e.target.closest("canvas[data-welle]");
+    if (!leinwand || !wellen.has(leinwand.dataset.welle)) return;
+    const p = probenDaten.get(leinwand.dataset.welle);
+    const { px, py, zeit, proPixel } = zeitAus(leinwand, e);
+    const nah = 7 * proPixel;
+    const grenze = p.teile.findIndex((t, i) => i > 0 && Math.abs(t.start - zeit) <= nah);
+    const akzent = py > leinwand.height - 34 ? (p.akzente ?? []).find((a) => Math.abs(a.zeit - zeit) <= nah) : null;
+    if (akzent) zug = { art: "akzent", alt: akzent.zeit, aus: akzent.aus, zeit, start: px, bewegt: false, leinwand, p };
+    else if (grenze > 0) zug = { art: "grenze", index: grenze, zeit, start: px, bewegt: false, leinwand, p };
+    else return;
+    leinwand.setPointerCapture?.(e.pointerId);
+  });
+  feld("songs").addEventListener("pointermove", (e) => {
+    const leinwand = e.target.closest("canvas[data-welle]");
+    if (!leinwand || !wellen.has(leinwand.dataset.welle)) return;
+    const { px, zeit } = zeitAus(leinwand, e);
+    const info = feld("songs").querySelector(`[data-welle-info="${CSS.escape(leinwand.dataset.welle)}"]`);
+    if (info && !zug) info.dataset.text ??= info.textContent;
+    if (zug && zug.leinwand === leinwand) {
+      zug.zeit = zeit;
+      zug.bewegt ||= Math.abs(px - zug.start) > 4;
+      welleZeichnen(leinwand, zug.p, wellen.get(leinwand.dataset.welle));
+    }
+    if (info) info.textContent = `${genau(zeit)}${zug?.bewegt ? " · loslassen zum Übernehmen" : ""}`;
+  });
+  feld("songs").addEventListener("pointerleave", (e) => {
+    const info = e.target.closest?.("[data-welle-info]");
+    if (info?.dataset.text) info.textContent = info.dataset.text;
+  }, true);
+  async function zugEnde() {
+    if (!zug) return;
+    const z = zug;
+    zug = null;
+    const name = z.leinwand.dataset.welle;
+    try {
+      if (z.art === "grenze" && z.bewegt) {
+        await senden(`/proben/${encodeURIComponent(name)}/teile`, { aktion: "grenze", index: z.index, wert: z.zeit });
+      } else if (z.art === "akzent") {
+        await senden(`/proben/${encodeURIComponent(name)}/akzente`, z.bewegt
+          ? { aktion: "verschieben", zeit: z.alt, wert: z.zeit } : { aktion: z.aus ? "an" : "aus", zeit: z.alt });
+      } else { return; }
+      geaendert.add(name);
+    } catch { /* Meldung kam schon */ }
+    songsZeigen();
+  }
+  // Loslassen: direkt an der Zeitleiste (mit Pointer-Capture kommt es dort an), nur einmal pro Zug
+  feld("songs").addEventListener("pointerup", (e) => { if (zug && e.target.closest("canvas[data-welle]")) zugEnde(); });
+  feld("songs").addEventListener("pointercancel", () => { zug = null; wellenZeigen(); });
+  feld("songs").addEventListener("lostpointercapture", (e) => { if (zug && e.target.closest?.("canvas[data-welle]")) zugEnde(); }, true);
+  feld("songs").addEventListener("dblclick", async (e) => {
+    const leinwand = e.target.closest("canvas[data-welle]");
+    if (!leinwand || !wellen.has(leinwand.dataset.welle)) return;
+    const { py, zeit } = zeitAus(leinwand, e);
+    if (py < leinwand.height * 0.6) return;
+    const name = leinwand.dataset.welle;
+    try {
+      await senden(`/proben/${encodeURIComponent(name)}/akzente`, { aktion: "neu", zeit, art: "schlag" });
+      geaendert.add(name);
+    } catch { return; }
+    songsZeigen();
+  });
+
   async function songsZeigen() {
     const { proben } = await api("/proben");
+    proben.forEach((p) => probenDaten.set(p.name, p));
     feld("songs").innerHTML = proben.map((p) => `
       <div class="kasten">
         <h2>${t(p.name)} <span class="leise">${p.tempo_bpm} BPM · ${minuten(p.dauer_s)}</span></h2>
@@ -62,6 +186,7 @@ export function probeSeite(wurzel) {
         <p class="leise">Die Show liegt als Sequenz „${t(p.name)}“ im Pult. Dort kannst du jeden Cue ändern.
           Live: auf der Seite „Show“ einmal Start drücken, wenn die Band anfängt. Der Song läuft dann von selbst durch.</p>
       </div>`).join("") || `<p class="leise">Noch keine Songs aufgenommen.</p>`;
+    wellenZeigen();
   }
 
   // Weitere Aufnahmen (Konzert-Mitschnitte, weitere Proben): helfen der Song-Erkennung
@@ -82,6 +207,10 @@ export function probeSeite(wurzel) {
   function editor(p) {
     const n = t(p.name);
     return `<div class="teile-editor">
+      <canvas class="welle" data-welle="${n}" width="1200" height="150"></canvas>
+      <p class="leise welle-info" data-welle-info="${n}">Zeitleiste: Grenze zwischen zwei Teilen ziehen = verschieben (landet auf der Takt-Eins).
+        Akzent unten antippen = aus/an, ziehen = verschieben. Doppelklick unten = neuer Schlag (kurz weiß).
+        ◆ Blitz-Akzent · ▲ Schlag · gelb oben = deine D-Marken.</p>
       <p class="leise">Hör dir die Stellen an („▶ ab hier“) und stell die Teile richtig. Grenzen liegen immer auf einer Takt-Eins.
         Danach <b>Show neu bauen</b>, dann gilt es für Song-Start und Probe ansehen.${p.von_hand ? " · <b>Von Hand richtiggestellt.</b>" : ""}</p>
       ${geaendert.has(p.name) ? `<div class="meldung gelb zeile">Geändert. Damit es für den Song gilt:

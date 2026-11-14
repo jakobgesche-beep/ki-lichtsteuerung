@@ -370,6 +370,10 @@ label.datei-knopf:hover { background: var(--kachel-hover); }
   display: flex; flex-direction: column; gap: 6px; }
 .fs-feld canvas { flex: 1; min-height: 0; width: 100%; object-fit: contain; touch-action: none; cursor: crosshair; }
 
+/* Probe: Zeitleiste mit Wellenform */
+.welle { width: 100%; height: auto; display: block; border: 1px solid var(--linie); border-radius: 3px; cursor: pointer; touch-action: none; }
+.welle-info { min-height: 2.6em; }
+
 /* Pult: eigene Gruppen und Presets */
 .kachel.eigen { border-style: dashed; }
 .kachel.neu { color: var(--leise); }
