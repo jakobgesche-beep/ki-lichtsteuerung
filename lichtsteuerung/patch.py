@@ -3,6 +3,9 @@
 Daten stehen in fixtures.json. Jedes Gerät hat eine feste `id` und `gruppen`
 nach Funktion ("Farb-PARs", "Frontlicht", ...). Cues und Engine sprechen nur
 Gruppen und ids an. Deshalb laufen sie weiter, wenn ein Gerät getauscht wird.
+
+Eigene Gruppen (wie bei grandMA: eine gespeicherte Auswahl, zum Beispiel "Front links") liegen in
+cues/gruppen.json. Sie gelten überall wie die anderen Gruppen (Pult, Befehlszeile, Licht-Chat, Gruppen-Master).
 """
 from __future__ import annotations
 
@@ -41,6 +44,10 @@ class Patch:
         inhalt = daten.lese_json(self.pfad, {"geraete": []})
         self.hinweis = inhalt.get("_hinweis")
         self.geraete = inhalt["geraete"]
+        self.eigene_pfad = self.pfad.parent / "cues" / "gruppen.json"
+        roh = daten.lese_json_sicher(self.eigene_pfad, {}) or {}
+        self.eigene_gruppen = {str(name): [str(i) for i in ids] for name, ids in (roh.get("gruppen") or {}).items()
+                               if isinstance(ids, list)}
 
     def speichern(self) -> None:
         inhalt = {"geraete": self.geraete}
@@ -74,6 +81,9 @@ class Patch:
         return ["Farb-PARs"]
 
     def in_gruppe(self, gruppe: str) -> list:
+        if gruppe in self.eigene_gruppen:
+            ids = set(self.eigene_gruppen[gruppe])
+            return [g for g in self.geraete if g["id"] in ids]
         return [g for g in self.geraete if gruppe in self.gruppen_von(g)]
 
     def gruppen(self) -> list:
@@ -82,7 +92,31 @@ class Patch:
             for gruppe in self.gruppen_von(geraet):
                 if gruppe not in vorhanden:
                     vorhanden.append(gruppe)
-        return vorhanden
+        return vorhanden + [name for name in self.eigene_gruppen if name not in vorhanden]
+
+    def alle_gruppen_von(self, geraet: dict) -> list:
+        """Gruppen nach Funktion und eigene Gruppen, in denen das Gerät steckt."""
+        return self.gruppen_von(geraet) + [n for n, ids in self.eigene_gruppen.items() if geraet["id"] in ids]
+
+    def eigene_gruppe_speichern(self, name: str, ids: list) -> None:
+        name = str(name or "").strip()
+        if not name:
+            raise PatchFehler("Bitte einen Namen für die Gruppe eingeben.")
+        funktion = {gruppe for geraet in self.geraete for gruppe in self.gruppen_von(geraet)}
+        if name in funktion or name in FUNKTIONS_GRUPPEN:
+            raise PatchFehler(f"„{name}“ gibt es schon als Gruppe aus dem Patch. Bitte einen anderen Namen nehmen.")
+        bekannt = {g["id"] for g in self.geraete}
+        ids = [str(i) for i in dict.fromkeys(ids) if str(i) in bekannt]
+        if not ids:
+            raise PatchFehler("Erst Geräte auswählen, dann als Gruppe speichern.")
+        self.eigene_gruppen[name] = ids
+        daten.schreibe_json(self.eigene_pfad, {"gruppen": self.eigene_gruppen})
+
+    def eigene_gruppe_loeschen(self, name: str) -> None:
+        if name not in self.eigene_gruppen:
+            raise PatchFehler(f"Die eigene Gruppe „{name}“ gibt es nicht.")
+        del self.eigene_gruppen[name]
+        daten.schreibe_json(self.eigene_pfad, {"gruppen": self.eigene_gruppen})
 
     def belegung(self, ohne: Optional[str] = None) -> dict:
         """Kanal -> Liste der Geräte, die ihn benutzen."""

@@ -360,6 +360,11 @@ label.datei-knopf:hover { background: var(--kachel-hover); }
 .fern-adresse { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--auswahl); }
 .fern-pin { font-size: 22px; letter-spacing: .12em; color: var(--text); }
 
+/* Pult: eigene Gruppen und Presets */
+.kachel.eigen { border-style: dashed; }
+.kachel.neu { color: var(--leise); }
+.eigene-presets { flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 6px; }
+
 /* Setup → DMX-Test → Ein Gerät testen */
 .gt-tabelle { width: 100%; border-collapse: collapse; font-size: 12px; }
 .gt-tabelle th { text-align: left; color: var(--leise); font-weight: 600; padding: 3px 6px; border-bottom: 1px solid var(--linie); }

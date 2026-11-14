@@ -24,6 +24,7 @@ const FARBEN = {
 };
 const FARB_NAMEN = { gruen: "Grün", weiss: "Weiß", warmweiss: "Warmweiß", hellblau: "Hellblau" };
 const BEWEGUNG = ["kreis", "acht", "schwenk", "nicken", "publikum"];
+const PRESET_ARTEN = ["dimmer", "position", "farbe", "gobo", "strahl"];
 const FEATURES = [["dimmer", "Dimmer"], ["position", "Position"], ["farbe", "Farbe"], ["gobo", "Gobo"],
   ["strahl", "Strahl"], ["effekt", "Effekt"]];
 const TASTEN = [
@@ -220,8 +221,10 @@ export function pultSeite(wurzel) {
       const ids = info.geraete.filter((x) => x.gruppen.includes(g)).map((x) => x.id);
       const an = ids.length && ids.every((id) => pult.auswahl.includes(id));
       const quelle = modus === "assign" && assignQuelle?.gruppe === g;
-      return kachel(i + 1, g, { gruppe: g }, `${an ? "gewaehlt" : ""} ${quelle ? "quelle" : ""}`);
-    }).join("") + kachel("", "Alle", { alle: 1 }, info.geraete.every((g) => pult.auswahl.includes(g.id)) ? "gewaehlt" : ""));
+      const eigen = (info.eigene_gruppen ?? []).includes(g);
+      return kachel(i + 1, g, { gruppe: g }, `${an ? "gewaehlt" : ""} ${quelle ? "quelle" : ""} ${eigen ? "eigen" : ""}`);
+    }).join("") + kachel("", "Alle", { alle: 1 }, info.geraete.every((g) => pult.auswahl.includes(g.id)) ? "gewaehlt" : "")
+      + kachel("", "+ Gruppe", { "neue-gruppe": 1 }, "neu", "", `<span class="unten">Auswahl speichern</span>`));
     html("geraete", info.geraete.map((g) => kachel(g.nummer, g.name, { geraet: g.id },
       `${pult.auswahl.includes(g.id) ? "gewaehlt" : ""} ${prog[g.id] ? "programmer" : ""}`, "",
       `<span class="licht" data-licht="${t(g.id)}"></span>`)).join(""));
@@ -315,7 +318,13 @@ export function pultSeite(wurzel) {
           `<div class="zeile laufend">${t(info.effekte[e.art])} · ${t(e.ziel.gruppe ?? e.ziel.geraete.length + " Geräte")}
            <button class="klein" data-effekt-weg="${i}">Stopp</button></div>`).join("")}</div></div>`;
     }
-    const sig = JSON.stringify([feature, pult.auswahl, prog, pult.programmer.effekte.map((e) => e.art)]);
+    if (PRESET_ARTEN.includes(feature)) {
+      const eigene = (pult.presets ?? []).filter((p) => p.art === feature);
+      inhalt += `<div class="feature-zeile eigene-presets"><span class="leise">Eigene Presets:</span>
+        ${eigene.map((p) => kachel("", p.name, { preset: p.nummer }, "mini eigen")).join("") || `<span class="leise">noch keine</span>`}
+        <button class="klein" data-preset-neu="${feature}" title="Die Werte im Programmer unter einem Namen speichern">+ Als Preset speichern</button></div>`;
+    }
+    const sig = JSON.stringify([feature, pult.auswahl, prog, pult.programmer.effekte.map((e) => e.art), pult.presets]);
     if (!neu && feld("feature").dataset.sig === sig) return;
     if (feld("feature").contains(document.activeElement) && document.activeElement.type === "range") return;
     feld("feature").dataset.sig = sig;
@@ -437,6 +446,34 @@ export function pultSeite(wurzel) {
         poolLaden();
         sheetStand = "";
         return;
+      }
+      if (modus === "delete" && d.gruppe && (info.eigene_gruppen ?? []).includes(d.gruppe)) {
+        modusSetzen(null);
+        if (!confirm(`Eigene Gruppe „${d.gruppe}“ löschen? Die Geräte bleiben im Patch.`)) return;
+        Object.assign(info, await api(`/gruppen/${encodeURIComponent(d.gruppe)}`, { method: "DELETE" }));
+        zuletzt.delete("gruppen");
+        return poolsZeigen();
+      }
+      if (d.neueGruppe) {
+        if (!pult.auswahl.length) return meldung("Erst Geräte auswählen, dann als Gruppe speichern.");
+        const name = prompt("Name der Gruppe, zum Beispiel „Front links“:");
+        if (!name?.trim()) return;
+        Object.assign(info, await senden("/gruppen", { name: name.trim() }));
+        info.geraete = (await api("/pult")).geraete;
+        zuletzt.delete("gruppen");
+        return poolsZeigen();
+      }
+      if (d.preset !== undefined) {
+        if (modus === "delete") {
+          modusSetzen(null);
+          return pultAnnehmen(await api(`/presets/${d.preset}`, { method: "DELETE" }));
+        }
+        return pultAnnehmen(await senden(`/presets/${d.preset}/anwenden`));
+      }
+      if (d.presetNeu) {
+        const name = prompt("Name des Presets, zum Beispiel „Lieblingsblau“:");
+        if (!name?.trim()) return;
+        return pultAnnehmen(await senden("/presets", { name: name.trim(), art: d.presetNeu }));
       }
       if (d.geraet) return pultAnnehmen(await senden("/auswahl", { geraete: [d.geraet], art: "umschalten" }));
       if (d.gruppe) return pultAnnehmen(await senden("/auswahl", { gruppe: d.gruppe, art: "umschalten" }));

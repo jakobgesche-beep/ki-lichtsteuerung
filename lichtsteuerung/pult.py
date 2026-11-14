@@ -270,6 +270,10 @@ ANZAHL_EXECUTOREN = SEITEN * PRO_SEITE
 SONG_NUMMER = 99                # eigener Platz für Song-Start: nimmt keinem Fader etwas weg
 FLASH_MAX_S = 20.0              # eine hängende Flash-Taste geht von selbst aus
 EXECUTOR_ARTEN = {"sequenz": "Sequenz", "gruppe": "Gruppen-Master", "tempo": "Tempo"}
+# Eigene Presets (wie bei grandMA): gespeicherte Werte einer Feature-Art, zum Beispiel "Lieblingsblau"
+PRESET_ARTEN = {"dimmer": ("helligkeit",), "position": ("position", "punkt", "pan", "tilt"), "farbe": ("farbe",),
+                "gobo": ("gobo", "gobo_drehung"), "strahl": ("strobo_hz",)}
+PRESET_NAMEN = {"dimmer": "Helligkeit", "position": "Position", "farbe": "Farbe", "gobo": "Gobo", "strahl": "Strobo-Einstellung"}
 
 
 def tempo_faktor(fader: float) -> float:
@@ -411,6 +415,10 @@ class Pult:
         roh = daten.lese_json(self.belegung_pfad, {"executoren": []})
         self.grand = max(0.0, min(1.0, float(roh.get("grand", 1.0))))
         self._eintraege_anwenden(roh.get("executoren", []))
+        self.presets_pfad = Path(self.belegung_pfad).parent / "presets.json"
+        self.presets = [p for p in (daten.lese_json_sicher(self.presets_pfad, {}) or {}).get("presets", [])
+                        if isinstance(p, dict) and p.get("name") and p.get("art") in PRESET_ARTEN
+                        and isinstance(p.get("werte"), dict) and p["werte"]]
 
     def _eintraege_anwenden(self, eintraege: list) -> None:
         """Belegung aus der Datei (oder aus dem Rückgängig-Stapel) auf die Fader legen."""
@@ -709,6 +717,50 @@ class Pult:
 
     def merke_belegung(self, zusammen: bool = False) -> None:
         self._merken(("belegung", [e.eintrag() for e in self.executoren], self.grand), zusammen)
+
+    # --- Eigene Presets ---------------------------------------------------------
+
+    def preset_speichern(self, name: str, art: str) -> dict:
+        """Speichert die Werte dieser Art aus dem Programmer (für jedes gewählte Gerät) unter einem Namen."""
+        name = str(name or "").strip()
+        if not name:
+            raise ValueError("Bitte einen Namen für das Preset eingeben.")
+        if art not in PRESET_ARTEN:
+            raise ValueError("Presets gibt es für Dimmer, Position, Farbe, Gobo und Strahl.")
+        if not self.auswahl:
+            raise ValueError("Zuerst Geräte wählen und ihnen im Programmer Werte geben.")
+        werte = {}
+        for geraet_id in self.auswahl:
+            eintrag = {k: v for k, v in self.programmer.werte.get(geraet_id, {}).items() if k in PRESET_ARTEN[art]}
+            if eintrag:
+                werte[geraet_id] = eintrag
+        if not werte:
+            raise ValueError(f"Im Programmer steht für die gewählten Geräte noch keine {PRESET_NAMEN[art]}.")
+        preset = {"name": name, "art": art, "werte": werte}
+        self.presets = [p for p in self.presets if not (p["name"] == name and p["art"] == art)] + [preset]
+        self._presets_speichern()
+        return preset
+
+    def preset_anwenden(self, nummer: int) -> None:
+        """Preset auf die Auswahl: Geräte aus dem Preset bekommen ihren eigenen Wert, alle anderen den ersten."""
+        if not 0 <= nummer < len(self.presets):
+            raise ValueError("Dieses Preset gibt es nicht.")
+        if not self.auswahl:
+            raise ValueError("Zuerst Geräte oder eine Gruppe wählen.")
+        preset = self.presets[nummer]
+        erster = next(iter(preset["werte"].values()))
+        self.merke_programmer()
+        for geraet_id in self.auswahl:
+            self.programmer.setzen([geraet_id], copy.deepcopy(preset["werte"].get(geraet_id, erster)))
+
+    def preset_loeschen(self, nummer: int) -> None:
+        if not 0 <= nummer < len(self.presets):
+            raise ValueError("Dieses Preset gibt es nicht.")
+        del self.presets[nummer]
+        self._presets_speichern()
+
+    def _presets_speichern(self) -> None:
+        daten.schreibe_json(self.presets_pfad, {"presets": self.presets})
 
     def merke_programmer(self, zusammen: bool = False) -> None:
         self._merken(("programmer", copy.deepcopy(self.programmer.werte), copy.deepcopy(self.programmer.effekte),
@@ -1037,6 +1089,7 @@ class Pult:
             "haupt_cues": [c["name"] for c in haupt.sequenz["cues"]] if haupt.sequenz else [],
             "seite": self.seite, "seiten": SEITEN, "pro_seite": PRO_SEITE,
             "grand": round(self.grand, 3), "highlight": self.highlight, "oops": len(self.oops),
+            "presets": [{"nummer": i, "name": p["name"], "art": p["art"]} for i, p in enumerate(self.presets)],
             "effekt_tempo": round(self.effekte.faktor, 2) if self.effekte else 1.0,
             "tasten": {"look": self.look if self.tasten.index >= 0 else None, "farbe_1": self.farbe_1,
                        "farbe_2": self.farbe_2, "halten": {a: s is not None for a, s in self.halten.items()},

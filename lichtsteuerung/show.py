@@ -551,7 +551,7 @@ class Show:
                 gobos = [b["name"] for b in plaetze]
             if kanal["typ"] == "farbrad":
                 farbrad = [{"name": b.get("name"), "farbe": b.get("farbe")} for b in plaetze if b.get("farbe")]
-        return {"id": geraet["id"], "name": geraet["name"], "gruppen": self.patch.gruppen_von(geraet),
+        return {"id": geraet["id"], "name": geraet["name"], "gruppen": self.patch.alle_gruppen_von(geraet),
                 "dimmer": "dimmer" in typen or bool(typen & {"rot", "gruen", "blau", "weiss"}),
                 "farbe": "mischung" if typen & {"rot", "gruen", "blau"} else "rad" if farbrad else None,
                 "farbrad": farbrad, "beweglich": "pan" in typen or "tilt" in typen, "gobos": gobos,

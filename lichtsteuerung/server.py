@@ -304,9 +304,45 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.get("/api/pult")
     def pult_lesen():
         return {"geraete": [geraet_faehigkeiten(show, g) for g in show.patch.geraete],
-                "gruppen": show.patch.gruppen(), "positionen": list(show.positionen),
+                "gruppen": show.patch.gruppen(), "eigene_gruppen": list(show.patch.eigene_gruppen),
+                "positionen": list(show.positionen),
                 "farben": list(FARBNAMEN), "effekte": EFFEKT_ARTEN,
                 "sequenzen": show.pult.sequenzen.namen(), "status": show.pult.status()}
+
+    # --- Eigene Gruppen und Presets (wie bei grandMA) -------------------------
+
+    @app.post("/api/gruppen")
+    def gruppe_speichern(auftrag: dict = Body(...)):
+        """Die Auswahl (oder die genannten Geräte) als eigene Gruppe speichern, zum Beispiel "Front links"."""
+        with show.sperre:
+            show.patch.eigene_gruppe_speichern(str(auftrag.get("name", "")),
+                                               list(auftrag.get("geraete") or show.pult.auswahl))
+        return {"gruppen": show.patch.gruppen(), "eigene_gruppen": list(show.patch.eigene_gruppen)}
+
+    @app.delete("/api/gruppen/{name}")
+    def gruppe_loeschen(name: str):
+        with show.sperre:
+            show.patch.eigene_gruppe_loeschen(name)
+        return {"gruppen": show.patch.gruppen(), "eigene_gruppen": list(show.patch.eigene_gruppen)}
+
+    @app.post("/api/presets")
+    def preset_speichern(auftrag: dict = Body(...)):
+        """Werte einer Art (Dimmer, Position, Farbe, Gobo, Strahl) aus dem Programmer als Preset speichern."""
+        with show.sperre:
+            show.pult.preset_speichern(str(auftrag.get("name", "")), str(auftrag.get("art", "")))
+        return show.pult.status()
+
+    @app.post("/api/presets/{nummer}/anwenden")
+    def preset_anwenden(nummer: int):
+        with show.sperre:
+            show.pult.preset_anwenden(nummer)
+        return show.pult.status()
+
+    @app.delete("/api/presets/{nummer}")
+    def preset_loeschen(nummer: int):
+        with show.sperre:
+            show.pult.preset_loeschen(nummer)
+        return show.pult.status()
 
     @app.post("/api/auswahl")
     def auswahl(auftrag: dict = Body(...)):
