@@ -72,7 +72,7 @@ class Show:
         self.grenzen = Grenzen.laden(self.pfade.sicherheit)
         self.ausgabe = ausgabe or DmxAusgabe()
         art = (daten.lese_json_sicher(self.pfade.wurzel / "daten" / "dmx.json", {}) or {}).get("art", "auto")
-        if art in ("open", "pro"):
+        if art in ("open", "open2", "pro"):
             import lichtsteuerung.dmx_ausgabe as dmx_modul
             dmx_modul.ART_ERZWUNGEN = art          # von Hand gewählte Enttec-Art (nur dieser Rechner)
         self.update = Aktualisierer(self)

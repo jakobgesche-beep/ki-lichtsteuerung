@@ -39,14 +39,23 @@ def pro_paket(bild: bytes) -> bytes:
     return bytes([0x7E, 6, len(daten) & 0xFF, len(daten) >> 8]) + daten + b"\xE7"
 
 
-ART_ERZWUNGEN: Optional[str] = None     # "open" oder "pro": von Hand gewählt (Setup → DMX-Test), sonst erkannt
+ART_ERZWUNGEN: Optional[str] = None     # von Hand gewählt (Setup → DMX-Test), sonst erkannt:
+                                        # "open", "open2" (Open DMX mit Pause über die Bitrate) oder "pro"
+ARTEN = ("auto", "open", "open2", "pro")
 
 
 def ist_pro(beschreibung: Optional[str]) -> bool:
     """DMX USB Pro (hat einen eigenen Prozessor) oder Open DMX? Erkannt am Namen im USB, außer von Hand gewählt."""
-    if ART_ERZWUNGEN in ("open", "pro"):
+    if ART_ERZWUNGEN in ("open", "open2", "pro"):
         return ART_ERZWUNGEN == "pro"
     return "PRO" in (beschreibung or "").upper()
+
+
+def pause_ueber_bitrate() -> bool:
+    """Open DMX über den seriellen Port: Die Pause vor jedem Paket (Break) nicht über das Break-Signal des Treibers
+    machen, sondern eine 0 bei 57600 Baud schicken (156 µs unten, danach 35 µs oben). Das klappt auch dann, wenn
+    ein Treiber das Break-Signal nicht richtig weitergibt."""
+    return ART_ERZWUNGEN == "open2"
 
 
 # --- Weg 1: FTDI-Treiber (Windows) ---------------------------------------------------
@@ -249,9 +258,17 @@ class EnttecSeriell:
             self.leitung.write(pro_paket(bild))
             return
         self.leitung.flush()                       # erst muss das vorige Bild draußen sein
-        self.leitung.break_condition = True
-        time.sleep(0.00015)                        # Break: mindestens 88 µs
-        self.leitung.break_condition = False
+        if pause_ueber_bitrate():
+            time.sleep(0.001)                      # auch der Puffer im Chip ist leer
+            self.leitung.baudrate = 57600
+            self.leitung.write(b"\x00")             # Break (156 µs) und Mark after Break (35 µs)
+            self.leitung.flush()
+            time.sleep(0.0005)
+            self.leitung.baudrate = 250000
+        else:
+            self.leitung.break_condition = True
+            time.sleep(0.00015)                    # Break: mindestens 88 µs
+            self.leitung.break_condition = False
         self.leitung.write(b"\x00" + bytes(bild))
 
     def schliessen(self) -> None:
@@ -391,8 +408,8 @@ class DmxAusgabe:
     def art_setzen(self, art: str) -> None:
         """Enttec-Art von Hand: "auto", "open" (Open DMX) oder "pro" (DMX USB Pro). Verbindet neu, wenn es an ist."""
         global ART_ERZWUNGEN
-        if art not in ("auto", "open", "pro"):
-            raise ValueError("Enttec-Art ist auto, open oder pro.")
+        if art not in ARTEN:
+            raise ValueError("Enttec-Art ist auto, open, open2 oder pro.")
         ART_ERZWUNGEN = None if art == "auto" else art
         if self.gewuenscht:
             self.ausschalten()
@@ -401,7 +418,8 @@ class DmxAusgabe:
     def status(self) -> dict:
         protokoll = None
         if self.geraet is not None:
-            protokoll = "DMX USB Pro" if getattr(self.geraet, "pro", False) else "Open DMX"
+            protokoll = ("DMX USB Pro" if getattr(self.geraet, "pro", False)
+                         else "Open DMX (Pause über die Bitrate)" if pause_ueber_bitrate() else "Open DMX")
         return {"eingeschaltet": self.gewuenscht, "verbunden": self.verbunden, "weg": self.weg if self.verbunden else None,
                 "fehler": self.fehler, "gesendet": self.gesendet, "protokoll": protokoll,
                 "art": ART_ERZWUNGEN or "auto"}

@@ -89,3 +89,32 @@ def test_ueber_den_server_und_als_geraet_speichern(show, tmp_path):
     show.pult.look_druecken("ballade", time.monotonic())
     bild = show.baue_bild()
     assert bild[frei - 1 + 6] == 8 and bild[frei - 1 + 7] == 0
+
+
+def test_open_dmx_mit_pause_ueber_die_bitrate():
+    """Zweite Sende-Art: Break als 0 bei 57600 Baud, dann das Paket bei 250000 Baud."""
+    class Leitung:
+        def __init__(self):
+            self.baudrate, self.log = 250000, []
+        def flush(self):
+            pass
+        def write(self, daten):
+            self.log.append((self.baudrate, bytes(daten)))
+        @property
+        def break_condition(self):
+            return False
+        @break_condition.setter
+        def break_condition(self, wert):
+            self.log.append(("break", wert))
+
+    geraet = dmx_ausgabe.EnttecSeriell.__new__(dmx_ausgabe.EnttecSeriell)
+    geraet.pro, geraet.leitung = False, Leitung()
+    bild = bytes([255, 0, 7]) + bytes(509)
+    geraet.sende(bild)
+    assert geraet.leitung.log[:2] == [("break", True), ("break", False)]          # normal: Break-Signal
+    geraet.leitung.log.clear()
+    dmx_ausgabe.ART_ERZWUNGEN = "open2"
+    geraet.sende(bild)
+    assert geraet.leitung.log == [(57600, b"\x00"), (250000, b"\x00" + bild)]
+    assert geraet.leitung.baudrate == 250000
+    assert not dmx_ausgabe.ist_pro("FT232R USB UART")

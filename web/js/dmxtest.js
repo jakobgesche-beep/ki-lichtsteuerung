@@ -13,9 +13,10 @@ export function dmxTestSeite(wurzel) {
           <label>Enttec-Art <select id="dmx-art">
             <option value="auto">Automatisch erkennen</option>
             <option value="open">Open DMX USB (ohne eigenen Prozessor)</option>
+            <option value="open2">Open DMX USB, andere Sende-Art (wenn gar nichts reagiert)</option>
             <option value="pro">DMX USB Pro (mit eigenem Prozessor)</option></select></label>
-          <p class="leise">Sendet das Programm, aber kein Gerät reagiert: die andere Enttec-Art wählen. Steht auf dem
-            Enttec „Pro“, ist es die Pro-Art.</p>
+          <p class="leise">Sendet das Programm, aber kein Gerät reagiert: Steht auf dem Enttec „Pro“, die Pro-Art wählen.
+            Sonst „Open DMX, andere Sende-Art“ probieren (die Pause zwischen den Paketen wird dann anders gemacht).</p>
         </div>
         <div class="kasten">
           <h2>Einzelner Kanal</h2>
@@ -42,16 +43,19 @@ export function dmxTestSeite(wurzel) {
         <p class="zeile"><button id="gt-start" class="haupt">Test starten</button>
           <button id="gt-ende">Test beenden</button> <span id="gt-status" class="leise"></span></p>
         <div id="gt-bereich" hidden>
-          <p class="leise">Für jeden Kanal aus der Anleitung eintragen, was er macht. Dann helfen die Knöpfe.
-            Kanäle für Strobo, Auto/Programm und Reset unten lassen.</p>
+          <p class="leise"><b>Erst prüfen, ob überhaupt etwas ankommt:</b> „Kanal-Lauf“ drücken. Dann geht jeder Kanal
+            nacheinander 2 Sekunden hoch. Bei Kanal 1 und 2 (meist Pan und Tilt) muss sich der Kopf drehen, auch wenn er dunkel ist.
+            Oder die Regler mit der Maus ziehen. Danach für jeden Kanal aus der Anleitung eintragen, was er macht.</p>
           <div class="tabelle-huelle"><table class="gt-tabelle" id="gt-kanaele"></table></div>
           <p class="zeile">
+            <button data-gt="lauf" class="haupt" id="gt-lauf">Kanal-Lauf</button>
             <button data-gt="null">Alles auf 0</button>
             <button data-gt="licht">Licht an (weiß)</button>
             <button data-gt="rot">Rot</button><button data-gt="gruen">Grün</button><button data-gt="blau">Blau</button>
             <button data-gt="mitte">Mitte</button>
             <button data-gt="bewegen">Bewegen</button></p>
-          <p class="leise" id="gt-hilfe"></p>
+          <p id="gt-hilfe"></p>
+          <p class="leise" id="gt-gesendet"></p>
           <h3>Als Gerät speichern und in den Patch legen</h3>
           <div class="zeile">
             <label>Name <input id="gt-name" placeholder="zum Beispiel Moving Head Amazon"></label>
@@ -138,9 +142,13 @@ export function dmxTestSeite(wurzel) {
     if (!gt.laeuft) return;
     const kanaele = {};
     gt.werte.forEach((w, i) => { if (adresse() + i <= 512) kanaele[adresse() + i] = w; });
-    const pan = kanalVon("pan"), tilt = kanalVon("tilt");
-    const bewegen = gt.bewegen && (pan >= 0 || tilt >= 0) ? [pan >= 0 ? adresse() + pan : 0, tilt >= 0 ? adresse() + tilt : 0] : null;
-    await senden("/dmxtest", { kanaele, nur: true, bewegen }).catch(() => {});
+    let pan = kanalVon("pan"), tilt = kanalVon("tilt");
+    if (pan < 0 && tilt < 0) { pan = 0; tilt = anzahl() > 1 ? 1 : -1; }   // ohne Eintrag: Kanal 1 und 2 (meist Pan und Tilt)
+    const bewegen = gt.bewegen ? [pan >= 0 ? adresse() + pan : 0, tilt >= 0 ? adresse() + tilt : 0] : null;
+    let antwort;
+    try { antwort = await senden("/dmxtest", { kanaele, nur: true, bewegen }); } catch { return; }
+    const werte = gt.werte.map((_, i) => `${adresse() + i}: ${antwort.bild[adresse() + i - 1] ?? 0}`);
+    feld("gt-gesendet").textContent = `Geht gerade an das Enttec (DMX-Kanal: Wert): ${werte.join(" · ")} · alle anderen Kanäle 0`;
   }
 
   function gtZeigen() {
@@ -162,6 +170,29 @@ export function dmxTestSeite(wurzel) {
     } catch { feld("gt-frei").textContent = ""; }
   }
 
+  // Kanal-Lauf: jeder Kanal 2 s hoch, damit man ohne Anleitung sieht, ob etwas ankommt und was welcher Kanal tut
+  let lauf = null;
+  async function kanalLauf() {
+    if (lauf) { lauf.stopp = true; return; }
+    lauf = { stopp: false };
+    const vorher = [...gt.werte];
+    feld("gt-lauf").textContent = "Kanal-Lauf stoppen";
+    for (let i = 0; i < gt.werte.length && !lauf.stopp; i += 1) {
+      gt.werte = vorher.map((w, j) => (j === i ? 255 : w));
+      feld("gt-hilfe").innerHTML = `<b>Jetzt ist Kanal ${i + 1} oben (DMX ${adresse() + i}).</b> Bewegt sich etwas, oder leuchtet etwas? Merk dir, was passiert.`;
+      gtZeigen();
+      await gtSenden();
+      for (let t = 0; t < 20 && !lauf.stopp; t += 1) await new Promise((r) => setTimeout(r, 100));
+    }
+    gt.werte = vorher;
+    gtZeigen();
+    await gtSenden();
+    feld("gt-hilfe").innerHTML = lauf.stopp ? "Kanal-Lauf gestoppt."
+      : "Kanal-Lauf fertig. Hat sich gar nichts getan: Adresse und DMX-Betrieb am Gerät prüfen, ein anderes Kabel probieren, oder links die Enttec-Art „Open DMX, andere Sende-Art“ wählen und nochmal.";
+    feld("gt-lauf").textContent = "Kanal-Lauf";
+    lauf = null;
+  }
+
   function setzeArt(art, wert, nur = false) {
     gt.arten.forEach((a, i) => { if (a === art) gt.werte[i] = wert; else if (nur && ["rot", "gruen", "blau", "weiss"].includes(a)) gt.werte[i] = 0; });
   }
@@ -175,6 +206,7 @@ export function dmxTestSeite(wurzel) {
     gtFrei();
   };
   feld("gt-ende").onclick = async () => {
+    if (lauf) lauf.stopp = true;
     gt.laeuft = false; gt.bewegen = false;
     gtZeigen();
     await senden("/dmxtest", {}).catch(() => {});
@@ -198,7 +230,9 @@ export function dmxTestSeite(wurzel) {
     if (!was) return;
     const hilfe = [];
     if (was === "null") { gt.werte = gt.werte.map(() => 0); gt.bewegen = false; }
-    if (["licht", "rot", "gruen", "blau"].includes(was)) {
+    if (["licht", "rot", "gruen", "blau"].includes(was) && !gt.arten.some((a) => ["dimmer", "rot", "gruen", "blau", "weiss"].includes(a))) {
+      hilfe.push("Dafür muss das Programm wissen, welcher Kanal Dimmer und welche Farbe ist: In der Spalte „macht“ eintragen (steht in der Anleitung). Oder erst „Kanal-Lauf“ drücken.");
+    } else if (["licht", "rot", "gruen", "blau"].includes(was)) {
       if (kanalVon("dimmer") < 0) hilfe.push("Tipp: Keinen Kanal als „Dimmer“ eingetragen. Ohne Dimmer bleiben viele Geräte dunkel.");
       setzeArt("dimmer", 255);
       if (was === "licht") ["rot", "gruen", "blau", "weiss"].forEach((a) => setzeArt(a, 255));
@@ -209,8 +243,11 @@ export function dmxTestSeite(wurzel) {
     if (was === "mitte") { setzeArt("pan", 128); setzeArt("tilt", 128); setzeArt("pan_fein", 0); setzeArt("tilt_fein", 0); }
     if (was === "bewegen") {
       gt.bewegen = !gt.bewegen;
-      if (kanalVon("pan") < 0 && kanalVon("tilt") < 0) { gt.bewegen = false; hilfe.push("Erst bei „macht“ eintragen, welcher Kanal Pan und welcher Tilt ist."); }
+      if (gt.bewegen && kanalVon("pan") < 0 && kanalVon("tilt") < 0) {
+        hilfe.push("Kein Kanal als Pan/Tilt eingetragen: Kanal 1 und 2 fahren jetzt langsam hin und her (bei fast allen Moving Heads Pan und Tilt).");
+      }
     }
+    if (was === "lauf") { kanalLauf(); return; }
     feld("gt-hilfe").textContent = hilfe.join(" ");
     gtZeigen();
     gtSenden();
