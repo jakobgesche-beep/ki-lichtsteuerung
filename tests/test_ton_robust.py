@@ -82,7 +82,9 @@ class Wackelquelle:
 def test_abgerissener_eingang_kommt_von_selbst_wieder():
     betrieb = AudioBetrieb()
     betrieb.starten(Wackelquelle(20), "Eingang: X32")
-    time.sleep(1.0)
+    ende = time.monotonic() + 5                                # langsame Rechner (CI) brauchen länger
+    while time.monotonic() < ende and not betrieb.fehler:
+        time.sleep(0.05)
     assert betrieb.fehler and "Ton weg" in betrieb.fehler
     assert betrieb.aktuell() is None                           # Rückfall: Grundlicht, nicht Blackout
     ende = time.monotonic() + 7
