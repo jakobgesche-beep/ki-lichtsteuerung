@@ -37,6 +37,7 @@ export function dmxTestSeite(wurzel) {
           alle anderen Kanäle bleiben auf 0. Am Gerät im Menü die Adresse einstellen (meist „A001“ oder „d001“ = 1) und den
           DMX-Betrieb wählen (nicht Auto, Sound oder Slave). Die Kanal-Anzahl steht in der Anleitung (zum Beispiel 7CH, 9CH).</p>
         <div class="zeile">
+          <label>Gespeichertes Gerät laden <select id="gt-geraet"><option value="">– neues Gerät –</option></select></label>
           <label>Startadresse <input id="gt-adresse" type="number" min="1" max="512" value="1"></label>
           <label>Kanäle <input id="gt-anzahl" type="number" min="1" max="32" value="9"></label>
         </div>
@@ -56,11 +57,17 @@ export function dmxTestSeite(wurzel) {
             <button data-gt="bewegen">Bewegen</button></p>
           <p id="gt-hilfe"></p>
           <p class="leise" id="gt-gesendet"></p>
-          <h3>Als Gerät speichern und in den Patch legen</h3>
+          <h3>Speichern und in der Lichtshow benutzen</h3>
           <div class="zeile">
             <label>Name <input id="gt-name" placeholder="zum Beispiel Moving Head Amazon"></label>
+            <label>Wo ist das Gerät? <select id="gt-ort">
+              <option value="boden">steht auf dem Boden oder Tisch</option>
+              <option value="traverse">hängt an der Traverse</option>
+              <option value="stativ">steht auf einem Stativ</option></select></label>
             <button id="gt-speichern">Speichern und patchen</button>
           </div>
+          <p class="leise">Danach „Test beenden“: Dann steuert die Lichtshow das Gerät wie alle anderen
+            (Moving Heads in der Gruppe „Spots“: Look-Tasten, Song-Start, Automatik, Follow-Spot, Licht-Chat).</p>
           <p class="leise" id="gt-frei"></p>
         </div>
       </div>
@@ -252,6 +259,42 @@ export function dmxTestSeite(wurzel) {
     gtZeigen();
     gtSenden();
   });
+  // --- Gespeichertes Gerät laden: Kanäle wieder richtigstellen, ohne ein zweites Gerät anzulegen ------------------
+  let geladen = null;                           // {id, typ} des geladenen Geräts aus dem Patch
+  async function geraeteLaden() {
+    try {
+      const { geraete } = await api("/patch");
+      const eigene = geraete.filter((g) => g.typ.startsWith("eigene/"));
+      feld("gt-geraet").innerHTML = `<option value="">– neues Gerät –</option>` + eigene.map((g) =>
+        `<option value="${t(g.id)}" ${geladen?.id === g.id ? "selected" : ""}>${t(g.name)} (Adresse ${g.adresse})</option>`).join("");
+      return eigene;
+    } catch { return []; }
+  }
+  feld("gt-geraet").onchange = async () => {
+    const id = feld("gt-geraet").value;
+    if (!id) { geladen = null; feld("gt-speichern").textContent = "Speichern und patchen"; return; }
+    const { geraete } = await api("/patch");
+    const g = geraete.find((x) => x.id === id);
+    if (!g) return;
+    const typ = await api("/katalog/" + g.typ.split("/").map(encodeURIComponent).join("/"));
+    const modus = typ.modi.find((m) => m.name === g.modus) ?? typ.modi[0];
+    const bekannt = new Set(ARTEN.map(([a]) => a));
+    gt.arten = modus.kanaele.map((k) => (bekannt.has(typ.kanaele[k]?.typ) ? typ.kanaele[k].typ : "sonstiges"));
+    gt.werte = modus.kanaele.map((k) => typ.kanaele[k]?.standard ?? 0);
+    geladen = { id: g.id, typ: g.typ };
+    feld("gt-adresse").value = g.adresse;
+    feld("gt-anzahl").value = modus.kanaele.length;
+    feld("gt-name").value = g.name;
+    feld("gt-ort").value = ["traverse", "stativ", "boden"].includes(g.ort?.ort) ? g.ort.ort : "boden";
+    feld("gt-speichern").textContent = "Änderungen speichern";
+    gt.laeuft = true;
+    gtTabelle();
+    feld("gt-bereich").hidden = false;
+    gtZeigen();
+    await gtSenden();
+    feld("gt-hilfe").textContent = `„${g.name}“ geladen. Kanäle prüfen (zum Beispiel mit „Kanal-Lauf“), bei „macht“ korrigieren, dann „Änderungen speichern“.`;
+  };
+
   feld("gt-speichern").onclick = async () => {
     const name = feld("gt-name").value.trim();
     if (!name) { feld("gt-hilfe").textContent = "Bitte einen Namen für das Gerät eingeben."; return; }
@@ -271,19 +314,36 @@ export function dmxTestSeite(wurzel) {
       reihe.push(kname);
     });
     const bewegt = gt.arten.includes("pan") || gt.arten.includes("tilt");
-    const id = "eigene/" + name.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const farben = ["rot", "gruen", "blau", "weiss"].filter((a) => gt.arten.includes(a));
+    const warnung = farben.length && !gt.arten.includes("rot")
+      ? " Achtung: Kein Kanal ist „Rot“ eingetragen. Rote und warme Farben bleiben dann dunkel (die Show nimmt oft Rot)." : "";
+    const id = geladen?.typ ?? "eigene/" + name.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const modus = `${reihe.length} Kanäle`;
     try {
       await senden("/katalog", { id, hersteller: "Eigene", name, kategorien: [bewegt ? "Moving Head" : "Color Changer"],
         physik: { gewicht_kg: null, abstrahlwinkel_grad: null }, kanaele,
-        modi: [{ name: `${reihe.length} Kanäle`, kanaele: reihe }],
+        modi: [{ name: modus, kanaele: reihe }],
         quelle: { art: "eigener Eintrag", name: "Technik-AG (Ein Gerät testen)" }, handbuch_geprueft: false,
         _hinweis: "Mit „Ein Gerät testen“ angelegt. Pan 540°, Tilt 270° angenommen: mit der Anleitung vergleichen." });
-      const { adresse: frei } = await api(`/patch/naechste_freie?kanaele=${reihe.length}`);
-      await senden("/patch", { typ: id, modus: `${reihe.length} Kanäle`, anzahl: 1, name, start: frei,
-        gruppen: [bewegt ? "Spots" : "Farb-PARs"], ort: "traverse" });
-      feld("gt-hilfe").textContent = `Gespeichert und gepatcht auf Adresse ${frei}. Jetzt am Gerät die Adresse ${frei} einstellen. Im Patch (Setup → Patch) kannst du Ort und Gruppe ändern.`;
+      if (geladen) {
+        await api("/patch/" + encodeURIComponent(geladen.id), { method: "PATCH",
+          daten: { name, modus, adresse: adresse(), ort: feld("gt-ort").value } });
+        feld("gt-hilfe").textContent = `Gespeichert: „${name}“ auf Adresse ${adresse()} nutzt jetzt diese Kanäle.${warnung} ` +
+          "Jetzt „Test beenden“, dann steuert die Lichtshow das Gerät.";
+      } else {
+        const { adresse: frei } = await api(`/patch/naechste_freie?kanaele=${reihe.length}`);
+        const antwort = await senden("/patch", { typ: id, modus, anzahl: 1, name, start: frei,
+          gruppen: [bewegt ? "Spots" : "Farb-PARs"], ort: feld("gt-ort").value });
+        const neu = antwort.geraete.find((g) => g.typ === id && g.adresse === frei);
+        if (neu) geladen = { id: neu.id, typ: id };
+        feld("gt-speichern").textContent = "Änderungen speichern";
+        feld("gt-hilfe").textContent = `Gespeichert und gepatcht auf Adresse ${frei}. Am Gerät die Adresse ${frei} einstellen.${warnung} ` +
+          "Dann „Test beenden“: Die Lichtshow steuert das Gerät wie alle anderen.";
+      }
+      await geraeteLaden();
     } catch { /* die Meldung kommt von senden() */ }
   };
+  geraeteLaden();
 
   const ART = {
     software: "noch nicht eingemessen. Blitzt trotzdem schon: Das Programm schaltet seine Helligkeit selbst, höchstens 3-mal pro Sekunde.",
