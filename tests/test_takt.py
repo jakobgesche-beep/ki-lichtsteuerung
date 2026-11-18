@@ -141,3 +141,17 @@ def test_song_spieler_kennt_die_stelle_im_takt():
     assert spieler.takt_stelle() == pytest.approx(9.5)
     spieler.folger.wartet = True                             # Band hat aufgehört: keine Stelle
     assert spieler.takt_stelle() is None
+
+
+def test_rechenfehler_haelt_den_ton_nicht_an(monkeypatch):
+    """Sicherer Rückfall: Geht im Takt-Folger etwas schief, zählt er neu ein, die Analyse läuft weiter."""
+    from lichtsteuerung.audio import songanalyse
+    ton, _ = testmusik.song("rock", 120, takte=6, seed=2)
+    analyse = Analyse(TaktFolger())
+    abspielen(ton[: len(ton) // 2], analyse)
+
+    def kaputt(*_, **__):
+        raise ValueError("Testfehler")
+    monkeypatch.setattr(songanalyse, "beats_finden", kaputt)
+    _, _, werte = abspielen(ton[len(ton) // 2:], analyse)
+    assert werte and analyse.beat.tempo == 0          # neu eingezählt, aber kein Absturz

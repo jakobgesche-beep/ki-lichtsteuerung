@@ -17,6 +17,7 @@ Vorher (bis 2.2) kam ein Beat bei jedem lauten Einsatz, und das Tempo sprang: Be
 """
 from __future__ import annotations
 
+import logging
 import math
 from collections import deque
 from typing import Optional
@@ -70,6 +71,7 @@ class TaktFolger:
         self.proben = 0
         self.seit_rechnung = 0
         self.rechnungen = 0
+        self.fehler_gemeldet = -999.0
         self.pruef_roh: Optional[float] = None               # letzte Prüfung: so viel BPM kam roh heraus
         self.pruefungen: deque = deque(maxlen=4)              # Ergebnisse der letzten Prüfungen (Faktor)
         self.pruef_faktor = 1.0                               # so viel schneller ist es wirklich
@@ -117,7 +119,14 @@ class TaktFolger:
         jetzt = self.proben / ABTASTRATE
         if self.seit_rechnung >= RECHNEN_ALLE and len(self.baender) >= MIN_S * songanalyse.RATE:
             self.seit_rechnung = 0
-            self._rechnen(jetzt)
+            try:
+                self._rechnen(jetzt)
+            except Exception:
+                # Sicherer Rückfall: Ein Rechenfehler darf nie den Ton anhalten. Neu einzählen und weiter.
+                if jetzt - self.fehler_gemeldet >= 60.0:      # ins Logbuch höchstens einmal pro Minute
+                    logging.exception("Takt-Folger")
+                    self.fehler_gemeldet = jetzt
+                self.neu_anfangen()
         beat, self.takt_eins = False, False
         if self.naechster is not None and self.periode:
             if jetzt >= self.naechster:
