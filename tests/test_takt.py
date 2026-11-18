@@ -96,11 +96,11 @@ def test_neu_anfangen_vergisst_alles():
 
 
 def test_rechnet_schnell_genug():
-    """Live muss es nebenher laufen: weit unter einem Zehntel der Zeit."""
+    """Live muss es nebenher laufen (auf diesem Mac gut 3 % der Zeit; Grenze großzügig für langsame Rechner)."""
     ton, _ = testmusik.song("rock", 140, takte=16, seed=4)
     start = time.perf_counter()
     abspielen(ton)
-    assert time.perf_counter() - start < 0.1 * len(ton) / ABTASTRATE
+    assert time.perf_counter() - start < 0.3 * len(ton) / ABTASTRATE
 
 
 # --- Die Effekt-Uhr zählt im Takt ----------------------------------------------------

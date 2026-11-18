@@ -27,7 +27,9 @@ from .audio.analyse import Analyse, EigeneBeatErkennung
 from .audio.quellen import ABTASTRATE, BLOCK, lade_datei
 from .weitere import WeitereAufnahmen
 
-ANALYSE_VERSION = 3          # 3: mit den großen Schlägen der Band (schlaege_s)
+ANALYSE_VERSION = 4          # 3: mit den großen Schlägen der Band (schlaege_s); 4: Punk-Tempo, Eins ohne
+                             # Becken-Rauschen, Phrasen in zusammengelegten Teilen (2.3.0)
+LICHT_VERSION = 2            # 2: Song-Licht wie von einem Lichtdesigner (2.3.0). Ältere Shows: "Show neu bauen"
 KLASSEN = ("ruhig", "mittel", "stark", "hoehepunkt")
 
 
@@ -348,7 +350,7 @@ def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optio
         teil["cue"] = neue_stelle[teil.pop("_erstes")]
     return {"name": analyse["name"], "cues": [ereignisse[i][1] for i in reihenfolge],
             "zeitcode": [ereignisse[i][0] for i in reihenfolge],
-            "farben": [farbe_a, farbe_b],
+            "farben": [farbe_a, farbe_b], "licht_version": LICHT_VERSION,
             "song": {"probe": analyse["name"], "tempo_bpm": analyse["tempo_bpm"], "dauer_s": analyse["dauer_s"],
                      "musik_von_s": analyse.get("musik_von_s", 0.0), "musik_bis_s": analyse.get("musik_bis_s"),
                      "teile": karte},

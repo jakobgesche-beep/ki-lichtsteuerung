@@ -49,6 +49,8 @@ def pruefen(show) -> list:
         analyse = show.proben.lesen(song["name"]) or {}
         if song.get("alte_analyse"):
             punkt("Songs", "hinweis", f"„{song['name']}“: alte Erkennung. In der Probe „Show neu bauen“ drücken.")
+        elif song.get("altes_licht"):
+            punkt("Songs", "hinweis", f"„{song['name']}“: Das neue Song-Licht (ab 2.3.0) kommt mit „Show neu bauen“ in der Probe.")
         elif not analyse.get("von_hand"):
             punkt("Songs", "hinweis", f"„{song['name']}“: Teile noch nicht von Hand geprüft (Probe → Teile richtigstellen).")
         else:

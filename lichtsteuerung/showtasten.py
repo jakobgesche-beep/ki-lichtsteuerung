@@ -23,10 +23,10 @@ from .render import Eigenschaften
 
 LOOKS = [
     {"id": "ruhig", "name": "Ruhig", "text": "Farbe 2 steht auf der Band und atmet langsam", "taste": "1"},
-    {"id": "strophe", "name": "Strophe", "text": "Farbe 1 steht, pulsiert im Beat", "taste": "2"},
+    {"id": "strophe", "name": "Strophe", "text": "Farbe 1, zieht langsam, kleiner Puls auf der Eins", "taste": "2"},
     {"id": "aufbau", "name": "Aufbau", "text": "Weiß in die Mitte, Puls auf jedem Schlag", "taste": "3"},
-    {"id": "refrain", "name": "Refrain", "text": "Beide Farben, langsamer Schwenk, Gobos", "taste": "4"},
-    {"id": "hoehepunkt", "name": "Höhepunkt", "text": "Kreis, Farben tauschen, Strobo blitzt", "taste": "5"},
+    {"id": "refrain", "name": "Refrain", "text": "Spots Farbe 2 über Farbe 1, langsamer Schwenk, Puls auf 1 und 3", "taste": "4"},
+    {"id": "hoehepunkt", "name": "Höhepunkt", "text": "Beide Farben, Kreise, Puls auf jedem Schlag, Strobo blitzt", "taste": "5"},
     {"id": "drop", "name": "Drop!", "text": "Weißer Schlag, dann schnelle Acht, alles voll", "taste": "6"},
     {"id": "solo", "name": "Solo", "text": "Weißer Spot auf die Band, Farbe 2 leise dahinter", "taste": "7"},
     {"id": "ballade", "name": "Ballade", "text": "Warmweiß, steht, kaum Bewegung", "taste": "8"},

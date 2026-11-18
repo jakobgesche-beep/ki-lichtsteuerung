@@ -162,14 +162,15 @@ export function showSeite(wurzel) {
     const nachName = new Map(songs.map((s) => [s.name, s]));
     const geordnet = reihenfolge.map((n) => nachName.get(n)).filter(Boolean)
       .concat(songs.filter((s) => !reihenfolge.includes(s.name)));
-    const stand = JSON.stringify([geordnet.map((s) => s.name), ordnen, songs.map((s) => s.alte_analyse)]);
+    const stand = JSON.stringify([geordnet.map((s) => s.name), ordnen, songs.map((s) => [s.alte_analyse, s.altes_licht])]);
     if (stand === setlistStand) return;
     setlistStand = stand;
     feld("songliste").innerHTML = geordnet.map((s, i) => `
       <div class="songplatz">
         <button class="songknopf" data-song="${t(s.name)}"><span><span class="setlist-nr">${i + 1}</span> ▶ <b>${t(s.name)}</b></span>
           <span class="leise">${s.dauer_s ? minuten(s.dauer_s) : ""} · ${s.tempo_bpm ? Math.round(s.tempo_bpm) + " BPM" : ""} · ${s.teile.length} Teile</span>
-          ${s.alte_analyse ? `<span class="alt-hinweis">Alte Erkennung: in der Probe „Show neu bauen“ drücken</span>` : ""}</button>
+          ${s.alte_analyse ? `<span class="alt-hinweis">Alte Erkennung: in der Probe „Show neu bauen“ drücken</span>`
+            : s.altes_licht ? `<span class="alt-hinweis">Neues Song-Licht: in der Probe „Show neu bauen“ drücken</span>` : ""}</button>
         ${ordnen ? `<span class="ordnen"><button class="klein" data-hoch="${i}" ${i === 0 ? "disabled" : ""}>↑</button>
           <button class="klein" data-runter="${i}" ${i === geordnet.length - 1 ? "disabled" : ""}>↓</button></span>` : ""}
       </div>`).join("")

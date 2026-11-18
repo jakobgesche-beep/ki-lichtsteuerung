@@ -31,6 +31,7 @@ import numpy as np
 from . import daten
 from .audio import erkennen, folgen
 from .audio.quellen import lade_datei
+from .probe import LICHT_VERSION
 from .pult import SONG_NUMMER
 
 MODI = ("automatisch", "vorschlagen", "aus")
@@ -102,7 +103,8 @@ class SongSpieler:
             karte = karte_aus(sequenz, analyse)
             ergebnis.append({"name": name, "tempo_bpm": karte.get("tempo_bpm"), "dauer_s": karte.get("dauer_s"),
                              "teile": karte.get("teile", []),
-                             "alte_analyse": (analyse or {}).get("version", 1) < 2})
+                             "alte_analyse": (analyse or {}).get("version", 1) < 2,
+                             "altes_licht": sequenz.get("licht_version", 1) < LICHT_VERSION})
         return ergebnis
 
     def _referenz(self, name: str) -> tuple:
