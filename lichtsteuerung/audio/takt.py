@@ -72,6 +72,7 @@ class TaktFolger:
         self.seit_rechnung = 0
         self.rechnungen = 0
         self.fehler_gemeldet = -999.0
+        self.klarheit_jetzt = 1.0                             # wie klar der Takt in den letzten 8 s ist (0 bis 1)
         self.pruef_roh: Optional[float] = None               # letzte Prüfung: so viel BPM kam roh heraus
         self.pruefungen: deque = deque(maxlen=4)              # Ergebnisse der letzten Prüfungen (Faktor)
         self.pruef_faktor = 1.0                               # so viel schneller ist es wirklich
@@ -263,6 +264,7 @@ class TaktFolger:
 
     def _rechnen(self, jetzt: float) -> None:
         if self._still():
+            self.klarheit_jetzt = 0.0
             self.naechster, self.periode, self.ak_summe = None, None, None
             self.oktaven.clear()
             self.eins_phase = None
@@ -277,6 +279,8 @@ class TaktFolger:
         # so sagen einzelne wirre Stellen nicht gleich ein anderes Tempo.
         kurve_t = songanalyse.tempo_kurve(baender)
         ak = songanalyse._autokorrelation(kurve_t, self.max_lag) if len(kurve_t) > self.max_lag else None
+        # Wie klar ist der Takt gerade jetzt (nur dieses Fenster)? Für die Rede-Erkennung.
+        self.klarheit_jetzt = songanalyse.tempo_aus_autokorrelation(ak)[1] if ak is not None else 0.0
         if ak is not None:
             # Am Anfang zählt jede Rechnung gleich viel (das Intro soll nicht allein bestimmen), später die
             # letzten Sekunden mehr.

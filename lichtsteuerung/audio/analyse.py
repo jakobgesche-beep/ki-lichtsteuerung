@@ -4,7 +4,7 @@
     tempo_bpm   Schläge pro Minute
     bass, mitte, hoehe     wie stark diese Bereiche sind, je 0 bis 1
     energie     geglättete Gesamtenergie, 0 bis 1
-    leise, rede sind die Regeln für das ruhige Grundlicht
+    leise, rede sind die Regeln für das ruhige Grundlicht (Rede: kurze Pausen zwischen den Silben, kein klarer Takt)
 
 Bass, Mitten und Höhen kommen aus einer eigenen FFT mit numpy. Beat, Tempo und die Eins im Takt
 liefert der Takt-Folger (takt.py). aubio und EigeneBeatErkennung gibt es noch zum Vergleichen
@@ -28,6 +28,12 @@ RUHE_S = 0.8                       # so lange muss es still sein
 KEIN_BEAT_S = 3.0                  # so lange ohne Beat, bevor es Rede sein kann
 APPLAUS_FLACH = 0.45               # Klatschen ~0,6; Rockmusik höchstens ~0,35 (gemessen an "Hh")
 NEUER_SONG_S = 2.0                 # so lange Applaus oder Stille: Der Takt wird neu gezählt
+# Rede: Zwischen den Silben ist es kurz fast still. Gemessen: Sprache 28 bis 39 % solcher Momente (auch mit Hall
+# und Publikum noch über 23 %), die Band in "Hh" 0 bis 6 %. Dazu muss der Takt unklar sein, sonst wäre es
+# sparsame Musik mit Pausen zwischen den Schlägen.
+REDE_PAUSEN = 0.23
+REDE_KLARHEIT = 0.3
+REDE_S = 2.0                       # so lange muss es nach Rede aussehen
 
 
 @dataclass
@@ -327,6 +333,9 @@ class Analyse:
         self.flach = 0.0
         self.zeit_pause = 0.0          # so lange schon Applaus oder Stille
         self.neu_gezaehlt = False
+        self.pegel_verlauf = deque(maxlen=int(3 * ABTASTRATE / BLOCK))   # Pegel der letzten 3 s
+        self.pausen_anteil = 0.0
+        self.zeit_rede = 0.0
 
     def verarbeite(self, block: np.ndarray) -> Messwerte:
         dauer = len(block) / ABTASTRATE
@@ -376,7 +385,7 @@ class Analyse:
         self.anteil_mitte += (self.werte["mitte"] / gesamt - self.anteil_mitte) * 0.02
         leise = self.zeit_still >= RUHE_S
         # Grobe Schätzung. Sicher erkennt es später das X32 (offenes Rednerpult).
-        rede = not leise and self.zeit_ohne_beat >= KEIN_BEAT_S and self.anteil_mitte > 0.45
+        rede = self._rede(pegel, leise, dauer)
         if not getattr(self.beat, "ist_uhr", False):      # der Takt-Folger zählt selbst mit, sonst überbrückt die Uhr
             beat = self.uhr.takt(beat, self.tempo, dauer)
         eins = beat and bool(getattr(self.beat, "takt_eins", False))
@@ -395,6 +404,21 @@ class Analyse:
                          rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
                          vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3),
                          schlag=schlag and not leise, applaus=applaus, eins=eins)
+
+    def _rede(self, pegel: float, leise: bool, dauer: float) -> bool:
+        """Spricht gerade jemand (Ansage zwischen den Songs)?"""
+        self.pegel_verlauf.append(pegel)
+        if len(self.pegel_verlauf) == self.pegel_verlauf.maxlen:
+            werte = np.asarray(self.pegel_verlauf)
+            self.pausen_anteil = float(np.mean(werte < 0.5 * werte.mean()))
+        klarheit = getattr(self.beat, "klarheit_jetzt", None)
+        if klarheit is None:
+            # Ältere Beat-Erkennungen: grobe Schätzung wie bis 2.2 (keine Beats und viel Mitten)
+            return not leise and self.zeit_ohne_beat >= KEIN_BEAT_S and self.anteil_mitte > 0.45
+        sieht_aus_wie_rede = (not leise and self.pausen_anteil > REDE_PAUSEN and klarheit < REDE_KLARHEIT
+                              and self.flach <= APPLAUS_FLACH)
+        self.zeit_rede = self.zeit_rede + dauer if sieht_aus_wie_rede else 0.0
+        return self.zeit_rede >= REDE_S
 
     def _schlag(self, spektrum: np.ndarray, dauer: float) -> bool:
         """Großer Schlag: plötzlich viel mehr Ton über alle Höhen (Becken, Band gemeinsam), 3-mal so stark

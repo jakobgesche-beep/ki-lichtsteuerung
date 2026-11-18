@@ -155,3 +155,31 @@ def test_rechenfehler_haelt_den_ton_nicht_an(monkeypatch):
     monkeypatch.setattr(songanalyse, "beats_finden", kaputt)
     _, _, werte = abspielen(ton[len(ton) // 2:], analyse)
     assert werte and analyse.beat.tempo == 0          # neu eingezählt, aber kein Absturz
+
+
+# --- Rede zwischen den Songs ---------------------------------------------------------
+
+def test_rede_wird_erkannt():
+    ton = testmusik.rede(25, seed=2)
+    _, _, werte = abspielen(ton)
+    nach_5_s = werte[int(5 * ABTASTRATE / BLOCK):]
+    assert sum(w.rede for w in nach_5_s) / len(nach_5_s) >= 0.8
+
+
+@pytest.mark.parametrize("stil,tempo", [("rock", 120), ("ballade", 72), ("akustik", 96), ("sechsachtel", 60)])
+def test_musik_ist_keine_rede(stil, tempo):
+    ton, _ = testmusik.song(stil, tempo, takte=16, seed=3)
+    _, _, werte = abspielen(ton)
+    assert not any(w.rede for w in werte)
+
+
+def test_ansage_nach_song_und_applaus():
+    song, _ = testmusik.song("rock", 120, takte=12, seed=1)
+    applaus = livefassung.publikum(4 * ABTASTRATE, seed=3) * 0.2
+    ansage = testmusik.rede(20, seed=3)
+    _, _, werte = abspielen(np.concatenate([song, applaus, ansage]).astype(np.float32))
+    ende_song = int(len(song) / BLOCK)
+    beginn_ansage = int((len(song) + len(applaus)) / BLOCK)
+    assert not any(w.rede for w in werte[:ende_song])
+    spaeter = werte[beginn_ansage + int(6 * ABTASTRATE / BLOCK):]
+    assert sum(w.rede for w in spaeter) / len(spaeter) >= 0.8

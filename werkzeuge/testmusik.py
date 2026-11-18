@@ -193,3 +193,32 @@ def song_mit_form(tempo: float = 120.0, form: list = None, seed: int = 1, vorlau
     ton = ton / (np.max(np.abs(ton)) + 1e-9) * 0.8
     return ton.astype(np.float32), {"beats": [round(b, 4) for b in beats[:-1]],
                                     "einsen": [round(b, 4) for b in beats[:-1:4]], "tempo": tempo, "teile": teile}
+
+
+def rede(sekunden: float = 20.0, seed: int = 1) -> np.ndarray:
+    """Künstliche Sprache: Silben (Stimme mit Grundton und Formanten), kurze Lücken, Pausen zwischen den Sätzen.
+    Unregelmäßig wie echte Rede, also ohne festen Takt."""
+    rng = np.random.default_rng(seed)
+    ton = np.zeros(int(sekunden * RATE))
+    t, silbe = 0.3, 0
+    while t < sekunden - 0.5:
+        dauer = rng.uniform(0.12, 0.26)
+        n = int(dauer * RATE)
+        zeit = np.arange(n) / RATE
+        f0 = rng.uniform(110, 190) * (1 + 0.04 * np.sin(2 * np.pi * rng.uniform(3, 6) * zeit))
+        phase = 2 * np.pi * np.cumsum(f0) / RATE
+        formanten = rng.choice([(700, 1200), (400, 2000), (300, 900), (500, 1700), (600, 1000)])
+        stimme = np.zeros(n)
+        for k in range(1, 25):
+            f = f0.mean() * k
+            gewicht = sum(np.exp(-0.5 * ((f - fm) / 120) ** 2) for fm in formanten) + 0.05 / k
+            stimme += gewicht * np.sin(k * phase)
+        huelle = np.minimum(1, zeit / 0.02) * np.minimum(1, (dauer - zeit) / 0.05)
+        _einfuegen(ton, 0.3 * stimme * huelle * rng.uniform(0.6, 1.0), t)
+        silbe += 1
+        t += dauer + rng.uniform(0.03, 0.09)
+        if silbe % int(rng.integers(4, 9)) == 0:
+            t += rng.uniform(0.3, 0.7)                 # Pause zwischen zwei Sätzen
+    ton = ton / (np.max(np.abs(ton)) + 1e-9) * 0.7
+    ton += 0.003 * rng.standard_normal(len(ton))          # Raumrauschen am Mikrofon (nie ganz still)
+    return ton.astype(np.float32)
