@@ -26,6 +26,8 @@ import math
 import time
 from typing import Optional
 
+import numpy as np
+
 from . import daten
 from .audio import erkennen, folgen
 from .audio.quellen import lade_datei
@@ -66,6 +68,8 @@ class SongSpieler:
         self.nummer = SONG_NUMMER
         self.karte: dict = {}
         self.zeitcode: list = []
+        self.takt_beats: list = []           # Beats der Probe (Sekunden)
+        self.takt_eins_index: Optional[int] = None   # welcher davon die erste Takt-Eins ist
         self.letzte_zeit: Optional[float] = None
         self._merkmale = {}          # Name -> (Dateistand, Merkmale, Pegel), damit Start schnell geht
         self.erkenner = erkennen.SongErkenner()
@@ -139,6 +143,7 @@ class SongSpieler:
             self.start_wie = wie
             analyse = self.show.proben.lesen(name) or {}
             self.karte = dict(karte_aus(sequenz, analyse))
+            self._takt_merken(analyse)
             if self.karte.get("musik_bis_s") is None:
                 self.karte["musik_bis_s"] = analyse.get("musik_bis_s")   # Show noch vor Version 2.2 gebaut
             self.zeitcode = list(sequenz["zeitcode"])
@@ -367,6 +372,27 @@ class SongSpieler:
         except Exception:
             logging.exception("Song-Folger")
             return self.folger.stelle
+
+    def _takt_merken(self, analyse: dict) -> None:
+        """Beats und Takt-Einsen der Probe, damit die Effekte im Takt der Probe zählen."""
+        beats = [float(b) for b in analyse.get("beats_s") or []]
+        einsen = [float(e) for e in analyse.get("einsen_s") or []]
+        self.takt_beats, self.takt_eins_index = beats, None
+        if len(beats) >= 8 and einsen:
+            self.takt_eins_index = min(range(len(beats)), key=lambda i: abs(beats[i] - einsen[0]))
+
+    def takt_stelle(self) -> Optional[float]:
+        """Wo im Takt der Probe sind wir? In Beats; die Takt-Einsen der Probe liegen auf 0, 4, 8 ...
+        (der Song-Folger kennt die Stelle auf etwa 20 bis 70 ms genau, siehe ANNAHMEN.md)."""
+        beats = getattr(self, "takt_beats", None)
+        if (self.folger is None or not beats or self.takt_eins_index is None or self.folger.wartet
+                or self.folger.bereit):
+            return None
+        stelle = self.folger.stelle
+        if not beats[0] - 1.0 <= stelle <= beats[-1] + 1.0:
+            return None
+        nummer = float(np.interp(stelle, beats, np.arange(len(beats))))
+        return nummer - self.takt_eins_index
 
     def tempo(self) -> Optional[float]:
         """Das Tempo der Band laut Song-Folger: Tempo der Probe mal wie viel schneller sie spielt."""

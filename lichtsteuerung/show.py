@@ -84,6 +84,7 @@ class Show:
         self.proben = Proben(self.pfade.proben)
         self.song = SongSpieler(self)
         self._beat = False                 # kam in diesem Bild ein Schlag? (für das Einrasten der Effekte)
+        self._eins = False                 # ... und war es die Eins im Takt?
         self._letztes_tempo: Optional[float] = None
         self.aufnahme_name: Optional[str] = None
         self.aufnahme_marken = []
@@ -174,7 +175,8 @@ class Show:
             zustand = self._automatik(jetzt)
             if not self._test_laeuft():
                 self.zwischenlicht.takt(jetzt, self._messwerte)
-                zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm(), self._beat)
+                zustand = self.pult.anwenden(zustand, jetzt, self._musik_bpm(), self._beat, self._eins,
+                                             self.song.takt_stelle() if self._beat else None)
                 self._blind_vorschau(zustand if self.pult.programmer.blind else None, jetzt)
                 zustand = self._software_blitz(zustand, jetzt)
                 zustand = self.follow_spot.anwenden(zustand)     # Follow-Spot und Einmessen liegen über allem,
@@ -361,7 +363,7 @@ class Show:
         return self.test_geraet is not None or bool(self.test_kanaele) or self.test_nur
 
     def _automatik(self, jetzt: float) -> dict:
-        self._beat = False
+        self._beat, self._eins = False, False
         clock_beat = self.midi.beat_abholen()          # MIDI-Clock: genaue Schläge statt gehörter
         if self._test_laeuft():
             zustand = {}
@@ -371,12 +373,14 @@ class Show:
         if not self.automatik_an:
             werte = self._mit_clock(self.audio.abholen(jetzt), clock_beat)   # Beats trotzdem abholen
             self._beat = bool(werte is not None and werte.beat) if clock_beat is None else clock_beat
+            self._eins = bool(werte is not None and werte.eins) if clock_beat is None else False
             self._messwerte = werte
             return {}
         try:
             messwerte = self._mit_clock(self.audio.abholen(jetzt), clock_beat)
             self._messwerte = messwerte
             self._beat = bool(messwerte is not None and messwerte.beat) if clock_beat is None else clock_beat
+            self._eins = bool(messwerte is not None and messwerte.eins) if clock_beat is None else False
             return self.engine.bewerte(messwerte, self.profil, jetzt, self.overrides.pause)
         except Exception:
             # Sicherer Rückfall: Auch ein Fehler in den Regeln führt zum Grundlicht.
@@ -603,7 +607,13 @@ class Show:
         analyse = self.proben.neu_analysieren(name)
         if analyse is None:
             raise ValueError(f"Probe {name!r} gibt es nicht.")
-        sequenz = show_bauen(analyse, self.patch, self.profil["palette"], self.gobos_der_gruppe, self.positionen)
+        vergeben = []                      # Farbpaare der anderen Songs: jeder Song bekommt möglichst sein eigenes
+        for anderer in self.proben.namen():
+            alte = self.pult.sequenzen.lesen(anderer) if anderer != name else None
+            if alte and len(alte.get("farben") or []) == 2:
+                vergeben.append(tuple(alte["farben"]))
+        sequenz = show_bauen(analyse, self.patch, self.profil["palette"], self.gobos_der_gruppe, self.positionen,
+                             vergeben=tuple(vergeben))
         with self.sperre:
             self.pult.sequenz_speichern(sequenz)
         return sequenz

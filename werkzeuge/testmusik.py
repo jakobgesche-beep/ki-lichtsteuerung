@@ -138,3 +138,58 @@ def song(stil: str = "rock", tempo: float = 120.0, takte: int = 32, seed: int = 
 
 
 STILE = ("rock", "pop", "punk", "shuffle", "ballade", "edm", "akustik", "sechsachtel")
+
+
+# --- Songs mit Form: Teile, die sich anhören wie echte Strophen und Refrains --------------------
+
+FORM_POP = [("Intro", 4, "leer"), ("Strophe", 8, "strophe"), ("Überleitung", 4, "vor"), ("Refrain", 8, "refrain"),
+            ("Strophe", 8, "strophe"), ("Überleitung", 4, "vor"), ("Refrain", 8, "refrain"), ("Bridge", 8, "bridge"),
+            ("Refrain", 8, "refrain"), ("Schluss", 4, "leer")]
+
+
+def song_mit_form(tempo: float = 120.0, form: list = None, seed: int = 1, vorlauf_s: float = 1.0) -> tuple:
+    """Ein Song mit Strophen, Überleitungen, Refrains und Bridge. Wie in echten Songs unterscheiden sich die Teile
+    in Akkorden, Lautstärke und Schlagzeug (Strophe: nur Bassdrum und Hi-Hat, Refrain: volles Schlagzeug mit Becken).
+
+    Gibt (Ton, {"beats", "einsen", "tempo", "teile": [{"start", "name"}]}) zurück."""
+    form = form or FORM_POP
+    rng = np.random.default_rng(seed)
+    grundton = 98.0 * 2 ** (int(rng.integers(0, 12)) / 12)
+    folgen = {art: FOLGEN[i] for art, i in zip(("strophe", "refrain", "bridge", "vor", "leer"),
+                                               rng.choice(len(FOLGEN), 5, replace=False))}
+    folgen["leer"] = folgen["strophe"]
+    takte = sum(t for _, t, _ in form)
+    periode = 60.0 / tempo
+    beats = [vorlauf_s + k * periode for k in range(takte * 4 + 1)]
+    ton = np.zeros(int((beats[-1] + 2.0) * RATE))
+    teile, takt = [], 0
+    for name, laenge, art in form:
+        teile.append({"start": round(beats[takt * 4], 4), "name": name})
+        for t in range(laenge):
+            akkord = _akkord(folgen[art][t % 4], grundton)
+            for schlag in range(4):
+                b = beats[(takt + t) * 4 + schlag]
+                laut = {"leer": 0.35, "strophe": 0.55, "vor": 0.65 + 0.3 * t / laenge, "refrain": 1.0, "bridge": 0.45}[art]
+                if schlag in (0, 2):
+                    _einfuegen(ton, _ton(akkord, 2 * periode, 0.25 * laut, rng, abkling=1.0), b)
+                _einfuegen(ton, _ton([akkord[0] / 2], periode, 0.3 * laut, rng, obertoene=2, abkling=4.0), b)
+                if art == "leer":
+                    continue
+                if art in ("strophe", "bridge"):
+                    if schlag in ((0,) if art == "bridge" else (0, 2)):
+                        _einfuegen(ton, _kick(rng) * 0.8, b)
+                    _einfuegen(ton, _hihat(rng, 0.05), b)
+                    _einfuegen(ton, _hihat(rng, 0.03), b + periode / 2)
+                    continue
+                _einfuegen(ton, _kick(rng) if schlag in (0, 2) else _snare(rng) * (0.7 if art == "vor" else 1.0), b)
+                if art == "vor":
+                    _einfuegen(ton, _snare(rng) * 0.3 * t / laenge, b + periode / 2)     # Snare-Wirbel wird dichter
+                _einfuegen(ton, _hihat(rng, 0.09), b)
+                _einfuegen(ton, _hihat(rng, 0.06), b + periode / 2)
+                if art == "refrain" and t == 0 and schlag == 0:
+                    becken = rng.standard_normal(int(1.5 * RATE)) * np.exp(-np.arange(int(1.5 * RATE)) / RATE * 3)
+                    _einfuegen(ton, 0.25 * np.diff(np.concatenate([[0], becken])), b)
+        takt += laenge
+    ton = ton / (np.max(np.abs(ton)) + 1e-9) * 0.8
+    return ton.astype(np.float32), {"beats": [round(b, 4) for b in beats[:-1]],
+                                    "einsen": [round(b, 4) for b in beats[:-1:4]], "tempo": tempo, "teile": teile}

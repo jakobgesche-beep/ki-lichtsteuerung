@@ -71,7 +71,12 @@ def test_gebaute_show_ist_gueltig_und_gleiche_teile_sehen_gleich_aus(show, analy
     assert len(sequenz["song"]["teile"]) == 6 and len(sequenz["zeitcode"]) == len(sequenz["cues"])
     assert sequenz["zeitcode"] == sorted(sequenz["zeitcode"])
     looks = [look_von(sequenz, i) for i in range(6)]
-    assert looks[2]["werte"] == looks[4]["werte"] and looks[2]["effekte"] == looks[4]["effekte"]
+
+    def farben_und_gobos(look):
+        return [(w["gruppe"], w.get("farbe"), w.get("gobo")) for w in look["werte"]]
+
+    # Gleiche Teile: gleiche Farben und Gobos. Der letzte Refrain ist derselbe Look, nur größer (Höhepunkt).
+    assert farben_und_gobos(looks[2]) == farben_und_gobos(looks[4])
     assert looks[1]["werte"] != looks[2]["werte"]
     assert "Takte" in looks[1]["name"]
 
@@ -189,8 +194,10 @@ def test_show_hat_nur_zwei_songfarben_und_akzente_an_markierungen(show, analyse)
     assert sequenz["cues"][akzente[0]]["folgen_s"] == 0.4
     assert sequenz["cues"][akzente[0] + 1]["name"].endswith("weiter")
     assert sequenz["zeitcode"] == sorted(sequenz["zeitcode"]) and len(sequenz["zeitcode"]) == len(sequenz["cues"])
-    starke = [c for c in sequenz["cues"] if "Refrain" in c["name"]]
-    assert any(w.get("gruppe") == "Strobo" and w["strobo_hz"] > 0 for w in starke[0]["werte"])
+    # Der Strobo blitzt erst im Höhepunkt (letzter Refrain), nicht schon im ersten Refrain
+    refrains = [c for c in sequenz["cues"] if c["name"].startswith("Refrain") and "weiter" not in c["name"]]
+    assert any(w.get("gruppe") == "Strobo" and w["strobo_hz"] > 0 for w in refrains[-1]["werte"])
+    assert all(w.get("strobo_hz", 0) == 0 for w in refrains[0]["werte"])
     strophe = next(c for c in sequenz["cues"] if c["name"].startswith("Strophe"))
     assert all(w.get("strobo_hz", 0) == 0 for w in strophe["werte"])
     assert pruefe_sequenz(sequenz, show.patch, show.positionen) == []

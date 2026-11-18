@@ -101,3 +101,43 @@ def test_rechnet_schnell_genug():
     start = time.perf_counter()
     abspielen(ton)
     assert time.perf_counter() - start < 0.1 * len(ton) / ABTASTRATE
+
+
+# --- Die Effekt-Uhr zählt im Takt ----------------------------------------------------
+
+def effekt_uhr():
+    from lichtsteuerung.pult import Effekte
+    return Effekte(None, None, {})
+
+
+def test_effekt_uhr_legt_vielfache_von_4_auf_die_eins():
+    uhr = effekt_uhr()
+    for _ in range(5):                              # fünf Schläge ohne Eins: die Uhr steht bei etwa 5
+        uhr.takt(0.5, 120.0, beat=True)
+    assert round(uhr.musik_beats) % 4 != 0
+    uhr.takt(0.5, 120.0, beat=True, eins=True)
+    assert round(uhr.musik_beats) % 4 == 0
+
+
+def test_effekt_uhr_zaehlt_wie_die_probe():
+    uhr = effekt_uhr()
+    uhr.takt(0.5, 120.0, beat=True)
+    uhr.takt(0.5, 120.0, beat=True, takt_stelle=13.08)    # laut Song-Folger der 14. Schlag nach der ersten Eins
+    assert round(uhr.musik_beats) == 13
+    rest = uhr.musik_beats - 13
+    uhr.takt(0.5, 120.0, beat=True, takt_stelle=14.02)
+    assert round(uhr.musik_beats) == 14 and abs(uhr.musik_beats - 14) <= abs(rest) + 1e-9
+
+
+def test_song_spieler_kennt_die_stelle_im_takt():
+    from types import SimpleNamespace
+    from lichtsteuerung.songspieler import SongSpieler
+    spieler = SongSpieler.__new__(SongSpieler)
+    beats = [1.0 + 0.5 * i for i in range(40)]
+    spieler._takt_merken({"beats_s": beats, "einsen_s": beats[2::4]})
+    spieler.folger = SimpleNamespace(stelle=beats[2], wartet=False, bereit=False)
+    assert spieler.takt_stelle() == pytest.approx(0.0)
+    spieler.folger.stelle = beats[11] + 0.25                 # halb zwischen dem 10. und 11. Schlag nach der Eins
+    assert spieler.takt_stelle() == pytest.approx(9.5)
+    spieler.folger.wartet = True                             # Band hat aufgehört: keine Stelle
+    assert spieler.takt_stelle() is None

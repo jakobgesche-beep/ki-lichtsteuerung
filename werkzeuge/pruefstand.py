@@ -127,6 +127,30 @@ def wechsel_zeiten(aufzeichnung: dict, schluessel: str) -> list:
     return zeiten
 
 
+def farbwechsel_zaehlen(farbe: np.ndarray, sichtbar: np.ndarray, bleiben_s: float = 0.3) -> int:
+    """Wie oft wechselt die Farbe wirklich? Helligkeit zählt nicht (ein RGB-PAR ohne Dimmer pulst über die Farbe),
+    weiche Überblendungen zählen einmal: Gezählt wird, wenn eine neue Farbe mindestens 0,3 s bleibt."""
+    if len(farbe) < 2:
+        return 0
+    norm = farbe / np.maximum(farbe.max(axis=1, keepdims=True), 1e-6)
+    stufen = [tuple(z) if h > 0.1 else None for z, h in zip(np.round(norm * 4).astype(int), sichtbar)]
+    bleiben = int(bleiben_s * BILDER)
+    wechsel, jetzt, i = 0, None, 0
+    while i < len(stufen):
+        stufe = stufen[i]
+        if stufe is None or stufe == jetzt:
+            i += 1
+            continue
+        lauf = i
+        while lauf < len(stufen) and stufen[lauf] == stufe:
+            lauf += 1
+        if lauf - i >= bleiben:
+            wechsel += jetzt is not None
+            jetzt = stufe
+        i = lauf
+    return wechsel
+
+
 def naechster_abstand(zeiten: list, ziele: list) -> list:
     ziele = np.asarray(sorted(ziele))
     if not len(ziele):
@@ -175,7 +199,7 @@ def auswerten(aufzeichnung: dict, offline: dict, marken: list) -> dict:
         if richtung.size and np.any(richtung):
             skalar = np.clip(np.sum(richtung[1:] * richtung[:-1], axis=1), -1, 1)
             winkel = np.degrees(np.arccos(skalar)) * BILDER        # Grad pro Sekunde
-        farbwechsel = int(np.sum(np.max(np.abs(np.diff(farbe, axis=0)), axis=1) > 0.3)) if len(farbe) > 1 else 0
+        farbwechsel = farbwechsel_zaehlen(farbe, sichtbar)
         geraete[gid] = {"dunkel_anteil": round(float(np.mean(sichtbar < 0.05)), 2),
                         "mittel_hell": round(float(np.mean(sichtbar)), 2),
                         "farbwechsel_pro_minute": round(farbwechsel / dauer_min, 1),
@@ -274,6 +298,7 @@ def main() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         show = show_bauen(Path(tmp) / "show", args.daten)
         show.automatik_an = True
+        show.song.mitschnitt_an = False          # der Mitschnitt schriebe noch, wenn der Ordner schon weg ist
         if args.profil:
             show.profil_laden(args.profil)
         offline = songanalyse.analysieren(ton)

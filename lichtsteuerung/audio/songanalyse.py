@@ -628,13 +628,16 @@ def analysieren(ton: np.ndarray) -> dict:
     for start, ende_t, gruppe in zip(starts, enden, gruppen):
         if teile and teile[-1]["gruppe"] == gruppe:          # gleiche Nachbarn sind ein Teil
             teile[-1]["_ende"] = ende_t
+            teile[-1]["_innen"].append(start)               # ... der Wechsel bleibt als Phrase im Teil
             continue
-        teile.append({"_start": start, "_ende": ende_t, "gruppe": gruppe})
+        teile.append({"_start": start, "_ende": ende_t, "gruppe": gruppe, "_innen": []})
     for nummer, teil in enumerate(teile):
         von = 0.0 if nummer == 0 else float(einsen[teil["_start"]])
         bis = dauer if nummer == len(teile) - 1 else float(einsen[min(teil["_ende"], len(einsen) - 1)])
         teil.update(start=round(von, 2), ende=round(bis, 2), takte=int(teil["_ende"] - teil["_start"]),
                     laut_db=round(float(np.mean(mk["laut"][teil["_start"]:teil["_ende"]])), 1))
-        del teil["_start"], teil["_ende"]
+        if teil["_innen"]:
+            teil["phrasen_s"] = [round(float(einsen[i]), 2) for i in teil["_innen"] if i < len(einsen)]
+        del teil["_start"], teil["_ende"], teil["_innen"]
     ergebnis["teile"] = teile
     return ergebnis

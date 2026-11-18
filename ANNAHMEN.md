@@ -183,6 +183,15 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Ein Gerät testen (2.2.1):** „Bewegen“ nimmt ohne Eintrag Kanal 1 und 2, „Kanal-Lauf“ zieht jeden Kanal 2 s auf 255, die Seite zeigt die gesendeten Werte. Enttec-Art „Open DMX, andere Sende-Art“: Break als eine 0 bei 57600 Baud (156 µs unten, 35 µs oben), dann das Paket bei 250000 Baud, falls ein Treiber das Break-Signal nicht richtig weitergibt (mit echtem Gerät noch nicht geprüft).
 - **Ein Gerät testen:** Alle Kanäle außer denen des Testgeräts sind 0 (gilt auch für die Lichter im Patch). Blackout und Warmweiß machen es dunkel. Ohne Bedienung endet der Test nach 15 Minuten. Rohe Werte gehen ungeprüft hinaus wie beim bisherigen Kanal-Test: Strobo-, Programm- und Reset-Kanäle unten lassen. Beim Speichern: Pan 540°, Tilt 270° angenommen; der Shutter-Wert, bei dem beim Testen Licht kam, gilt als „offen“, Blitzen bleibt gesperrt. Enttec-Art von Hand (Open DMX / DMX USB Pro) liegt in `daten/dmx.json` (nur dieser Rechner).
 
+## Song-Licht wie von einem Lichtdesigner (ab 2.3.0)
+
+- **Dramaturgie:** Strophe und Intro ruhig in einer Farbe (A), jeder Refrain „stark“ (Spots in B über den PARs in A, langsamer Schwenk, Puls auf 1 und 3), das Größte erst im letzten Refrain und im Finale (Kreise, Puls auf jedem Schlag, Strobo falls vorhanden). Vorher waren oft schon der erste Refrain und lange Strecken „Höhepunkt“, und dort wechselten Rot und Blau alle 4 Beats.
+- **Alle 8 Takte auf der Eins** eine kleine Änderung (anderes Gobo, im Refrain tauschen Spots und PARs die Farben), oder dort, wo die Analyse einen Wechsel gehört hat, ihn aber im selben Teil ließ (Strophe 1 und 2). Ruhige Teile bleiben stehen.
+- **Zwei Farben pro Song:** aus guten Paaren, die auch Köpfe mit Farbrad zeigen können (Blau/Rot, Grün/Pink, Blau/Pink …), schnelle Songs kräftiger, langsame kühler, nur Farben aus dem Profil. Jeder Song bekommt möglichst ein anderes Paar. Gold und Orange stehen hinten, weil das Farbrad der MH-X25 dafür nur ein blasses Lachsrosa hat.
+- **Effekte zählen im Takt der Probe:** Der Song-Folger kennt die Stelle auf etwa 20 bis 70 ms genau (gemessen an „Hh“ mit Hall, Publikum und 3 % schneller), also immer genauer als ein halber Beat. Daraus weiß die Effekt-Uhr, welcher Schlag die Eins ist; der Takt-Folger liefert die genaue Lage der Schläge. Ohne Song nimmt die Effekt-Uhr die Eins vom Takt-Folger.
+- **Alte Song-Shows** bleiben, wie sie sind. Das neue Licht bekommt ein Song erst mit „Show neu bauen“ in der Probe.
+- **Prüfstand** (`werkzeuge/pruefstand.py`, „Hh“ im Song-Modus): Beats 99 % (vorher 52 %), Lichtwechsel an allen D-Markierungen innerhalb einer Sekunde (vorher 67 %), Farbwechsel nur noch etwa alle 6 Sekunden statt Dauer-Wechsel.
+
 ## Konzert-Sicherheit (ab 2.0.0)
 
 - **Enttec, drei Wege:** FTDI-Treiber (Windows, ftd2xx.dll per ctypes), USB direkt (pyftdi/libusb, Mac oder Windows mit Zadig), serieller Port des eingebauten Treibers (Mac `/dev/cu.usbserial-…`, Windows COM). Der erste, der klappt, wird benutzt. Das Enttec DMX USB Pro wird am Namen erkannt und bekommt fertige Pakete. Alles nur gegen nachgebaute Treiber getestet, kein echtes Enttec.

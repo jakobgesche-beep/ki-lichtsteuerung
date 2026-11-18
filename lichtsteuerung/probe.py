@@ -151,9 +151,13 @@ def einordnen(teile: list) -> None:
             teil["name"] = "Zwischenteil"
         s = teil["staerke"]
         klasse = "ruhig" if s < 0.3 else "mittel" if s < 0.6 else "stark" if s < 0.85 else "hoehepunkt"
+        # Dramaturgie wie bei einem Lichtdesigner: Strophen bleiben ruhiger als der Refrain, jeder Refrain ist
+        # "stark", das Größte (Höhepunkt) kommt erst im letzten Refrain und im Finale.
         if teil["name"] == "Refrain":
-            klasse = "stark" if klasse in ("ruhig", "mittel") else klasse
-        elif teil["name"] in ("Strophe", "Intro") and klasse == "hoehepunkt":
+            klasse = "stark"
+        elif teil["name"] in ("Strophe", "Intro"):
+            klasse = "mittel" if klasse in ("stark", "hoehepunkt") else klasse
+        elif teil["name"] not in ("Finale", "Drop") and klasse == "hoehepunkt":
             klasse = "stark"
         teil["klasse"] = klasse
         teil.pop("laut_db", None)
@@ -167,52 +171,95 @@ def einordnen(teile: list) -> None:
 
 # --- Aus der Analyse eine Show bauen --------------------------------------------
 
-# So sieht jede Stärke aus. Der Song bekommt nur zwei Farben (A und B) und Weiß für Akzente,
-# damit es zusammenpasst und nicht wie eine bunte Lichterkette wirkt.
+# So sieht jede Stärke aus. Jeder Song bekommt zwei Farben (A und B) und Weiß für Akzente, damit es
+# zusammenpasst und nicht wie eine bunte Lichterkette wirkt:
+#   Strophe und Intro          eine Farbe (A), Spots ziehen kaum merklich, kleiner Puls auf der Eins
+#   ruhige Teile (Bridge)      eine Farbe (B), das Licht atmet langsam
+#   Refrain                    Spots in B über den PARs in A, langsamer Schwenk, Puls auf 1 und 3
+#   Höhepunkt (letzter Refrain) wie Refrain, dazu Kreise und Puls auf jedem Schlag
+# Alle 8 Takte (auf der Eins) eine kleine Änderung: anderes Gobo, im Refrain tauschen Spots und PARs die Farben.
+# Kein Dauer-Farbwechsel mehr (vor 2.3.0 wechselten im Höhepunkt Rot und Blau alle 4 Beats).
+#              Bewegung,  Größe, Beats/Runde, Helligkeit, Gobo-Drehung, Puls-Tiefe, Pulse pro Minute, Farben
 LOOKS = {
-    #              Bewegung, Größe, Beats/Runde, Helligkeit, Gobo-Drehung, Puls-Tiefe, Farben
-    "ruhig":      (None,      0.0, 16, 0.5, 0.0, 0.3, "B"),
-    "mittel":     (None,      0.0, 16, 0.7, 0.0, 0.3, "A"),
-    "stark":      ("schwenk", 0.5, 16, 1.0, 0.3, 0.35, "A"),
-    "hoehepunkt": ("kreis",   0.7, 8,  1.0, 0.6, 0.35, "AB"),
+    "ruhig":      (None,      0.0,  32, 0.45, 0.0, 0.3,  None, "B"),
+    "mittel":     ("schwenk", 0.2,  64, 0.65, 0.0, 0.25, 40,   "A"),
+    "stark":      ("schwenk", 0.45, 16, 0.9,  0.3, 0.35, 80,   "BA"),
+    "hoehepunkt": ("kreis",   0.6,  16, 1.0,  0.5, 0.4,  160,  "BA"),
 }
 ZEITEN_S = {"ruhig": 3.0, "mittel": 2.0, "stark": 1.0, "hoehepunkt": 0.0}
+PHRASE_ZEIT_S = 1.0       # so weich kommt die kleine Änderung alle 8 Takte
+PHRASE_TAKTE = 8
 AKZENT_S = 0.4            # so lange dauert ein Akzent, dann geht es von selbst weiter
 SCHLAG_S = 0.25           # ein Schlag-Akzent (großer Schlag der Band): kurz weiß, kein Strobo
+# Farbpaare, die auf der Bühne gut aussehen (A: Strophe und Grundfarbe, B: Spots im Refrain). Vorne die, die auch
+# Köpfe mit Farbrad sauber zeigen (Rot, Blau, Grün, Pink und Hellblau hat fast jedes Rad, Gold und Orange nicht).
+# Schnelle Songs nehmen eher die kräftigen vorne, langsame eher die kühlen.
+FARBPAARE_KRAEFTIG = [("blau", "rot"), ("gruen", "pink"), ("blau", "pink"), ("rot", "cyan"), ("lila", "cyan"),
+                      ("rot", "gold"), ("blau", "gold"), ("cyan", "orange")]
+FARBPAARE_RUHIG = [("blau", "gold"), ("blau", "pink"), ("lila", "cyan"), ("rot", "cyan"), ("blau", "rot"),
+                   ("gold", "lila"), ("gruen", "pink"), ("cyan", "orange")]
+
+
+def farbpaar(palette: list, tempo_bpm: float = 120.0, vergeben: tuple = ()) -> tuple:
+    """Die zwei Farben eines Songs. Nur Farben aus dem Profil; andere Songs haben möglichst andere Paare."""
+    erlaubt = [f for f in palette if f not in ("weiss", "warmweiss")] or list(palette) or ["blau", "gold"]
+    paare = [p for p in (FARBPAARE_KRAEFTIG if tempo_bpm >= 110 else FARBPAARE_RUHIG)
+             if p[0] in erlaubt and p[1] in erlaubt]
+    vergeben = {tuple(v) for v in vergeben}
+    frei = [p for p in paare if p not in vergeben and (p[1], p[0]) not in vergeben]
+    if frei:
+        return frei[0]
+    if paare:
+        return paare[0]
+    return erlaubt[0], erlaubt[1 % len(erlaubt)]
+
+
+def _pulse_alle(tempo_bpm: float, pro_minute: float) -> int:
+    """Alle wie viele Beats pulst es? So, dass es etwa pro_minute mal pulst (1, 2 oder 4 Beats)."""
+    return min((1, 2, 4), key=lambda beats: abs(tempo_bpm / beats - pro_minute))
 
 
 def look_cue(name: str, klasse: str, gruppen: list, farbe_a: str, farbe_b: str, gobo: Optional[str] = None,
-             band: Optional[str] = None, drop: bool = False, zeit_s: Optional[float] = None) -> dict:
-    """Ein Look als Cue: Farbe, Gobo, stehen oder bewegen, Puls im Beat. Für Songs und Show-Tasten."""
-    bewegung, groesse, beats, hell, drehung, tiefe, farben = LOOKS[klasse]
+             band: Optional[str] = None, drop: bool = False, zeit_s: Optional[float] = None,
+             tempo_bpm: float = 120.0, variante: int = 0, farben: Optional[str] = None) -> dict:
+    """Ein Look als Cue: Farbe, Gobo, stehen oder bewegen, Puls im Beat. Für Songs und Show-Tasten.
+
+    variante: die kleine Änderung alle 8 Takte (ungerade: Spots und PARs tauschen die Farben, wenn zwei da sind).
+    farben: "A", "B" oder "BA" (Spots B, PARs A); sonst wie die Stärke es vorgibt."""
+    bewegung, groesse, beats, hell, drehung, tiefe, pro_minute, schema = LOOKS[klasse]
+    schema = farben or schema
     if drop:
-        bewegung, groesse, beats, drehung = "acht", 1.0, 4, 0.8
-    haupt = farbe_b if farben == "B" else farbe_a
+        bewegung, groesse, beats, drehung, pro_minute, schema = "acht", 1.0, 4, 0.8, 10_000, "BA"
+    if schema == "A":
+        spot_farbe = par_farbe = farbe_a
+    elif schema == "B":
+        spot_farbe = par_farbe = farbe_b
+    else:
+        spot_farbe, par_farbe = (farbe_b, farbe_a) if variante % 2 == 0 else (farbe_a, farbe_b)
     werte, effekte = [], []
     if "Spots" in gruppen:
-        wert = {"gruppe": "Spots", "helligkeit": hell, "farbe": haupt,
+        wert = {"gruppe": "Spots", "helligkeit": hell, "farbe": spot_farbe,
                 "gobo": gobo if gobo and klasse != "ruhig" else "Offen"}
         if gobo and drehung and klasse != "ruhig":
-            wert["gobo_drehung"] = drehung
-        if band and not bewegung:
-            wert["position"] = band            # stehendes Licht zeigt auf die Band
+            wert["gobo_drehung"] = drehung if variante % 2 == 0 else -drehung
+        if not bewegung and band:
+            wert["position"] = band                       # stehendes Licht zeigt auf die Band (oder die Mitte)
         werte.append(wert)
         if bewegung:
             effekte.append({"art": bewegung, "ziel": {"gruppe": "Spots"}, "groesse": groesse,
-                            "tempo": "musik", "beats": beats, "verteilung": 0.5})
-        if farben == "AB":
-            effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Spots"}, "tempo": "musik",
-                            "beats": 8, "verteilung": 0.5, "farben": [farbe_a, farbe_b]})
+                            "tempo": "musik", "beats": beats, "verteilung": 0.5,
+                            **({"mitte": band} if band else {})})
     if "Farb-PARs" in gruppen:
-        werte.append({"gruppe": "Farb-PARs", "helligkeit": hell, "farbe": farbe_b if farben != "B" else farbe_a})
-        if farben == "AB":
-            effekte.append({"art": "farbwechsel", "ziel": {"gruppe": "Farb-PARs"}, "tempo": "musik",
-                            "beats": 8, "verteilung": 0.5, "farben": [farbe_b, farbe_a]})
-    puls = "dimmer_welle" if klasse == "ruhig" else "dimmer_puls"
+        werte.append({"gruppe": "Farb-PARs", "helligkeit": hell, "farbe": par_farbe})
     for ziel in ("Spots", "Farb-PARs"):
-        if ziel in gruppen:
-            effekte.append({"art": puls, "ziel": {"gruppe": ziel}, "tempo": "musik", "tiefe": tiefe,
-                            "beats": 16 if puls == "dimmer_welle" else (1 if drop else 2), "verteilung": 0.5})
+        if ziel not in gruppen:
+            continue
+        if pro_minute is None:
+            effekte.append({"art": "dimmer_welle", "ziel": {"gruppe": ziel}, "tempo": "musik", "tiefe": tiefe,
+                            "beats": 16, "verteilung": 0.5})
+        else:
+            effekte.append({"art": "dimmer_puls", "ziel": {"gruppe": ziel}, "tempo": "musik", "tiefe": tiefe,
+                            "beats": _pulse_alle(tempo_bpm, pro_minute), "verteilung": 0.0})
     if "Strobo" in gruppen:
         # Im Höhepunkt blitzt er. Wie lange, begrenzt die Prüfung (Dauer, dann Pause).
         werte.append({"gruppe": "Strobo", "helligkeit": 1.0 if klasse == "hoehepunkt" else 0.0,
@@ -221,65 +268,108 @@ def look_cue(name: str, klasse: str, gruppen: list, farbe_a: str, farbe_b: str, 
             "folgen_s": None, "werte": werte, "effekte": effekte}
 
 
-def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optional[dict] = None) -> dict:
-    """Baut die Sequenz: ein Cue pro Songteil, dazu Akzente an markierten Stellen.
+def _farbschema(teil: dict, klasse: str) -> Optional[str]:
+    """Welche Farben ein Teil zeigt. Strophe und Intro in A, Refrain B über A, Bridge und Solo in B."""
+    if teil["name"] in ("Intro", "Strophe", "Schluss"):
+        return "A"
+    if teil["name"] in ("Bridge", "Solo", "Zwischenteil") and klasse in ("ruhig", "mittel"):
+        return "B"
+    return None
 
-    Gleiche Buchstaben sehen gleich aus. Strophen sind ruhiger, Refrain und Höhepunkt
-    bewegen sich und tauschen die zwei Song-Farben. Eine Überleitung vor dem Refrain
-    baut Spannung auf (weiß in die Mitte). Der Strobo blitzt nur bei Höhepunkt, Drop
-    und Akzenten, und nur so weit die Prüfung es erlaubt.
+
+def _phrasen(analyse: dict, teil: dict) -> list:
+    """Wo im Teil eine neue Phrase beginnt: an Wechseln, die die Analyse gehört, aber im selben Teil gelassen hat
+    (Strophe 1 und 2 klingen gleich), dazwischen alle 8 Takte. Immer auf einer Takt-Eins, und nur wenn danach
+    noch mindestens 4 Takte im Teil kommen."""
+    einsen = [e for e in analyse.get("einsen_s", []) if teil["start"] - 0.3 < e < teil["ende"] - 0.3]
+    if not einsen:
+        return []
+    gehoert = sorted({min(range(len(einsen)), key=lambda i: abs(einsen[i] - p))
+                      for p in teil.get("phrasen_s", []) if teil["start"] + 0.5 < p < teil["ende"]})
+    gehoert = [i for i in gehoert if i >= 2 and len(einsen) - i >= 4]
+    anker = [0] + gehoert + [len(einsen)]
+    stellen = set(gehoert)
+    for von, bis in zip(anker, anker[1:]):
+        for nummer in range(von + PHRASE_TAKTE, bis, PHRASE_TAKTE):
+            if bis - nummer >= 4:
+                stellen.add(nummer)
+    return [round(einsen[i], 2) for i in sorted(stellen)]
+
+
+def show_bauen(analyse: dict, patch, palette: list, gobos_von, positionen: Optional[dict] = None,
+               vergeben: tuple = ()) -> dict:
+    """Baut die Sequenz: pro Songteil ein Look, alle 8 Takte eine kleine Änderung, Akzente an markierten Stellen.
+
+    Gleiche Buchstaben sehen gleich aus. Strophen sind ruhig und einfarbig, Refrain und Höhepunkt bewegen sich
+    und zeigen beide Song-Farben. Eine Überleitung vor dem Refrain baut Spannung auf (weiß in die Mitte).
+    Der Strobo blitzt nur bei Höhepunkt, Drop und Akzenten, und nur so weit die Prüfung es erlaubt.
+    vergeben: Farbpaare anderer Songs (jeder Song bekommt möglichst sein eigenes).
     In "song" steht die Song-Karte für den Song-Start: Teile, Zeiten, Tempo.
     """
     gruppen = patch.gruppen()
-    farbe_a = palette[0]
-    farbe_b = palette[1 % len(palette)]
+    tempo = float(analyse.get("tempo_bpm") or 120.0)
+    farbe_a, farbe_b = farbpaar(palette, tempo, vergeben)
     gobos = gobos_von("Spots") if "Spots" in gruppen else []
-    band = "Band" if positionen and "Band" in positionen else None
-    cues, zeitcode, karte = [], [], []
+    band = next((p for p in ("Band", "Mitte") if positionen and p in positionen), None)
+    ereignisse, karte = [], []          # (Zeit, Cue) und die Song-Karte
     buchstaben = {}
     teile = analyse["teile"]
     for index, teil in enumerate(teile):
         nummer = buchstaben.setdefault(teil["gruppe"], len(buchstaben))
         naechster = teile[index + 1] if index + 1 < len(teile) else None
-        takte = teil.get("takte") or round((teil["ende"] - teil["start"]) * analyse["tempo_bpm"] / 60 / 4)
+        takte = teil.get("takte") or round((teil["ende"] - teil["start"]) * tempo / 60 / 4)
         titel = f"{teil['name']} {teil['gruppe']} ({takte} Takte)"
         klasse = "hoehepunkt" if teil["name"] == "Drop" else teil["klasse"]
         karte.append({"name": teil["name"], "gruppe": teil["gruppe"], "klasse": klasse, "start": teil["start"],
-                      "ende": teil["ende"], "takte": takte, "cue": len(cues)})
+                      "ende": teil["ende"], "takte": takte, "_erstes": len(ereignisse)})
         if teil["name"] == "Aufbau" or (teil["name"] == "Überleitung" and naechster and naechster["name"] in ("Refrain", "Drop")):
             cue = aufbau_cue(teil, gruppen, farbe_b)
             cue["name"] = titel
-            cues.append(cue)
-            zeitcode.append(teil["start"])
+            ereignisse.append((teil["start"], cue))
             continue
         if teil["name"] == "Schluss":
             klasse = "ruhig"
-        # Gleich starke, aber verschiedene Teile tauschen A und B, damit man den Wechsel sieht.
-        a, b = (farbe_a, farbe_b) if nummer % 2 == 0 else (farbe_b, farbe_a)
-        gobo = gobos[nummer % len(gobos)] if gobos else None
-        cue = look_cue(titel, klasse, gruppen, a, b, gobo, band, drop=teil["name"] == "Drop",
-                       zeit_s=4.0 if teil["name"] == "Schluss" else None)
+        schema = _farbschema(teil, klasse)
+        drop = teil["name"] == "Drop"
+
+        def look(variante: int, name: str = titel, zeit: Optional[float] = None) -> dict:
+            gobo = gobos[(nummer + variante) % len(gobos)] if gobos else None
+            return look_cue(name, klasse, gruppen, farbe_a, farbe_b, gobo, band, drop=drop, zeit_s=zeit,
+                            tempo_bpm=tempo, variante=variante, farben=schema)
+
+        cue = look(0, zeit=4.0 if teil["name"] == "Schluss" else None)
         schlaege = schlaege_im_teil(analyse, teil, klasse)
         if schlaege and abs(schlaege[0] - teil["start"]) <= 0.3:
             # Der Teil beginnt mit einem großen Schlag: erst kurz weiß, dann der neue Look
-            karte[-1]["cue"] = len(cues)
-            cues.append(schlag_cue(gruppen))
-            zeitcode.append(teil["start"])
+            ereignisse.append((teil["start"], schlag_cue(gruppen)))
             schlaege = schlaege[1:]
             zeit_look = round(teil["start"] + SCHLAG_S, 2)
         else:
             zeit_look = teil["start"]
-        cues.append(cue)
-        zeitcode.append(zeit_look)
+        ereignisse.append((zeit_look, cue))
+        # Alle 8 Takte eine kleine Änderung (nicht in ruhigen Teilen und nicht beim Drop)
+        phrasen = [] if klasse == "ruhig" or drop else _phrasen(analyse, teil)
+        looks = [(zeit_look, cue)]
+        for k, stelle in enumerate(phrasen, start=1):
+            neu = look(k, f"{titel} · Takt {PHRASE_TAKTE * k + 1}", PHRASE_ZEIT_S)
+            ereignisse.append((stelle, neu))
+            looks.append((stelle, neu))
         akzente = [(stelle, "akzent") for stelle in akzente_im_teil(analyse, teil)]
         akzente += [(stelle, "schlag") for stelle in schlaege
                     if all(abs(stelle - a) > 1.5 for a, _ in akzente) and stelle > zeit_look + 0.5]
         for stelle, art in sorted(akzente):
             dauer = AKZENT_S if art == "akzent" else SCHLAG_S
-            cues += [akzent_cue(gruppen) if art == "akzent" else schlag_cue(gruppen),
-                     {**cue, "name": cue["name"] + " weiter", "zeit_s": 0.5}]
-            zeitcode += [stelle, round(stelle + dauer, 2)]
-    return {"name": analyse["name"], "cues": cues, "zeitcode": zeitcode,
+            jetzt_look = max((l for l in looks if l[0] <= stelle + 0.01), key=lambda l: l[0])[1]
+            ereignisse.append((stelle, akzent_cue(gruppen) if art == "akzent" else schlag_cue(gruppen)))
+            ereignisse.append((round(stelle + dauer, 2), {**jetzt_look, "name": jetzt_look["name"] + " weiter",
+                                                          "zeit_s": 0.5}))
+    # Nach der Zeit ordnen (Phrasen und Akzente können sich überholen); die Karte zeigt auf den ersten Cue jedes Teils
+    reihenfolge = sorted(range(len(ereignisse)), key=lambda i: (ereignisse[i][0], i))
+    neue_stelle = {alt: neu for neu, alt in enumerate(reihenfolge)}
+    for teil in karte:
+        teil["cue"] = neue_stelle[teil.pop("_erstes")]
+    return {"name": analyse["name"], "cues": [ereignisse[i][1] for i in reihenfolge],
+            "zeitcode": [ereignisse[i][0] for i in reihenfolge],
             "farben": [farbe_a, farbe_b],
             "song": {"probe": analyse["name"], "tempo_bpm": analyse["tempo_bpm"], "dauer_s": analyse["dauer_s"],
                      "musik_von_s": analyse.get("musik_von_s", 0.0), "musik_bis_s": analyse.get("musik_bis_s"),

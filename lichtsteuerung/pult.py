@@ -122,11 +122,23 @@ class Effekte:
             return self.musik_beats * self.faktor + self.versatz
         return self.zeit_skaliert * tempo / 60.0
 
-    def takt(self, dauer: float, musik_bpm: float, beat: bool = False) -> None:
+    def takt(self, dauer: float, musik_bpm: float, beat: bool = False, eins: bool = False,
+             takt_stelle: Optional[float] = None) -> None:
+        """Die Effekt-Uhr zählt Beats. Ganze Beats liegen auf den Schlägen, Vielfache von 4 auf der Takt-Eins,
+        damit Farbwechsel und Bewegungen mit dem Takt beginnen.
+
+        takt_stelle: Beat-Nummer laut Probe (Song-Start), dann zählt die Uhr genau wie die Probe.
+        eins: dieser Schlag ist laut Takt-Folger die Eins (Automatik und Cues ohne Song)."""
         self.zeit += dauer
         self.zeit_skaliert += dauer * self.faktor
         self.musik_beats += dauer * musik_bpm / 60.0
         if beat:
+            gezaehlt = round(self.musik_beats)
+            if takt_stelle is not None:
+                self.musik_beats += round(takt_stelle) - gezaehlt          # die Nummer des Schlags laut Probe
+            elif eins:
+                rest = gezaehlt % 4                                       # auf das nächste Vielfache von 4
+                self.musik_beats -= rest if rest <= 2 else rest - 4
             # Einrasten: Die Effekt-Uhr wird sanft auf den gehörten Schlag gezogen,
             # so landet der Puls auf dem Beat statt irgendwo dazwischen.
             rest = self.musik_beats % 1.0
@@ -910,12 +922,13 @@ class Pult:
 
     # --- Ein Bild ---------------------------------------------------------
 
-    def anwenden(self, zustand: dict, jetzt: float, musik_bpm: float, beat: bool = False) -> dict:
+    def anwenden(self, zustand: dict, jetzt: float, musik_bpm: float, beat: bool = False, eins: bool = False,
+                 takt_stelle: Optional[float] = None) -> dict:
         """Legt Executoren, Show-Tasten, Programmer, Gruppen-Master, Halte-Tasten und Grand Master
         über die Automatik."""
         dauer = 0.0 if self.letzte_zeit is None else max(0.0, jetzt - self.letzte_zeit)
         self.letzte_zeit = jetzt
-        self.effekte.takt(dauer, musik_bpm, beat)
+        self.effekte.takt(dauer, musik_bpm, beat, eins, takt_stelle)
         self.meldungen = []
         for executor in self.executoren:
             if executor.flash_seit is not None and jetzt - executor.flash_seit > FLASH_MAX_S:
