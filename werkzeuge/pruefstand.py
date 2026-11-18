@@ -10,6 +10,8 @@ Aufruf aus dem Projektordner:
                   Dann läuft dieselbe Aufnahme als Band.
     --daten       Ordner mit Patch und Bühne (Kopie!). Sonst die Beispiel-Show des Projekts.
     --marken      Echte Teilwechsel (zum Beispiel die D-Marken), werden im Bild rot eingezeichnet und gemessen.
+    --band        Wie live: tempo,hall_s,publikum_db (zum Beispiel 1.03,1.2,10). Die Aufnahme bleibt die Probe,
+                  die "Band" spielt eine veränderte Fassung (schneller, Saal-Hall, Publikum).
 
 Ergebnis: ein Bild (pro Gerät ein Streifen mit Farbe und Helligkeit über die Zeit, darunter die Kopfrichtung)
 und Zahlen: wie oft das Licht wechselt, ob Wechsel auf Takt-Einsen und Teilwechseln liegen, wie gut der Puls zum
@@ -293,8 +295,20 @@ def main() -> None:
     parser.add_argument("--von", type=float, default=0.0)
     parser.add_argument("--bis", type=float)
     parser.add_argument("--json")
+    parser.add_argument("--band", help="Live-Fassung: tempo,hall_s,publikum_db (zum Beispiel 1.03,1.2,10). "
+                                       "Die Aufnahme bleibt die Probe, die Band spielt die veränderte Fassung.")
     args = parser.parse_args()
     ton = lade_datei(Path(args.aufnahme))
+    probe_ton = ton
+    if args.band:
+        from lichtsteuerung.audio import livefassung
+        tempo, hall, publikum = (float(x) for x in args.band.split(","))
+        fassung = livefassung.bauen(ton, 0.0, len(ton) / RATE, tempo=tempo, anderer_mix=True, nachhall_s=hall,
+                                    publikum_db=publikum, vorlauf_s=3.0)
+        ton = fassung.ton
+        if args.marken:                          # Marken auf die Zeit der Band umrechnen
+            args.marken = ",".join(str(round(fassung.live_zeit(float(m)), 2)) for m in args.marken.split(",")
+                                   if m.strip() and fassung.live_zeit(float(m)) is not None)
     with tempfile.TemporaryDirectory() as tmp:
         show = show_bauen(Path(tmp) / "show", args.daten)
         show.automatik_an = True
@@ -304,7 +318,7 @@ def main() -> None:
         offline = songanalyse.analysieren(ton)
         song = None
         if args.song:
-            show.proben.speichern("Prüfstand", ton)
+            show.proben.speichern("Prüfstand", probe_ton)
             show.show_aus_probe("Prüfstand")
             song = "Prüfstand"
         marken = [float(m) for m in args.marken.split(",") if m.strip()]
