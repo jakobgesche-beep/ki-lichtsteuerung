@@ -87,8 +87,9 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 
 ## Technik
 
-- **aubio** braucht auf neuen Macs eine Compiler-Einstellung, die `start.command` setzt. Klappt es nicht, springt die eigene Beat-Erkennung ein. Sie ist einfacher und liegt bei Musik ohne klaren Takt öfter daneben.
-- **Beat-Uhr:** aubio lässt auch bei klarem Takt einzelne Schläge aus. Eine kleine Uhr läuft deshalb im erkannten Tempo weiter, höchstens 6 s lang.
+- **Takt-Folger (ab 2.3.0):** Beat, Tempo und die Eins im Takt kommen live aus `audio/takt.py`. Er rechnet wie die Probe-Analyse, nur laufend über die letzten 8 bis 16 Sekunden, und zählt mit wie ein Musiker: Der Beat kommt zur vorhergesagten Zeit, ein neues Tempo gilt erst nach einigen Sekunden, halbes oder doppeltes Tempo entscheidet die Snare. Nach 2 s Applaus oder Stille zählt er neu ein (neuer Song).
+- **Gemessen** (`werkzeuge/taktmessung.py`, Beats auf 70 ms genau): 16 künstliche Songs (Rock, Pop, Punk bis 190 BPM, Shuffle, Ballade, EDM, Akustik, 12/8) sauber und „im Saal“ (anderer Mix, Hall, Publikum): im Mittel 97 % der Beats, vorher 56 % (eigene Erkennung) und 88 % (aubio). Die echte Aufnahme „Hh“: 99 % (vorher 80 %), dieselbe mit viel Hall und lautem Publikum 81 % (vorher 48 %). Die Eins trifft er bei den künstlichen Songs zu 89 %, bei „Hh“ zu 65 % (dort liegt die Snare nur auf jedem vierten Schlag). Rechenzeit gut 3 % eines Kerns.
+- **Grenzen:** Er braucht nach dem Einsatz der Band 4 bis 8 Sekunden, bei sehr viel Hall und Publikum bis 20 s. Rede und Klatschen hält er nicht sicher für „kein Takt“ (die alte Erkennung auch nicht); Rede erkennt das Programm darum weiter nur grob. aubio und die alte eigene Erkennung gibt es noch zum Vergleichen, das Programm nutzt sie nicht mehr (die Startskripte installieren aubio nicht mehr).
 - **Rede-Erkennung** aus dem Ton ist eine grobe Schätzung. Zuverlässig wird das erst mit dem X32 in Schritt 10.
 - **Enttec:** Der Code folgt pyopendmx und ist nur gegen ein nachgebautes Gerät getestet. pyftdi braucht `libusb` (Mac) oder einen WinUSB-Treiber (Windows). Solange der fehlt, meldet das Programm „Kein Enttec gefunden“.
 - **Die Enttec-Suche** erkennt jeden FTDI-Chip mit dieser Kennung, also auch ein USB Pro oder andere USB-Kabel.
@@ -99,12 +100,13 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 ## Song-Erkennung, Song-Start und Show-Tasten (ab 1.9.0)
 
 - **Gemessen statt geraten:** 12 künstliche Songs (Pop, Rock, Ballade, EDM, Punk, Swing, Weihnachtslied ohne Schlagzeug), jeweils als „Probe“ und als „Live“-Fassung (4 % schneller, zum Ende 3 % schneller, ungenaues Timing, Handy-Lautsprecher, Raum, Publikum). Tempo: 24 von 24 richtig, Beats: 97 % getroffen, Takt-Eins: 24 von 24. Die alte Erkennung hatte auf den ersten 16 dieser Aufnahmen 3 Tempi richtig und 67 % der Beats.
+- **Nachgemessen in 2.3.0** mit `werkzeuge/testmusik.py` (32 Aufnahmen, dazu Punk mit 160 bis 190 BPM und 12/8-Balladen): Punk wurde vorher für zwei Drittel so schnell gehalten (176 → 118 BPM), sauber aufgenommene Songs bekamen die Eins oft auf Schlag 3 (das Rauschen von Snare und Becken überdeckte die Akkorde). Beides ist behoben, jetzt stimmen Tempo und Eins in allen 32 Aufnahmen, die Beats zu 94 bis 99 % (Punk 190 im Saal 89 %). „Hh“ bleibt genau wie vorher.
 - **Songteile sind schwerer:** Die Grenzen kommen aus Lautstärke und Klang, die Buchstaben aus dem Vergleich der Akkordfolgen. Auf den künstlichen Songs werden gut ein Drittel der Teil-Wechsel exakt gefunden, die gefundenen stimmen zu 84 %. Kurze Überleitungen (4 Takte) gehen oft im Nachbarteil auf. Beim echten Song „Hh“ lagen die gefundenen Wechsel bei 69, 119, 144 und 181 s, die D-Markierungen bei 69, 120, 144 und 181 s.
 - **Halbes oder doppeltes Tempo** ist bei schnellen Songs Geschmackssache (Boulevard of Broken Dreams: 83 oder 167 BPM). Das Programm entscheidet nach der Snare. Fürs Licht ist beides brauchbar.
 - **Song-Folger:** in 2.0.0 neu gebaut, siehe „Song-Folger 2.0“ unten.
 - **Leise Intros:** Der Musikanfang wird gegen das Rauschen der ersten Sekunde der Aufnahme gemessen. Darum vor dem Song kurz Stille aufnehmen.
 - **Show-Tasten** bauen ihre Looks aus den Gruppen Spots, Farb-PARs und Strobo. Der Strobo blitzt nur, wenn er eingemessen ist und die Prüfung es erlaubt. Halte-Tasten gehen nach 20 s von selbst aus, falls das Loslassen nicht ankommt.
-- **Effekte rasten auf den Beat ein:** Jeder gehörte Schlag zieht die Effekt-Uhr ein Stück nach, so liegt der Puls auf dem Beat. Welcher der Schläge die Takt-Eins ist, weiß live nur der Song-Start.
+- **Effekte rasten auf den Beat ein:** Jeder gehörte Schlag zieht die Effekt-Uhr ein Stück nach, so liegt der Puls auf dem Beat. Welcher der Schläge die Takt-Eins ist, weiß live nur der Song-Start (in der Automatik schätzt sie ab 2.3.0 der Takt-Folger).
 
 ## Strobo ohne Einmessen (ab 1.10.0)
 
@@ -196,7 +198,7 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Die Website** ist für GitHub Pages vorbereitet. Cloudflare muss einmal im eigenen Konto mit dem Repo verbunden werden.
 - **Das Repo muss öffentlich sein,** denn Downloads aus privaten Repos gehen nicht ohne Anmeldung.
 - **Keine Lizenz vergeben:** Es wurde noch keine Lizenz für den eigenen Code gewählt.
-- **Die Mac-App enthält aubio nicht,** wegen der GPL. Sie nutzt die eigene Beat-Erkennung, die bei Musik ohne klaren Takt öfter daneben liegt.
+- **Die Mac-App enthält aubio nicht,** wegen der GPL. Seit 2.3.0 braucht sie es auch nicht: Der eigene Takt-Folger ist genauer.
 - **Die App ist nicht von Apple beglaubigt** (kein bezahltes Konto). Beim ersten Start braucht es „Dennoch öffnen“. Nach Updates kann macOS erneut nach dem Mikrofon fragen.
 - **Updates:** Beim Start wird einmal gesucht, die Datei lädt im Hintergrund. Installiert wird nur auf Klick und nie bei laufender DMX-Ausgabe. Geprüft wird die Prüfsumme aus dem Release. Eine eigene digitale Unterschrift gibt es nicht, die Sicherheit hängt also am GitHub-Konto.
 - **Beispieldaten** kommen nur beim allerersten Start in den Datenordner. Neue Beispielprofile aus Updates erscheinen daher nicht von selbst. Der Gerätekatalog kommt dagegen mit jedem Update neu.

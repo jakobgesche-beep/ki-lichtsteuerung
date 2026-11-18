@@ -22,7 +22,7 @@ import numpy as np
 
 from . import daten
 from .audio import songanalyse
-from .audio.analyse import Analyse, EigeneBeatErkennung, beat_erkennung
+from .audio.analyse import Analyse, EigeneBeatErkennung
 from .audio.quellen import ABTASTRATE, BLOCK, lade_datei
 from .weitere import WeitereAufnahmen
 
@@ -31,8 +31,9 @@ KLASSEN = ("ruhig", "mittel", "stark", "hoehepunkt")
 
 
 def drops_und_aufbau(ton: np.ndarray) -> tuple:
-    """Spielt den Song einmal durch die Live-Analyse: Wo sind Drops und Aufbauten?"""
-    analyse = Analyse(beat_erkennung())
+    """Spielt den Song einmal durch die Live-Analyse: Wo sind Drops und Aufbauten?
+    (Die Beats kommen aus der Songanalyse, hier reicht die einfache, schnelle Beat-Erkennung.)"""
+    analyse = Analyse(EigeneBeatErkennung())
     drops, aufbau = [], []
     for start in range(0, len(ton) - BLOCK, BLOCK):
         werte = analyse.verarbeite(ton[start:start + BLOCK])

@@ -6,8 +6,9 @@
     energie     geglättete Gesamtenergie, 0 bis 1
     leise, rede sind die Regeln für das ruhige Grundlicht
 
-Bass, Mitten und Höhen kommen aus einer eigenen FFT mit numpy. Den Beat liefert
-aubio. Lässt sich aubio nicht installieren, springt EigeneBeatErkennung ein.
+Bass, Mitten und Höhen kommen aus einer eigenen FFT mit numpy. Beat, Tempo und die Eins im Takt
+liefert der Takt-Folger (takt.py). aubio und EigeneBeatErkennung gibt es noch zum Vergleichen
+(werkzeuge/taktmessung.py).
 """
 from __future__ import annotations
 
@@ -26,6 +27,7 @@ LEISE_PEGEL = 10 ** (-45 / 20)     # unter -45 dB gilt es als Stille
 RUHE_S = 0.8                       # so lange muss es still sein
 KEIN_BEAT_S = 3.0                  # so lange ohne Beat, bevor es Rede sein kann
 APPLAUS_FLACH = 0.45               # Klatschen ~0,6; Rockmusik höchstens ~0,35 (gemessen an "Hh")
+NEUER_SONG_S = 2.0                 # so lange Applaus oder Stille: Der Takt wird neu gezählt
 
 
 @dataclass
@@ -45,6 +47,7 @@ class Messwerte:
     intensitaet: float = 0.0   # 0 bis 1: wie stark diese Stelle im Vergleich zum Rest des Songs ist
     schlag: bool = False       # ein großer Schlag der Band (Crash, gemeinsamer Schlag): nur in einem Block wahr
     applaus: bool = False      # breites Rauschen ohne Töne, eine Weile lang: Klatschen
+    eins: bool = False         # dieser Beat ist die Eins im Takt (nur in einem Block wahr, nur wenn sicher erkannt)
 
 
 class AubioBeatErkennung:
@@ -112,10 +115,10 @@ class EigeneBeatErkennung:
 
 
 def beat_erkennung():
-    try:
-        return AubioBeatErkennung()
-    except Exception:
-        return EigeneBeatErkennung()
+    """Der Takt-Folger (audio/takt.py): rechnet wie die Probe-Analyse und zählt mit wie ein Musiker.
+    Gemessen genauer als aubio und die einfache eigene Erkennung (siehe ANNAHMEN.md)."""
+    from .takt import TaktFolger
+    return TaktFolger()
 
 
 class BeatUhr:
@@ -322,6 +325,8 @@ class Analyse:
         # Applaus: wie "flach" das Spektrum ist (Rauschen = 1, reine Töne = 0), über 1,5 s gemittelt
         self.flach_maske = (frequenzen >= 400) & (frequenzen <= 8000)
         self.flach = 0.0
+        self.zeit_pause = 0.0          # so lange schon Applaus oder Stille
+        self.neu_gezaehlt = False
 
     def verarbeite(self, block: np.ndarray) -> Messwerte:
         dauer = len(block) / ABTASTRATE
@@ -372,13 +377,24 @@ class Analyse:
         leise = self.zeit_still >= RUHE_S
         # Grobe Schätzung. Sicher erkennt es später das X32 (offenes Rednerpult).
         rede = not leise and self.zeit_ohne_beat >= KEIN_BEAT_S and self.anteil_mitte > 0.45
-        return Messwerte(beat=self.uhr.takt(beat, self.tempo, dauer), tempo_bpm=round(self.tempo, 1), bass=self.werte["bass"],
+        if not getattr(self.beat, "ist_uhr", False):      # der Takt-Folger zählt selbst mit, sonst überbrückt die Uhr
+            beat = self.uhr.takt(beat, self.tempo, dauer)
+        eins = beat and bool(getattr(self.beat, "takt_eins", False))
+        applaus = bool(self.flach > APPLAUS_FLACH and self.pegel_glatt > LEISE_PEGEL)
+        # Nach Applaus oder Stille kommt meist ein neuer Song: neu einzählen (anderes Tempo, andere Eins).
+        self.zeit_pause = self.zeit_pause + dauer if (applaus or leise) else 0.0
+        if self.zeit_pause >= NEUER_SONG_S and not self.neu_gezaehlt:
+            if hasattr(self.beat, "neu_anfangen"):
+                self.beat.neu_anfangen()
+            self.neu_gezaehlt = True
+        elif self.zeit_pause == 0.0:
+            self.neu_gezaehlt = False
+        return Messwerte(beat=beat, tempo_bpm=round(self.tempo, 1), bass=self.werte["bass"],
                          mitte=self.werte["mitte"], hoehe=self.werte["hoehe"],
                          energie=min(1.0, self.energie), pegel=pegel, leise=leise and not self.drops.vor_drop,
                          rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
                          vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3),
-                         schlag=schlag and not leise,
-                         applaus=bool(self.flach > APPLAUS_FLACH and self.pegel_glatt > LEISE_PEGEL))
+                         schlag=schlag and not leise, applaus=applaus, eins=eins)
 
     def _schlag(self, spektrum: np.ndarray, dauer: float) -> bool:
         """Großer Schlag: plötzlich viel mehr Ton über alle Höhen (Becken, Band gemeinsam), 3-mal so stark

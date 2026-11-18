@@ -175,6 +175,12 @@ def tempo_schaetzen(kurve: np.ndarray, von_bpm: float = 60.0, bis_bpm: float = 2
     Die Autokorrelation wird über 8-s-Fenster des ganzen Songs gemittelt. Tempi um
     120 BPM werden leicht bevorzugt.
     """
+    return tempo_und_klarheit(kurve, von_bpm, bis_bpm)[0]
+
+
+def tempo_und_klarheit(kurve: np.ndarray, von_bpm: float = 60.0, bis_bpm: float = 200.0) -> tuple:
+    """Wie tempo_schaetzen, dazu die Klarheit des Takts: Wie stark kehren die Einsätze im Abstand eines
+    Schlags wieder (0 = gar nicht, wie bei Rede oder Klatschen; 1 = vollkommen gleichmäßig)."""
     fenster = int(8 * RATE)
     max_lag = int(60 * RATE / von_bpm * 4) + 2
     summe = np.zeros(max_lag + 1)
@@ -182,18 +188,27 @@ def tempo_schaetzen(kurve: np.ndarray, von_bpm: float = 60.0, bis_bpm: float = 2
         stueck = kurve[a:a + fenster]
         if len(stueck) > max_lag:
             summe += np.sqrt(np.mean(stueck ** 2)) * _autokorrelation(stueck, max_lag)
+    return tempo_aus_autokorrelation(summe, von_bpm, bis_bpm)
+
+
+def tempo_aus_autokorrelation(summe: np.ndarray, von_bpm: float = 60.0, bis_bpm: float = 200.0) -> tuple:
+    """Tempo und Klarheit aus einer (gemittelten) Autokorrelation der Einsatz-Kurve."""
     if not summe.any():
-        return 120.0
-    summe /= summe[0] + 1e-9
+        return 120.0, 0.0
+    summe = summe / (summe[0] + 1e-9)
     bpm = np.arange(von_bpm, bis_bpm + 0.01, 0.25)
     lag = 60 * RATE / bpm
 
     def wert(l):
         return np.interp(l, np.arange(len(summe)), summe)
 
-    salienz = wert(lag) + 0.5 * wert(2 * lag) + 0.25 * wert(4 * lag) - 0.15 * wert(1.5 * lag)
+    # Abzug, wenn der Abstand von zwei Dritteln stark wiederkehrt: Dann ist das Tempo eher anderthalbmal so
+    # schnell (bei durchgehenden Achteln, etwa im Punk, passt sonst auch ein Raster auf jeden anderthalbten Schlag).
+    salienz = (wert(lag) + 0.5 * wert(2 * lag) + 0.25 * wert(4 * lag) - 0.15 * wert(1.5 * lag)
+               - 0.3 * wert(2 * lag / 3))
     vorliebe = np.exp(-0.5 * (np.log2(bpm / 120.0) / 1.0) ** 2)
-    return float(bpm[int(np.argmax(salienz * vorliebe))])
+    beste = int(np.argmax(salienz * vorliebe))
+    return float(bpm[beste]), float(max(0.0, wert(lag[beste])))
 
 
 def beats_finden(kurve: np.ndarray, tempo: float, enge: float = 100.0) -> np.ndarray:
@@ -221,6 +236,48 @@ def beats_finden(kurve: np.ndarray, tempo: float, enge: float = 100.0) -> np.nda
         beats.append(t)
         t = vorgaenger[t]
     return np.array(beats[::-1], float) / RATE
+
+
+def dreier_pruefen(kurve: np.ndarray, tempo: float) -> float:
+    """Zwei Drittel des Tempos erwischt? Bei durchgehenden Achteln (Punk) passt auch ein Raster auf jeden
+    anderthalbten Schlag. Dann liegen zwischen zwei gefundenen Schlägen Einsätze bei einem und bei zwei
+    Dritteln, in der Mitte aber keiner. Richtig ist dann das anderthalbfache Tempo.
+
+    Bei echten Triolen (12/8-Ballade) träfe das schnellere Raster weniger Einsätze, dann bleibt es."""
+    schneller = tempo * 1.5
+    beats = beats_finden(kurve, tempo)
+    if schneller > 210 or len(beats) < 8:
+        return tempo
+    a, d = beats[:-1], np.diff(beats)
+    auf = float(_an_stellen(kurve, a, 2).mean()) + 1e-9
+    drittel = min(float(_an_stellen(kurve, a + d / 3, 2).mean()), float(_an_stellen(kurve, a + 2 * d / 3, 2).mean())) / auf
+    mitte = float(_an_stellen(kurve, a + d / 2, 2).mean()) / auf
+    if drittel < 0.35 or drittel < 1.5 * mitte:
+        return tempo
+    neu = beats_finden(kurve, schneller)
+    return schneller if float(_an_stellen(kurve, neu, 2).mean()) >= 0.9 * auf else tempo
+
+
+def gruppen_pruefen(kurve: np.ndarray, tempo: float) -> float:
+    """Achtel statt Schläge erwischt (12/8- oder 6/8-Ballade)? Dann ist jeder dritte gefundene Schlag betont,
+    nicht jeder zweite. Ein Schlag sind dann drei Achtel. Liegen auch genau zwischen den gefundenen Schlägen
+    Einsätze, war das Raster zwei Achtel lang (anderthalb Schläge)."""
+    beats = beats_finden(kurve, tempo)
+    werte = _an_stellen(kurve, beats, 2)
+    werte = werte[: len(werte) // 6 * 6]
+    if len(werte) < 12:
+        return tempo
+    dreier = sorted(float(werte[v::3].mean()) for v in range(3))
+    zweier = sorted(float(werte[v::2].mean()) for v in range(2))
+    betont3 = dreier[2] / (np.mean(dreier[:2]) + 1e-9)
+    betont2 = zweier[1] / (zweier[0] + 1e-9)
+    if betont3 < 1.6 or betont3 < 1.2 * betont2:
+        return tempo
+    mitte = float(_an_stellen(kurve, (beats[:-1] + beats[1:]) / 2, 2).mean()) / (float(werte.mean()) + 1e-9)
+    neu = (tempo * 2 if mitte > 0.4 else tempo) / 3
+    while neu < 50:
+        neu *= 2
+    return neu
 
 
 def oktave_pruefen(log_baender: np.ndarray, kurve: np.ndarray, tempo: float) -> float:
@@ -253,15 +310,20 @@ def takt_eins_finden(log_baender: np.ndarray, chroma: np.ndarray, beats: np.ndar
     """Welcher Beat ist die Eins? Verglichen wird der Klang der zwei Beats davor mit den zwei danach."""
     if len(beats) < 3 * takt:
         return 0
-    chroma_b = beat_synchron(chroma, RATE / 5, beats)
+    return int(np.argmax(takt_eins_punkte(log_baender, chroma, beats, takt)))
+
+
+def takt_eins_punkte(log_baender: np.ndarray, chroma: np.ndarray, beats: np.ndarray, takt: int = 4) -> np.ndarray:
+    """Für jeden der ersten vier Beats: Wie sehr spricht alles dafür, dass dort (und alle vier Beats danach)
+    die Eins ist? Akkordwechsel zählt voll, die Bassdrum halb."""
+    chroma_b = _chroma_kontrast(beat_synchron(chroma, RATE / 5, beats))     # Rauschen (Snare, Becken) zählt nicht
     wechsel = np.zeros(len(chroma_b))
     for i in range(2, len(chroma_b) - 1):
         vorher, nachher = chroma_b[i - 2:i].mean(axis=0), chroma_b[i:i + 2].mean(axis=0)
         wechsel[i] = 1 - np.dot(vorher, nachher) / (np.linalg.norm(vorher) * np.linalg.norm(nachher) + 1e-9)
     kick = _an_stellen(_band_kurve(log_baender, FREQ_MITTEN < 120), beats[:-1])
-    punkte = [wechsel[v::takt].mean() / (wechsel.mean() + 1e-9) + 0.5 * kick[v::takt].mean() / (kick.mean() + 1e-9)
-              for v in range(takt)]
-    return int(np.argmax(punkte))
+    return np.array([wechsel[v::takt].mean() / (wechsel.mean() + 1e-9) + 0.5 * kick[v::takt].mean() / (kick.mean() + 1e-9)
+                     for v in range(takt)])
 
 
 # --- Songteile -------------------------------------------------------------------
@@ -543,8 +605,9 @@ def analysieren(ton: np.ndarray) -> dict:
     lb = m["baender"]
     anfang, ende = musik_bereich(lb)
     kurve_t = tempo_kurve(lb)
-    tempo = oktave_pruefen(lb, kurve_t, tempo_schaetzen(kurve_t))
-    beats = beats_finden(einsatz_kurve(lb), tempo)
+    kurve_e = einsatz_kurve(lb)
+    tempo = gruppen_pruefen(kurve_e, oktave_pruefen(lb, kurve_t, dreier_pruefen(kurve_e, tempo_schaetzen(kurve_t))))
+    beats = beats_finden(kurve_e, tempo)
     beats = beats[(beats >= anfang - 0.15) & (beats <= ende + 0.15)]
     if len(beats) >= 8:
         tempo = float(60.0 / np.median(np.diff(beats)))

@@ -180,6 +180,6 @@ Die `wrangler.toml` liegt bereit. Einmal im Cloudflare-Konto unter Workers & Pag
 
 - Gerätedaten: [Open Fixture Library](https://github.com/OpenLightingProject/open-fixture-library) (MIT) und [QLC+](https://github.com/mcallegari/qlcplus) (Apache-2.0). Die Lizenztexte liegen in `catalog/`.
 - 3D: [three.js](https://threejs.org) (MIT), liegt in `web/vendor/`, damit alles offline läuft.
-- Beat-Erkennung: [aubio](https://aubio.org) steht unter der GPL. Es wird nur beim Start aus dem Quellcode nachinstalliert. Die fertige Mac-App enthält es nicht und nimmt die eigene Beat-Erkennung. Soll es mit in die App, muss das Projekt selbst unter die GPL.
+- Beat-Erkennung: Seit 2.3.0 nimmt das Programm den eigenen Takt-Folger (genauer gemessen als aubio). [aubio](https://aubio.org) (GPL) ist nicht mehr nötig; wer vergleichen will, installiert es selbst in die `.venv`. Die fertige App enthält es nicht.
 
 Annahmen und offene Punkte stehen in [ANNAHMEN.md](ANNAHMEN.md), die vollständige Vorgabe in [CLAUDE.md](CLAUDE.md).
