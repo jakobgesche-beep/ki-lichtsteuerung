@@ -21,6 +21,7 @@ from typing import Optional
 import numpy as np
 
 from . import daten
+from .farben import farbpaar
 from .audio import songanalyse
 from .audio.analyse import Analyse, EigeneBeatErkennung
 from .audio.quellen import ABTASTRATE, BLOCK, lade_datei
@@ -191,29 +192,6 @@ PHRASE_ZEIT_S = 1.0       # so weich kommt die kleine Änderung alle 8 Takte
 PHRASE_TAKTE = 8
 AKZENT_S = 0.4            # so lange dauert ein Akzent, dann geht es von selbst weiter
 SCHLAG_S = 0.25           # ein Schlag-Akzent (großer Schlag der Band): kurz weiß, kein Strobo
-# Farbpaare, die auf der Bühne gut aussehen (A: Strophe und Grundfarbe, B: Spots im Refrain). Vorne die, die auch
-# Köpfe mit Farbrad sauber zeigen (Rot, Blau, Grün, Pink und Hellblau hat fast jedes Rad, Gold und Orange nicht).
-# Schnelle Songs nehmen eher die kräftigen vorne, langsame eher die kühlen.
-FARBPAARE_KRAEFTIG = [("blau", "rot"), ("gruen", "pink"), ("blau", "pink"), ("rot", "cyan"), ("lila", "cyan"),
-                      ("rot", "gold"), ("blau", "gold"), ("cyan", "orange")]
-FARBPAARE_RUHIG = [("blau", "gold"), ("blau", "pink"), ("lila", "cyan"), ("rot", "cyan"), ("blau", "rot"),
-                   ("gold", "lila"), ("gruen", "pink"), ("cyan", "orange")]
-
-
-def farbpaar(palette: list, tempo_bpm: float = 120.0, vergeben: tuple = ()) -> tuple:
-    """Die zwei Farben eines Songs. Nur Farben aus dem Profil; andere Songs haben möglichst andere Paare."""
-    erlaubt = [f for f in palette if f not in ("weiss", "warmweiss")] or list(palette) or ["blau", "gold"]
-    paare = [p for p in (FARBPAARE_KRAEFTIG if tempo_bpm >= 110 else FARBPAARE_RUHIG)
-             if p[0] in erlaubt and p[1] in erlaubt]
-    vergeben = {tuple(v) for v in vergeben}
-    frei = [p for p in paare if p not in vergeben and (p[1], p[0]) not in vergeben]
-    if frei:
-        return frei[0]
-    if paare:
-        return paare[0]
-    return erlaubt[0], erlaubt[1 % len(erlaubt)]
-
-
 def _pulse_alle(tempo_bpm: float, pro_minute: float) -> int:
     """Alle wie viele Beats pulst es? So, dass es etwa pro_minute mal pulst (1, 2 oder 4 Beats)."""
     return min((1, 2, 4), key=lambda beats: abs(tempo_bpm / beats - pro_minute))

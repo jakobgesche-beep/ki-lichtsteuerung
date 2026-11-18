@@ -10,9 +10,14 @@ Bewegung und eine Art, im Beat zu pulsieren. So entsteht Ruhe statt Dauerwechsel
     Leise Stellen und Rede gehen auf das ruhige Grundlicht.
 
 Was im Look passiert:
-    Puls       Dimmer geht im Beat auf und zu. Beim Akzent kurz doppelt hell.
-    Farbe      bleibt stehen, oder zwei Farben wechseln sich alle 4 Beats ab.
-    Bewegung   nur in manchen Looks, dann langsam und weich. Sonst steht das Licht.
+    Puls       Dimmer geht im Beat auf und zu (bei schnellen Songs auf 1 und 3). Akzent auf der Eins.
+    Farbe      Jeder Song bekommt zwei Farben (A und B) und behält sie bis zur nächsten Pause. Ein Look zeigt
+               eine davon oder beide (Spots B über PARs A); manche tauschen sie zu Beginn jeder 8-Takt-Phrase.
+    Bewegung   nur in manchen Looks, dann langsam und weich (eine Runde dauert mindestens 4 Sekunden).
+               Sonst steht das Licht.
+
+Wechsel kommen auf der Eins: Kennt der Takt-Folger die Eins, wechselt ein Look nur zu Beginn einer
+8-Takt-Phrase (gezählt ab dem ersten Takt des Songs), sonst nach Beats gezählt.
 
 Drops sind ein eigenes Ereignis (die Analyse prüft: erst Aufbau, dann Bass-Einschlag):
     Aufbau     Strahlen sammeln sich in der Mitte, das Licht wird heller und weißer,
@@ -30,7 +35,7 @@ import math
 from dataclasses import dataclass
 from typing import Optional
 
-from .farben import farbe as lies_farbe
+from .farben import farbe as lies_farbe, farbpaar
 from .audio.analyse import Messwerte
 from .pantilt import ZielAusserhalb
 from .render import Eigenschaften, mischen
@@ -61,6 +66,12 @@ STROBO_NACH_S = 2.0
 ERSATZ_HELLIGKEIT = 0.5
 UEBERGANG_S = 1.5        # so lange dauert der Wechsel zwischen Musik und Grundlicht
 ZIEL_HOEHE_M = 0.8       # die Spots zielen auf den Bühnenboden
+PHRASE_TAKTE = 8         # eine Phrase: 8 Takte (mit bekannter Eins)
+ABWECHSLUNG_TAKTE = 16   # ruhige Teile: frühestens nach 2 Phrasen ein neuer Look derselben Stärke
+ABWECHSLUNG_TAKTE_STARK = 8
+NEUER_SONG_S = 3.0       # so lange Pause (leise, Rede, Applaus), dann gilt die nächste Musik als neuer Song
+MIN_RUNDE_S = 4.0        # eine Bewegungs-Runde dauert mindestens so lange (schnelle Songs: doppelt so viele Beats)
+SCHNELL_BPM = 140        # ab hier pulst das Licht nur auf 1 und 3
 
 
 @dataclass(frozen=True)
@@ -119,6 +130,19 @@ class Engine:
         self.winkel = {}
         self.grund_kopie = {}
         self.zustand_text = "Grundlicht"
+        # Song und Takt
+        self.song_nummer = -1
+        self.farben_paar: Optional[tuple] = None   # (A, B) des laufenden Songs
+        self.pause_seit: Optional[float] = None
+        self.takte = 0                  # gezählte Takt-Einsen im Song
+        self.eins_bekannt = False       # hat der Takt-Folger schon eine Eins gemeldet?
+        self.letzte_eins_beat = 0       # bei welchem Beat die letzte Eins war
+        self.phrase_nummer = 0          # 8-Takt-Phrasen im Song
+        self.pulse = 0                  # gezählte Lichtpulse (die Lampen wechseln sich ab)
+        self.phrase_basis = 0           # ab diesem Takt werden die 8-Takt-Phrasen gezählt
+        self.schlag_beat = -99          # bei welchem Beat der letzte große Schlag (Becken) kam
+        self.tempo = STANDARD_TEMPO
+        self.letzter_puls = -99.0
 
     def bewerte(self, messwerte: Optional[Messwerte], profil: dict, jetzt: float,
                 pause: bool = False) -> dict:
@@ -135,14 +159,23 @@ class Engine:
         if messwerte is not None:
             tempo = messwerte.tempo_bpm if 40.0 <= messwerte.tempo_bpm <= 240.0 else STANDARD_TEMPO
             self.phase += dauer * tempo / 60.0
+            self._song_pruefen(messwerte, profil, jetzt)
             if messwerte.beat:
                 self.beats += 1
                 self.letzter_beat = jetzt
+                if messwerte.eins:
+                    self._eins_zaehlen()
+                im_takt = (self.beats - self.letzte_eins_beat) % 4 if self.eins_bekannt else self.beats % 4
+                if tempo <= SCHNELL_BPM or im_takt % 2 == 0:
+                    self.pulse += 1
+                    self.letzter_puls = jetzt
             if messwerte.drop and profil["beat_reaktion"] >= 0.5 and not pause:
                 self.drop_zeit, self.drop_beat = jetzt, self.beats
                 self.musik_anteil = 1.0          # der Drop kommt sofort voll, ohne Überblenden
             elif messwerte.schlag and profil["beat_reaktion"] >= 0.5 and not pause and self.stufe >= 1:
                 self.letzter_akzent = jetzt      # großer Schlag der Band: kurz doppelt hell, dann klingt es ab
+            if messwerte.schlag:
+                self.schlag_beat = self.beats
         ruhig = (messwerte is None or pause or profil["beat_reaktion"] <= 0
                  or messwerte.leise or messwerte.rede)
         self._text_setzen(messwerte, pause, profil)   # Aufbau, Pause und Drop setzen ihn danach neu
@@ -160,6 +193,39 @@ class Engine:
                                                          pan=eigenschaften.pan, tilt=eigenschaften.tilt))
             ergebnis[geraet_id] = mischen(ausgang, eigenschaften, self.musik_anteil)
         return ergebnis
+
+    def _song_pruefen(self, m: Messwerte, profil: dict, jetzt: float) -> None:
+        """Nach einer Pause beginnt ein neuer Song: nächstes Farbpaar, Takte neu zählen."""
+        pause = m.leise or m.rede or m.applaus
+        if pause:
+            self.pause_seit = jetzt if self.pause_seit is None else self.pause_seit
+            return
+        neu = self.farben_paar is None or (self.pause_seit is not None and jetzt - self.pause_seit >= NEUER_SONG_S)
+        self.pause_seit = None
+        palette = profil.get("palette") or ["blau", "rot"]
+        if neu:
+            self.song_nummer += 1
+            self.eins_bekannt, self.takte, self.phrase_nummer, self.phrase_basis = False, 0, 0, 0
+        if neu or not all(f in palette for f in self.farben_paar):
+            tempo = m.tempo_bpm if 40.0 <= m.tempo_bpm <= 240.0 else STANDARD_TEMPO
+            self.farben_paar = farbpaar(palette, tempo, nummer=max(0, self.song_nummer))
+
+    def _eins_zaehlen(self) -> None:
+        self.eins_bekannt = True
+        self.takte += 1
+        self.letzte_eins_beat = self.beats
+        if self.takte - 1 > self.phrase_basis and (self.takte - 1 - self.phrase_basis) % PHRASE_TAKTE == 0:
+            self.phrase_nummer += 1
+
+    def _phrase_beginnt(self, m: Messwerte) -> bool:
+        """Beginnt mit diesem Beat eine neue 8-Takt-Phrase?"""
+        return bool(m.beat and m.eins and self.eins_bekannt
+                    and (self.takte - 1 - self.phrase_basis) % PHRASE_TAKTE == 0)
+
+    def _abschnitt_beginnt(self, m: Messwerte) -> bool:
+        """Ein großer Schlag (Becken) auf der Eins: Hier beginnt oft ein neuer Songteil, zum Beispiel der Refrain."""
+        return bool(self.eins_bekannt and m.beat and self.beats - self.letzte_eins_beat <= 1
+                    and self.beats - self.schlag_beat <= 1)
 
     def _ersatz_grundlicht(self) -> dict:
         """Passt das Grundlicht zu keinem gepatchten Gerät, darf die Bühne nicht dunkel bleiben."""
@@ -218,10 +284,20 @@ class Engine:
         drop = (stufe == 3 and self.stufe <= 1 and staerke - self.energie_langsam > DROP)
         self.energie_langsam += (staerke - self.energie_langsam) * min(1.0, self.dauer / 8.0)
         seit = self.beats - self.look_seit
-        abwechslung = ABWECHSLUNG_STARK if self.look.stufe >= 2 else ABWECHSLUNG
-        phrase_um = m.beat and seit >= PHRASE and seit % 8 == 0
-        # Passt der Look gar nicht (zwei Stufen daneben), wartet er nur bis zum nächsten Takt.
-        weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and seit >= 8 and seit % 4 == 0
+        if self.eins_bekannt:
+            # Mit bekannter Eins: Wechsel nur zu Beginn einer 8-Takt-Phrase (auf der Eins)
+            abwechslung = 4 * (ABWECHSLUNG_TAKTE_STARK if self.look.stufe >= 2 else ABWECHSLUNG_TAKTE)
+            phrase_um = self._phrase_beginnt(m) and seit >= PHRASE
+            weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and m.eins and seit >= 8
+            if self._abschnitt_beginnt(m) and stufe != self.look.stufe and seit >= 8:
+                # Neuer Songteil mit Becken und anderer Stärke: jetzt wechseln und die Phrasen ab hier zählen
+                weit_daneben = True
+                self.phrase_basis = self.takte - 1
+        else:
+            abwechslung = ABWECHSLUNG_STARK if self.look.stufe >= 2 else ABWECHSLUNG
+            phrase_um = m.beat and seit >= PHRASE and seit % 8 == 0
+            # Passt der Look gar nicht (zwei Stufen daneben), wartet er nur bis zum nächsten Takt.
+            weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and seit >= 8 and seit % 4 == 0
         erster = self.look_nummer == 0          # beim ersten Ton gleich den passenden Look nehmen
         wechseln = erster or (drop and seit >= 4) or weit_daneben or (
             phrase_um and (stufe != self.stufe or seit >= abwechslung))
@@ -258,16 +334,19 @@ class Engine:
             self.gobo_listen[geraet["id"]] = namen
         return self.gobo_listen[geraet["id"]]
 
-    def _farbe(self, palette: list, nummer: int) -> tuple:
-        """Die Farbe eines Geräts im aktuellen Look."""
-        a = palette[self.look_nummer % len(palette)]
-        b = palette[(self.look_nummer + 1) % len(palette)]
+    def _song_farben(self) -> tuple:
+        a, b = self.farben_paar or ("blau", "rot")
+        return lies_farbe(a), lies_farbe(b)
+
+    def _farbe(self, art: str) -> tuple:
+        """Die Farbe eines Geräts im aktuellen Look: eine Song-Farbe (A) oder Spots B über PARs A.
+        "wechsel": zu Beginn jeder 8-Takt-Phrase tauschen Spots und PARs die Farben (nicht mehr alle 4 Beats)."""
+        a, b = self._song_farben()
         if self.look.farben == "eine":
             return a
-        if self.look.farben == "zwei":
-            return a if nummer % 2 == 0 else b
-        # Wechsel: alle 4 Beats tauschen die Geräte ihre Farben.
-        return a if (self.beats // 4 + nummer) % 2 == 0 else b
+        if self.look.farben == "wechsel" and self.phrase_nummer % 2 == 1:
+            a, b = b, a
+        return b if art == "spot" else a
 
     def _helligkeit(self, m: Messwerte, grenze: float, reaktion: float, nummer: int, anzahl: int,
                     jetzt: float, periode: float) -> float:
@@ -275,13 +354,14 @@ class Engine:
         look = self.look
         if look.puls == "atmen":
             return grenze * (0.6 + 0.2 * math.sin(2 * math.pi * self.phase / 8))
-        puls = math.exp(-(jetzt - self.letzter_beat) / (PULS_ABKLANG * periode))
-        # Die Lampen wechseln sich auf dem Beat ab, das wirkt auch mit nur zweien lebendig.
-        if anzahl > 1 and self.beats % anzahl != nummer % anzahl:
+        puls = math.exp(-(jetzt - self.letzter_puls) / (PULS_ABKLANG * periode))
+        # Die Lampen wechseln sich auf dem Puls ab, das wirkt auch mit nur zweien lebendig.
+        if anzahl > 1 and self.pulse % anzahl != nummer % anzahl:
             puls *= 0.35
         grund = 1.0 - (0.35 + 0.45 * reaktion)      # so tief geht der Dimmer zwischen den Beats
         hell = grund + (1.0 - grund) * max(puls, 0.5 * m.bass)
-        if look.puls == "akzent" and self.beats % 4 == 0:
+        auf_der_eins = self.beats == self.letzte_eins_beat if self.eins_bekannt else self.beats % 4 == 0
+        if look.puls == "akzent" and auf_der_eins:
             # Auf der Eins im Takt: alle zusammen voll, und langsamer wieder runter.
             hell = max(hell, math.exp(-(jetzt - self.letzter_beat) / (AKZENT_ABKLANG * periode)))
         # Beim Wechsel in einen starken Look: kurz doppelt hell.
@@ -293,10 +373,11 @@ class Engine:
 
     def _musik(self, m: Messwerte, profil: dict, jetzt: float) -> dict:
         reaktion = profil["beat_reaktion"]
-        palette = [lies_farbe(f) for f in profil["palette"]]
+        palette = list(self._song_farben())
         grenze = profil["max_helligkeit"]
         tempo = m.tempo_bpm if 40.0 <= m.tempo_bpm <= 240.0 else STANDARD_TEMPO
         periode = 60.0 / tempo
+        self.tempo = tempo
         self.schub = math.exp(-(jetzt - self.letzter_beat) / (PULS_ABKLANG * periode))
         if reaktion >= 0.5:
             if self.drop_laeuft():
@@ -313,14 +394,14 @@ class Engine:
         pars = self.patch.in_gruppe(GRUPPE_FARBE)
         for nummer, geraet in enumerate(pars):
             hell = self._helligkeit(m, grenze, reaktion, nummer, len(pars), jetzt, periode)
-            ziel = self._farbe(palette, nummer + 1)
+            ziel = self._farbe("par")
             ergebnis[geraet["id"]] = Eigenschaften(helligkeit=hell, farbe=self._weiche_farbe(geraet["id"], ziel))
 
         strobo = self._strobo_hz(m, profil, jetzt)
         spots = self.patch.in_gruppe(GRUPPE_BEWEGUNG)
         for nummer, geraet in enumerate(spots):
             e = Eigenschaften(helligkeit=self._helligkeit(m, grenze, reaktion, nummer, len(spots), jetzt, periode),
-                              farbe=self._farbe(palette, nummer),
+                              farbe=self._farbe("spot"),
                               strobo_hz=strobo if "Effektlicht" in self.patch.gruppen_von(geraet) else 0.0)
             gobos = self._gobos(geraet)
             if gobos and self.look.gobo and reaktion >= 0.3:
@@ -464,12 +545,19 @@ class Engine:
             return (seite * 0.2 * breite, tiefe * (0.5 + 0.3 * weite * math.sin(winkel + versatz)))
         return (0.35 * breite * weite * math.sin(winkel + versatz / 2), tiefe * 0.5)   # Schwenk
 
+    def _runde_beats(self, bewegung: str) -> float:
+        """So viele Beats dauert eine Runde der Bewegung: wie im Look, bei "langsam" doppelt so viele,
+        und bei schnellen Songs so viele, dass eine Runde mindestens 4 Sekunden dauert."""
+        zyklus = self.look.beats * (2 if bewegung == "langsam" else 1)
+        while zyklus * 60.0 / max(getattr(self, "tempo", STANDARD_TEMPO), 1.0) < MIN_RUNDE_S:
+            zyklus *= 2
+        return zyklus
+
     def _bewegen(self, geraet: dict, nummer: int, bewegung: str, energie: float, e: Eigenschaften) -> None:
         """Die Spots folgen dem Muster des Looks, im Takt und geglättet."""
-        zyklus = self.look.beats * (2 if bewegung == "langsam" else 1)
-        x, y = self._muster(nummer, zyklus, 0.6 + 0.4 * energie)
+        x, y = self._muster(nummer, self._runde_beats(bewegung), 0.6 + 0.4 * energie)
         if self.look.schub:
-            y += self.schub * self.buehne.daten["buehne"]["tiefe_m"] * 0.12     # kleiner Ruck auf dem Beat
+            y += self.schub * self.buehne.daten["buehne"]["tiefe_m"] * 0.06     # kleiner Ruck auf dem Beat
         self._zielen(geraet, (x, y, ZIEL_HOEHE_M), e)
 
     def _zielen(self, geraet: dict, ziel: tuple, e: Eigenschaften) -> None:

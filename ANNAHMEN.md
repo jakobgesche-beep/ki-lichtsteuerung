@@ -192,6 +192,14 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 - **Alte Song-Shows** bleiben, wie sie sind. Das neue Licht bekommt ein Song erst mit „Show neu bauen“ in der Probe.
 - **Prüfstand** (`werkzeuge/pruefstand.py`, „Hh“ im Song-Modus): Beats 99 % (vorher 52 %), Lichtwechsel an allen D-Markierungen innerhalb einer Sekunde (vorher 67 %), Farbwechsel nur noch etwa alle 6 Sekunden statt Dauer-Wechsel.
 
+## Musik-Automatik wie ein Operator (ab 2.3.0)
+
+- **Zwei Farben pro Song** (wie bei den Song-Shows) statt einer neuen Palettenfarbe bei jedem Look. Nach 3 s Pause (leise, Rede, Applaus) gilt die nächste Musik als neuer Song und bekommt das nächste Farbpaar.
+- **Wechsel auf der Eins:** Kennt der Takt-Folger die Eins, wechselt ein Look nur zu Beginn einer 8-Takt-Phrase; bei einem großen Sprung (zwei Stufen) oder einem Becken auf der Eins mit neuer Stärke schon auf der nächsten Eins, dann zählen die Phrasen ab dort. Ohne Eins wie bisher nach Beats.
+- **Ruhiger:** Farben tauschen höchstens zu Beginn einer Phrase (vorher alle 4 Beats), eine Bewegungsrunde dauert mindestens 4 s, über 140 BPM pulst das Licht auf 1 und 3, Akzente kommen auf der echten Eins.
+- **Gemessen** (Prüfstand, „Hh“, Profil „Schulfest Abend“): 6 statt 11 Look-Wechsel pro Minute, 5 statt 17 bis 22 Farbwechsel pro Minute, Bewegung im 95-%-Wert 49 statt 105 °/s, 52 % der Wechsel auf der Eins (vorher 7 %).
+- **Grenzen:** Ohne Probe kennt die Automatik die Songteile nicht. Ein Refrain beginnt im Licht oft erst am Ende der laufenden Phrase (bis zu 8 Takte später). Für Songs, die bei der Probe aufgenommen sind, ist der Song-Start genauer.
+
 ## Konzert-Sicherheit (ab 2.0.0)
 
 - **Enttec, drei Wege:** FTDI-Treiber (Windows, ftd2xx.dll per ctypes), USB direkt (pyftdi/libusb, Mac oder Windows mit Zadig), serieller Port des eingebauten Treibers (Mac `/dev/cu.usbserial-…`, Windows COM). Der erste, der klappt, wird benutzt. Das Enttec DMX USB Pro wird am Namen erkannt und bekommt fertige Pakete. Alles nur gegen nachgebaute Treiber getestet, kein echtes Enttec.

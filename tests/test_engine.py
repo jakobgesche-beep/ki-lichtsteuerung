@@ -230,15 +230,91 @@ def test_drop_wechselt_sofort_mit_akzent(engine):
     assert start <= engine.letzter_akzent < start + 1.5                       # mit einem hellen Akzent
 
 
-def test_farben_wechseln_hoechstens_alle_4_beats(engine):
+def test_farben_bleiben_innerhalb_der_phrase(engine):
+    """Kein Dauer-Farbwechsel mehr (vor 2.3.0 tauschten die Farben alle 4 Beats)."""
     zeit, _ = beats_spielen(engine, PARTY, 1, 0.65)
     erzwinge(engine, "Stehen mit Akzent")
     farben = []
     for beat in range(14):              # innerhalb einer Phrase, vor dem nächsten Look
         zeit, _ = beats_spielen(engine, PARTY, 1, 0.65, von=zeit)
         farben.append(engine.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False), PARTY, zeit)["kopf"].farbe)
-    wechsel = sum(1 for a, b in zip(farben, farben[1:]) if a != b)
-    assert 2 <= wechsel <= 4
+    assert len(set(farben)) == 1
+
+
+def takte_spielen(engine, profil, takte, energie, von=0.0, bpm=120):
+    """Spielt Takte mit bekannter Eins (wie vom Takt-Folger). Gibt (Zeit, [(Beat-Nummer, Look, Eins?)]) zurück."""
+    abstand = 60 / bpm
+    zeit, verlauf = von, []
+    for nummer in range(takte * 4):
+        for schritt in range(int(abstand * 40)):
+            m = Messwerte(beat=schritt == 0, eins=schritt == 0 and nummer % 4 == 0, tempo_bpm=bpm, energie=energie,
+                          leise=False, bass=0.5)
+            engine.bewerte(m, profil, zeit)
+            zeit += 1 / 40
+        verlauf.append((engine.beats, engine.look.name, nummer % 4 == 0))
+    return zeit, verlauf
+
+
+def test_looks_wechseln_nur_zu_beginn_einer_8_takt_phrase(engine):
+    zeit, verlauf = takte_spielen(engine, PARTY, 4, 0.5)
+    for energie in (0.7, 0.45, 0.7, 0.45, 0.7):         # immer nur eine Stufe Unterschied
+        zeit, neu = takte_spielen(engine, PARTY, 6, energie, von=zeit)
+        verlauf += neu
+    wechsel = [i for i in range(1, len(verlauf)) if verlauf[i][1] != verlauf[i - 1][1]]
+    assert wechsel
+    assert all(verlauf[i][2] and i % 32 == 0 for i in wechsel)    # auf der Eins, zu Beginn einer 8-Takt-Phrase
+
+
+def test_grosser_sprung_wechselt_auf_der_naechsten_eins(engine):
+    zeit, verlauf = takte_spielen(engine, PARTY, 9, 0.9)
+    zeit, neu = takte_spielen(engine, PARTY, 4, 0.2, von=zeit)          # plötzlich ganz ruhig
+    wechsel = [i for i in range(1, len(neu)) if neu[i][1] != neu[i - 1][1]]
+    assert wechsel and all(neu[i][2] for i in wechsel) and wechsel[0] <= 8
+
+
+def test_farben_tauschen_zu_beginn_der_phrase(engine):
+    zeit, _ = takte_spielen(engine, PARTY, 1, 0.65)
+    erzwinge(engine, "Stehen mit Akzent")
+    vorher = engine.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False), PARTY, zeit)
+    zeit, _ = takte_spielen(engine, PARTY, 8, 0.65, von=zeit)          # die neunte Eins beginnt Phrase 2
+    erzwinge(engine, "Stehen mit Akzent")      # derselbe Look in der nächsten Phrase
+    nachher = engine.bewerte(Messwerte(tempo_bpm=120, energie=0.65, leise=False), PARTY, zeit)
+    assert vorher["kopf"].farbe != nachher["kopf"].farbe
+    assert vorher["kopf"].farbe == pytest.approx(nachher["par-1"].farbe, abs=0.01)   # Spots und PARs getauscht
+
+
+def test_jeder_song_hat_zwei_eigene_farben(engine):
+    profil = {**PARTY, "palette": ["rot", "blau", "gruen", "pink", "cyan", "lila"]}
+    farben_pro_song = []
+    zeit = 0.0
+    for song in range(2):
+        gesehen = set()
+        for energie in (0.4, 0.65, 0.9):
+            zeit, _ = takte_spielen(engine, profil, 8, energie, von=zeit)
+            z = engine.bewerte(Messwerte(tempo_bpm=120, energie=energie, leise=False), profil, zeit)
+            gesehen |= {tuple(round(x, 2) for x in z[g].farbe) for g in ("kopf", "par-1")}
+        farben_pro_song.append(gesehen)
+        for i in range(5 * 40):                  # Pause zwischen den Songs
+            engine.bewerte(Messwerte(tempo_bpm=0, leise=True), profil, zeit + i / 40)
+        zeit += 5.0
+    assert all(len(f) == 2 for f in farben_pro_song), farben_pro_song
+    assert farben_pro_song[0] != farben_pro_song[1]
+
+
+def test_schnelle_songs_pulsen_auf_eins_und_drei(engine):
+    takte_spielen(engine, PARTY, 4, 0.65, bpm=170)
+    vorher = engine.pulse
+    takte_spielen(engine, PARTY, 4, 0.65, von=100.0, bpm=170)
+    assert engine.pulse - vorher == 8                                  # 16 Beats, 8 Pulse
+
+
+def test_bewegung_bleibt_bei_schnellen_songs_ruhig(engine):
+    erzwinge(engine, "Nicken")                                         # 4 Beats pro Runde: bei 176 BPM 1,4 s
+    for tempo in (90, 120, 176, 200):
+        engine.tempo = tempo
+        assert engine._runde_beats("voll") * 60 / tempo >= 4.0
+    engine.tempo = 120
+    assert engine._runde_beats("voll") == 8 and engine._runde_beats("langsam") == 8
 
 
 def test_stehender_look_bewegt_sich_nicht(engine):
@@ -387,3 +463,14 @@ def test_drop_bleibt_unter_der_blitz_grenze_auch_bei_174_bpm(pfade):
     spruenge = [i for i, (a, b) in enumerate(zip(hell_verlauf, hell_verlauf[1:])) if b - a >= 0.4]
     for i, start in enumerate(spruenge):
         assert sum(1 for s in spruenge[i:] if s - start < 40) <= 3     # höchstens 3 in einer Sekunde
+
+
+def test_neuer_teil_mit_becken_wechselt_sofort_auf_der_eins(engine):
+    zeit, _ = takte_spielen(engine, PARTY, 5, 0.45)
+    alt = engine.look
+    # Drei Takte lauter, dann ein Becken auf der Eins (der Refrain beginnt), mitten in der Phrase
+    zeit, _ = takte_spielen(engine, PARTY, 1, 0.7, von=zeit)
+    m = Messwerte(beat=True, eins=True, schlag=True, tempo_bpm=120, energie=0.7, leise=False, bass=0.5)
+    engine.bewerte(m, PARTY, zeit)
+    assert engine.look != alt and engine.look.stufe == 2
+    assert engine.phrase_basis == engine.takte - 1

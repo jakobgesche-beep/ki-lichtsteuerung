@@ -26,3 +26,26 @@ def ist_farbe(wert: str) -> bool:
         return True
     except ValueError:
         return False
+
+
+# Farbpaare, die auf der Bühne gut aussehen (A: Strophe und Grundfarbe, B: Spots im Refrain). Vorne die, die auch
+# Köpfe mit Farbrad sauber zeigen (Rot, Blau, Grün, Pink und Hellblau hat fast jedes Rad, Gold und Orange nicht).
+# Schnelle Songs nehmen eher die kräftigen vorne, langsame eher die kühlen.
+FARBPAARE_KRAEFTIG = [("blau", "rot"), ("gruen", "pink"), ("blau", "pink"), ("rot", "cyan"), ("lila", "cyan"),
+                      ("rot", "gold"), ("blau", "gold"), ("cyan", "orange")]
+FARBPAARE_RUHIG = [("blau", "gold"), ("blau", "pink"), ("lila", "cyan"), ("rot", "cyan"), ("blau", "rot"),
+                   ("gold", "lila"), ("gruen", "pink"), ("cyan", "orange")]
+
+
+def farbpaar(palette: list, tempo_bpm: float = 120.0, vergeben: tuple = (), nummer: int = 0) -> tuple:
+    """Die zwei Farben eines Songs. Nur Farben aus dem Profil; andere Songs haben möglichst andere Paare.
+    nummer: der wievielte Song (die Automatik nimmt für jeden neuen Song das nächste Paar)."""
+    erlaubt = [f for f in palette if f not in ("weiss", "warmweiss")] or list(palette) or ["blau", "gold"]
+    paare = [p for p in (FARBPAARE_KRAEFTIG if tempo_bpm >= 110 else FARBPAARE_RUHIG)
+             if p[0] in erlaubt and p[1] in erlaubt]
+    vergeben = {tuple(v) for v in vergeben}
+    frei = [p for p in paare if p not in vergeben and (p[1], p[0]) not in vergeben]
+    auswahl = frei or paare
+    if auswahl:
+        return auswahl[nummer % len(auswahl)]
+    return erlaubt[nummer % len(erlaubt)], erlaubt[(nummer + 1) % len(erlaubt)]
