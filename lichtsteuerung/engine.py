@@ -72,6 +72,15 @@ ABWECHSLUNG_TAKTE_STARK = 8
 NEUER_SONG_S = 3.0       # so lange Pause (leise, Rede, Applaus), dann gilt die nächste Musik als neuer Song
 MIN_RUNDE_S = 4.0        # eine Bewegungs-Runde dauert mindestens so lange (schnelle Songs: doppelt so viele Beats)
 SCHNELL_BPM = 140        # ab hier pulst das Licht nur auf 1 und 3
+MIN_RUNDE_HOEHEPUNKT_S = 2.0   # im Höhepunkt darf es schneller gehen
+TREFFER_BODEN = 0.62     # starke Looks: von hier aus springt das Licht auf jedem Treffer hoch. Unter 0,4 Sprung
+                         # zählt es nicht als Blitz, so hält der Blitz-Wächter das Licht bei einem Wirbel nicht dunkel.
+TREFFER_ABKLANG_S = 0.12
+WEISS_ABKLANG_S = 0.15   # großer Schlag (Becken): kurz weiß
+STAERKE_HALTEN_S = 3.0   # so lange hält die Stärke nach (ein kurzer Break macht das Licht nicht gleich ruhig)
+RHYTHMUS_TREFFER = 2.0   # so viele Treffer pro Sekunde (mit Takt): Das ist nie "Ruhe", mindestens Stufe 1
+ERSTER_LOOK_S = 0.5      # so lange nach dem ersten Schlag eines Songs wird der erste Look gewählt
+ERSTER_LOOK_SPAETESTENS_S = 1.5   # Musik ganz ohne Schläge (Fläche, Orgel): spätestens dann
 
 
 @dataclass(frozen=True)
@@ -143,6 +152,13 @@ class Engine:
         self.schlag_beat = -99          # bei welchem Beat der letzte große Schlag (Becken) kam
         self.tempo = STANDARD_TEMPO
         self.letzter_puls = -99.0
+        self.letzter_treffer = -99.0
+        self.treffer_zahl = 0
+        self.staerke_gehalten = 0.0
+        self.treffer_rate = 0.0         # Treffer pro Sekunde, über etwa 3 s gemittelt
+        self.look_offen = True          # der erste Look des Songs ist noch nicht gewählt
+        self.erste_regung: Optional[float] = None   # erster Schlag oder Treffer des Songs
+        self.musik_seit: Optional[float] = None     # seit wann Musik kommt (für den ersten Look ohne Schläge)
 
     def bewerte(self, messwerte: Optional[Messwerte], profil: dict, jetzt: float,
                 pause: bool = False) -> dict:
@@ -176,6 +192,14 @@ class Engine:
                 self.letzter_akzent = jetzt      # großer Schlag der Band: kurz doppelt hell, dann klingt es ab
             if messwerte.schlag:
                 self.schlag_beat = self.beats
+            if messwerte.treffer:
+                self.letzter_treffer = jetzt
+                self.treffer_zahl += 1
+            if (messwerte.beat or messwerte.treffer) and self.erste_regung is None and not (
+                    messwerte.leise or messwerte.rede or messwerte.applaus):
+                self.erste_regung = jetzt
+            if dauer > 0:
+                self.treffer_rate += ((1.0 / dauer if messwerte.treffer else 0.0) - self.treffer_rate) * min(1.0, dauer / 3.0)
         ruhig = (messwerte is None or pause or profil["beat_reaktion"] <= 0
                  or messwerte.leise or messwerte.rede)
         self._text_setzen(messwerte, pause, profil)   # Aufbau, Pause und Drop setzen ihn danach neu
@@ -206,6 +230,9 @@ class Engine:
         if neu:
             self.song_nummer += 1
             self.eins_bekannt, self.takte, self.phrase_nummer, self.phrase_basis = False, 0, 0, 0
+            if self.song_nummer > 0:
+                self.look_offen, self.erste_regung = True, None
+            self.musik_seit = jetzt
         if neu or not all(f in palette for f in self.farben_paar):
             tempo = m.tempo_bpm if 40.0 <= m.tempo_bpm <= 240.0 else STANDARD_TEMPO
             self.farben_paar = farbpaar(palette, tempo, nummer=max(0, self.song_nummer))
@@ -277,8 +304,14 @@ class Engine:
         """Nur am Ende einer Phrase wechseln, außer bei einem Drop."""
         # Intensität: wie stark diese Stelle im Vergleich zum Rest des Songs ist.
         staerke = m.intensitaet if m.intensitaet > 0 else m.energie
+        # Spitze halten: Ein Break (ein Takt nur Becken) oder eine kurze leise Stelle zieht die Stärke nur langsam
+        # herunter. Erst wenn es mehrere Sekunden ruhiger bleibt, wird das Licht ruhiger.
+        self.staerke_gehalten = max(staerke, self.staerke_gehalten - self.dauer / STAERKE_HALTEN_S)
+        staerke = self.staerke_gehalten
         stufe = self._stufe(staerke)
-        if self.look_nummer == 0:
+        if stufe == 0 and m.tempo_bpm > 0 and self.treffer_rate >= RHYTHMUS_TREFFER:
+            stufe = 1                   # klarer Rhythmus mit vielen Schlägen ist nie "Ruhe"
+        if self.look_offen:
             self.energie_langsam = staerke
         # Ein Sprung: von ruhig oder mittel plötzlich auf Höhepunkt, deutlich über dem Schnitt.
         drop = (stufe == 3 and self.stufe <= 1 and staerke - self.energie_langsam > DROP)
@@ -298,7 +331,10 @@ class Engine:
             phrase_um = m.beat and seit >= PHRASE and seit % 8 == 0
             # Passt der Look gar nicht (zwei Stufen daneben), wartet er nur bis zum nächsten Takt.
             weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and seit >= 8 and seit % 4 == 0
-        erster = self.look_nummer == 0          # beim ersten Ton gleich den passenden Look nehmen
+        # Der erste Look eines Songs: eine halbe Sekunde nach dem ersten Schlag (nicht schon beim Rauschen davor).
+        erster = self.look_offen and (
+            (self.erste_regung is not None and jetzt - self.erste_regung >= ERSTER_LOOK_S)
+            or (self.musik_seit is not None and jetzt - self.musik_seit >= ERSTER_LOOK_SPAETESTENS_S))
         wechseln = erster or (drop and seit >= 4) or weit_daneben or (
             phrase_um and (stufe != self.stufe or seit >= abwechslung))
         self.stufe = stufe if (wechseln or seit < 1) else self.stufe
@@ -310,6 +346,7 @@ class Engine:
         self.look_nummer += 1
         self.look_seit = self.beats
         self.stufe = stufe
+        self.look_offen = False
         if drop or stufe >= 2:
             self.letzter_akzent = jetzt     # der neue Look kommt mit einem hellen Akzent
 
@@ -359,6 +396,13 @@ class Engine:
         if anzahl > 1 and self.pulse % anzahl != nummer % anzahl:
             puls *= 0.35
         grund = 1.0 - (0.35 + 0.45 * reaktion)      # so tief geht der Dimmer zwischen den Beats
+        if look.stufe >= 2 and reaktion >= 0.5:
+            # Starke Musik: Das Licht springt auf jedem Treffer (Schlagzeug!) hoch, die Lampen abwechselnd.
+            grund = max(grund, TREFFER_BODEN)
+            treffer = math.exp(-(jetzt - self.letzter_treffer) / TREFFER_ABKLANG_S)
+            if anzahl > 1 and self.treffer_zahl % anzahl != nummer % anzahl:
+                treffer *= 0.5
+            puls = max(puls, treffer)
         hell = grund + (1.0 - grund) * max(puls, 0.5 * m.bass)
         auf_der_eins = self.beats == self.letzte_eins_beat if self.eins_bekannt else self.beats % 4 == 0
         if look.puls == "akzent" and auf_der_eins:
@@ -391,17 +435,26 @@ class Engine:
         self._look_waehlen(m, profil, jetzt)
         ergebnis = {}
 
+        # Großer Schlag (Becken) oder neuer starker Look: kurz weiß, dann zurück in die Farbe
+        weiss = 0.0
+        if self.look.stufe >= 2 and reaktion >= 0.5 and jetzt - self.letzter_akzent < 4 * WEISS_ABKLANG_S:
+            weiss = math.exp(-(jetzt - self.letzter_akzent) / WEISS_ABKLANG_S)
+
+        def mit_weiss(farbe):
+            return tuple(f + (1.0 - f) * weiss for f in farbe) if weiss > 0.01 else farbe
+
         pars = self.patch.in_gruppe(GRUPPE_FARBE)
         for nummer, geraet in enumerate(pars):
             hell = self._helligkeit(m, grenze, reaktion, nummer, len(pars), jetzt, periode)
             ziel = self._farbe("par")
-            ergebnis[geraet["id"]] = Eigenschaften(helligkeit=hell, farbe=self._weiche_farbe(geraet["id"], ziel))
+            ergebnis[geraet["id"]] = Eigenschaften(helligkeit=hell,
+                                                   farbe=mit_weiss(self._weiche_farbe(geraet["id"], ziel)))
 
         strobo = self._strobo_hz(m, profil, jetzt)
         spots = self.patch.in_gruppe(GRUPPE_BEWEGUNG)
         for nummer, geraet in enumerate(spots):
             e = Eigenschaften(helligkeit=self._helligkeit(m, grenze, reaktion, nummer, len(spots), jetzt, periode),
-                              farbe=self._farbe("spot"),
+                              farbe=mit_weiss(self._farbe("spot")),
                               strobo_hz=strobo if "Effektlicht" in self.patch.gruppen_von(geraet) else 0.0)
             gobos = self._gobos(geraet)
             if gobos and self.look.gobo and reaktion >= 0.3:
@@ -549,7 +602,8 @@ class Engine:
         """So viele Beats dauert eine Runde der Bewegung: wie im Look, bei "langsam" doppelt so viele,
         und bei schnellen Songs so viele, dass eine Runde mindestens 4 Sekunden dauert."""
         zyklus = self.look.beats * (2 if bewegung == "langsam" else 1)
-        while zyklus * 60.0 / max(getattr(self, "tempo", STANDARD_TEMPO), 1.0) < MIN_RUNDE_S:
+        mindestens = MIN_RUNDE_HOEHEPUNKT_S if self.look.stufe >= 3 and bewegung != "langsam" else MIN_RUNDE_S
+        while zyklus * 60.0 / max(getattr(self, "tempo", STANDARD_TEMPO), 1.0) < mindestens:
             zyklus *= 2
         return zyklus
 

@@ -183,3 +183,70 @@ def test_ansage_nach_song_und_applaus():
     assert not any(w.rede for w in werte[:ende_song])
     spaeter = werte[beginn_ansage + int(6 * ABTASTRATE / BLOCK):]
     assert sum(w.rede for w in spaeter) / len(spaeter) >= 0.8
+
+
+# --- Schlagzeug-Solo: nie Applaus, nie Rede, immer kräftiges Licht -----------------------
+
+@pytest.mark.parametrize("raum", [False, True])
+def test_schlagzeug_solo_ist_kein_applaus_und_keine_rede(raum):
+    """Becken und Snare rauschen wie Klatschen, zwischen den Schlägen ist es kurz still wie zwischen Silben.
+    Trotzdem ist ein Solo Musik (bis 2.3.2 schaltete das Licht dabei auf ruhig)."""
+    solo = testmusik.schlagzeug_solo(150, 40, seed=2)
+    if raum:
+        solo = livefassung.falten(solo, livefassung.hall(0.6, 0.3)).astype(np.float32)
+    _, _, werte = abspielen(solo)
+    assert not any(w.applaus for w in werte)
+    assert not any(w.rede for w in werte)
+    assert sum(w.treffer for w in werte) >= 2 * 40          # mindestens 2 Treffer pro Sekunde
+
+
+@pytest.mark.parametrize("raum", [False, True])
+def test_klatschen_bleibt_applaus(raum):
+    rng = np.random.default_rng(1)
+    klatschen = np.zeros(12 * ABTASTRATE, np.float32)
+    for start in rng.integers(0, len(klatschen) - 2000, size=12 * 25):     # viele Hände, 25 Klatscher pro Sekunde
+        klatschen[start:start + 1500] += (rng.standard_normal(1500) * np.exp(-np.arange(1500) / 200) * 0.2).astype(np.float32)
+    if raum:
+        klatschen = livefassung.falten(klatschen, livefassung.hall(1.0, 0.3)).astype(np.float32)[:len(klatschen)]
+    _, _, werte = abspielen(klatschen)
+    spaeter = werte[int(3 * ABTASTRATE / BLOCK):]
+    assert sum(w.applaus for w in spaeter) / len(spaeter) >= 0.8
+
+
+def test_schlagzeug_solo_gibt_kraeftiges_licht(pfade, katalog):
+    """Das ganze Solo durch Analyse und Automatik: meistens die starken Looks, Licht springt auf den Treffern."""
+    from lichtsteuerung.buehne import Buehne
+    from lichtsteuerung.engine import Engine
+    from lichtsteuerung.patch import Patch
+    from lichtsteuerung.sicherheit import Grenzen
+    patch = Patch(pfade.fixtures, katalog)
+    patch.hinzufuegen("test/kopf", "7", 2, "Front 1-2", gruppen=["Spots"])
+    buehne = Buehne(pfade.stage)
+    for geraet, x in (("front-1", -3.5), ("front-2", 3.5)):
+        buehne.setze_geraet(geraet, {"ort": "stativ", "x": x, "y": -1, "z": 2.5, "montage": "stehend"})
+    engine = Engine(patch, buehne, {}, Grenzen(3, 5, 30))
+    profil = {"name": "Party", "palette": ["rot", "blau", "gruen"], "max_helligkeit": 1.0, "bewegung": "voll",
+              "beat_reaktion": 0.9, "strobo": "aus", "hazer": False,
+              "grundlicht": {"werte": [{"gruppe": "Spots", "farbe": "warmweiss", "helligkeit": 0.4}]}}
+    solo = livefassung.falten(testmusik.schlagzeug_solo(150, 40, seed=2), livefassung.hall(0.6, 0.3)).astype(np.float32)
+    analyse = Analyse(TaktFolger())
+    stufen, hell, texte, bild_zeit = [], [], [], 0.0
+    offen = {"beat": False, "treffer": False, "eins": False, "schlag": False}
+    for start in range(0, len(solo) - BLOCK, BLOCK):
+        w = analyse.verarbeite(solo[start:start + BLOCK])
+        for k in offen:
+            offen[k] |= getattr(w, k)
+        zeit = start / ABTASTRATE
+        if zeit >= bild_zeit:                                # 40 Bilder pro Sekunde, wie die Show
+            from dataclasses import replace
+            z = engine.bewerte(replace(w, **offen), profil, zeit)
+            offen = {k: False for k in offen}
+            bild_zeit += 1 / 40
+            if 5 < zeit < 40:
+                stufen.append(engine.look.stufe)
+                hell.append(z["front-1"].helligkeit)
+                texte.append(engine.zustand_text)
+    assert sum(s >= 2 for s in stufen) / len(stufen) >= 0.6
+    assert not any("Rede" in t or "Leise" in t for t in texte)
+    spruenge = sum(1 for a, b in zip(hell, hell[1:]) if b - a > 0.15)
+    assert spruenge / (len(hell) / 40) >= 1.0               # sichtbare Sprünge, mindestens einer pro Sekunde

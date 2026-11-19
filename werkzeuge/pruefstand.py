@@ -65,7 +65,7 @@ def durchlauf(show: Show, ton: np.ndarray, von_s: float = 0.0, bis_s: float = No
     """Spielt den Ton blockweise ein (wie der Audio-Thread) und rechnet 40 Bilder pro Sekunde (wie die Show)."""
     audio = show.audio
     analyse = Analyse()
-    zaehler = {"beat": 0, "drop": 0, "schlag": 0, "eins": 0}
+    zaehler = {"beat": 0, "drop": 0, "schlag": 0, "eins": 0, "treffer": 0}
     abgeholt = dict(zaehler)
     stand = {"werte": None, "zeit": -1.0}
 
@@ -78,14 +78,15 @@ def durchlauf(show: Show, ton: np.ndarray, von_s: float = 0.0, bis_s: float = No
             return None
         neu = {k: zaehler[k] != abgeholt[k] for k in zaehler}
         abgeholt.update(zaehler)
-        return replace(werte, beat=neu["beat"], drop=neu["drop"], schlag=neu["schlag"], eins=neu["eins"])
+        return replace(werte, beat=neu["beat"], drop=neu["drop"], schlag=neu["schlag"], eins=neu["eins"],
+                       treffer=neu["treffer"])
 
     audio.aktuell, audio.abholen = aktuell, abholen
     audio.name = "Eingang: Prüfstand"
     von = int(von_s * RATE)
     bis = len(ton) if bis_s is None else min(len(ton), int(bis_s * RATE))
     aufzeichnung = {"zeit": [], "geraete": {}, "look": [], "beats": [], "schlaege": [], "drops": [], "einsen": [],
-                    "cue": []}
+                    "treffer": [], "cue": [], "text": []}
     naechstes = von / RATE
     gestartet = song is None
     for a in range(von, bis - BLOCK, BLOCK):
@@ -101,8 +102,8 @@ def durchlauf(show: Show, ton: np.ndarray, von_s: float = 0.0, bis_s: float = No
         for art in zaehler:
             if getattr(werte, art):
                 zaehler[art] += 1
-                aufzeichnung[{"beat": "beats", "schlag": "schlaege", "drop": "drops", "eins": "einsen"}[art]].append(
-                    round(jetzt, 3))
+                aufzeichnung[{"beat": "beats", "schlag": "schlaege", "drop": "drops", "eins": "einsen",
+                              "treffer": "treffer"}[art]].append(round(jetzt, 3))
         stand["werte"] = werte
         while naechstes <= jetzt:
             show.baue_bild(naechstes)
@@ -111,6 +112,7 @@ def durchlauf(show: Show, ton: np.ndarray, von_s: float = 0.0, bis_s: float = No
                 aufzeichnung["geraete"].setdefault(g["id"], []).append(
                     (g["hell"], tuple(g["farbe"]), tuple(g["richtung"]), g["strobo_hz"], g["gobo"]))
             aufzeichnung["look"].append((show.engine.look.name, show.engine.look_nummer))
+            aufzeichnung["text"].append(show.engine.zustand_text)
             platz = show.pult.song_platz
             aufzeichnung["cue"].append(platz.index if show.song.folger is not None else -1)
             naechstes += 1.0 / BILDER

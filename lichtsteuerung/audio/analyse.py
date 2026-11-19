@@ -34,6 +34,9 @@ NEUER_SONG_S = 2.0                 # so lange Applaus oder Stille: Der Takt wird
 REDE_PAUSEN = 0.23
 REDE_KLARHEIT = 0.3
 REDE_S = 2.0                       # so lange muss es nach Rede aussehen
+REDE_FLACH = 0.33                  # Sprache klingt tonal (gemessen 0,07 bis 0,30), Schlagzeug rauscht (0,36 bis 0,55)
+APPLAUS_BASS = 0.12                # Klatschen hat kaum Bass (3 %), Schlagzeug viel (Bassdrum, Toms: 17 bis 70 %)
+TREFFER_MIN_S = 0.09               # so schnell hintereinander zählen Treffer höchstens (16tel bei 160 BPM)
 
 
 @dataclass
@@ -54,6 +57,7 @@ class Messwerte:
     schlag: bool = False       # ein großer Schlag der Band (Crash, gemeinsamer Schlag): nur in einem Block wahr
     applaus: bool = False      # breites Rauschen ohne Töne, eine Weile lang: Klatschen
     eins: bool = False         # dieser Beat ist die Eins im Takt (nur in einem Block wahr, nur wenn sicher erkannt)
+    treffer: bool = False      # ein kräftiger Einsatz (Schlagzeug-Schlag, Akkord), nur in einem Block wahr
 
 
 class AubioBeatErkennung:
@@ -331,11 +335,20 @@ class Analyse:
         # Applaus: wie "flach" das Spektrum ist (Rauschen = 1, reine Töne = 0), über 1,5 s gemittelt
         self.flach_maske = (frequenzen >= 400) & (frequenzen <= 8000)
         self.flach = 0.0
+        self.flach_langsam = 0.0
         self.zeit_pause = 0.0          # so lange schon Applaus oder Stille
         self.neu_gezaehlt = False
         self.pegel_verlauf = deque(maxlen=int(3 * ABTASTRATE / BLOCK))   # Pegel der letzten 3 s
         self.pausen_anteil = 0.0
         self.zeit_rede = 0.0
+        # Applaus gegen Schlagzeug: Anteil des Basses (30 bis 200 Hz) an allem, über 1,5 s
+        self.bass_maske = (frequenzen >= 30) & (frequenzen < 200)
+        self.alles_maske = (frequenzen >= 30) & (frequenzen < 16000)
+        self.bass_anteil = 0.0
+        # Treffer: Wie stark gerade neue Töne einsetzen, über alle Höhen (auch die Bassdrum)
+        self.treffer_vorher = None
+        self.treffer_verlauf = deque(maxlen=int(2 * ABTASTRATE / BLOCK))
+        self.seit_treffer = 99.0
 
     def verarbeite(self, block: np.ndarray) -> Messwerte:
         dauer = len(block) / ABTASTRATE
@@ -359,6 +372,11 @@ class Analyse:
         leistung = spektrum[self.flach_maske] ** 2 + 1e-12
         flach_jetzt = float(np.exp(np.mean(np.log(leistung))) / np.mean(leistung))
         self.flach += (flach_jetzt - self.flach) * min(1.0, dauer / 1.5)
+        self.flach_langsam += (flach_jetzt - self.flach_langsam) * min(1.0, dauer / 4.0)   # für die Rede: ruhiger
+        alles = float(np.sum(spektrum[self.alles_maske] ** 2)) + 1e-12
+        bass_jetzt = float(np.sum(spektrum[self.bass_maske] ** 2)) / alles
+        self.bass_anteil += (bass_jetzt - self.bass_anteil) * min(1.0, dauer / 1.5)
+        treffer = self._treffer(spektrum, dauer)
 
         pegel = float(np.sqrt(np.mean(block ** 2)))
         self.pegel_glatt += (pegel - self.pegel_glatt) * 0.1
@@ -377,6 +395,9 @@ class Analyse:
             intensitaet = float(min(1.0, max(0.0, (self.energie - unten) / max(oben - unten, 0.08))))
         else:
             intensitaet = float(min(1.0, self.energie))
+        # Laut bleibt laut: Spielt die Band (oder ein Schlagzeug-Solo) minutenlang volle Kanne, darf das nicht
+        # zur "normalen" Stärke werden. Gemessen an "Hh": Strophe 0,27 bis 0,40, Refrain 0,57 bis 0,77; Solo 0,56 bis 0,72.
+        intensitaet = max(intensitaet, float(min(1.0, max(0.0, (self.energie - 0.3) / 0.4))))
 
         leise_jetzt = self.pegel_glatt < LEISE_PEGEL
         self.zeit_still = self.zeit_still + dauer if leise_jetzt else 0.0
@@ -389,7 +410,8 @@ class Analyse:
         if not getattr(self.beat, "ist_uhr", False):      # der Takt-Folger zählt selbst mit, sonst überbrückt die Uhr
             beat = self.uhr.takt(beat, self.tempo, dauer)
         eins = beat and bool(getattr(self.beat, "takt_eins", False))
-        applaus = bool(self.flach > APPLAUS_FLACH and self.pegel_glatt > LEISE_PEGEL)
+        # Klatschen rauscht und hat kaum Bass. Schlagzeug rauscht auch (Becken, Snare), hat aber Bassdrum und Toms.
+        applaus = bool(self.flach > APPLAUS_FLACH and self.bass_anteil < APPLAUS_BASS and self.pegel_glatt > LEISE_PEGEL)
         # Nach Applaus oder Stille kommt meist ein neuer Song: neu einzählen (anderes Tempo, andere Eins).
         self.zeit_pause = self.zeit_pause + dauer if (applaus or leise) else 0.0
         if self.zeit_pause >= NEUER_SONG_S and not self.neu_gezaehlt:
@@ -403,7 +425,7 @@ class Analyse:
                          energie=min(1.0, self.energie), pegel=pegel, leise=leise and not self.drops.vor_drop,
                          rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
                          vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3),
-                         schlag=schlag and not leise, applaus=applaus, eins=eins)
+                         schlag=schlag and not leise, applaus=applaus, eins=eins, treffer=treffer and not leise)
 
     def _rede(self, pegel: float, leise: bool, dauer: float) -> bool:
         """Spricht gerade jemand (Ansage zwischen den Songs)?"""
@@ -416,9 +438,27 @@ class Analyse:
             # Ältere Beat-Erkennungen: grobe Schätzung wie bis 2.2 (keine Beats und viel Mitten)
             return not leise and self.zeit_ohne_beat >= KEIN_BEAT_S and self.anteil_mitte > 0.45
         sieht_aus_wie_rede = (not leise and self.pausen_anteil > REDE_PAUSEN and klarheit < REDE_KLARHEIT
-                              and self.flach <= APPLAUS_FLACH)
+                              and self.flach_langsam < REDE_FLACH)
         self.zeit_rede = self.zeit_rede + dauer if sieht_aus_wie_rede else 0.0
         return self.zeit_rede >= REDE_S
+
+    def _treffer(self, spektrum: np.ndarray, dauer: float) -> bool:
+        """Ein kräftiger Einsatz: deutlich mehr neuer Ton als sonst in den letzten 2 s (Schlagzeug-Schläge, Akkorde).
+        Höchstens alle 90 ms einer, damit ein Wirbel nicht zum Flackern wird."""
+        logbetrag = np.log1p(spektrum[self.alles_maske] * 10)
+        fluss = 0.0 if self.treffer_vorher is None else float(np.maximum(logbetrag - self.treffer_vorher, 0).mean())
+        self.treffer_vorher = logbetrag
+        self.seit_treffer += dauer
+        verlauf = self.treffer_verlauf
+        ist_treffer = False
+        if len(verlauf) >= verlauf.maxlen // 2:
+            werte = np.asarray(verlauf)
+            schwelle = float(np.median(werte)) + 1.5 * float(np.std(werte))
+            ist_treffer = fluss > schwelle and fluss > 0.05 and self.seit_treffer >= TREFFER_MIN_S
+        verlauf.append(fluss)
+        if ist_treffer:
+            self.seit_treffer = 0.0
+        return ist_treffer
 
     def _schlag(self, spektrum: np.ndarray, dauer: float) -> bool:
         """Großer Schlag: plötzlich viel mehr Ton über alle Höhen (Becken, Band gemeinsam), 3-mal so stark

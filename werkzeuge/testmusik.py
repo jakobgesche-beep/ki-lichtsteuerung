@@ -222,3 +222,53 @@ def rede(sekunden: float = 20.0, seed: int = 1) -> np.ndarray:
     ton = ton / (np.max(np.abs(ton)) + 1e-9) * 0.7
     ton += 0.003 * rng.standard_normal(len(ton))          # Raumrauschen am Mikrofon (nie ganz still)
     return ton.astype(np.float32)
+
+
+def _tom(rng, hoehe: float) -> np.ndarray:
+    t = np.arange(int(0.35 * RATE)) / RATE
+    f = hoehe * (1 + 0.5 * np.exp(-t * 25))
+    return 0.8 * np.sin(2 * np.pi * np.cumsum(f) / RATE) * np.exp(-t * 7) + 0.1 * rng.standard_normal(len(t)) * np.exp(-t * 40)
+
+
+def _becken(rng, laut: float = 0.35) -> np.ndarray:
+    n = int(1.6 * RATE)
+    rauschen = rng.standard_normal(n)
+    return laut * np.diff(np.concatenate([[0], rauschen])) * np.exp(-np.arange(n) / RATE * 2.5)
+
+
+def schlagzeug_solo(tempo: float = 150.0, sekunden: float = 60.0, seed: int = 1) -> np.ndarray:
+    """Ein lautes Schlagzeug-Solo ohne Band: erst Groove, dann Wirbel über Snare und Toms, Becken auf der Eins,
+    Doppel-Bassdrum, kurze Breaks, am Ende wieder Groove. So, wie es ein Schlagzeuger zum Ausprobieren spielt."""
+    rng = np.random.default_rng(seed)
+    ton = np.zeros(int((sekunden + 2) * RATE))
+    beat = 60.0 / tempo
+    t, takt = 0.5, 0
+    while t < sekunden:
+        art = "groove" if takt < 4 or takt % 12 >= 10 else ("break" if takt % 7 == 6 else "solo")
+        for schlag in range(4):
+            b = t + schlag * beat
+            if art == "groove":
+                _einfuegen(ton, _kick(rng) if schlag in (0, 2) else _snare(rng), b)
+                for achtel in range(2):
+                    _einfuegen(ton, _hihat(rng, 0.12), b + achtel * beat / 2)
+                if schlag == 0 and takt % 4 == 0:
+                    _einfuegen(ton, _becken(rng), b)
+            elif art == "break":
+                if schlag == 0:
+                    _einfuegen(ton, _becken(rng, 0.45), b)
+                    _einfuegen(ton, _kick(rng), b)
+            else:
+                if schlag == 0:
+                    _einfuegen(ton, _becken(rng, 0.4), b)
+                for sechzehntel in range(4):
+                    s = b + sechzehntel * beat / 4 + rng.normal(0, 0.006)
+                    wahl = rng.random()
+                    if wahl < 0.35:
+                        _einfuegen(ton, _snare(rng) * rng.uniform(0.6, 1.0), s)
+                    elif wahl < 0.75:
+                        _einfuegen(ton, _tom(rng, rng.choice([90.0, 120.0, 160.0, 210.0])) * rng.uniform(0.6, 1.0), s)
+                    if sechzehntel % 2 == 0 and rng.random() < 0.7:
+                        _einfuegen(ton, _kick(rng) * 0.8, s)
+        t += 4 * beat * (1 + rng.normal(0, 0.01))
+        takt += 1
+    return (ton / (np.max(np.abs(ton)) + 1e-9) * 0.9).astype(np.float32)

@@ -183,6 +183,7 @@ def erzwinge(engine, name):
     """Setzt einen Look von Hand, als hätte die Engine ihn gerade gewählt."""
     engine.look, engine.look_seit = look(name), engine.beats
     engine.look_nummer = max(engine.look_nummer, 1)
+    engine.look_offen = False
 
 
 def beats_spielen(engine, profil, anzahl, energie, von=0.0, bpm=120, **werte):
@@ -260,7 +261,8 @@ def test_looks_wechseln_nur_zu_beginn_einer_8_takt_phrase(engine):
     for energie in (0.7, 0.45, 0.7, 0.45, 0.7):         # immer nur eine Stufe Unterschied
         zeit, neu = takte_spielen(engine, PARTY, 6, energie, von=zeit)
         verlauf += neu
-    wechsel = [i for i in range(1, len(verlauf)) if verlauf[i][1] != verlauf[i - 1][1]]
+    # (der erste Look des Songs kommt kurz nach dem ersten Schlag, er zählt hier nicht)
+    wechsel = [i for i in range(2, len(verlauf)) if verlauf[i][1] != verlauf[i - 1][1]]
     assert wechsel
     assert all(verlauf[i][2] and i % 32 == 0 for i in wechsel)    # auf der Eins, zu Beginn einer 8-Takt-Phrase
 
