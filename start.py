@@ -78,6 +78,14 @@ def selbsttest(adresse: str) -> None:
     rtmidi.MidiIn().get_ports()          # MIDI muss sich laden lassen (ohne Gerät: leere Liste)
     from lichtsteuerung.licht_chat import werkzeuge
     assert len(werkzeuge()) == 2
+    # Die Musik-Analyse mit dem Takt-Folger muss in der gebauten App laufen: 12 s Takt rein, Beats und Tempo raus.
+    from lichtsteuerung.audio.analyse import Analyse, beat_erkennung
+    from lichtsteuerung.audio.quellen import BLOCK, erzeuge_takt
+    analyse, ton, beats = Analyse(beat_erkennung()), erzeuge_takt(120, 12), 0
+    for start in range(0, len(ton) - BLOCK, BLOCK):
+        werte = analyse.verarbeite(ton[start:start + BLOCK])
+        beats += werte.beat
+    assert analyse.beat.name == "takt" and beats >= 8 and 110 <= werte.tempo_bpm <= 130, (beats, werte.tempo_bpm)
     print("Selbsttest bestanden")
 
 
