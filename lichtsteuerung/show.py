@@ -41,6 +41,7 @@ from .generalprobe import Generalprobe
 from .ki import KiKonto
 from .ki_show import KiDesign
 from .licht_chat import LichtChat
+from .regie import KiRegie
 from .midi import Midi
 from .zwischenlicht import Zwischenlicht
 from .pult import Executor, Pult
@@ -97,6 +98,7 @@ class Show:
         self.vorschau_geraete = None
         self.ki = KiKonto(self.pfade.lokal)     # Claude: Schlüssel, Modelle, Kosten (Chat, Lichtdesign, Regie)
         self.ki_design = KiDesign(self)
+        self.regie = KiRegie(self)
         self.chat = LichtChat(self)
         self.zwischenlicht = Zwischenlicht(self)
         self.generalprobe = Generalprobe(self)
@@ -385,6 +387,7 @@ class Show:
             self._messwerte = messwerte
             self._beat = bool(messwerte is not None and messwerte.beat) if clock_beat is None else clock_beat
             self._eins = bool(messwerte is not None and messwerte.eins) if clock_beat is None else False
+            self.regie.messen(messwerte, jetzt)            # KI-Regie sammelt nur (pro Sekunde zusammengefasst)
             return self.engine.bewerte(messwerte, self.profil, jetzt, self.overrides.pause)
         except Exception:
             # Sicherer Rückfall: Auch ein Fehler in den Regeln führt zum Grundlicht.
@@ -506,7 +509,7 @@ class Show:
 
     def _sitzung_speichern(self) -> None:
         daten.schreibe_json(self.pfade.sitzung, {"profil": self.profil["name"], "automatik": self.automatik_an,
-                                                 "audio": self.audio_auftrag})
+                                                 "audio": self.audio_auftrag, "ki_regie": self.regie.an})
 
     def audio_quelle_setzen(self, auftrag: dict, merken: bool = True) -> str:
         """Tonquelle wählen. Gemerkt wird sie, damit sie nach einem Neustart von selbst wieder da ist."""
@@ -555,6 +558,9 @@ class Show:
             self.profil = RUHE_PROFIL
         self.automatik_an = sitzung.get("automatik", True)
         self.audio_auftrag = sitzung.get("audio") if isinstance(sitzung.get("audio"), dict) else None
+        # KI-Regie: gemerkt wie gewählt; beim ersten Mal an, wenn ein Claude-Schlüssel da ist
+        self.regie.an = bool(sitzung.get("ki_regie", self.ki.bereit()))
+        self.regie.meldung = "wartet auf Musik" if self.regie.an else "aus"
         palette = self.profil.get("palette") or ["rot", "blau"]
         self.pult.farbe_1, self.pult.farbe_2 = palette[0], palette[1 % len(palette)]
 
@@ -653,6 +659,7 @@ class Show:
                     "chat_vorschau": ({"geraete": self.chat_vorschau_geraete, "cue": self.chat.entwurf["cue"]}
                                       if self.chat_vorschau_geraete is not None and self.chat.entwurf else None),
                     "chat_denkt": self.chat.denkt, "start_meldungen": daten.START_MELDUNGEN,
+                    "ki_regie": self.regie.status(),
                     "strobo_erlaubt": self.profil["strobo"] != "aus",
                     "hazer_erlaubt": self.profil["hazer"],
                     "audio": {"quelle": self.audio.name, "fehler": self.audio.fehler,
@@ -671,6 +678,7 @@ class Show:
             return                                    # läuft schon (nie zwei Show-Threads)
         self.rueckblick.ereignis("programm", version=VERSION)
         self.midi.starten()
+        self.regie.starten()
         self._stopp.clear()
         self._thread = threading.Thread(target=self._schleife, name="Show", daemon=True)
         self._thread.start()
@@ -683,6 +691,7 @@ class Show:
             self._thread.join(timeout=1.0)
         self.audio.stoppen()
         self.midi.stoppen()
+        self.regie.stoppen()
         self.fernbedienung.ausschalten()
         self.ausgabe.ausschalten()
 

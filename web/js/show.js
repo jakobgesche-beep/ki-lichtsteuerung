@@ -75,8 +75,10 @@ export function showSeite(wurzel) {
         </div>
       </section>
       <section class="fenster buehnenfenster"><header>Bühne live <span class="zeile"><span id="quelle" class="leise"></span>
+        <button id="regie-knopf" class="chip check-knopf" title="KI-Regie: Claude hört über die Messwerte mit (nie den Ton) und wählt alle paar Sekunden den passenden Look. Ohne Internet macht die Automatik allein weiter.">KI-Regie</button>
         <button id="fs-knopf" class="chip check-knopf" title="Follow-Spot: in der Draufsicht ziehen, die Moving Heads folgen">Follow-Spot</button></span></header>
         <div class="drei-d show-buehne" id="drei"></div>
+        <div id="regie-zeile" class="leise regie-zeile"></div>
         <div id="fs-feld" class="fs-feld" hidden>
           <canvas id="fs-leinwand" width="560" height="300"></canvas>
           <div class="zeile"><span class="leise">Auf die Bühne tippen oder ziehen: Die Moving Heads zeigen dorthin (Kopfhöhe) und folgen.</span>
@@ -196,11 +198,34 @@ export function showSeite(wurzel) {
     if (feld("vorschlag").dataset.inhalt !== html) { feld("vorschlag").innerHTML = html; feld("vorschlag").dataset.inhalt = html; }
   }
 
+  // KI-Regie: Claude sagt alle paar Sekunden, was los ist und welcher Look passt. Die Engine wechselt im Takt.
+  const LAGE = { ruhige_musik: "ruhige Musik", strophe: "Strophe", refrain: "Refrain", hoehepunkt: "Höhepunkt",
+    solo: "Solo", schlagzeug_solo: "Schlagzeug-Solo", break: "Break", aufbau: "Aufbau", drop: "Drop",
+    ansage: "Ansage", applaus: "Applaus", stille: "Stille", unklar: "unklar" };
+  let regieAn = false;
+  function regieZeigen(regie) {
+    if (!regie) return;
+    regieAn = regie.an;
+    setze(feld("regie-knopf"), regie.an ? "KI-Regie an" : regie.bereit ? "KI-Regie aus" : "KI-Regie (Schlüssel fehlt)");
+    feld("regie-knopf").className = `chip check-knopf ${regie.an ? "an" : ""}`;
+    const l = regie.letzte;
+    const kosten = regie.kosten_cent ? ` · ${regie.kosten_cent.toLocaleString("de-DE", { maximumFractionDigits: 1 })} Cent` : "";
+    setze(feld("regie-zeile"), !regie.an ? "" : l && l.gilt
+      ? `Claude hört: ${LAGE[l.lage] ?? l.lage} → ${l.look}${l.farben ? " · " + l.farben.join("/") : ""} (vor ${Math.round(l.vor_s)} s)`
+        + (l.hoere ? ` – ${l.hoere}` : "") + kosten
+      : `KI-Regie: ${regie.meldung}${kosten}`);
+  }
+
+  feld("regie-knopf").onclick = async () => {
+    try { regieZeigen(await senden("/ki/regie", { an: !regieAn })); } catch { /* Meldung kam schon */ }
+  };
+
   function zeigen(live) {
     letzterLive = live;
     erkennungZeigen(live.erkennung);
     buehne?.setzeWerte(live.geraete);
     setze(feld("quelle"), quelleText(live));
+    regieZeigen(live.ki_regie);
     setze(feld("mitschnitt-an"), live.mitschnitt?.song ? "● schneidet mit" : live.mitschnitt?.status ?? "");
     feld("fs-knopf").className = `chip check-knopf ${live.follow_spot?.an ? "an" : ""}`;
     if (!feld("fs-feld").hidden) fsZeichnen(live.follow_spot?.punkt);

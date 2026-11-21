@@ -507,13 +507,23 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         show.chat.abspielen_stoppen()
         return show.chat.status()
 
-    # --- Claude: Lichtdesign aus der Probe ---------------------------------
+    # --- Claude: Lichtdesign aus der Probe und Live-Regie ---------------------------------
+
+    @app.get("/api/ki")
+    def ki_status():
+        return {**show.ki.status(), "regie": show.regie.status()}
 
     @app.post("/api/ki/design/{name}")
     def ki_design(name: str, auftrag: dict = Body(default={})):
         """Claude entwirft die Show für einen Song (dauert bis zu zwei Minuten). Sie landet als Vorschlag im
         Licht-Chat und läuft nur in der Vorschau, bis jemand Übernehmen drückt."""
         return show.chat.song_entwerfen(name, str(auftrag.get("titel") or ""), str(auftrag.get("wuensche") or ""))
+
+    @app.post("/api/ki/regie")
+    def ki_regie(auftrag: dict = Body(...)):
+        show.regie.einschalten(bool(auftrag.get("an")))
+        show._sitzung_speichern()
+        return show.regie.status()
 
     @app.post("/api/chat/verwerfen")
     def chat_verwerfen():

@@ -81,6 +81,16 @@ STAERKE_HALTEN_S = 3.0   # so lange hält die Stärke nach (ein kurzer Break mac
 RHYTHMUS_TREFFER = 2.0   # so viele Treffer pro Sekunde (mit Takt): Das ist nie "Ruhe", mindestens Stufe 1
 ERSTER_LOOK_S = 0.5      # so lange nach dem ersten Schlag eines Songs wird der erste Look gewählt
 ERSTER_LOOK_SPAETESTENS_S = 1.5   # Musik ganz ohne Schläge (Fläche, Orgel): spätestens dann
+# KI-Regie (regie.py): Claude sagt, was los ist und welcher Look passt; die Engine wechselt im Takt.
+REGIE_GUELTIG_S = 20.0   # so lange gilt eine Entscheidung, dann macht die Engine wieder allein weiter
+REGIE_SPAETESTENS_S = 8.0   # kommt keine Phrase (Eins unbekannt), wechselt der Look spätestens dann auf einem Beat
+REGIE_RUHIG = ("ansage", "applaus", "stille")
+REGIE_LEISE = ("ruhige_musik", "ansage", "applaus", "stille")   # dabei endet ein (vermutlich falscher) Drop
+REGIE_KRAEFTIG = ("refrain", "hoehepunkt", "solo", "schlagzeug_solo", "drop", "aufbau")
+REGIE_RUHIG_GUELTIG_S = 8.0   # "Ansage/Applaus/Stille" gilt kürzer: Fängt die Musik an, fragt die Regie sofort neu
+LAGE_NAMEN = {"ruhige_musik": "ruhige Musik", "strophe": "Strophe", "refrain": "Refrain", "hoehepunkt": "Höhepunkt",
+              "solo": "Solo", "schlagzeug_solo": "Schlagzeug-Solo", "break": "Break", "aufbau": "Aufbau",
+              "drop": "Drop", "ansage": "Ansage", "applaus": "Applaus", "stille": "Stille", "unklar": "unklar"}
 
 
 @dataclass(frozen=True)
@@ -159,6 +169,66 @@ class Engine:
         self.look_offen = True          # der erste Look des Songs ist noch nicht gewählt
         self.erste_regung: Optional[float] = None   # erster Schlag oder Treffer des Songs
         self.musik_seit: Optional[float] = None     # seit wann Musik kommt (für den ersten Look ohne Schläge)
+        self.regie: Optional[dict] = None           # letzte Entscheidung der KI-Regie (siehe regie.py)
+
+    # --- KI-Regie -------------------------------------------------------------
+
+    def regie_setzen(self, entscheidung: dict, jetzt: float) -> None:
+        """Claude hat entschieden. Angewendet wird es im Takt (in _look_waehlen), nicht sofort."""
+        look = next((l for l in LOOKS if l.name == entscheidung.get("look")), None)
+        self.regie = {**entscheidung, "look_obj": look, "zeit": jetzt, "angewendet": False}
+
+    def _regie(self, jetzt: float) -> Optional[dict]:
+        if self.regie is not None and jetzt - self.regie["zeit"] > REGIE_GUELTIG_S:
+            self.regie = None                       # zu alt: Die Engine macht wieder allein weiter
+        return self.regie
+
+    def _regie_anwenden(self, regie: dict, m: Messwerte, profil: dict, jetzt: float, eigene: int) -> None:
+        """Claudes Look kommt auf der Eins (Anfang einer Phrase), bei "jetzt" auf dem nächsten Beat.
+        Solange die Entscheidung gilt, wechselt die Engine nicht von selbst (außer beim Drop).
+
+        Grenzen (eigene = Stufe, die die Engine selbst aus der Stärke der Musik hört):
+            Ist die Musik kräftig (Stufe 2 oder 3), wird das Licht nie schwächer als die Engine es fahren würde.
+            Höchstens eine Stufe kräftiger als die Engine (eine Rede, die Claude für Musik hält, bleibt ruhig).
+            Wird die Musik deutlich lauter als Claudes Look, übernimmt die Engine bis zur nächsten Antwort."""
+        if regie["angewendet"]:
+            if eigene >= 2 and self.look.stufe < eigene:
+                regie["look_obj"] = None            # lauter geworden: Die Engine wechselt selbst
+            return
+        look = regie["look_obj"] or self.look
+        ziel = min(max(look.stufe, eigene if eigene >= 2 else 0), eigene + 1)
+        if ziel != look.stufe:
+            kandidaten = [l for l in self._passende_looks(ziel, profil) if l != self.look] or \
+                self._passende_looks(ziel, profil)
+            gleich = [l for l in kandidaten if (l.bewegung is None) == (look.bewegung is None)]
+            look = (gleich or kandidaten or [self.look])[0]
+        erlaubt = self._passende_looks(look.stufe, profil)
+        if look not in erlaubt:                     # das Profil verbietet ihn (zum Beispiel Bewegung aus)
+            look = erlaubt[0] if erlaubt else self.look
+        if regie["wechsel"] == "bleiben" or look == self.look:
+            regie["angewendet"] = True
+            if regie.get("farben") and self.look_offen:
+                self.farben_paar = tuple(regie["farben"])
+            return
+        seit = self.beats - self.look_seit
+        if regie["wechsel"] == "jetzt" or self.look_offen:
+            jetzt_wechseln = m.beat
+        elif self.eins_bekannt:
+            jetzt_wechseln = self._phrase_beginnt(m) or (m.beat and m.eins and jetzt - regie["zeit"] >= REGIE_SPAETESTENS_S)
+        else:
+            jetzt_wechseln = m.beat and (seit % 8 == 0 or jetzt - regie["zeit"] >= REGIE_SPAETESTENS_S)
+        if not jetzt_wechseln:
+            return
+        self.look = look
+        self.look_nummer += 1
+        self.look_seit = self.beats
+        self.stufe = look.stufe
+        self.look_offen = False
+        if regie.get("farben"):
+            self.farben_paar = tuple(regie["farben"])
+        if look.stufe >= 2:
+            self.letzter_akzent = jetzt             # der neue starke Look kommt mit einem hellen Akzent
+        regie["angewendet"] = True
 
     def bewerte(self, messwerte: Optional[Messwerte], profil: dict, jetzt: float,
                 pause: bool = False) -> dict:
@@ -202,7 +272,16 @@ class Engine:
                 self.treffer_rate += ((1.0 / dauer if messwerte.treffer else 0.0) - self.treffer_rate) * min(1.0, dauer / 3.0)
         ruhig = (messwerte is None or pause or profil["beat_reaktion"] <= 0
                  or messwerte.leise or messwerte.rede)
-        self._text_setzen(messwerte, pause, profil)   # Aufbau, Pause und Drop setzen ihn danach neu
+        regie = None if pause else self._regie(jetzt)
+        if (regie is not None and messwerte is not None and profil["beat_reaktion"] > 0
+                and regie["lage"] in REGIE_RUHIG and jetzt - regie["zeit"] <= REGIE_RUHIG_GUELTIG_S
+                and (messwerte.intensitaet if messwerte.intensitaet > 0 else messwerte.energie) < STUFEN[1]):
+            # Claude hört eine Ansage, Applaus oder Stille: ruhiges Grundlicht, aber nur, wenn es nicht gerade
+            # kräftig ist. Kräftiger als die eigene Erkennung (zum Beispiel trotz erkannter Rede) macht die Regie nie.
+            # Getestet (2.4.0): Claude hielt eine Ansage für ein Solo und ein Schlagzeug-Solo für eine Strophe,
+            # weil er nur Zahlen sieht.
+            ruhig = True
+        self._text_setzen(messwerte, pause, profil, regie, ruhig)   # Aufbau, Pause und Drop setzen ihn danach neu
         schritt = dauer / UEBERGANG_S
         self.musik_anteil = max(0.0, min(1.0, self.musik_anteil + (-schritt if ruhig else schritt)))
         # Fällt die Analyse aus, soll das nicht mitten im Blitz stehen bleiben.
@@ -264,19 +343,22 @@ class Engine:
             ergebnis[geraet["id"]] = e
         return ergebnis
 
-    def _text_setzen(self, messwerte, pause, profil) -> None:
+    def _text_setzen(self, messwerte, pause, profil, regie: Optional[dict] = None, ruhig: bool = False) -> None:
+        lage = LAGE_NAMEN.get(regie["lage"], regie["lage"]) if regie else None
         if pause:
             self.zustand_text = "Automatik pausiert: Grundlicht"
         elif messwerte is None:
             self.zustand_text = "Kein Ton: Grundlicht"
         elif profil["beat_reaktion"] <= 0:
             self.zustand_text = "Profil ohne Automatik: Grundlicht"
-        elif messwerte.leise:
+        elif ruhig and regie is not None and regie["lage"] in REGIE_RUHIG:
+            self.zustand_text = f"KI-Regie hört {lage}: Grundlicht"
+        elif ruhig and messwerte.leise:
             self.zustand_text = "Leise Stelle: Grundlicht"
-        elif messwerte.rede:
+        elif ruhig and messwerte.rede:
             self.zustand_text = "Rede erkannt: Grundlicht"
         else:
-            self.zustand_text = f"Musik: {self.look.name}"
+            self.zustand_text = f"Musik: {self.look.name}" + (f" · KI-Regie: {lage}" if lage else "")
 
     # --- Looks wählen --------------------------------------------------------
 
@@ -316,6 +398,14 @@ class Engine:
         # Ein Sprung: von ruhig oder mittel plötzlich auf Höhepunkt, deutlich über dem Schnitt.
         drop = (stufe == 3 and self.stufe <= 1 and staerke - self.energie_langsam > DROP)
         self.energie_langsam += (staerke - self.energie_langsam) * min(1.0, self.dauer / 8.0)
+        regie = self._regie(jetzt)
+        if regie is not None and regie.get("look_obj") is not None:
+            if not drop:
+                self._regie_anwenden(regie, m, profil, jetzt, stufe)
+                if regie.get("look_obj") is not None:
+                    return
+            else:
+                regie["angewendet"] = True  # ein plötzlicher Sprung geht vor; Claude sieht ihn bei der nächsten Frage
         seit = self.beats - self.look_seit
         if self.eins_bekannt:
             # Mit bekannter Eins: Wechsel nur zu Beginn einer 8-Takt-Phrase (auf der Eins)
@@ -424,6 +514,13 @@ class Engine:
         self.tempo = tempo
         self.schub = math.exp(-(jetzt - self.letzter_beat) / (PULS_ABKLANG * periode))
         if reaktion >= 0.5:
+            regie = self._regie(jetzt)
+            leise_gehoert = regie is not None and (regie["lage"] in REGIE_LEISE or (
+                regie["lage"] not in REGIE_KRAEFTIG and regie.get("look_obj") is not None and regie["look_obj"].stufe <= 1))
+            if self.drop_laeuft() and leise_gehoert and regie["zeit"] > self.drop_zeit + 1.0:
+                # Claude hört nach dem "Drop" ruhige Musik: Das war ein Songanfang nach einer Pause, kein Drop.
+                self.drop_beat = -999
+                self.musik_anteil = min(self.musik_anteil, 0.5)
             if self.drop_laeuft():
                 return self._drop(m, profil, palette, grenze, jetzt, periode)
             if self.drop_beat >= 0 and self.beats - self.drop_beat == DROP_BEATS:

@@ -416,6 +416,9 @@ label.datei-knopf:hover { background: var(--kachel-hover); }
 .songplatz .ordnen { display: flex; flex-direction: column; gap: 2px; justify-content: center; }
 .setlist-nr { display: inline-block; min-width: 18px; color: var(--leise); font-size: 12px; font-weight: 700; }
 
+/* KI-Regie (2.4.0): eine Zeile unter der Bühne, was Claude gerade hört */
+.regie-zeile { padding: 4px 8px; font-size: 12px; min-height: 1.2em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 /* KI-Lichtdesign in der Probe (2.4.0) */
 .ki-design { margin: 6px 0; }
 .ki-design summary { cursor: pointer; color: var(--leise); }
