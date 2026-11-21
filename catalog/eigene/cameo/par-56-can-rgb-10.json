@@ -1,0 +1,115 @@
+{
+  "id": "cameo/par-56-can-rgb-10",
+  "hersteller": "Cameo",
+  "name": "PAR 56 CAN RGB 10",
+  "kategorien": [
+    "Color Changer"
+  ],
+  "physik": {
+    "gewicht_kg": null,
+    "abstrahlwinkel_grad": 25
+  },
+  "_hinweis": "108 x 10 mm LEDs (36 rot, 36 grün, 36 blau), Artikel CLP56RGB10BS/PS. Kanal 4 ist der Master-Dimmer: Bekommt die Lampe nur Rot, Grün und Blau, bleibt sie dunkel. Am Gerät mit der Taste MODE in den DMX-Modus: roter Punkt unter der ersten Ziffer der Adresse = 4 Kanäle, kein roter Punkt = 6 Kanäle.",
+  "kanaele": {
+    "Rot": {
+      "typ": "rot",
+      "standard": 0
+    },
+    "Grün": {
+      "typ": "gruen",
+      "standard": 0
+    },
+    "Blau": {
+      "typ": "blau",
+      "standard": 0
+    },
+    "Dimmer": {
+      "typ": "dimmer",
+      "standard": 0
+    },
+    "Strobo": {
+      "typ": "strobo",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 16,
+          "typ": "offen",
+          "name": "kein Strobo"
+        },
+        {
+          "von": 17,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null,
+          "name": "Strobo, Tempo laut Handbuch nicht angegeben"
+        }
+      ]
+    },
+    "Modus": {
+      "typ": "makro",
+      "standard": 0,
+      "bereiche": [
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus",
+          "name": "Farbe über DMX"
+        },
+        {
+          "von": 32,
+          "bis": 95,
+          "typ": "sonstiges",
+          "name": "Farbmischung"
+        },
+        {
+          "von": 96,
+          "bis": 159,
+          "typ": "sonstiges",
+          "name": "RGB-Farbwechsel"
+        },
+        {
+          "von": 160,
+          "bis": 223,
+          "typ": "sonstiges",
+          "name": "7 Farben Wechsel"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Soundsteuerung"
+        }
+      ]
+    }
+  },
+  "modi": [
+    {
+      "name": "4-Kanal (roter Punkt)",
+      "kanaele": [
+        "Rot",
+        "Grün",
+        "Blau",
+        "Dimmer"
+      ]
+    },
+    {
+      "name": "6-Kanal (kein Punkt)",
+      "kanaele": [
+        "Rot",
+        "Grün",
+        "Blau",
+        "Dimmer",
+        "Strobo",
+        "Modus"
+      ]
+    }
+  ],
+  "quelle": {
+    "art": "handbuch",
+    "name": "Cameo PAR 56 CAN (CLP56RGB10), Bedienungsanleitung, DMX-Tabelle",
+    "url": "https://www.manualslib.de/manual/97116/Cameo-Par-56-Can.html?page=9"
+  },
+  "handbuch_geprueft": true
+}
