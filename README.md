@@ -59,13 +59,30 @@ Beim ersten Mal dauert es ein paar Minuten, danach geht der Browser von selbst a
 - **Fader:** 10 pro Seite, 4 Seiten. Fader hoch startet die Sequenz, ganz runter schaltet sie aus. Go+, Go−, Flash (solange gedrückt), Aus. Fader-Arten: Sequenz, **Gruppen-Master** (Helligkeit einer Gruppe) und **Tempo** (alle Effekte langsamer oder schneller, Learn = im Takt tippen). Rechts der **Grand Master**.
 - **Befehlszeile** (unten, immer da), deutsch oder englisch: `Group 2 At Full` · `Farbe Rot` · `Store Exec 5` · `Assign Sequence Intro At Exec 3` · `Exec 3 At 50` · `Go Exec 3` · `Off Exec 3` · `Delete Exec 3` · `Label Exec 3 Intro` · `Update` · `Page 2` · `Grandmaster At 80` · `Oops`.
 
-### Licht-Chat (im Pult, rechts)
+### Claude: Licht-Chat, Lichtdesign und KI-Regie
 
-Schreib, was du sehen willst, zum Beispiel: „Spots langsam blau kreisen, PARs warmweiß atmen, auf Fader 3“. Der Vorschlag läuft erst nur in der **Vorschau** (Bühne zeigt „Vorschau Licht-Chat“), nichts geht live. Mit **Übernehmen** wird er gespeichert und auf den gewählten Fader gelegt, **Oops** nimmt beides zurück.
+Claude ist an drei Stellen dabei. Alle brauchen den Schlüssel aus der [Claude Console](https://console.anthropic.com) (API Keys), einmal unten im Licht-Chat eingetragen. Er liegt nur auf diesem Rechner (`lokal.json` im Datenordner) und kommt nie in eine Sicherung. In der Claude Console ein **Ausgabenlimit** setzen. Claude bekommt nie den Ton, nur Zahlen und Lichtdaten.
 
-- **Mit Claude** (freie Sätze, auch Abläufe und Änderungen an vorhandenen Sequenzen): unten im Chat den Schlüssel aus der [Claude Console](https://console.anthropic.com) eintragen (API Keys). Er liegt nur auf diesem Rechner (`lokal.json` im Datenordner) und kommt nie in eine Sicherung. In der Claude Console ein **Ausgabenlimit** setzen. Der Chat zeigt ungefähr, was er bisher gekostet hat. Benutzt wird `claude-opus-5-5`; lehnt Claude eine Anfrage ab, springt automatisch ein anderes Claude-Modell ein (Rückfall-Einstellung der Schnittstelle).
-- **Ohne Schlüssel oder ohne Internet** versteht der Chat einfache Sätze selbst und verzeiht Tippfehler: Gruppen („alle Lichter“), Farben, Helligkeit, Positionen, Effekte, Stile (Pop, Rock, Party, Ballade, Weihnachten, Jazz), „wirbeln/durcheinander“, Strobo, „langsam/schnell“, „in 3 Sekunden“, „auf Fader 4“.
-- Claude bekommt nur Lichtdaten (Geräte, Gruppen, Positionen, Sequenzen), nie Ton oder Bilder. Jeder Vorschlag läuft durch dieselbe Prüfung wie alles andere (Strobo-Grenze, Publikum, Gobos).
+**1. Licht-Chat (im Pult, rechts): programmieren mit Sätzen.** Zum Beispiel:
+
+- „Spots langsam blau kreisen, PARs warmweiß atmen, auf Fader 3“ (Look oder Ablauf)
+- „Mach die Sequenz Intro röter und schneller“ (vorhandene Sequenz ändern)
+- „Leg Intro auf Fader 5“ oder „Mach Fader 5 frei“
+- „Profil fürs Weihnachtskonzert: warm, ruhig, bei Soli darf es kräftiger werden“
+- „Bau die Show für Boböd, Refrain soll knallen“ (ganze Song-Show, siehe Punkt 2)
+
+Jeder Vorschlag läuft erst nur in der **Vorschau** (Bühne zeigt „Vorschau Licht-Chat“), nichts geht live. Gespeichert, auf den Fader gelegt oder geladen wird erst mit **Übernehmen**, **Oops** nimmt es zurück. Ohne Schlüssel oder Internet versteht der Chat einfache Sätze selbst (Gruppen, Farben, Effekte, Stile, Tippfehler). Kosten: ein paar Cent pro Nachricht (`claude-opus-5-5`).
+
+**2. Lichtdesign mit Claude (Probe, bei jedem Song „Lichtdesign mit Claude“).** Das Programm misst die Aufnahme Takt für Takt (Lautstärke, Bass, wie viel los ist, welcher frühere Takt genauso klingt, große Schläge, deine D-Marken). Claude erkennt daraus die Songteile – bekannte Songs auch mit seinem Wissen über den Song – und entwirft für jeden Teil einen Look: ruhige Teile ruhig, Refrain, Solo und Höhepunkt kräftig, Akzente auf den großen Schlägen. Titel und Wünsche kannst du dazuschreiben. Die Zeiten kommen immer aus den gemessenen Takten. **„Mit Aufnahme ansehen“** spielt die Aufnahme ab, das Licht läuft nur in der 3D-Ansicht; erst **Übernehmen** ersetzt die Show. Dauert etwa 30 Sekunden, kostet etwa 10 Cent. Live läuft die fertige Show ohne Internet.
+
+**3. KI-Regie (Show-Seite, Knopf „KI-Regie“ über der Bühne).** Läuft kein Song mit Song-Start, hört Claude über die Messwerte mit und sagt alle paar Sekunden, was los ist (Strophe, Refrain, Solo, Ansage, Applaus …) und welcher Look passt. Die Engine wechselt im Takt. Unter der Bühne steht, was Claude gerade hört. Grenzen:
+
+- Claude bleibt im Profil (Farben aus der Palette, ohne Bewegung kein bewegter Look). Strobo, Sperrzone und Override-Tasten bleiben, wie sie sind.
+- Ist die Musik kräftig, wird das Licht nie schwächer, als die Automatik es fahren würde. Höchstens eine Stufe kräftiger als die Automatik. Die eigene Rede-Erkennung überstimmt Claude nie; ruhiger machen (Ansage, Applaus) darf er, wenn es nicht gerade kräftig ist.
+- Kein Internet, keine Antwort, Limit erreicht: Die Automatik macht allein weiter. Eine Entscheidung gilt höchstens 20 Sekunden.
+- Kosten: mit dem schnellen Modell (`claude-haiku-5-5`, denkt kurz nach, antwortet in 2 bis 6 Sekunden) etwa 35 Cent pro Stunde Musik; Limit 1 € pro Sitzung. In `lokal.json` ändern `"regie_modell"` das Modell (zum Beispiel `claude-sonnet-5-5`, etwa 3 € pro Stunde) und `"regie_limit_cent"` das Limit.
+
+Getestet (Kunst-Konzert aus Song, Applaus, Ansage, Schlagzeug-Solo, Ballade, Song, echtes Claude): Applaus, Ansage, Ballade und die lauten Teile hat Haiku erkannt. Am Anfang der Ansage hielt er sie einmal für ein Solo; die Grenzen oben sorgen dafür, dass so etwas nicht schadet. Mit echter Band und echtem Publikum ist die Regie noch nicht ausprobiert.
 
 ### Probe und Song-Start
 
@@ -136,6 +153,7 @@ Automatik (Engine) → Fader und Song → Programmer → Gruppen-Master → Halt
 | `pult.py` | Programmer, Effekte, Sequenzen, Fader (Seiten, Arten, Flash, Oops) |
 | `befehle.py` | die Befehlszeile |
 | `licht_chat.py` | Licht-Chat (Claude und einfache Sätze ohne Internet) |
+| `ki.py`, `ki_show.py`, `regie.py` | Claude: Schlüssel und Kosten, Lichtdesign aus der Probe, KI-Regie live |
 | `probe.py`, `songspieler.py` | Probe, Teile richtigstellen, Song-Start |
 | `sicherung.py`, `konzertcheck.py`, `wachhalten.py` | Show sichern und laden, Konzert-Check, kein Ruhezustand |
 | `szenen.py`, `profile.py`, `overrides.py`, `vorschau.py` | Werte auflösen, Profile, feste Tasten, Entwürfe |

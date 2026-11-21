@@ -243,3 +243,17 @@ Hier steht alles, was die Projektbeschreibung offen ließ, und wie es jetzt gel�
 | 10 X32 | Das Modul setzt `show.overrides` oder einen eigenen Rede-Eingang und liest `x32.json`. Audio vom X32 läuft schon über `audio.quellen.Eingang` mit Kanalwahl |
 | 11 Klick-Positionen | `pantilt.py`, `szenen.zeige_auf` und die Versatz-Felder in `stage.json` sind fertig und getestet. Es fehlt nur die Oberfläche |
 | 12 Generalprobe | Handbuch-Abgleich, Einmessen, Enttec testen |
+
+## Claude überall (2.4.0)
+
+Wunsch der Technik-AG: „alles über die Claude-API“ (Erkennung und Programmieren über den Chat funktionierten nicht gut).
+
+- **Der Licht-Chat ging mit Claude nie:** Seine Werkzeug-Beschreibung hatte 17 Felder „Typ oder null“, Claude erlaubt höchstens 16 und lehnte jede Anfrage ab (400). Ohne Schlüssel fiel das nicht auf. Jetzt sind seltene Felder weglassbar statt null-bar; ein Test zählt die Felder (`unionen`).
+- **Live mit Claude** weicht vom Wortlaut der Grundregel „Offline zuerst“ ab. Umgesetzt ist der in CLAUDE.md vorgesehene „Live-Regisseur (Version 2)“ mit seinen Regeln: nur Zahlen, nie der Ton; nur innerhalb der Profilgrenzen; keine Antwort = alles bleibt, wie die Automatik es fährt. Die Show läuft ohne Internet unverändert.
+- **Alle 8 Sekunden statt alle 30 bis 60**, dazu sofort bei einem Wechsel (Rede, Applaus, Drop): Der Wunsch war, dass zum Beispiel ein Solo sofort kräftig wird. Mit dem schnellen Modell kostet das wenig.
+- **Grenzen der Regie** (nach Tests mit dem echten Claude): Er verwechselte aus den Zahlen eine Ansage mit einem Solo und ein Schlagzeug-Solo mit einer Strophe. Deshalb: bei kräftiger Musik nie schwächer als die Automatik, höchstens eine Stufe kräftiger, die eigene Rede-Erkennung wird nie überstimmt.
+- **„Nichts von der KI geht direkt live“** gilt weiter für alles, was gespeichert wird (Chat, Lichtdesign, Profile: Vorschau, dann Übernehmen). Die Regie speichert nichts; sie wählt live nur unter den festen Looks der Engine.
+- **KI-Regie ist beim ersten Start an, wenn ein Schlüssel da ist** (Wunsch: alles über die API). Der Knopf auf der Show-Seite schaltet sie ab; gemerkt wird es in `sitzung.json`.
+- **Modelle:** Chat und Lichtdesign `claude-opus-5-5`, Regie `claude-haiku-5-5` mit kurzem Nachdenken (Antwort in 2 bis 6 Sekunden). Ohne Nachdenken war Haiku schneller, verwechselte aber Applaus mit Musik und ließ ein falsches Drop-Licht in einer Ballade stehen; mit Nachdenken erkannte er beides, fast so gut wie Sonnet (das live etwa das Zehnfache kostet; einstellbar in `lokal.json`).
+- **Kosten** (gemessen): Chat etwa 3 Cent pro Nachricht, Lichtdesign eines Songs etwa 7 Cent, Regie mit Haiku etwa 2 Cent pro 3 Minuten Musik (rund 35 Cent pro Stunde). Limit der Regie: 1 € pro Sitzung.
+- **Wer zahlt:** offen (siehe Offene Fragen in CLAUDE.md).
