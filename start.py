@@ -76,8 +76,11 @@ def selbsttest(adresse: str) -> None:
     import anthropic  # noqa: F401  der Licht-Chat muss sich laden lassen (auch ohne Schlüssel)
     import rtmidi
     rtmidi.MidiIn().get_ports()          # MIDI muss sich laden lassen (ohne Gerät: leere Liste)
-    from lichtsteuerung.licht_chat import werkzeuge
-    assert len(werkzeuge()) == 2
+    from lichtsteuerung.licht_chat import MAX_UNIONEN, unionen, werkzeuge
+    assert len(werkzeuge()) == 5 and unionen(werkzeuge()) <= MAX_UNIONEN   # sonst lehnt Claude jede Anfrage ab
+    from lichtsteuerung.ki_show import SCHEMA
+    from lichtsteuerung.regie import schema
+    assert unionen(SCHEMA) == 0 and unionen(schema(["rot", "blau"])) == 0     # Lichtdesign und KI-Regie laden
     # Die Musik-Analyse mit dem Takt-Folger muss in der gebauten App laufen: 12 s Takt rein, Beats und Tempo raus.
     from lichtsteuerung.audio.analyse import Analyse, beat_erkennung
     from lichtsteuerung.audio.quellen import BLOCK, erzeuge_takt
