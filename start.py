@@ -117,6 +117,8 @@ def main() -> None:
     if daten.ALS_APP:
         pfade = daten.standard_pfade()
         logging.basicConfig(filename=pfade.wurzel / "logbuch.txt", level=logging.INFO, encoding="utf-8")
+        for laut in ("httpx", "httpcore", "anthropic"):
+            logging.getLogger(laut).setLevel(logging.WARNING)   # sonst eine Zeile pro Claude-Anfrage (KI-Regie)
     show = Show()
     if not args.selbsttest:
         # Bei jedem Start eine kleine Sicherung der Show (die letzten 10 bleiben, ohne Aufnahmen)
