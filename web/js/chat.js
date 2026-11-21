@@ -11,7 +11,7 @@ export function lichtChat(huelle, { nachUebernehmen } = {}) {
     <div class="chat-verlauf" id="chat-verlauf"></div>
     <div class="chat-entwurf" id="chat-entwurf" hidden></div>
     <form class="chat-eingabe" id="chat-form">
-      <textarea id="chat-text" rows="2" placeholder="Was willst du sehen? Zum Beispiel: Spots langsam blau kreisen, PARs warmweiß atmen, auf Fader 3"></textarea>
+      <textarea id="chat-text" rows="2" placeholder="Was willst du? Zum Beispiel: Spots langsam blau kreisen auf Fader 3 · Profil fürs Weihnachtskonzert · Bau die Show für Boböd, Refrain soll knallen"></textarea>
       <button class="haupt" id="chat-senden">Senden</button>
     </form>
     <details class="chat-schluessel" id="chat-schluessel"><summary id="chat-schluessel-titel">Claude-Schlüssel</summary>
@@ -66,6 +66,34 @@ export function lichtChat(huelle, { nachUebernehmen } = {}) {
     const kasten = feld("chat-entwurf");
     kasten.hidden = !entwurf;
     if (!entwurf) return;
+    const kopf = `<div class="entwurf-kopf"><b>${t(entwurf.name)}</b> <span class="vorschau-schild">Vorschau, nicht live</span></div>`;
+    const knoepfe = (haupt = "Übernehmen") => `<button class="haupt" id="entwurf-ok">${haupt}</button>
+      <button id="entwurf-weg">Verwerfen</button>`;
+    if (entwurf.art === "fader") {
+      kasten.innerHTML = `${kopf}<p class="leise">${t(entwurf.erklaerung)}</p><div class="zeile">${knoepfe()}</div>`;
+      return;
+    }
+    if (entwurf.art === "profil") {
+      const p = entwurf.profil;
+      const strobo = p.strobo === "aus" ? "aus" : `bis ${p.strobo.max_blitze_pro_sekunde} pro Sekunde`;
+      kasten.innerHTML = `${kopf}<p class="leise">${t(entwurf.erklaerung)}</p>
+        <div class="entwurf-profil">Farben: ${p.palette.map(t).join(", ")} · Bewegung: ${t(p.bewegung)} ·
+          Beat: ${Math.round(p.beat_reaktion * 100)} % · Strobo: ${strobo} · höchstens ${Math.round(p.max_helligkeit * 100)} % hell
+          ${p.hinweise_ki ? `<br>Für die KI-Regie: ${t(p.hinweise_ki)}` : ""}</div>
+        <p class="leise">Die Vorschau zeigt das Grundlicht.${entwurf.vorhanden ? " Ein Profil mit diesem Namen gibt es schon: Übernehmen ersetzt es." : ""}</p>
+        <div class="zeile"><button class="haupt" id="entwurf-laden">Speichern und laden</button>
+          <button id="entwurf-ok">Nur speichern</button> <button id="entwurf-weg">Verwerfen</button></div>`;
+      return;
+    }
+    if (entwurf.art === "song") {
+      kasten.innerHTML = `${kopf}<p class="leise">${t(entwurf.erklaerung)}</p>
+        <div class="entwurf-cues">${entwurf.teile.map((teil) => `<button class="klein" data-entwurf-cue="${teil.cue}"
+          title="${t(teil.idee ?? "")}">${t(teil.name)}</button>`).join("")}</div>
+        <div class="zeile"><button id="entwurf-abspielen">${entwurf.abspielen ? "■ Ansehen beenden" : "▶ Mit Aufnahme ansehen"}</button>
+          ${knoepfe()}</div>
+        <p class="leise">Übernehmen ersetzt die Show „${t(entwurf.name)}“. Live startet sie mit Song-Start.</p>`;
+      return;
+    }
     const vorschlag = entwurf.fader ?? freierFader();
     const fader = liveDaten?.pult?.executoren ?? [];
     kasten.innerHTML = `
@@ -112,12 +140,20 @@ export function lichtChat(huelle, { nachUebernehmen } = {}) {
       else if (k.id === "chat-zu") huelle.classList.toggle("zu");
       else if (k.dataset.entwurfCue !== undefined) zeichnen(await senden("/chat/vorschau", { cue: Number(k.dataset.entwurfCue) }));
       else if (k.id === "entwurf-weg") zeichnen(await senden("/chat/verwerfen"));
-      else if (k.id === "entwurf-ok") {
-        const fader = Number(feld("entwurf-fader").value) || null;
-        const antwort = await senden("/chat/uebernehmen", { fader });
+      else if (k.id === "entwurf-ok" || k.id === "entwurf-laden") {
+        const art = stand?.entwurf?.art ?? "sequenz";
+        const auswahl = feld("entwurf-fader");
+        const fader = art === "sequenz" && auswahl ? Number(auswahl.value) || null : null;
+        const antwort = await senden("/chat/uebernehmen", { fader, laden: k.id === "entwurf-laden" });
         zeichnen(antwort);
-        meldung(fader ? `Liegt jetzt auf Fader ${fader}. Fader hoch oder Go+ drücken.` : "Liegt jetzt im Sequenzen-Pool.", "ok");
+        const ergebnis = antwort.ergebnis ?? {};
+        meldung(art === "profil" ? (ergebnis.geladen ? "Profil gespeichert und geladen." : "Profil gespeichert.")
+          : art === "song" ? "Song-Show gespeichert."
+          : art === "fader" ? (ergebnis.name ? `Fader ${ergebnis.fader}: jetzt „${ergebnis.name}“.` : `Fader ${ergebnis.fader} ist frei.`)
+          : fader ? `Liegt jetzt auf Fader ${fader}. Fader hoch oder Go+ drücken.` : "Liegt jetzt im Sequenzen-Pool.", "ok");
         nachUebernehmen?.(antwort);
+      } else if (k.id === "entwurf-abspielen") {
+        zeichnen(await senden(stand?.entwurf?.abspielen ? "/chat/abspielen/stopp" : "/chat/abspielen"));
       } else if (k.id === "chat-schluessel-speichern") {
         zeichnen(await senden("/ki/schluessel", { schluessel: feld("chat-schluessel-wert").value }));
         feld("chat-schluessel").open = false;

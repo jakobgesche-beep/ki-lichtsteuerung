@@ -492,8 +492,28 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.post("/api/chat/uebernehmen")
     def chat_uebernehmen(auftrag: dict = Body(default={})):
         fader = auftrag.get("fader")
-        ergebnis = show.chat.uebernehmen(int(fader) if fader else None, auftrag.get("name") or None)
+        ergebnis = show.chat.uebernehmen(int(fader) if fader else None, auftrag.get("name") or None,
+                                         laden=bool(auftrag.get("laden")))
         return {**show.chat.status(), "ergebnis": ergebnis, "pult": show.pult.status()}
+
+    @app.post("/api/chat/abspielen")
+    def chat_abspielen(auftrag: dict = Body(default={})):
+        """Song-Vorschlag: Die Aufnahme läuft, das Licht des Vorschlags nur in der 3D-Vorschau (nie live)."""
+        show.chat.abspielen(float(auftrag.get("ab_s", 0) or 0))
+        return show.chat.status()
+
+    @app.post("/api/chat/abspielen/stopp")
+    def chat_abspielen_stopp():
+        show.chat.abspielen_stoppen()
+        return show.chat.status()
+
+    # --- Claude: Lichtdesign aus der Probe ---------------------------------
+
+    @app.post("/api/ki/design/{name}")
+    def ki_design(name: str, auftrag: dict = Body(default={})):
+        """Claude entwirft die Show für einen Song (dauert bis zu zwei Minuten). Sie landet als Vorschlag im
+        Licht-Chat und läuft nur in der Vorschau, bis jemand Übernehmen drückt."""
+        return show.chat.song_entwerfen(name, str(auftrag.get("titel") or ""), str(auftrag.get("wuensche") or ""))
 
     @app.post("/api/chat/verwerfen")
     def chat_verwerfen():

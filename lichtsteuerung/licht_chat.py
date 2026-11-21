@@ -1,79 +1,39 @@
-"""Licht-Chat: Man beschreibt, was man sehen will. Daraus wird ein Vorschlag (eine Sequenz mit Cues).
+"""Licht-Chat: Man beschreibt, was man will. Claude programmiert es: Looks und Abläufe (Sequenzen),
+Fader-Belegung, Veranstaltungsprofile und ganze Song-Shows aus einer Probe-Aufnahme.
 
 Die Grundregeln aus CLAUDE.md gelten hier besonders:
     Offline zuerst      Der Chat braucht Internet, die Show nicht. Ohne Internet oder ohne Schlüssel
                         versteht der Chat einfache Sätze selbst ("Spots blau, langsamer Kreis").
-    Nichts geht live    Ein Vorschlag erscheint nur in der 3D-Vorschau. Gespeichert und auf einen Fader
-                        gelegt wird er erst mit "Übernehmen". Es gibt kein Werkzeug, das live sendet.
+    Nichts geht live    Jeder Vorschlag erscheint nur in der 3D-Vorschau. Gespeichert, auf einen Fader
+                        gelegt oder geladen wird er erst mit "Übernehmen". Es gibt kein Werkzeug, das live sendet.
     Alles wird geprüft  Jeder Vorschlag läuft durch dieselbe Prüfung wie alles, was man von Hand speichert.
                         Danach prüft die Show jedes Bild noch einmal (Strobo-Grenze, Publikum).
     Kein Key im Code    Der Schlüssel liegt in lokal.json im Datenordner (nie im Repository)
                         oder in der Umgebungsvariable ANTHROPIC_API_KEY.
 
-Claude bekommt nur Lichtdaten (Gerätenamen, Gruppen, Positionen, Sequenzen), nie Ton oder Bilder.
+Claude bekommt nur Lichtdaten (Gerätenamen, Gruppen, Positionen, Sequenzen) und Messwerte, nie Ton oder Bilder.
+
+Wichtig für die Werkzeuge: Claude nimmt höchstens 16 Felder mit "Typ oder null" an. Deshalb sind Felder, die
+man nicht immer braucht, einfach weglassbar (nicht in "required") statt null-bar.
 """
 from __future__ import annotations
 
 import copy
 import json
 import logging
-import os
 import re
 import threading
 from typing import Optional
 
-from . import daten
 from .farben import FARBNAMEN
+from .ki import MODELL, Schluessel  # noqa: F401  (Schluessel: für ältere Importe)
+from .profile import BEWEGUNGEN, pruefe_profil
 from .pult import ANZAHL_EXECUTOREN, BEWEGUNGS_ARTEN, EFFEKT_ARTEN, pruefe_sequenz
 
-MODELL = "claude-opus-5-5"
-MAX_ANFRAGEN = 4               # höchstens so viele Anfragen an Claude pro Nachricht (Korrekturen eingeschlossen)
+MAX_ANFRAGEN = 5               # höchstens so viele Anfragen an Claude pro Nachricht (Korrekturen eingeschlossen)
 MAX_NACHRICHTEN = 40           # danach beginnt ein neues Gespräch (der Verlauf wird nie gekürzt oder geändert)
 ZEITLIMIT_S = 90.0
-# Preise Claude Opus 5.5 in Dollar pro Million Tokens, nur für die Kosten-Anzeige
-PREISE = {"eingabe": 4.0, "ausgabe": 20.0, "cache_lesen": 0.20, "cache_schreiben": 5.0}
-
-
-# --- Der Schlüssel ---------------------------------------------------------------
-
-class Schluessel:
-    """Der API-Schlüssel steht in lokal.json im Datenordner. Die Oberfläche sieht ihn nie ganz."""
-
-    def __init__(self, pfad):
-        self.pfad = pfad
-
-    def _aus_datei(self) -> str:
-        return str(daten.lese_json(self.pfad, {}).get("anthropic_api_key") or "").strip()
-
-    def lesen(self) -> Optional[str]:
-        return self._aus_datei() or os.environ.get("ANTHROPIC_API_KEY") or None
-
-    def quelle(self) -> Optional[str]:
-        if self._aus_datei():
-            return "datei"
-        return "umgebung" if os.environ.get("ANTHROPIC_API_KEY") else None
-
-    def maskiert(self) -> Optional[str]:
-        schluessel = self.lesen()
-        return f"{schluessel[:7]}…{schluessel[-4:]}" if schluessel else None
-
-    def speichern(self, schluessel: str) -> None:
-        schluessel = schluessel.strip()
-        if not re.fullmatch(r"sk-ant-[A-Za-z0-9_\-]{20,}", schluessel):
-            raise ValueError("Das sieht nicht wie ein Claude-Schlüssel aus. Er beginnt mit sk-ant- "
-                             "und steht in der Claude Console unter API Keys.")
-        inhalt = daten.lese_json(self.pfad, {})
-        inhalt["anthropic_api_key"] = schluessel
-        daten.schreibe_json(self.pfad, inhalt)
-        try:
-            os.chmod(self.pfad, 0o600)       # nur der eigene Benutzer darf die Datei lesen
-        except OSError:
-            pass
-
-    def loeschen(self) -> None:
-        inhalt = daten.lese_json(self.pfad, {})
-        if inhalt.pop("anthropic_api_key", None) is not None:
-            daten.schreibe_json(self.pfad, inhalt)
+MAX_UNIONEN = 16               # Grenze der API für Felder mit "Typ oder null" in strikten Werkzeugen
 
 
 # --- Was Claude über die Bühne wissen muss -----------------------------------------------
@@ -124,92 +84,136 @@ def welt_text(show) -> str:
 
 
 def stand_text(show) -> str:
-    """Was sich laufend ändert (Sequenzen, Fader). Kommt mit jeder Nachricht, nicht in den Systemtext."""
+    """Was sich laufend ändert (Sequenzen, Fader, Songs, Profile). Kommt mit jeder Nachricht, nicht in den Systemtext."""
     pult = show.pult
     sequenzen = []
     for name in pult.sequenzen.namen():
         sequenz = pult.sequenzen.lesen(name) or {"cues": []}
         sequenzen.append(f"„{name}“ ({len(sequenz.get('cues', []))} Cues{', Song' if sequenz.get('zeitcode') else ''})")
     belegt = [f"{e.nummer}: {pult.anzeigename(e)}" for e in pult.executoren if e.art]
+    songs = []
+    for name in show.proben.namen():
+        probe = show.proben.lesen(name) or {}
+        songs.append(f"„{name}“ ({round(probe.get('dauer_s') or 0)} s, {round(probe.get('tempo_bpm') or 0)} BPM, "
+                     f"{len(probe.get('teile') or [])} Teile)")
     return ("[Stand jetzt] Sequenzen: " + (", ".join(sequenzen) or "keine")
-            + ". Belegte Fader: " + (", ".join(belegt) or "keine") + f". Fader gibt es 1 bis {ANZAHL_EXECUTOREN}.")
+            + ". Belegte Fader: " + (", ".join(belegt) or "keine") + f". Fader gibt es 1 bis {ANZAHL_EXECUTOREN}."
+            + " Proben-Aufnahmen (Songs): " + (", ".join(songs) or "keine")
+            + f". Profile: {', '.join(show.profile.namen()) or 'keine'}. Aktives Profil: „{show.profil['name']}“.")
 
 
 SYSTEMTEXT = """Du bist der Licht-Assistent der Technik-AG einer Schule. Du hilfst nur beim Programmieren von Licht \
-(Looks, Cues, Sequenzen, Fader) für die Geräte unten. Bei allen anderen Themen antwortest du: \
+(Looks, Cues, Sequenzen, Fader, Profile, Song-Shows) für die Geräte unten. Bei allen anderen Themen antwortest du: \
 „Da kann ich nicht helfen, ich mache nur Licht.“
 
+Deine Werkzeuge (keins schaltet etwas live, alles landet erst in der Vorschau; der Mensch drückt „Übernehmen“):
+- vorschlag_machen: ein Look oder Ablauf als Sequenz mit Cues, auf Wunsch für einen Fader.
+- sequenz_lesen: eine vorhandene Sequenz lesen, bevor du sie änderst.
+- fader_belegen: eine vorhandene Sequenz auf einen Fader legen oder einen Fader frei machen.
+- profil_vorschlagen: ein Veranstaltungsprofil (Grenzen für die Automatik und die KI-Regie am Abend).
+- song_show_entwerfen: die komplette Lichtshow für einen Song aus seiner Probe-Aufnahme. Das macht ein eigener \
+Lichtdesign-Schritt, der die Aufnahme Takt für Takt kennt. Gib ihm die Wünsche des Menschen mit (auch Änderungen an \
+einer vorhandenen Song-Show, zum Beispiel „im Refrain mehr Rot, im Solo Strobo“).
+
 So arbeitest du:
-- Beschreibt jemand einen Look, eine Szene, einen Ablauf oder was auf einen Fader soll, rufst du das Werkzeug \
-vorschlag_machen auf. Der Vorschlag erscheint zuerst nur in der 3D-Vorschau. Gespeichert und auf einen Fader gelegt \
-wird er erst, wenn der Mensch „Übernehmen“ drückt. Du kannst nichts live schalten.
 - Eine Sequenz hat einen oder mehrere Cues. Ein Look für einen Fader ist meistens eine Sequenz mit einem Cue. \
 Mehrere Cues nur für Abläufe („erst blau, nach 4 Sekunden rot“: folgen_s = 4 im ersten Cue).
 - Tracking: Was ein Cue nicht ändert, bleibt aus dem vorigen Cue stehen. Effekte gelten nur in dem Cue, in dem sie stehen.
-- Benutze Gruppen. Ein einzelnes Gerät (geraet = id) nur, wenn es ausdrücklich gemeint ist.
+- Benutze Gruppen. Ein einzelnes Gerät (geraet = id) nur, wenn es ausdrücklich gemeint ist. Pro Gruppe ein \
+Eintrag in werte mit allen Eigenschaften (helligkeit, farbe, position ...).
+- Felder, die du nicht brauchst, lässt du einfach weg.
+- Pro Antwort höchstens EIN Vorschlag (vorschlag_machen, fader_belegen, profil_vorschlagen oder \
+song_show_entwerfen). Der Mensch übernimmt oder verwirft ihn; was er gemacht hat, steht in der nächsten Nachricht.
+- Soll etwas schneller, langsamer, größer oder kleiner werden, setze beats bzw. groesse ausdrücklich neu \
+(schneller heißt: weniger beats).
 - helligkeit 0 bis 1. farbe nur Namen aus der Liste oder #rrggbb. position nur Namen aus der Liste und nur für \
 bewegliche Gruppen. gobo nur Namen, die die Gruppe hat. strobo_hz nur für Gruppen mit Strobo und nie über der Grenze. \
 zeit_s ist die Überblendzeit in Sekunden.
-- Effekte: tempo null heißt im Tempo der Musik (meistens richtig). beats = Beats pro Runde (4 ist ein Takt, 8 oder 16 \
-ist ruhig). Bewegungs-Effekte (kreis, acht, schwenk, nicken, publikum) nur für bewegliche Gruppen. \
+- Effekte: ohne tempo laufen sie im Tempo der Musik (meistens richtig). beats = Beats pro Runde (4 ist ein Takt, \
+8 oder 16 ist ruhig). Bewegungs-Effekte (kreis, acht, schwenk, nicken, publikum) nur für bewegliche Gruppen. \
 farbwechsel braucht eine Liste farben. dimmer_welle und dimmer_puls brauchen eine Helligkeit über 0 im selben Cue.
-- Lieber ruhig und schön als hektisch: wenige Farben, die zusammenpassen, weiche Überblendungen, langsame Bewegung. \
-Schnell und Strobo nur, wenn es ausdrücklich gewünscht ist.
+- Ruhige Musik: ruhig und schön (wenige Farben, weiche Überblendungen, langsame Bewegung). Laute Musik, Refrain, \
+Solo, Höhepunkt: kräftig (schneller Puls, Bewegung, kurze weiße Akzente). Strobo nur, wenn es gewünscht ist oder \
+zu einem Höhepunkt passt, und nie über der Grenze.
 - Soll eine vorhandene Sequenz geändert werden, lies sie zuerst mit sequenz_lesen. Im Vorschlag dann derselbe Name \
-und ersetzt = true.
-- Nennt der Mensch einen Fader, setze fader auf diese Nummer. Sonst fader = null (der Mensch wählt beim Übernehmen).
-- Meldet die Prüfung Fehler, korrigiere den Vorschlag und rufe vorschlag_machen noch einmal auf.
-- Fehlt dir eine wichtige Angabe, frag kurz nach. Antworte immer kurz, in einfachem Deutsch und in der du-Form.
+und ersetzt = true. Eine Song-Show (Sequenz mit „Song“) änderst du mit song_show_entwerfen, nicht mit vorschlag_machen.
+- Nennt der Mensch einen Fader, setze fader auf diese Nummer. Sonst lass fader weg (der Mensch wählt beim Übernehmen).
+- Meldet die Prüfung Fehler, korrigiere den Vorschlag und rufe das Werkzeug noch einmal auf.
+- Fehlt dir eine wichtige Angabe, frag kurz nach. Antworte immer kurz, in einfachem Deutsch und in der du-Form. \
+Der Mensch tippt schnell und macht Tippfehler: Rate wohlwollend, was gemeint ist.
 """
 
 
-def _nullbar(typ: str, text: str) -> dict:
-    return {"anyOf": [{"type": typ}, {"type": "null"}], "description": text}
+def _feld(typ: str, text: str) -> dict:
+    return {"type": typ, "description": text}
 
 
 def werkzeuge() -> list:
-    """Nur zwei Werkzeuge: Vorschlag machen und eine Sequenz lesen. Keins davon schaltet etwas live."""
-    wert = {"type": "object", "additionalProperties": False, "properties": {
-        "gruppe": _nullbar("string", "Gruppe aus der Liste; null, wenn geraet gesetzt ist"),
-        "geraet": _nullbar("string", "Geräte-id, nur für ein einzelnes, ausdrücklich genanntes Gerät"),
-        "helligkeit": _nullbar("number", "0 bis 1"),
-        "farbe": _nullbar("string", "Farbname aus der Liste oder #rrggbb"),
-        "position": _nullbar("string", "benannte Position, nur für bewegliche Gruppen"),
-        "gobo": _nullbar("string", "Gobo-Name, den die Gruppe hat, zum Beispiel Offen"),
-        "gobo_drehung": _nullbar("number", "-1 bis 1, Vorzeichen ist die Richtung"),
-        "strobo_hz": _nullbar("number", "Blitze pro Sekunde, nie über der Grenze"),
+    """Die Werkzeuge des Chats. Keins schaltet etwas live; alles landet als Vorschlag in der Vorschau."""
+    wert = {"type": "object", "additionalProperties": False, "required": ["gruppe"], "properties": {
+        "gruppe": _feld("string", "Gruppe aus der Liste (bei einem einzelnen Gerät dessen Gruppe)"),
+        "geraet": _feld("string", "Geräte-id, nur für ein einzelnes, ausdrücklich genanntes Gerät"),
+        "helligkeit": _feld("number", "0 bis 1"),
+        "farbe": _feld("string", "Farbname aus der Liste oder #rrggbb"),
+        "position": _feld("string", "benannte Position, nur für bewegliche Gruppen"),
+        "gobo": _feld("string", "Gobo-Name, den die Gruppe hat, zum Beispiel Offen"),
+        "gobo_drehung": _feld("number", "-1 bis 1, Vorzeichen ist die Richtung"),
+        "strobo_hz": _feld("number", "Blitze pro Sekunde, nie über der Grenze"),
     }}
-    wert["required"] = list(wert["properties"])
-    effekt = {"type": "object", "additionalProperties": False, "properties": {
+    effekt = {"type": "object", "additionalProperties": False, "required": ["art", "gruppe", "beats"], "properties": {
         "art": {"type": "string", "enum": list(EFFEKT_ARTEN)},
-        "gruppe": {"type": "string", "description": "Gruppe, auf der der Effekt läuft"},
-        "groesse": _nullbar("number", "0 bis 1, Größe der Bewegung"),
-        "beats": _nullbar("number", "Beats pro Runde, zum Beispiel 4, 8 oder 16"),
-        "verteilung": _nullbar("number", "0 bis 1, Versatz zwischen den Geräten"),
-        "tempo": _nullbar("number", "null: im Tempo der Musik; sonst feste BPM (10 bis 300)"),
-        "tiefe": _nullbar("number", "nur Dimmer-Effekte: 0 bis 1, wie weit es dunkler wird"),
-        "farben": {"anyOf": [{"type": "array", "items": {"type": "string"}}, {"type": "null"}],
-                   "description": "nur farbwechsel: Farbnamen oder #rrggbb"},
-        "mitte": _nullbar("string", "benannte Position als Mittelpunkt der Bewegung"),
+        "gruppe": _feld("string", "Gruppe, auf der der Effekt läuft"),
+        "groesse": _feld("number", "0 bis 1, Größe der Bewegung (0.3 klein, 0.5 mittel, 0.8 groß)"),
+        "beats": _feld("number", "Beats pro Runde: 1 = jeder Schlag (Puls), 4 = ein Takt (schnell), 8 = mittel, "
+                                 "16 = langsam, 32 = sehr langsam"),
+        "verteilung": _feld("number", "0 bis 1, Versatz zwischen den Geräten"),
+        "tempo": _feld("number", "feste BPM (10 bis 300); weglassen heißt im Tempo der Musik"),
+        "tiefe": _feld("number", "nur Dimmer-Effekte: 0 bis 1, wie weit es dunkler wird"),
+        "farben": {"type": "array", "items": {"type": "string"}, "description": "nur farbwechsel: Farbnamen oder #rrggbb"},
+        "mitte": _feld("string", "benannte Position als Mittelpunkt der Bewegung"),
     }}
-    effekt["required"] = list(effekt["properties"])
-    cue = {"type": "object", "additionalProperties": False, "properties": {
-        "name": {"type": "string", "description": "kurzer Name des Cues"},
-        "zeit_s": {"type": "number", "description": "Überblendzeit in Sekunden"},
-        "folgen_s": _nullbar("number", "null: wartet auf Go. Zahl: geht nach der Überblendung und so vielen "
-                                       "Sekunden von selbst zum nächsten Cue"),
-        "werte": {"type": "array", "items": wert},
-        "effekte": {"type": "array", "items": effekt},
-    }}
-    cue["required"] = list(cue["properties"])
-    vorschlag = {"type": "object", "additionalProperties": False, "properties": {
-        "name": {"type": "string", "description": "kurzer Name der Sequenz, steht auf dem Fader"},
-        "erklaerung": {"type": "string", "description": "ein bis zwei Sätze für den Menschen: was man sehen wird"},
-        "fader": _nullbar("integer", f"Fader 1 bis {ANZAHL_EXECUTOREN}, nur wenn der Mensch einen genannt hat"),
-        "ersetzt": {"type": "boolean", "description": "true, wenn eine vorhandene Sequenz geändert wird"},
-        "cues": {"type": "array", "items": cue},
-    }}
-    vorschlag["required"] = list(vorschlag["properties"])
+    cue = {"type": "object", "additionalProperties": False, "required": ["name", "zeit_s", "werte", "effekte"],
+           "properties": {
+               "name": _feld("string", "kurzer Name des Cues"),
+               "zeit_s": _feld("number", "Überblendzeit in Sekunden"),
+               "folgen_s": _feld("number", "nur für Abläufe: geht nach der Überblendung und so vielen Sekunden von "
+                                           "selbst zum nächsten Cue; weglassen heißt: wartet auf Go"),
+               "werte": {"type": "array", "items": wert},
+               "effekte": {"type": "array", "items": effekt},
+           }}
+    vorschlag = {"type": "object", "additionalProperties": False, "required": ["name", "erklaerung", "cues"],
+                 "properties": {
+                     "name": _feld("string", "kurzer Name der Sequenz, steht auf dem Fader"),
+                     "erklaerung": _feld("string", "ein bis zwei Sätze für den Menschen: was man sehen wird"),
+                     "fader": _feld("integer", f"Fader 1 bis {ANZAHL_EXECUTOREN}, nur wenn der Mensch einen genannt hat"),
+                     "ersetzt": _feld("boolean", "true, wenn eine vorhandene Sequenz geändert wird"),
+                     "cues": {"type": "array", "items": cue},
+                 }}
+    grundlicht = {"type": "object", "additionalProperties": False, "required": ["gruppe", "farbe", "helligkeit"],
+                  "properties": {"gruppe": _feld("string", "Gruppe aus der Liste"),
+                                 "farbe": _feld("string", "Farbname oder #rrggbb"),
+                                 "helligkeit": _feld("number", "0 bis 1"),
+                                 "position": _feld("string", "benannte Position, nur für bewegliche Gruppen")}}
+    profil = {"type": "object", "additionalProperties": False,
+              "required": ["name", "erklaerung", "palette", "max_helligkeit", "bewegung", "beat_reaktion",
+                           "strobo_blitze_pro_s", "hazer", "grundlicht"],
+              "properties": {
+                  "name": _feld("string", "Name des Profils, zum Beispiel Weihnachtskonzert"),
+                  "erklaerung": _feld("string", "ein bis zwei Sätze für den Menschen"),
+                  "palette": {"type": "array", "items": {"type": "string"},
+                              "description": "2 bis 5 Farbnamen, die an dem Abend vorkommen dürfen"},
+                  "max_helligkeit": _feld("number", "0 bis 1"),
+                  "bewegung": {"type": "string", "enum": list(BEWEGUNGEN)},
+                  "beat_reaktion": _feld("number", "0 (Automatik aus) bis 1 (stark im Beat)"),
+                  "strobo_blitze_pro_s": _feld("number", "0 heißt Strobo aus; sonst höchstens so viele Blitze pro "
+                                                         "Sekunde (die feste Sicherheitsgrenze gilt trotzdem)"),
+                  "strobo_dauer_s": _feld("number", "wie lange der Strobo am Stück blitzen darf (Sekunden)"),
+                  "hazer": _feld("boolean", "Nebel erlaubt"),
+                  "grundlicht": {"type": "array", "items": grundlicht,
+                                 "description": "das ruhige Licht für leise Stellen, Reden und als sicherer Rückfall"},
+                  "hinweise_ki": _feld("string", "Wünsche für die KI-Regie am Abend in einem Satz, zum Beispiel "
+                                                 "„bei Soli richtig knallen, sonst ruhig“"),
+              }}
     return [
         {"name": "vorschlag_machen", "strict": True, "input_schema": vorschlag,
          "description": "Legt einen Vorschlag (Sequenz mit Cues) in die Vorschau. Nichts geht live und nichts wird "
@@ -217,28 +221,102 @@ def werkzeuge() -> list:
         {"name": "sequenz_lesen", "strict": True,
          "input_schema": {"type": "object", "additionalProperties": False,
                           "properties": {"name": {"type": "string"}}, "required": ["name"]},
-         "description": "Liest eine vorhandene Sequenz mit allen Cues, zum Beispiel bevor sie geändert wird."},
+         "description": "Liest eine vorhandene Sequenz mit allen Cues, zum Beispiel bevor sie geändert wird. "
+                        "Bei Song-Shows auch die Songteile mit ihren Zeiten."},
+        {"name": "fader_belegen", "strict": True,
+         "input_schema": {"type": "object", "additionalProperties": False, "required": ["fader", "sequenz"],
+                          "properties": {
+                              "fader": _feld("integer", f"Fader 1 bis {ANZAHL_EXECUTOREN}"),
+                              "sequenz": _feld("string", "Name einer vorhandenen Sequenz; leer heißt: Fader frei machen")}},
+         "description": "Schlägt vor, eine vorhandene Sequenz auf einen Fader zu legen (oder ihn frei zu machen). "
+                        "Gilt erst, wenn der Mensch Übernehmen drückt."},
+        {"name": "profil_vorschlagen", "strict": True, "input_schema": profil,
+         "description": "Legt ein Veranstaltungsprofil als Vorschlag an. Es legt die Grenzen fest, in denen "
+                        "Automatik und KI-Regie am Abend arbeiten. Gespeichert (und auf Wunsch geladen) wird es erst "
+                        "mit Übernehmen."},
+        {"name": "song_show_entwerfen", "strict": True,
+         "input_schema": {"type": "object", "additionalProperties": False, "required": ["probe"],
+                          "properties": {
+                              "probe": _feld("string", "Name der Probe-Aufnahme (siehe Stand jetzt)"),
+                              "songtitel": _feld("string", "Titel und Interpret, falls bekannt"),
+                              "wuensche": _feld("string", "Wünsche des Menschen für das Licht, so genau wie möglich")}},
+         "description": "Entwirft die komplette Lichtshow für einen Song aus seiner Probe-Aufnahme (Songteile, "
+                        "Looks, Akzente auf den großen Schlägen). Dauert bis zu zwei Minuten. Das Ergebnis liegt "
+                        "als Vorschlag in der Vorschau."},
     ]
 
 
+def unionen(schema) -> int:
+    """Zählt Felder mit mehreren Typen (anyOf oder Typ-Liste). Claude erlaubt höchstens 16 pro Anfrage."""
+    if isinstance(schema, dict):
+        eigene = 1 if ("anyOf" in schema or isinstance(schema.get("type"), list)) else 0
+        return eigene + sum(unionen(wert) for wert in schema.values())
+    if isinstance(schema, list):
+        return sum(unionen(wert) for wert in schema)
+    return 0
+
+
 # --- Vorschlag umwandeln und prüfen ---------------------------------------------------
+
+def _zahl(wert, standard=None):
+    return wert if isinstance(wert, (int, float)) and not isinstance(wert, bool) else standard
+
 
 def aus_vorschlag(eingabe: dict) -> dict:
     """Macht aus dem Werkzeug-Aufruf eine Sequenz, wie sie das Pult speichert (ohne leere Felder)."""
     cues = []
     for c in eingabe.get("cues") or []:
-        werte = [{k: v for k, v in w.items() if v is not None} for w in c.get("werte") or []]
+        if not isinstance(c, dict):
+            continue
+        werte, nach_ziel = [], {}
+        for w in c.get("werte") or []:
+            if not isinstance(w, dict):
+                continue
+            wert = {k: v for k, v in w.items() if v is not None and v != ""}
+            if wert.get("geraet"):
+                wert.pop("gruppe", None)          # ein einzelnes Gerät: die Gruppe war nur zur Orientierung
+            ziel = ("geraet", wert["geraet"]) if wert.get("geraet") else ("gruppe", wert.get("gruppe"))
+            if ziel in nach_ziel:
+                nach_ziel[ziel].update(wert)      # zwei Einträge für dieselbe Gruppe: zu einem zusammenlegen
+                continue
+            nach_ziel[ziel] = wert
+            werte.append(wert)
         effekte = []
         for e in c.get("effekte") or []:
+            if not isinstance(e, dict):
+                continue
+            tempo = _zahl(e.get("tempo"))
             effekt = {"art": e.get("art"), "ziel": {"gruppe": e.get("gruppe")},
-                      "tempo": "musik" if e.get("tempo") is None else e["tempo"]}
+                      "tempo": "musik" if tempo is None else tempo}
             for feld in ("groesse", "beats", "verteilung", "tiefe", "farben", "mitte"):
-                if e.get(feld) is not None:
+                if e.get(feld) is not None and e.get(feld) != "":
                     effekt[feld] = e[feld]
             effekte.append(effekt)
-        cues.append({"name": str(c.get("name") or "Cue").strip()[:60], "zeit_s": c.get("zeit_s", 2.0),
-                     "folgen_s": c.get("folgen_s"), "werte": werte, "effekte": effekte})
+        cues.append({"name": str(c.get("name") or "Cue").strip()[:60], "zeit_s": _zahl(c.get("zeit_s"), 2.0),
+                     "folgen_s": _zahl(c.get("folgen_s")), "werte": werte, "effekte": effekte})
     return {"name": str(eingabe.get("name") or "").strip()[:40], "cues": cues}
+
+
+def profil_aus_vorschlag(eingabe: dict, grenzen) -> dict:
+    """Macht aus dem Werkzeug-Aufruf ein Profil im Format von profile/*.json."""
+    blitze = _zahl(eingabe.get("strobo_blitze_pro_s"), 0.0) or 0.0
+    strobo = "aus" if blitze <= 0 else {
+        "max_blitze_pro_sekunde": round(min(float(blitze), grenzen.strobo_max_hz), 2),
+        "max_dauer_s": round(min(float(_zahl(eingabe.get("strobo_dauer_s"), 5.0) or 5.0), grenzen.strobo_max_dauer_s), 1)}
+    werte = []
+    for w in eingabe.get("grundlicht") or []:
+        if isinstance(w, dict):
+            werte.append({k: v for k, v in w.items() if v is not None and v != ""})
+    profil = {"name": str(eingabe.get("name") or "").strip()[:40],
+              "palette": [str(f) for f in eingabe.get("palette") or []][:6],
+              "max_helligkeit": _zahl(eingabe.get("max_helligkeit"), 0.8),
+              "bewegung": eingabe.get("bewegung"), "beat_reaktion": _zahl(eingabe.get("beat_reaktion"), 0.5),
+              "strobo": strobo, "hazer": bool(eingabe.get("hazer")), "grundlicht": {"werte": werte},
+              "_hinweis": "Vom Licht-Chat vorgeschlagen und vom Menschen übernommen."}
+    hinweise = str(eingabe.get("hinweise_ki") or "").strip()
+    if hinweise:
+        profil["hinweise_ki"] = hinweise[:300]
+    return profil
 
 
 def pruefen(show, sequenz: dict, fader: Optional[int] = None) -> list:
@@ -548,60 +626,143 @@ def einfach_verstehen(show, text: str) -> Optional[dict]:
     return {"sequenz": {"name": name, "cues": [cue]}, "erklaerung": erklaerung, "fader": fader, "ersetzt": False}
 
 
+
+
 # --- Der Chat --------------------------------------------------------------------
 
+FERTIG_WERKZEUGE = ("vorschlag_machen", "fader_belegen", "profil_vorschlagen", "song_show_entwerfen")
+
+
+def _kurz_cue(cue: dict) -> dict:
+    return {"name": cue["name"], "zeit_s": cue.get("zeit_s"), "folgen_s": cue.get("folgen_s")}
+
+
 class LichtChat:
+    """Ein Gespräch mit Claude (oder ohne Internet mit dem einfachen Leser) und genau ein Vorschlag.
+
+    Ein Vorschlag (self.entwurf) hat eine Art:
+        sequenz   ein Look oder Ablauf; Übernehmen speichert ihn und legt ihn auf Wunsch auf einen Fader
+        fader     eine vorhandene Sequenz auf einen Fader legen (oder ihn frei machen)
+        profil    ein Veranstaltungsprofil; Übernehmen speichert es, auf Wunsch wird es gleich geladen
+        song      die Show für einen Song aus seiner Probe; Übernehmen speichert sie als Song-Sequenz
+    Die Vorschau zeigt immer "sequenz": bei einem Profil das Grundlicht, bei einem Fader die Sequenz darauf.
+    """
+
     def __init__(self, show):
         self.show = show
-        self.schluessel = Schluessel(show.pfade.lokal)
-        # Das Modell lässt sich in lokal.json ("modell") ändern, zum Beispiel wenn die Schule ein anderes will.
-        self.modell = str(daten.lese_json(show.pfade.lokal, {}).get("modell") or MODELL)
+        self.konto = show.ki
+        self.schluessel = self.konto.schluessel
+        self.modell = self.konto.modell()
         self.verlauf = []          # was an Claude geht (wird nur angehängt, nie geändert)
         self.anzeige = []          # was die Oberfläche zeigt
         self.systemtext: Optional[str] = None
         self.entwurf: Optional[dict] = None
         self.denkt = False
-        self.kosten_cent = 0.0
+        self.notizen = []          # was mit dem letzten Vorschlag passiert ist; geht mit der nächsten Nachricht an Claude
         self._sperre = threading.Lock()
+
+    @property
+    def kosten_cent(self) -> float:
+        return self.konto.kosten.get("chat", 0.0) + self.konto.kosten.get("design", 0.0)
 
     # --- Für die Oberfläche ---------------------------------------------------
 
+    def _entwurf_info(self) -> Optional[dict]:
+        e = self.entwurf
+        if not e:
+            return None
+        sequenz = e.get("sequenz") or {"name": "", "cues": []}
+        info = {"art": e["art"], "name": e.get("name") or sequenz["name"], "erklaerung": e["erklaerung"],
+                "fader": e.get("fader"), "ersetzt": bool(e.get("ersetzt")), "cue": e["cue"], "quelle": e["quelle"],
+                "cues": [_kurz_cue(c) for c in sequenz["cues"][:120]], "vorhanden": False}
+        if e["art"] == "sequenz":
+            info["vorhanden"] = sequenz["name"] in self.show.pult.sequenzen.namen()
+        elif e["art"] == "fader":
+            info["sequenz"] = e.get("sequenz_name") or ""
+        elif e["art"] == "profil":
+            profil = e["profil"]
+            info["profil"] = {k: profil.get(k) for k in ("name", "palette", "max_helligkeit", "bewegung", "beat_reaktion",
+                                                       "strobo", "hazer", "hinweise_ki")}
+            info["vorhanden"] = profil["name"] in self.show.profile.namen()
+        elif e["art"] == "song":
+            info["probe"] = e["probe"]
+            info["abspielen"] = bool(e.get("abspielen"))
+            info["teile"] = [{k: t.get(k) for k in ("name", "klasse", "start", "ende", "takte", "cue", "idee")}
+                             for t in (sequenz.get("song") or {}).get("teile", [])]
+            info["vorhanden"] = sequenz["name"] in self.show.pult.sequenzen.namen()
+        return info
+
     def status(self) -> dict:
-        entwurf = None
-        if self.entwurf:
-            sequenz = self.entwurf["sequenz"]
-            entwurf = {"name": sequenz["name"], "erklaerung": self.entwurf["erklaerung"],
-                       "fader": self.entwurf["fader"], "ersetzt": self.entwurf["ersetzt"],
-                       "cue": self.entwurf["cue"], "quelle": self.entwurf["quelle"],
-                       "cues": [{"name": c["name"], "zeit_s": c.get("zeit_s"), "folgen_s": c.get("folgen_s")}
-                                for c in sequenz["cues"]],
-                       "vorhanden": sequenz["name"] in self.show.pult.sequenzen.namen()}
-        return {"anzeige": self.anzeige[-60:], "entwurf": entwurf, "denkt": self.denkt,
-                "ki": {"bereit": bool(self.schluessel.lesen()), "quelle": self.schluessel.quelle(),
+        return {"anzeige": self.anzeige[-60:], "entwurf": self._entwurf_info(), "denkt": self.denkt,
+                "ki": {"bereit": self.konto.bereit(), "quelle": self.schluessel.quelle(),
                        "maskiert": self.schluessel.maskiert(), "modell": self.modell},
                 "kosten_cent": round(self.kosten_cent, 1), "beispiele": BEISPIELE}
 
     def neu(self) -> None:
         with self._sperre:
-            self.verlauf, self.anzeige, self.systemtext = [], [], None
+            self.verlauf, self.anzeige, self.systemtext, self.notizen = [], [], None, []
 
     def vorschau_cue(self, index: int) -> None:
         if not self.entwurf:
             raise ValueError("Es gibt keinen Vorschlag.")
-        self.entwurf["cue"] = max(0, min(int(index), len(self.entwurf["sequenz"]["cues"]) - 1))
+        anzahl = len((self.entwurf.get("sequenz") or {}).get("cues") or [])
+        self.entwurf["cue"] = max(0, min(int(index), anzahl - 1))
+        self.entwurf["abspielen"] = False if self.entwurf["art"] != "song" else self.entwurf.get("abspielen", False)
 
     def verwerfen(self) -> None:
+        if self.entwurf and self.entwurf.get("abspielen"):
+            self.abspielen_stoppen()
+        if self.entwurf:
+            self.notizen.append(f"Der Mensch hat deinen Vorschlag „{self.entwurf.get('name') or ''}“ verworfen.")
         self.entwurf = None
 
-    def uebernehmen(self, fader: Optional[int] = None, name: Optional[str] = None) -> dict:
+    # --- Song-Vorschlag mit der Aufnahme ansehen (nur in der Vorschau) -----------------
+
+    def abspielen(self, ab_s: float = 0.0) -> None:
+        """Spielt die Probe-Aufnahme ab. Das Licht des Vorschlags läuft dazu nur in der 3D-Vorschau, nie live."""
+        from .audio import quellen
+        if not self.entwurf or self.entwurf["art"] != "song":
+            raise ValueError("Nur eine Song-Show lässt sich mit der Aufnahme abspielen.")
+        probe = self.entwurf["probe"]
+        try:
+            self.show.audio.starten(quellen.Datei(self.show.proben.ton_pfad(probe), float(ab_s or 0)),
+                                    f"Vorschau: {probe}")
+        except quellen.AudioFehler as fehler:
+            raise ValueError(str(fehler)) from fehler
+        self.entwurf["abspielen"] = True
+
+    def abspielen_stoppen(self) -> None:
+        if self.entwurf:
+            self.entwurf["abspielen"] = False
+        self.show.audio_quelle_setzen(self.show.audio_auftrag or {"art": "aus"}, merken=False)
+
+    # --- Übernehmen: erst hier wird gespeichert ----------------------------------------
+
+    def uebernehmen(self, fader: Optional[int] = None, name: Optional[str] = None, laden: bool = False) -> dict:
         """Erst hier wird gespeichert. Mit Fader: gleich darauf legen (wie Assign)."""
         if not self.entwurf:
             raise ValueError("Es gibt keinen Vorschlag zum Übernehmen.")
+        art = self.entwurf["art"]
+        if art == "fader":
+            ergebnis = self._fader_uebernehmen(fader)
+        elif art == "profil":
+            ergebnis = self._profil_uebernehmen(laden)
+        elif art == "song":
+            ergebnis = self._song_uebernehmen()
+        else:
+            ergebnis = self._sequenz_uebernehmen(fader, name)
+        self.entwurf = None
+        text = ergebnis.pop("text")
+        self.notizen.append("Der Mensch hat deinen Vorschlag übernommen: " + text)
+        self.anzeige.append({"rolle": "hinweis", "text": text})
+        return ergebnis
+
+    def _sequenz_uebernehmen(self, fader: Optional[int], name: Optional[str]) -> dict:
         sequenz = copy.deepcopy(self.entwurf["sequenz"])
         if name:
             sequenz["name"] = str(name).strip()[:40]
         pult = self.show.pult
-        if sequenz["name"] in pult.sequenzen.namen() and not (self.entwurf["ersetzt"] and not name):
+        if sequenz["name"] in pult.sequenzen.namen() and not (self.entwurf.get("ersetzt") and not name):
             basis, nummer = sequenz["name"], 2
             while f"{basis} {nummer}" in pult.sequenzen.namen():
                 nummer += 1
@@ -610,8 +771,9 @@ class LichtChat:
         if alt and alt.get("zeitcode"):
             # Ein Song behält seine Zeiten, auch wenn der Chat die Looks geändert hat
             sequenz["zeitcode"] = alt["zeitcode"]
-            if alt.get("song"):
-                sequenz["song"] = alt["song"]
+            for feld in ("song", "farben", "licht_version"):
+                if alt.get(feld):
+                    sequenz[feld] = alt[feld]
         fehler = pruefen(self.show, sequenz, fader)
         if fehler:
             raise ValueError(" ".join(fehler))
@@ -619,10 +781,42 @@ class LichtChat:
             pult.sequenz_speichern(sequenz)
             if fader:
                 pult.zuweisen(int(fader), "sequenz", sequenz["name"], zusammen=True)   # ein Oops-Schritt
-        self.entwurf = None
         text = f"Übernommen: „{sequenz['name']}“" + (f" liegt auf Fader {fader}." if fader else " liegt im Sequenzen-Pool.")
-        self.anzeige.append({"rolle": "hinweis", "text": text})
-        return {"name": sequenz["name"], "fader": fader}
+        return {"name": sequenz["name"], "fader": fader, "text": text}
+
+    def _fader_uebernehmen(self, fader: Optional[int]) -> dict:
+        nummer = int(fader or self.entwurf.get("fader") or 0)
+        if not 1 <= nummer <= ANZAHL_EXECUTOREN:
+            raise ValueError(f"Fader {nummer} gibt es nicht (1 bis {ANZAHL_EXECUTOREN}).")
+        name = self.entwurf.get("sequenz_name") or ""
+        with self.show.sperre:
+            self.show.pult.zuweisen(nummer, "sequenz" if name else None, name or None)
+        text = f"Fader {nummer}: jetzt „{name}“." if name else f"Fader {nummer} ist jetzt frei."
+        return {"name": name, "fader": nummer, "text": text}
+
+    def _profil_uebernehmen(self, laden: bool) -> dict:
+        profil = copy.deepcopy(self.entwurf["profil"])
+        fehler = pruefe_profil(profil, self.show.patch.gruppen())
+        if fehler:
+            raise ValueError(" ".join(fehler))
+        self.show.profile.speichern(profil)
+        if laden:
+            self.show.profil_laden(profil["name"])
+        text = f"Profil „{profil['name']}“ gespeichert" + (" und geladen." if laden else ". Laden: Setup → Profile.")
+        return {"name": profil["name"], "fader": None, "geladen": bool(laden), "text": text}
+
+    def _song_uebernehmen(self) -> dict:
+        if self.entwurf.get("abspielen"):
+            self.abspielen_stoppen()
+        sequenz = copy.deepcopy(self.entwurf["sequenz"])
+        fehler = pruefen(self.show, sequenz)
+        if fehler:
+            raise ValueError(" ".join(fehler))
+        with self.show.sperre:
+            self.show.pult.sequenz_speichern(sequenz)
+        text = (f"Übernommen: Die Show für „{sequenz['name']}“ ist gespeichert. Live startet sie mit Song-Start; "
+                "„Probe ansehen“ zeigt sie mit der Aufnahme.")
+        return {"name": sequenz["name"], "fader": None, "text": text}
 
     # --- Eine Nachricht -------------------------------------------------------
 
@@ -637,7 +831,7 @@ class LichtChat:
         try:
             self.denkt = True
             self.anzeige.append({"rolle": "du", "text": text})
-            if self.schluessel.lesen():
+            if self.konto.bereit():
                 self._mit_claude(text)
             else:
                 self._einfach(text, "Ohne Claude-Schlüssel verstehe ich einfache Sätze: Gruppen, Farben, Effekte, "
@@ -656,18 +850,19 @@ class LichtChat:
         if fehler:
             self.anzeige.append({"rolle": "ki", "text": f"{grund} Mein Vorschlag passt nicht: {' '.join(fehler)}"})
             return
-        self._entwurf_setzen(vorschlag, "einfach")
+        self._entwurf_setzen("sequenz", vorschlag["sequenz"], vorschlag["erklaerung"], "einfach",
+                             fader=vorschlag["fader"], ersetzt=bool(vorschlag.get("ersetzt")))
         self.anzeige.append({"rolle": "ki", "text": f"{grund} Vorschlag: {vorschlag['erklaerung']} "
                                                     "Schau ihn dir in der Vorschau an und drück Übernehmen."})
 
-    def _entwurf_setzen(self, vorschlag: dict, quelle: str) -> None:
-        self.entwurf = {"sequenz": vorschlag["sequenz"], "erklaerung": vorschlag["erklaerung"],
-                        "fader": vorschlag.get("fader"), "ersetzt": bool(vorschlag.get("ersetzt")),
-                        "cue": 0, "quelle": quelle}
+    def _entwurf_setzen(self, art: str, sequenz: dict, erklaerung: str, quelle: str, **mehr) -> None:
+        if self.entwurf and self.entwurf.get("abspielen"):
+            self.abspielen_stoppen()
+        self.entwurf = {"art": art, "sequenz": sequenz, "erklaerung": erklaerung, "fader": mehr.pop("fader", None),
+                        "ersetzt": bool(mehr.pop("ersetzt", False)), "cue": 0, "quelle": quelle, **mehr}
 
     def _client(self):
-        import anthropic
-        return anthropic.Anthropic(api_key=self.schluessel.lesen(), timeout=ZEITLIMIT_S, max_retries=2)
+        return self.konto.client(ZEITLIMIT_S)
 
     def _mit_claude(self, text: str) -> None:
         import anthropic
@@ -676,8 +871,11 @@ class LichtChat:
             self.anzeige.append({"rolle": "hinweis", "text": "Neues Gespräch begonnen (das alte wurde zu lang)."})
         if self.systemtext is None:
             # Für ein Gespräch fest: Dann bleibt der Anfang gleich und Claude kann ihn zwischenspeichern.
+            self.modell = self.konto.modell()
             self.systemtext = SYSTEMTEXT + "\n" + welt_text(self.show)
-        self.verlauf.append({"role": "user", "content": stand_text(self.show) + "\n\n" + text})
+        notizen = "".join(f"[{n}] " for n in self.notizen)
+        self.notizen = []
+        self.verlauf.append({"role": "user", "content": stand_text(self.show) + "\n" + notizen + "\n\n" + text})
         try:
             client = self._client()
             for _ in range(MAX_ANFRAGEN):
@@ -686,7 +884,7 @@ class LichtChat:
                     messages=self.verlauf, cache_control={"type": "ephemeral"},
                     output_config={"effort": "medium"},
                     betas=["server-side-fallback-2026-07-01"], fallbacks="default")
-                self._kosten(antwort.usage)
+                self.konto.buchen("chat", antwort.usage, self.modell)
                 if antwort.stop_reason == "refusal":
                     self.verlauf.pop()           # die abgelehnte Nachricht nicht im Verlauf lassen
                     self.anzeige.append({"rolle": "ki", "text": "Da kann ich nicht helfen, ich mache nur Licht."})
@@ -702,7 +900,12 @@ class LichtChat:
                     return
                 ergebnisse, fertig = [], False
                 for aufruf in aufrufe:
-                    inhalt, fehler, fertig_hier = self._werkzeug(aufruf.name, aufruf.input)
+                    if fertig and aufruf.name in FERTIG_WERKZEUGE:
+                        # Es gibt nur einen Vorschlag auf einmal; ein zweiter würde den ersten verdrängen.
+                        inhalt, fehler, fertig_hier = ("Nicht ausgeführt: Pro Antwort nur ein Vorschlag. Der erste "
+                                                       "liegt in der Vorschau.", True, False)
+                    else:
+                        inhalt, fehler, fertig_hier = self._werkzeug(aufruf.name, aufruf.input)
                     ergebnis = {"type": "tool_result", "tool_use_id": aufruf.id, "content": inhalt}
                     if fehler:
                         ergebnis["is_error"] = True
@@ -742,34 +945,121 @@ class LichtChat:
                     getattr(b, "type", None) == "tool_use" for b in self.verlauf[-1]["content"]):
                 self.verlauf, self.systemtext = [], None
 
+    # --- Die Werkzeuge ----------------------------------------------------------
+
     def _werkzeug(self, name: str, eingabe: dict) -> tuple:
         """Führt einen Werkzeug-Aufruf aus. Gibt (Text für Claude, ist Fehler, Vorschlag fertig) zurück."""
-        if name == "sequenz_lesen":
-            sequenz = self.show.pult.sequenzen.lesen(str(eingabe.get("name", "")))
-            if sequenz is None:
-                return f"Die Sequenz „{eingabe.get('name')}“ gibt es nicht. Vorhanden: " + \
-                       ", ".join(self.show.pult.sequenzen.namen()), True, False
-            kurz = {"name": sequenz["name"], "cues": sequenz["cues"]}
-            return json.dumps(kurz, ensure_ascii=False), False, False
-        if name == "vorschlag_machen":
-            sequenz = aus_vorschlag(eingabe)
-            fader = eingabe.get("fader")
-            fehler = pruefen(self.show, sequenz, fader)
-            if fehler:
-                return "Die Prüfung meldet: " + " ".join(fehler), True, False
-            self._entwurf_setzen({"sequenz": sequenz, "erklaerung": str(eingabe.get("erklaerung", "")).strip(),
-                                  "fader": fader, "ersetzt": bool(eingabe.get("ersetzt"))}, "claude")
-            self.anzeige.append({"rolle": "ki", "text": (self.entwurf["erklaerung"] or "Vorschlag fertig.")
-                                 + " Er läuft jetzt in der Vorschau, noch nicht live."})
-            return "Der Vorschlag ist geprüft und läuft in der Vorschau. Der Mensch entscheidet über Übernehmen.", False, True
+        try:
+            if name == "sequenz_lesen":
+                return self._sequenz_lesen(eingabe)
+            if name == "vorschlag_machen":
+                return self._vorschlag(eingabe)
+            if name == "fader_belegen":
+                return self._fader(eingabe)
+            if name == "profil_vorschlagen":
+                return self._profil(eingabe)
+            if name == "song_show_entwerfen":
+                return self._song(eingabe)
+        except ValueError as fehler:
+            return str(fehler), True, False
         return f"Unbekanntes Werkzeug {name}.", True, False
 
-    def _kosten(self, usage) -> None:
-        """Ungefähre Kosten in Cent, damit man das Ausgabenlimit im Blick behält."""
+    def _sequenz_lesen(self, eingabe: dict) -> tuple:
+        sequenz = self.show.pult.sequenzen.lesen(str(eingabe.get("name", "")))
+        if sequenz is None:
+            return (f"Die Sequenz „{eingabe.get('name')}“ gibt es nicht. Vorhanden: "
+                    + ", ".join(self.show.pult.sequenzen.namen()), True, False)
+        kurz = {"name": sequenz["name"], "cues": sequenz["cues"]}
+        if sequenz.get("zeitcode"):
+            kurz["song"] = {"zeitcode_s": sequenz["zeitcode"],
+                            "teile": [{k: t.get(k) for k in ("name", "klasse", "start", "ende", "takte")}
+                                      for t in (sequenz.get("song") or {}).get("teile", [])],
+                            "hinweis": "Song-Show: ändern mit song_show_entwerfen"}
+        text = json.dumps(kurz, ensure_ascii=False)
+        if len(text) > 30000:
+            text = text[:30000] + " … (gekürzt)"
+        return text, False, False
+
+    def _vorschlag(self, eingabe: dict) -> tuple:
+        sequenz = aus_vorschlag(eingabe)
+        fader = eingabe.get("fader") if isinstance(eingabe.get("fader"), int) else None
+        alt = self.show.pult.sequenzen.lesen(sequenz["name"])
+        if alt and alt.get("zeitcode") and eingabe.get("ersetzt") and len(alt["cues"]) != len(sequenz["cues"]):
+            raise ValueError(f"„{sequenz['name']}“ ist eine Song-Show. Ändere sie mit song_show_entwerfen.")
+        fehler = pruefen(self.show, sequenz, fader)
+        if fehler:
+            return "Die Prüfung meldet: " + " ".join(fehler), True, False
+        self._entwurf_setzen("sequenz", sequenz, str(eingabe.get("erklaerung", "")).strip(), "claude",
+                             fader=fader, ersetzt=bool(eingabe.get("ersetzt")))
+        self.anzeige.append({"rolle": "ki", "text": (self.entwurf["erklaerung"] or "Vorschlag fertig.")
+                             + " Er läuft jetzt in der Vorschau, noch nicht live."})
+        return "Der Vorschlag ist geprüft und läuft in der Vorschau. Der Mensch entscheidet über Übernehmen.", False, True
+
+    def _fader(self, eingabe: dict) -> tuple:
+        nummer = eingabe.get("fader")
+        if not isinstance(nummer, int) or not 1 <= nummer <= ANZAHL_EXECUTOREN:
+            raise ValueError(f"Fader gibt es nur von 1 bis {ANZAHL_EXECUTOREN}.")
+        name = str(eingabe.get("sequenz") or "").strip()
+        sequenz = {"name": name, "cues": []}
+        if name:
+            gefunden = self.show.pult.sequenzen.lesen(name)
+            if gefunden is None:
+                raise ValueError(f"Die Sequenz „{name}“ gibt es nicht. Vorhanden: "
+                                 + ", ".join(self.show.pult.sequenzen.namen()))
+            if gefunden.get("zeitcode"):
+                raise ValueError(f"„{name}“ ist eine Song-Show. Die startet live mit Song-Start, nicht auf einem Fader.")
+            sequenz = gefunden
+        erklaerung = f"Fader {nummer} bekommt „{name}“." if name else f"Fader {nummer} wird frei."
+        self._entwurf_setzen("fader", sequenz, erklaerung, "claude", fader=nummer, sequenz_name=name)
+        self.anzeige.append({"rolle": "ki", "text": erklaerung + " Drück Übernehmen, dann gilt es."})
+        return "Vorschlag liegt bereit. Der Mensch entscheidet über Übernehmen.", False, True
+
+    def _profil(self, eingabe: dict) -> tuple:
+        profil = profil_aus_vorschlag(eingabe, self.show.grenzen)
+        fehler = pruefe_profil(profil, self.show.patch.gruppen())
+        for wert in profil["grundlicht"]["werte"]:
+            if "position" in wert and wert["position"] not in self.show.positionen:
+                fehler.append(f"Position „{wert['position']}“ gibt es nicht.")
+        if fehler:
+            return "Die Prüfung meldet: " + " ".join(fehler), True, False
+        vorschau = {"name": profil["name"], "cues": [{"name": "Grundlicht", "zeit_s": 1.0, "folgen_s": None,
+                                                      "werte": profil["grundlicht"]["werte"], "effekte": []}]}
+        erklaerung = str(eingabe.get("erklaerung", "")).strip()
+        self._entwurf_setzen("profil", vorschau, erklaerung, "claude", profil=profil, name=profil["name"])
+        self.anzeige.append({"rolle": "ki", "text": (erklaerung or f"Profil „{profil['name']}“ fertig.")
+                             + " Die Vorschau zeigt sein Grundlicht. Mit Übernehmen wird es gespeichert."})
+        return "Das Profil ist geprüft und liegt als Vorschlag bereit.", False, True
+
+    def _song(self, eingabe: dict) -> tuple:
+        probe = str(eingabe.get("probe") or "").strip()
+        if probe not in self.show.proben.namen():
+            raise ValueError(f"Die Probe „{probe}“ gibt es nicht. Vorhanden: " + (", ".join(self.show.proben.namen())
+                                                                                  or "keine"))
+        self.anzeige.append({"rolle": "hinweis", "text": f"Das Lichtdesign für „{probe}“ entsteht (bis zu zwei Minuten) …"})
+        ergebnis = self.show.ki_design.entwerfen(probe, str(eingabe.get("songtitel") or ""),
+                                                 str(eingabe.get("wuensche") or ""))
+        self._song_entwurf(ergebnis, "claude")
+        teile = ", ".join(f"{t['name']} ({t['klasse']})" for t in ergebnis["sequenz"]["song"]["teile"])
+        return (f"Die Song-Show liegt als Vorschlag bereit. Teile: {teile}. Idee: {ergebnis['erklaerung']}",
+                False, True)
+
+    def _song_entwurf(self, ergebnis: dict, quelle: str) -> None:
+        """Auch die Probe-Seite legt hier ihren Vorschlag ab ("Mit Claude bauen")."""
+        sequenz = ergebnis["sequenz"]
+        self._entwurf_setzen("song", sequenz, ergebnis["erklaerung"], quelle, probe=ergebnis["probe"],
+                             name=sequenz["name"])
+        self.anzeige.append({"rolle": "ki", "text": f"Show für „{sequenz['name']}“: {ergebnis['erklaerung']} "
+                                                    "Schau sie dir mit „Mit Aufnahme ansehen“ in der Vorschau an."})
+
+    def song_entwerfen(self, probe: str, titel: str = "", wuensche: str = "") -> dict:
+        """Für die Probe-Seite: Lichtdesign ohne Chat-Nachricht."""
+        if not self._sperre.acquire(blocking=False):
+            raise ValueError("Der Chat denkt gerade nach. Gleich nochmal versuchen.")
         try:
-            dollar = (usage.input_tokens * PREISE["eingabe"] + usage.output_tokens * PREISE["ausgabe"]
-                      + (usage.cache_read_input_tokens or 0) * PREISE["cache_lesen"]
-                      + (usage.cache_creation_input_tokens or 0) * PREISE["cache_schreiben"]) / 1_000_000
-            self.kosten_cent += dollar * 100
-        except (AttributeError, TypeError):
-            pass
+            self.denkt = True
+            ergebnis = self.show.ki_design.entwerfen(probe, titel, wuensche)
+            self._song_entwurf(ergebnis, "design")
+        finally:
+            self.denkt = False
+            self._sperre.release()
+        return self.status()

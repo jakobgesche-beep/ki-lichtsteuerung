@@ -38,6 +38,8 @@ from .weitere import Mitschnitt
 from .einmessen import Einmessen, FollowSpot
 from .fernbedienung import Fernbedienung
 from .generalprobe import Generalprobe
+from .ki import KiKonto
+from .ki_show import KiDesign
 from .licht_chat import LichtChat
 from .midi import Midi
 from .zwischenlicht import Zwischenlicht
@@ -93,6 +95,8 @@ class Show:
         self.audio_auftrag: Optional[dict] = None
         self.vorschau = Vorschau(self)
         self.vorschau_geraete = None
+        self.ki = KiKonto(self.pfade.lokal)     # Claude: Schlüssel, Modelle, Kosten (Chat, Lichtdesign, Regie)
+        self.ki_design = KiDesign(self)
         self.chat = LichtChat(self)
         self.zwischenlicht = Zwischenlicht(self)
         self.generalprobe = Generalprobe(self)
@@ -427,9 +431,15 @@ class Show:
     def _chat_vorschau(self, jetzt: float) -> None:
         """Licht-Chat: Der Vorschlag läuft nur in der 3D-Vorschau, nie am Ausgang (Grundregel)."""
         entwurf = self.chat.entwurf
-        if entwurf is None:
+        if entwurf is None or not (entwurf.get("sequenz") or {}).get("cues"):
             self.chat_vorschau_geraete = None
             return
+        zeiten = entwurf["sequenz"].get("zeitcode")
+        if entwurf.get("abspielen") and zeiten:
+            # Song-Vorschlag mit der Aufnahme: der Cue folgt der Stelle im Song (nur in der Vorschau)
+            stelle = self.audio.position_s()
+            if stelle is not None:
+                entwurf["cue"] = max((i for i, z in enumerate(zeiten) if z <= stelle + 0.05), default=0)
         platz = self.chat_platz
         platz.sequenz = entwurf["sequenz"]
         platz.index = max(0, min(entwurf["cue"], len(entwurf["sequenz"]["cues"]) - 1))

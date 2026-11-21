@@ -9,7 +9,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from lichtsteuerung import daten
-from lichtsteuerung.licht_chat import MODELL, aus_vorschlag, einfach_verstehen, pruefen
+from lichtsteuerung.licht_chat import MAX_UNIONEN, MODELL, aus_vorschlag, einfach_verstehen, pruefen, unionen, werkzeuge
 from lichtsteuerung.server import erstelle_app
 from lichtsteuerung.show import Show
 
@@ -135,7 +135,9 @@ def test_claude_korrigiert_sich_nach_pruef_fehler(show, monkeypatch):
     # So geht die Anfrage raus: richtiges Modell, feste Werkzeuge, Rückfall bei Ablehnung, Zwischenspeicher
     erste = falsch.anfragen[0]
     assert erste["model"] == MODELL == "claude-opus-5-5"
-    assert all(w["strict"] for w in erste["tools"]) and {w["name"] for w in erste["tools"]} == {"vorschlag_machen", "sequenz_lesen"}
+    assert all(w["strict"] for w in erste["tools"]) and {w["name"] for w in erste["tools"]} == {
+        "vorschlag_machen", "sequenz_lesen", "fader_belegen", "profil_vorschlagen", "song_show_entwerfen"}
+    assert unionen(erste["tools"]) <= MAX_UNIONEN           # sonst lehnt Claude jede Anfrage ab (400)
     assert erste["fallbacks"] == "default" and erste["betas"] == ["server-side-fallback-2026-07-01"]
     assert erste["cache_control"] == {"type": "ephemeral"} and erste["output_config"] == {"effort": "medium"}
     assert "Spots" in erste["system"] and "[Stand jetzt]" in erste["messages"][0]["content"]
@@ -232,3 +234,163 @@ def test_einfach_versteht_tippfehler_stile_und_wirbel(show):
     assert pop["sequenz"]["name"] == "Pop" and pop["fader"] == 2
     assert einfach_verstehen(show, "ruhige Ballade")["sequenz"]["cues"][0]["effekte"][0]["art"] == "dimmer_welle"
     assert einfach_verstehen(show, "Wie spät ist es?") is None
+
+
+# --- Seit 2.4.0: Werkzeuge, die Claude wirklich annimmt, und mehr als nur Looks ----------------
+
+def _objekte(schema):
+    if isinstance(schema, dict):
+        if schema.get("type") == "object":
+            yield schema
+        for wert in schema.values():
+            yield from _objekte(wert)
+    elif isinstance(schema, list):
+        for wert in schema:
+            yield from _objekte(wert)
+
+
+def test_werkzeuge_halten_die_regeln_der_api_ein():
+    """Bis 2.3.3 hatte vorschlag_machen 17 Felder "Typ oder null": Claude lehnte jede Anfrage mit 400 ab.
+    Jetzt sind seltene Felder weglassbar statt null-bar."""
+    alle = werkzeuge()
+    assert unionen(alle) == 0
+    assert all(w["strict"] for w in alle) and len(alle) <= 20
+    for werkzeug in alle:
+        for objekt in _objekte(werkzeug["input_schema"]):
+            assert objekt.get("additionalProperties") is False
+            assert set(objekt.get("required", [])) <= set(objekt["properties"])
+
+
+def test_vorschlag_mit_weggelassenen_feldern(show, monkeypatch):
+    """So schickt Claude es jetzt: nur die Felder, die gebraucht werden."""
+    eingabe = {"name": "Rot", "erklaerung": "PARs rot.", "cues": [
+        {"name": "Rot", "zeit_s": 1.0, "werte": [{"gruppe": "Farb-PARs", "farbe": "rot", "helligkeit": 0.7}],
+         "effekte": [{"art": "dimmer_puls", "gruppe": "Farb-PARs", "beats": 1}]}]}
+    sequenz = aus_vorschlag(eingabe)
+    assert pruefen(show, sequenz) == []
+    effekt = sequenz["cues"][0]["effekte"][0]
+    assert effekt["tempo"] == "musik" and "groesse" not in effekt and sequenz["cues"][0]["folgen_s"] is None
+    einzeln = aus_vorschlag({"name": "Front", "cues": [{"name": "A", "zeit_s": 1, "werte": [
+        {"gruppe": "Spots", "geraet": "front-1", "helligkeit": 1.0}], "effekte": []}]})
+    assert einzeln["cues"][0]["werte"][0] == {"geraet": "front-1", "helligkeit": 1.0}
+
+
+def test_claude_legt_eine_sequenz_auf_einen_fader(show, monkeypatch):
+    show.pult.sequenz_speichern(aus_vorschlag(look(name="Blau")))
+    mit_claude(show, monkeypatch, [antwort(aufruf("fader_belegen", {"fader": 6, "sequenz": "Blau"}))])
+    status = show.chat.senden("Leg Blau auf Fader 6")
+    assert status["entwurf"]["art"] == "fader" and status["entwurf"]["sequenz"] == "Blau"
+    assert show.pult.executor(6).art is None                  # erst nach Übernehmen
+    show.chat.uebernehmen()
+    assert show.pult.executor(6).sequenz["name"] == "Blau"
+    mit_claude(show, monkeypatch, [antwort(aufruf("fader_belegen", {"fader": 6, "sequenz": ""}))])
+    show.chat.senden("Mach Fader 6 frei")
+    show.chat.uebernehmen()
+    assert show.pult.executor(6).art is None
+
+
+def test_fader_mit_unbekannter_sequenz_geht_als_fehler_an_claude(show, monkeypatch):
+    falsch = mit_claude(show, monkeypatch, [antwort(aufruf("fader_belegen", {"fader": 2, "sequenz": "Gibtsnicht"})),
+                                            antwort(text("Die Sequenz gibt es nicht."), stop="end_turn")])
+    status = show.chat.senden("Gibtsnicht auf Fader 2")
+    ergebnis = falsch.anfragen[1]["messages"][-1]["content"][0]
+    assert ergebnis["is_error"] and "gibt es nicht" in ergebnis["content"] and status["entwurf"] is None
+
+
+def profil_eingabe(**anders):
+    eingabe = {"name": "Weihnachtskonzert", "erklaerung": "Warm und ruhig.", "palette": ["gold", "rot", "warmweiss"],
+               "max_helligkeit": 0.8, "bewegung": "langsam", "beat_reaktion": 0.2, "strobo_blitze_pro_s": 0,
+               "hazer": False, "grundlicht": [{"gruppe": "Farb-PARs", "farbe": "warmweiss", "helligkeit": 0.5}],
+               "hinweise_ki": "Bei Soli darf es kräftiger werden."}
+    eingabe.update(anders)
+    return eingabe
+
+
+def test_claude_macht_ein_profil_und_es_wird_erst_beim_uebernehmen_gespeichert(show, monkeypatch):
+    mit_claude(show, monkeypatch, [antwort(aufruf("profil_vorschlagen", profil_eingabe(strobo_blitze_pro_s=50)))])
+    status = show.chat.senden("Profil fürs Weihnachtskonzert, ruhig und warm")
+    entwurf = status["entwurf"]
+    assert entwurf["art"] == "profil" and entwurf["profil"]["palette"] == ["gold", "rot", "warmweiss"]
+    assert entwurf["profil"]["strobo"]["max_blitze_pro_sekunde"] <= show.grenzen.strobo_max_hz   # feste Grenze
+    assert "Weihnachtskonzert" not in show.profile.namen()
+    show.baue_bild(0.0)
+    assert show.live_daten()["chat_vorschau"] is not None                                   # Grundlicht in der Vorschau
+    show.chat.uebernehmen(laden=True)
+    assert "Weihnachtskonzert" in show.profile.namen() and show.profil["name"] == "Weihnachtskonzert"
+    assert show.profil["hinweise_ki"].startswith("Bei Soli")
+
+
+def test_falsches_profil_geht_zur_korrektur_an_claude(show, monkeypatch):
+    falsch = mit_claude(show, monkeypatch, [
+        antwort(aufruf("profil_vorschlagen", profil_eingabe(palette=["glitzerblau"]))),
+        antwort(aufruf("profil_vorschlagen", profil_eingabe(), "2"))])
+    status = show.chat.senden("Profil fürs Weihnachtskonzert")
+    fehler = falsch.anfragen[1]["messages"][-1]["content"][0]
+    assert fehler["is_error"] and "glitzerblau" in fehler["content"] and status["entwurf"]["art"] == "profil"
+
+
+def song_ergebnis(show, name="Song"):
+    cue = aus_vorschlag(look(name="Song"))["cues"][0]
+    sequenz = {"name": name, "cues": [dict(cue, name="Intro"), dict(cue, name="Refrain")], "zeitcode": [0.0, 10.0],
+               "farben": ["blau", "rot"], "song": {"probe": name, "tempo_bpm": 120, "dauer_s": 20.0, "teile": [
+                   {"name": "Intro", "klasse": "ruhig", "start": 0.0, "ende": 10.0, "takte": 5, "cue": 0, "idee": "ruhig"},
+                   {"name": "Refrain", "klasse": "stark", "start": 10.0, "ende": 20.0, "takte": 5, "cue": 1, "idee": "laut"}]}}
+    return {"probe": name, "sequenz": sequenz, "plan": {}, "erklaerung": "Ruhig anfangen, im Refrain knallen."}
+
+
+def test_claude_laesst_eine_song_show_entwerfen(show, monkeypatch):
+    aufrufe = []
+    monkeypatch.setattr(show.proben, "namen", lambda: ["Song"])
+
+    def entwerfen(probe, titel, wuensche):
+        aufrufe.append((probe, titel, wuensche))
+        return song_ergebnis(show, probe)
+
+    monkeypatch.setattr(show.ki_design, "entwerfen", entwerfen)
+    mit_claude(show, monkeypatch, [antwort(aufruf("song_show_entwerfen", {
+        "probe": "Song", "songtitel": "Boulevard of Broken Dreams", "wuensche": "Refrain rot"}))])
+    status = show.chat.senden("Bau die Show für Song, im Refrain rot")
+    assert aufrufe == [("Song", "Boulevard of Broken Dreams", "Refrain rot")]
+    entwurf = status["entwurf"]
+    assert entwurf["art"] == "song" and [t["name"] for t in entwurf["teile"]] == ["Intro", "Refrain"]
+    assert show.pult.sequenzen.lesen("Song") is None                     # nichts gespeichert vor Übernehmen
+    show.chat.uebernehmen()
+    gespeichert = show.pult.sequenzen.lesen("Song")
+    assert gespeichert["zeitcode"] == [0.0, 10.0] and gespeichert["song"]["teile"][1]["name"] == "Refrain"
+
+
+def test_eine_song_show_laesst_sich_nicht_mit_einem_look_ueberschreiben(show, monkeypatch):
+    show.pult.sequenz_speichern(song_ergebnis(show)["sequenz"])
+    neu = look(name="Song")
+    neu["ersetzt"] = True
+    falsch = mit_claude(show, monkeypatch, [antwort(aufruf("vorschlag_machen", neu)),
+                                            antwort(text("Dafür nehme ich das Lichtdesign."), stop="end_turn")])
+    show.chat.senden("Mach Song rot")
+    assert "song_show_entwerfen" in falsch.anfragen[1]["messages"][-1]["content"][0]["content"]
+
+
+def test_kosten_werden_mitgezaehlt(show, monkeypatch):
+    mit_claude(show, monkeypatch, [antwort(aufruf("vorschlag_machen", look()))])
+    show.chat.senden("Spots blau")
+    assert show.ki.kosten["chat"] > 0 and show.chat.status()["kosten_cent"] > 0
+
+
+def test_nur_ein_vorschlag_pro_antwort_und_claude_erfaehrt_was_damit_passiert_ist(show, monkeypatch):
+    """Echter Fall: Claude rief fader_belegen und vorschlag_machen in einer Antwort auf, der zweite verdrängte den ersten."""
+    show.pult.sequenz_speichern(aus_vorschlag(look(name="Drop")))
+    falsch = mit_claude(show, monkeypatch, [
+        antwort(aufruf("fader_belegen", {"fader": 5, "sequenz": "Drop"}), aufruf("vorschlag_machen", look(), "2")),
+        antwort(text("Alles klar."), stop="end_turn")])
+    status = show.chat.senden("leg die rock sache auf fader 5")
+    assert status["entwurf"]["art"] == "fader"                       # der erste bleibt
+    zweiter = falsch.anfragen[0] and show.chat.verlauf[-1]["content"][1]
+    assert zweiter["is_error"] and "nur ein Vorschlag" in zweiter["content"]
+    show.chat.uebernehmen()
+    show.chat.senden("danke")
+    assert "übernommen" in falsch.anfragen[1]["messages"][-1]["content"]
+
+
+def test_doppelte_eintraege_einer_gruppe_werden_zusammengelegt():
+    sequenz = aus_vorschlag({"name": "X", "cues": [{"name": "A", "zeit_s": 1, "effekte": [], "werte": [
+        {"gruppe": "Spots", "farbe": "blau"}, {"gruppe": "Spots", "helligkeit": 0.8, "position": "Mitte"}]}]})
+    assert sequenz["cues"][0]["werte"] == [{"gruppe": "Spots", "farbe": "blau", "helligkeit": 0.8, "position": "Mitte"}]

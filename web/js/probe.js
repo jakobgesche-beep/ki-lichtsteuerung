@@ -29,6 +29,7 @@ export function probeSeite(wurzel) {
       </div>
       <div>
         <div class="drei-d klein" id="drei"></div>
+        <div class="kasten" id="ki-entwurf" hidden></div>
         <div id="songs"></div>
       </div>
     </div>
@@ -182,6 +183,15 @@ export function probeSeite(wurzel) {
           <button data-neu="${t(p.name)}">Show neu bauen</button>
           <button data-editor="${t(p.name)}" class="${offen.has(p.name) ? "an" : ""}">Teile richtigstellen</button>
           <button data-weg="${t(p.name)}" class="gefahr">Löschen</button></p>
+        <details class="ki-design"><summary>Lichtdesign mit Claude</summary>
+          <p class="leise">Claude bekommt die Messwerte Takt für Takt (nicht den Ton), erkennt die Songteile und entwirft
+            das Licht. Dauert bis zu zwei Minuten und kostet etwa 10 Cent. Gespeichert wird erst mit „Übernehmen“.</p>
+          <label>Titel und Interpret, wenn bekannt <input data-ki-titel="${t(p.name)}"
+            placeholder="zum Beispiel Boulevard of Broken Dreams – Green Day"></label>
+          <label>Wünsche (freiwillig) <textarea data-ki-wunsch="${t(p.name)}" rows="2"
+            placeholder="zum Beispiel: Refrain rot und weiß, im Solo Strobo, Strophen ganz ruhig"></textarea></label>
+          <button data-claude="${t(p.name)}" class="haupt">Entwerfen</button>
+        </details>
         ${offen.has(p.name) ? editor(p) : ""}
         <p class="leise">Die Show liegt als Sequenz „${t(p.name)}“ im Pult. Dort kannst du jeden Cue ändern.
           Live: auf der Seite „Show“ einmal Start drücken, wenn die Band anfängt. Der Song läuft dann von selbst durch.</p>
@@ -287,8 +297,57 @@ export function probeSeite(wurzel) {
 
   feld("ansehen-stopp").onclick = () => senden("/proben/ansehen/stopp");
 
+  // --- Vorschlag von Claude (KI-Lichtdesign): läuft nur in der Vorschau, bis Übernehmen gedrückt ist ------------
+  const KLASSE_TEXT = Object.fromEntries(KLASSEN);
+  let entwurf = null;
+
+  function entwurfZeigen(neu) {
+    entwurf = neu && neu.art === "song" ? neu : null;
+    const kasten = feld("ki-entwurf");
+    kasten.hidden = !entwurf;
+    if (!entwurf) return;
+    kasten.innerHTML = `
+      <h2>Vorschlag von Claude: ${t(entwurf.name)} <span class="vorschau-schild">Vorschau, nicht live</span></h2>
+      <p>${t(entwurf.erklaerung)}</p>
+      <ol class="ki-teile">${entwurf.teile.map((teil) => `<li><b>${t(teil.name)}</b>
+        <span class="leise">${minuten(teil.start)}–${minuten(teil.ende)} · ${KLASSE_TEXT[teil.klasse] ?? t(teil.klasse)} · ${teil.takte} Takte</span>
+        ${teil.idee ? `<br><span class="leise">${t(teil.idee)}</span>` : ""}</li>`).join("")}</ol>
+      <p class="zeile"><button id="ki-abspielen" class="haupt">${entwurf.abspielen ? "■ Ansehen beenden" : "▶ Mit Aufnahme ansehen"}</button>
+        <button id="ki-ok">Übernehmen</button> <button id="ki-weg" class="gefahr">Verwerfen</button></p>
+      <p class="leise">Beim Ansehen läuft die Aufnahme, das Licht des Vorschlags nur in der 3D-Ansicht oben, nicht auf der Bühne.
+        Übernehmen ersetzt die Show „${t(entwurf.name)}“ (Oops im Pult holt die alte zurück).</p>`;
+    feld("ki-abspielen").onclick = async () =>
+      entwurfZeigen((await senden(entwurf.abspielen ? "/chat/abspielen/stopp" : "/chat/abspielen")).entwurf);
+    feld("ki-ok").onclick = async () => {
+      const antwort = await senden("/chat/uebernehmen");
+      entwurfZeigen(antwort.entwurf);
+      meldung("Übernommen: Die Show ist gespeichert.", "ok");
+      songsZeigen();
+    };
+    feld("ki-weg").onclick = async () => entwurfZeigen((await senden("/chat/verwerfen")).entwurf);
+  }
+
+  api("/chat").then((stand) => { if (!beendet) entwurfZeigen(stand.entwurf); }).catch(() => {});
+
   wurzel.addEventListener("click", async (ereignis) => {
     const d = ereignis.target.dataset;
+    if (d.claude) {
+      const knopf = ereignis.target;
+      const titel = wurzel.querySelector(`[data-ki-titel="${CSS.escape(d.claude)}"]`)?.value ?? "";
+      const wuensche = wurzel.querySelector(`[data-ki-wunsch="${CSS.escape(d.claude)}"]`)?.value ?? "";
+      knopf.disabled = true;
+      knopf.textContent = "Claude entwirft …";
+      meldung(`Claude entwirft die Show für „${d.claude}“ (bis zu zwei Minuten) …`, "ok");
+      try {
+        entwurfZeigen((await senden(`/ki/design/${encodeURIComponent(d.claude)}`, { titel, wuensche })).entwurf);
+        meldung("Der Vorschlag ist da: oben ansehen und übernehmen.", "ok");
+        feld("ki-entwurf").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } catch { /* Meldung kam schon */ } finally {
+        knopf.disabled = false;
+        knopf.textContent = "Entwerfen";
+      }
+      return;
+    }
     if (d.ansehen) await senden(`/proben/${encodeURIComponent(d.ansehen)}/abspielen`);
     if (d.hoeren) await senden(`/proben/${encodeURIComponent(d.hoeren)}/abspielen`, { ab_s: Number(d.ab) });
     if (d.editor) { offen.has(d.editor) ? offen.delete(d.editor) : offen.add(d.editor); songsZeigen(); }
@@ -316,7 +375,8 @@ export function probeSeite(wurzel) {
 
   const abmelden = abonnieren((live) => {
     if (!live) return;
-    buehne?.setzeWerte(live.geraete);
+    // Läuft der Vorschlag von Claude mit der Aufnahme, zeigt die 3D-Ansicht die Vorschau statt der Bühne
+    buehne?.setzeWerte(entwurf?.abspielen && live.chat_vorschau ? live.chat_vorschau.geraete : live.geraete);
     const platz = live.pult.song_platz;
     const ansehen = live.audio.quelle?.startsWith("Probe:") && platz.sequenz && !platz.song;
     feld("laeuft-kasten").hidden = !ansehen;
