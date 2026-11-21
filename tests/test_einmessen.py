@@ -113,3 +113,42 @@ def test_ueber_den_server(show):
     handy.headers["X-Fern"] = handy.post("/fern/anmelden", json={"pin": "123456"}).json()["token"]
     assert handy.post("/fern/followspot", json={"x": 1, "y": 1}).json()["an"] is True
     assert handy.post("/fern/followspot", json={"aus": True}).json()["an"] is False
+
+
+# --- Ausrichtung (2.4.2): Kopf hängt andersherum als gedacht ------------------------------------
+
+def test_andersherum_gehaengt_zeigt_nach_aussen_und_180_grad_drehen_heilt_es():
+    """Veranstaltung am 21.11.2026: Beide Köpfe zeigten bei „Mitte“ nach außen statt aufeinander zu. Grund: Sie
+    hingen um 180° anders als in stage.json. Mit „Um 180° drehen“ treffen sie wieder die Mitte."""
+    import math
+    from dataclasses import replace
+    from lichtsteuerung.pantilt import richtung
+    mitte = (0.0, 2.0, 0.8)
+    for x in (-1.4, 1.4):
+        echt = Montage(x=x, y=2.0, z=3.9, haengend=True, drehung_grad=0.0)       # so hängt er wirklich
+        eingetragen = replace(echt, drehung_grad=180.0)                          # so stand es in stage.json
+        zeigt = richtung(echt, *winkel_fuer_ziel(eingetragen, mitte, 540, 270))
+        assert (zeigt[0] > 0) != (mitte[0] - x > 0)                              # nach außen: der Fehler
+        gedreht = replace(eingetragen, drehung_grad=(eingetragen.drehung_grad + 180) % 360)
+        zeigt = richtung(echt, *winkel_fuer_ziel(gedreht, mitte, 540, 270))
+        soll = [m - p for m, p in zip(mitte, (x, 2.0, 3.9))]
+        laenge = math.sqrt(sum(s * s for s in soll))
+        winkel = math.degrees(math.acos(max(-1.0, min(1.0, sum(z * s / laenge for z, s in zip(zeigt, soll))))))
+        assert winkel < 1.0                                                      # trifft wieder
+
+
+def test_ausrichtung_ueber_den_server(show):
+    kopf = show.follow_spot.moegliche()[0]
+    vorher = round(show.buehne.geraet(kopf["id"]).get("drehung_grad", 0)) % 360
+    with TestClient(erstelle_app(show)) as client:
+        assert any(k["id"] == kopf["id"] for k in client.get("/api/positionen").json()["ausrichtung"])
+        koepfe = client.post(f"/api/ausrichtung/{kopf['id']}", json={"aktion": "drehen180"}).json()["koepfe"]
+        neu = next(k for k in koepfe if k["id"] == kopf["id"])["drehung_grad"]
+        assert neu == (vorher + 180) % 360
+        assert daten.lese_json(show.pfade.stage)["geraete"][kopf["id"]]["drehung_grad"] == neu   # gespeichert
+        client.post(f"/api/ausrichtung/{kopf['id']}", json={"aktion": "drehen90"})
+        assert show.buehne.geraet(kopf["id"])["drehung_grad"] == (neu + 90) % 360
+        client.post(f"/api/ausrichtung/{kopf['id']}", json={"aktion": "pan_tauschen"})
+        assert show.buehne.geraet(kopf["id"])["pan_umkehren"] is True
+        assert client.post(f"/api/ausrichtung/{kopf['id']}", json={"aktion": "quatsch"}).status_code == 400
+        assert client.post("/api/ausrichtung/gibtsnicht", json={"aktion": "drehen180"}).status_code == 400

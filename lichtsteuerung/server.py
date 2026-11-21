@@ -318,12 +318,42 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         return {"positionen": show.positionen, "platzhalter": bool(roh.get("platzhalter")),
                 "buehne": show.buehne.daten.get("buehne"),
                 "koepfe": [{"id": g["id"], "name": g["name"]} for g in show.follow_spot.moegliche()],
-                "einmessen": show.einmessen.zustand()}
+                "ausrichtung": ausrichtung(), "einmessen": show.einmessen.zustand()}
 
     @app.post("/api/positionen")
     def positionen_speichern(auftrag: dict = Body(...)):
         show.positionen_setzen(auftrag.get("positionen") or {})
         return positionen_lesen()
+
+    def ausrichtung() -> list:
+        """Wie jeder Moving Head hängt: Drehung (Vorderseite) und ob Pan oder Tilt am Gerät andersherum laufen."""
+        koepfe = []
+        for g in show.follow_spot.moegliche():
+            ort = show.buehne.geraet(g["id"]) or {}
+            koepfe.append({"id": g["id"], "name": g["name"], "montage": ort.get("montage", "stehend"),
+                           "drehung_grad": round(float(ort.get("drehung_grad", 0.0))) % 360,
+                           "pan_umkehren": bool(ort.get("pan_umkehren")), "tilt_umkehren": bool(ort.get("tilt_umkehren"))})
+        return koepfe
+
+    @app.post("/api/ausrichtung/{geraet_id}")
+    def ausrichtung_aendern(geraet_id: str, auftrag: dict = Body(...)):
+        """Kopf zeigt falsch herum: um 180° oder 90° drehen, links/rechts oder oben/unten tauschen.
+        Gilt sofort (jedes Zielen liest den Ort neu) und wird in stage.json gespeichert."""
+        if geraet_id not in {k["id"] for k in ausrichtung()}:
+            raise ValueError("Diesen Moving Head gibt es nicht (oder er hat keinen Ort auf der Bühne).")
+        ort = show.buehne.geraet(geraet_id)
+        aktion = str(auftrag.get("aktion", ""))
+        with show.sperre:
+            if aktion in ("drehen180", "drehen90"):
+                schritt = 180 if aktion == "drehen180" else 90
+                show.buehne.setze_geraet(geraet_id, {"drehung_grad": (round(float(ort.get("drehung_grad", 0.0))) + schritt) % 360})
+            elif aktion in ("pan_tauschen", "tilt_tauschen"):
+                feld = "pan_umkehren" if aktion == "pan_tauschen" else "tilt_umkehren"
+                show.buehne.setze_geraet(geraet_id, {feld: not bool(ort.get(feld))})
+            else:
+                raise ValueError("Unbekannte Änderung.")
+            show.buehne.speichern()
+        return {"koepfe": ausrichtung()}
 
     @app.post("/api/einmessen/{aktion}")
     def einmessen(aktion: str, auftrag: dict = Body(default={})):

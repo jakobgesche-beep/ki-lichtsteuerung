@@ -8,6 +8,20 @@ export function positionenSeite(wurzel) {
   wurzel.innerHTML = `
     <div class="spalten">
       <div>
+        <div class="kasten"><h2>Kopf zeigt falsch herum?</h2>
+          <p class="leise">So hängt ihr die Köpfe, wie es bequem ist, und stellt es hier ein: Erst „Alle zur Mitte zeigen“
+            (DMX an). Die Strahlen sollen sich in der Bühnenmitte treffen.</p>
+          <ul class="leise ausrichtung-hilfe">
+            <li>Zeigt ein Kopf nach außen statt zur Mitte (spiegelverkehrt): <b>Um 180° drehen</b>.</li>
+            <li>Zeigt er seitlich daneben (nach vorne oder hinten): <b>Um 90° drehen</b>, bis es passt.</li>
+            <li>Läuft er nach links, wenn er nach rechts soll: <b>Links/rechts tauschen</b>. Zu hoch statt zu tief:
+              <b>Oben/unten tauschen</b>.</li>
+          </ul>
+          <p class="zeile"><button id="ar-mitte" class="haupt">Alle zur Mitte zeigen</button>
+            <button id="ar-aus">Test aus</button></p>
+          <table class="ausrichtung"><tbody id="ar-tabelle"></tbody></table>
+          <p class="leise">Jede Änderung gilt sofort und bleibt gespeichert. Danach genauer: „Moving Head einmessen“.</p>
+        </div>
         <div class="kasten"><h2>Moving Head einmessen</h2>
           <p class="leise">Damit die Köpfe die Positionen genau treffen: Kopf wählen, Position wählen, „Hinfahren“.
             Jemand steht genau auf der Stelle (oder ein Klebeband liegt dort). Dann den Lichtkegel mit den Pfeilen genau
@@ -111,7 +125,37 @@ export function positionenSeite(wurzel) {
       || `<option value="">kein Moving Head im Patch</option>`;
     feld("em-position").innerHTML = liste.map((p) => `<option>${t(p.name)}</option>`).join("");
     einmessenZeigen(daten.einmessen);
+    ausrichtungZeigen(daten.ausrichtung ?? []);
   }
+
+  // --- Ausrichtung: Kopf hängt andersherum als gedacht -------------------------------
+  const VORDERSEITE = { 0: "zur Bühne", 90: "nach links", 180: "zum Publikum", 270: "nach rechts" };
+  function ausrichtungZeigen(koepfe) {
+    feld("ar-tabelle").innerHTML = koepfe.map((k) => `<tr>
+      <td><b>${t(k.name)}</b><br><span class="leise">${k.montage === "haengend" ? "hängend" : "stehend"} · Vorderseite
+        ${VORDERSEITE[k.drehung_grad] ?? k.drehung_grad + "°"} (${k.drehung_grad}°)${k.pan_umkehren ? " · links/rechts getauscht" : ""}${k.tilt_umkehren ? " · oben/unten getauscht" : ""}</span></td>
+      <td class="zeile"><button class="klein" data-ar="drehen180" data-kopf="${t(k.id)}">Um 180° drehen</button>
+        <button class="klein" data-ar="drehen90" data-kopf="${t(k.id)}">Um 90° drehen</button>
+        <button data-ar="pan_tauschen" data-kopf="${t(k.id)}" class="klein ${k.pan_umkehren ? "an" : ""}">Links/rechts tauschen</button>
+        <button data-ar="tilt_tauschen" data-kopf="${t(k.id)}" class="klein ${k.tilt_umkehren ? "an" : ""}">Oben/unten tauschen</button></td>
+    </tr>`).join("") || `<tr><td class="leise">Kein Moving Head mit Ort auf der Bühne (Setup → Patch).</td></tr>`;
+  }
+
+  feld("ar-tabelle").addEventListener("click", async (e) => {
+    const k = e.target.closest("button[data-ar]");
+    if (!k) return;
+    try { ausrichtungZeigen((await senden(`/ausrichtung/${encodeURIComponent(k.dataset.kopf)}`, { aktion: k.dataset.ar })).koepfe); }
+    catch { /* Meldung kommt von senden() */ }
+  });
+  let mitteTest = false;
+  feld("ar-mitte").onclick = async () => {
+    try {
+      await senden("/followspot", { x: 0, y: (daten?.buehne?.tiefe_m ?? 5) / 2 });
+      mitteTest = true;
+      meldung("Alle Köpfe zeigen auf die Bühnenmitte (Kopfhöhe). Treffen sich die Strahlen dort?", "ok");
+    } catch { /* Meldung kommt von senden() */ }
+  };
+  feld("ar-aus").onclick = () => { mitteTest = false; senden("/followspot/aus").catch(() => {}); };
 
   function einmessenZeigen(e) {
     feld("em-bereich").hidden = !e.geraet;
@@ -187,5 +231,8 @@ export function positionenSeite(wurzel) {
   });
 
   laden().catch(() => {});
-  return () => { senden("/einmessen/ende").catch(() => {}); };
+  return () => {
+    senden("/einmessen/ende").catch(() => {});
+    if (mitteTest) senden("/followspot/aus").catch(() => {});      // den Test „Alle zur Mitte“ nicht stehen lassen
+  };
 }

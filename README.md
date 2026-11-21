@@ -133,6 +133,7 @@ Für den ersten Test mit einem neuen Gerät: Startadresse und Kanal-Anzahl (aus 
 2. Laptop per USB mit X32 und Enttec verbinden. Programm starten, Profil laden, auf **Live** den X32-Eingang als Quelle wählen (wird gemerkt).
 3. **Show → Konzert-Check** öffnen, bis alles grün ist (DMX einschalten geht dort mit einem Knopf). Nach der letzten Probe einmal die **Generalprobe** laufen lassen.
 4. **Setup → DMX-Test**: jedes Licht kurz einzeln an. Override-Tasten einmal ausprobieren.
+   **Setup → Positionen → „Alle zur Mitte zeigen“**: Treffen sich die Strahlen der Moving Heads in der Mitte? Wenn nicht: „Um 180° drehen“ (zeigt nach außen), „Um 90° drehen“ (seitlich daneben) oder „Links/rechts tauschen“. So können die Köpfe hängen, wie es bequem ist.
 5. **Setup → Sicherung → Show sichern** auf einen USB-Stick. Dann geht es los.
 
 ## Wie das Programm aufgebaut ist

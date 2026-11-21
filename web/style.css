@@ -427,3 +427,10 @@ label.datei-knopf:hover { background: var(--kachel-hover); }
 .ki-teile { margin: 6px 0 8px 18px; padding: 0; }
 .ki-teile li { margin: 3px 0; }
 .entwurf-profil { margin: 4px 0; font-size: 12px; }
+
+/* Setup → Positionen: Kopf zeigt falsch herum? (2.4.2) */
+.ausrichtung-hilfe { margin: 4px 0 8px 18px; padding: 0; }
+.ausrichtung-hilfe li { margin: 2px 0; }
+table.ausrichtung { width: 100%; border-collapse: collapse; margin: 6px 0; }
+table.ausrichtung td { padding: 6px 4px; border-top: 1px solid var(--titel); vertical-align: middle; }
+table.ausrichtung td.zeile { gap: 4px; flex-wrap: wrap; }
