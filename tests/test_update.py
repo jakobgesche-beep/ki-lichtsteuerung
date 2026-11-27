@@ -43,7 +43,7 @@ def test_app_daten_mit_eingebautem_katalog(tmp_path):
     eintrag = dict(show.katalog.typ("stairville/mh-x25").daten, id="stairville/mein-kopf", name="Mein Kopf")
     show.katalog.speichere_eigenen(eintrag)
     assert (ziel / "catalog/eigene/stairville/mein-kopf.json").exists()
-    assert not (daten.PROJEKT / "catalog/eigene/stairville").exists()
+    assert not (daten.PROJEKT / "catalog/eigene/stairville/mein-kopf.json").exists()   # nicht in die App
 
 
 class Ausgabe(DmxAusgabe):
