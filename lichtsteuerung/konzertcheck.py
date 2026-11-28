@@ -43,6 +43,12 @@ def pruefen(show) -> list:
         punkt("Ton", "hinweis", f"Der Ton kommt aus „{show.audio.name}“, nicht aus einem Eingang. Für das Konzert den X32-Eingang wählen.")
     if werte is not None and show.audio.name.startswith("Eingang"):
         _ton_rollen(show, punkt)
+        if show.audio._bezug_name(show.audio.quelle) in show.audio.bezuege:
+            punkt("Ton", "ok", "Die Lautstärke der Band ist gemerkt (Soundcheck): Schon der erste Song wird richtig "
+                               "als leise oder laut erkannt.")
+        else:
+            punkt("Ton", "hinweis", "Noch kein Soundcheck gemerkt: Die Band einmal mindestens 1 Minute über diesen Eingang "
+                                    "spielen lassen. Dann weiß das Programm schon beim ersten Song, was leise und was laut ist.")
     gesund = show.audio.gesundheit()
     if gesund["abrisse"]:
         punkt("Ton", "hinweis", f"Der Ton war seit dem Start {gesund['abrisse']}-mal weg (steht mit Uhrzeit im Logbuch). "

@@ -25,7 +25,7 @@ from .farben import FARBNAMEN
 from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
-from . import adressierung, daten, konzertcheck, showtasten, patchplan, sicherung
+from . import adressierung, checkliste, daten, konzertcheck, showtasten, patchplan, sicherung
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .probe import akzente_alle
@@ -1209,6 +1209,16 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
     @app.get("/patchplan")
     def patchplan_seite():
         return HTMLResponse(patchplan.seite(show))
+
+    @app.get("/checkliste")
+    def checkliste_seite():
+        return HTMLResponse(checkliste.seite(show))
+
+    @app.post("/api/checkliste/oeffnen")
+    def checkliste_oeffnen(anfrage: Request):
+        """Öffnet die Aufbau-Checkliste im normalen Browser. Dort kann man sie drucken."""
+        webbrowser.open(f"http://{anfrage.headers.get('host')}/checkliste")
+        return {}
 
     @app.post("/api/patchplan/oeffnen")
     def patchplan_oeffnen(anfrage: Request):

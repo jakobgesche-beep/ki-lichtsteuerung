@@ -448,3 +448,4 @@ dialog.kanalfinder h2 { margin: 0 0 8px; font-size: 16px; }
 .kanal-zeile { display: grid; grid-template-columns: 28px 1fr 64px 130px; gap: 6px; align-items: center; }
 .kanal-pegel { height: 10px; background: #1b1c1f; border-radius: 3px; overflow: hidden; }
 .kanal-pegel i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #2fbf55, #e0a800 75%, #ff453a); transition: width 0.12s; }
+.check-fuss { display: flex; gap: 8px; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--linie); flex-wrap: wrap; }

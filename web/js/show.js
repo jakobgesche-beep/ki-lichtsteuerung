@@ -342,14 +342,17 @@ export function showSeite(wurzel) {
     knopf.className = `chip check-knopf ${probleme ? "warn" : hinweise ? "gelb" : "an"}`;
     const html = punkte.map((p) => `<div class="check-punkt ${p.stufe}"><span class="check-zeichen">${STUFE[p.stufe]}</span>
       <span><b>${t(p.thema)}</b> ${t(p.text)}</span>${p.aktion === "dmx_ein" ? `<button class="klein haupt" data-check="dmx_ein">DMX einschalten</button>` : ""}</div>`).join("");
+    const fuss = `<div class="check-fuss"><button class="klein" data-check="checkliste">Aufbau-Checkliste drucken …</button>
+      <span class="leise">Schritt für Schritt am Ort: Adressen und DIP-Schalter, X32, iPad, Soundcheck, Notfall</span></div>`;
     if (feld("check-liste").dataset.inhalt !== html) {
-      feld("check-liste").innerHTML = html;
+      feld("check-liste").innerHTML = html + fuss;
       feld("check-liste").dataset.inhalt = html;
     }
   }
   feld("check-knopf").onclick = () => { feld("check-liste").hidden = !feld("check-liste").hidden; checkLaden(); };
   feld("check-liste").addEventListener("click", async (ereignis) => {
     if (ereignis.target.dataset.check === "dmx_ein") { await senden("/dmx/ein").catch(() => {}); checkLaden(); }
+    if (ereignis.target.dataset.check === "checkliste") senden("/checkliste/oeffnen").catch(() => {});
   });
   checkLaden();
   const checkUhr = setInterval(checkLaden, 3000);
