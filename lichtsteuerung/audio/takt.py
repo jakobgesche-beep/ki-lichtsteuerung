@@ -100,6 +100,7 @@ class TaktFolger:
         self.eins_stimmen: deque = deque(maxlen=EINS_MAL)
         self.eins_punkte = np.zeros(4)                        # gesammelte Punkte je Beat-Nummer modulo 4
         self.takt_eins = False                                # der Beat in diesem Block ist eine Eins
+        self.vorlauf_s = 0.0                                  # Beat so viel früher melden (Verzögerung ausgleichen)
 
     # --- Ton rein ----------------------------------------------------------------
 
@@ -130,7 +131,9 @@ class TaktFolger:
                 self.neu_anfangen()
         beat, self.takt_eins = False, False
         if self.naechster is not None and self.periode:
-            if jetzt >= self.naechster:
+            # Mit Vorlauf: Der Beat geht etwas vor seiner Zeit raus. Bis das Licht leuchtet, vergehen sonst
+            # Ton-Weg, Puffer, ein Show-Bild und ein DMX-Paket (zusammen rund 60 bis 100 ms).
+            if jetzt + self.vorlauf_s >= self.naechster:
                 beat = True
                 self.beat_nummer += 1
                 self.ausgegeben.append((self.naechster, self.beat_nummer))
@@ -140,6 +143,20 @@ class TaktFolger:
                     self.naechster += self.periode
         tempo = 60.0 / self.periode if self.periode else self.tempo
         return beat, tempo
+
+    def luecke(self, proben: int) -> None:
+        """Ein paar Blöcke gingen verloren (Rückstau): Die Uhr zählt die fehlende Zeit als Stille mit, sonst
+        kämen alle folgenden Beats um diese Zeit zu spät. Längere Lücken: neu einzählen."""
+        if proben <= 0:
+            return
+        if proben > 2 * ABTASTRATE:
+            self.neu_anfangen()
+            return
+        stille = np.zeros(512, np.float32)
+        for _ in range(proben // 512):
+            self.verarbeite(stille)
+        if proben % 512:
+            self.verarbeite(np.zeros(proben % 512, np.float32))
 
     def neu_anfangen(self) -> None:
         """Ein neuer Song beginnt (nach Applaus oder Stille): alles vergessen, neu einzählen."""

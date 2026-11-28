@@ -17,6 +17,9 @@ import numpy as np
 
 ABTASTRATE = 44100
 BLOCK = 512           # 512 Werte sind rund 12 Millisekunden
+WARTESCHLANGE = 128   # so viele Blöcke dürfen warten (rund 1,5 s), bevor einer verloren geht
+NICHTS_KOMMT_S = 2.0  # so lange kein Block vom Gerät: Eingang gilt als weg
+LUECKE_S = 0.1        # längere Pausen zwischen zwei Lieferungen des Geräts werden gezählt
 
 
 class AudioFehler(Exception):
@@ -238,13 +241,26 @@ class Eingang:
         except Exception as fehler:
             raise AudioFehler(f"Audio-Eingang nicht gefunden: {fehler}") from fehler
         self.kanaele = tuple(kanaele)
-        self.warteschlange = queue.Queue(maxsize=32)
+        self.warteschlange = queue.Queue(maxsize=WARTESCHLANGE)
         self.auswahl = [k - 1 for k in self.kanaele]
+        # Zum Nachsehen, wenn der Ton wegbleibt (steht im Logbuch und im Konzert-Check)
+        self.verloren = 0                    # Blöcke, die wegen Rückstau verworfen wurden
+        self.luecken = 0                     # Pausen > 0,1 s zwischen zwei Lieferungen des Geräts
+        self.status_meldungen = 0            # Meldungen des Treibers (zum Beispiel Überlauf)
+        self.letzter_status = ""
+        self.letzte_lieferung: Optional[float] = None
         self.puffer = np.zeros(0, np.float32)
         self.umrechner: Optional[Umrechner] = None
         zusatz = sd.WasapiSettings(auto_convert=True) if self.api_name == "Windows WASAPI" else None
 
-        def angekommen(daten, _anzahl, _zeit, _status):
+        def angekommen(daten, _anzahl, _zeit, status):
+            jetzt = time.monotonic()
+            if self.letzte_lieferung is not None and jetzt - self.letzte_lieferung > LUECKE_S:
+                self.luecken += 1
+            self.letzte_lieferung = jetzt
+            if status:
+                self.status_meldungen += 1
+                self.letzter_status = str(status)
             mono = daten[:, self.auswahl].mean(axis=1)
             if self.umrechner is not None:
                 mono = self.umrechner(mono)
@@ -254,7 +270,7 @@ class Eingang:
                 try:
                     self.warteschlange.put_nowait(block)
                 except queue.Full:
-                    pass     # Lieber einen Block verlieren als hinterherhinken.
+                    self.verloren += 1     # Lieber einen Block verlieren als hinterherhinken (die Uhr erfährt es).
 
         def oeffnen(rate):
             return sd.InputStream(device=geraet, channels=max(self.kanaele), samplerate=rate, blocksize=0,
@@ -275,9 +291,24 @@ class Eingang:
 
     def lies(self) -> np.ndarray:
         try:
-            return self.warteschlange.get(timeout=1.0)
+            return self.warteschlange.get(timeout=NICHTS_KOMMT_S)
         except queue.Empty:
-            raise AudioFehler("Vom Audio-Eingang kommt nichts mehr.") from None
+            raise AudioFehler(f"Vom Audio-Eingang kommt nichts mehr ({self.diagnose()}).") from None
+
+    def diagnose(self) -> str:
+        """Kurz, warum der Ton fehlen könnte: fürs Logbuch."""
+        if self.letzte_lieferung is None:
+            seit = "Gerät hat noch nie geliefert"
+        else:
+            seit = f"letzte Lieferung vor {time.monotonic() - self.letzte_lieferung:.1f} s"
+        teile = [seit, f"{self.geraet_name}, {self.api_name}"]
+        if self.umrechner is not None:
+            teile.append("mit Umrechnung")
+        if self.status_meldungen:
+            teile.append(f"Treiber meldete {self.status_meldungen}× ({self.letzter_status})")
+        if self.verloren:
+            teile.append(f"{self.verloren} Blöcke wegen Rückstau verworfen")
+        return ", ".join(teile)
 
     def schliessen(self) -> None:
         try:
@@ -287,8 +318,15 @@ class Eingang:
             pass
 
     def neu_oeffnen(self) -> "Eingang":
-        """Nach einem Abriss (USB-Kabel): Geräteliste neu einlesen und dasselbe Gerät wieder öffnen."""
+        """Nach einem Abriss: dasselbe Gerät wieder öffnen.
+
+        Erst einfach neu öffnen. Nur wenn das Gerät in der Liste fehlt (USB-Kabel war ab), die Geräteliste von
+        PortAudio neu einlesen. Das beendet nämlich alle offenen Tonströme des Programms."""
         self.schliessen()
+        try:
+            return Eingang(kanaele=self.kanaele, name=self.geraet_name, api=self.api_name)
+        except AudioFehler:
+            pass
         try:
             sd = _sounddevice()
             sd._terminate()

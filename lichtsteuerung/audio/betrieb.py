@@ -1,20 +1,29 @@
 """Lässt die Analyse in einem eigenen Thread laufen und bewacht sie.
 
-Hängt die Analyse oder fällt die Quelle aus, ist `aktuell()` einfach None.
-Die Engine geht dann aufs Grundlicht (Grundregel „Sicherer Rückfall").
+Fällt die Quelle aus, hält `aktuell()` die letzten Werte noch kurz fest (HALTEN_S): Ein kurzer Aussetzer
+macht das Licht nicht ruhig. Danach ist es None, und die Engine geht aufs Grundlicht
+(Grundregel „Sicherer Rückfall"). `frisch()` sagt ehrlich, ob gerade Ton ankommt (Konzert-Check, Rückblick).
+
+Bleibt der Ton weg, wird der Eingang immer wieder geöffnet: erst nach 2 s, dann mit wachsender Pause bis 10 s.
+Ins Logbuch kommen nur „weg“ (mit Grund) und „wieder da“ (mit Dauer und Versuchen), keine Zeile pro Versuch.
 """
 from __future__ import annotations
 
 import logging
 import threading
 import time
+from collections import deque
 from dataclasses import replace
 from typing import Optional
 
 from .analyse import Analyse, Messwerte
 
 MAX_AUFNAHME_BLOECKE = 20 * 60 * 44100 // 512   # höchstens 20 Minuten
-MAX_ALTER_S = 0.5     # Ältere Messwerte gelten als ausgefallen
+MAX_ALTER_S = 0.5     # Jüngere Messwerte sind „frisch“
+HALTEN_S = 3.0        # So lange gelten die letzten Messwerte nach einem Aussetzer noch (ohne neue Beats)
+ERSTE_PAUSE_S = 2.0   # nach einem Abriss: so lange warten bis zum ersten neuen Versuch
+LAENGSTE_PAUSE_S = 10.0
+BERICHT_S = 60.0      # höchstens so oft eine Zeile „Ton holpert“ ins Logbuch
 
 
 class AudioBetrieb:
@@ -39,6 +48,11 @@ class AudioBetrieb:
         self.zuhoerer = None      # zum Beispiel der Song-Folger: bekommt jeden Block mit
         self.mithoerer = []       # weitere, zum Beispiel die Song-Erkennung
         self.wieder_verbunden = 0
+        self.abrisse = 0              # so oft war der Ton weg (seit dem Start)
+        self.weg_seit: Optional[float] = None     # Wanduhr: seit wann der Ton weg ist (zählt Schlaf mit)
+        self.vorlauf_s = 0.0          # Beats so viel früher melden (Verzögerung von Ton, Licht und Weg ausgleichen)
+        self.rechenzeiten: deque = deque(maxlen=600)      # Rechenzeit pro Block (Analyse + Zuhörer), Sekunden
+        self._analyse: Optional[Analyse] = None
         self._thread: Optional[threading.Thread] = None
         self._stopp = threading.Event()
 
@@ -60,19 +74,49 @@ class AudioBetrieb:
             self.quelle = None
         self.name = "aus"
         self.messwerte = None
+        self.weg_seit = None
+        self._analyse = None
+
+    def vorlauf_setzen(self, sekunden: float) -> None:
+        self.vorlauf_s = max(0.0, min(0.3, float(sekunden)))
+        if self._analyse is not None and hasattr(self._analyse.beat, "vorlauf_s"):
+            self._analyse.beat.vorlauf_s = self.vorlauf_s
 
     def _schleife(self, quelle, stopp: threading.Event) -> None:
         try:
             analyse = Analyse()
+            self._analyse = analyse
+            self.vorlauf_setzen(self.vorlauf_s)
             self.beat_erkennung = analyse.beat.name
+            self._versuche, self._pause = 0, ERSTE_PAUSE_S
+            verloren_gemeldet = getattr(quelle, "verloren", 0)
+            bericht = {"zeit": time.monotonic(), "verloren": verloren_gemeldet, "luecken": getattr(quelle, "luecken", 0)}
             while not stopp.is_set():
                 try:
                     block = quelle.lies()
                 except Exception as fehler:
-                    quelle = self._neu_verbinden(quelle, stopp, fehler)
+                    if not hasattr(quelle, "neu_oeffnen"):
+                        raise
+                    if self.weg_seit is None:
+                        self._weg(quelle, fehler)
+                    quelle = self._neu_oeffnen(quelle, stopp)
                     if quelle is None:
                         return
+                    verloren_gemeldet = getattr(quelle, "verloren", 0)
                     continue
+                if self.weg_seit is not None:            # erst ein echter Block heißt „wieder da“
+                    logging.info("Audio-Eingang wieder da nach %.0f s (%d Versuche)", time.time() - self.weg_seit,
+                                 self._versuche)
+                    self.weg_seit, self.fehler = None, None
+                    self.wieder_verbunden += 1
+                    self._versuche, self._pause = 0, ERSTE_PAUSE_S
+                    analyse.neu_einzaehlen()
+                beginn = time.monotonic()
+                verloren = getattr(quelle, "verloren", 0)
+                if verloren > verloren_gemeldet:
+                    # Verworfene Blöcke: Die Takt-Uhr zählt die fehlende Zeit mit, sonst kämen die Beats zu spät.
+                    analyse.luecke((verloren - verloren_gemeldet) * len(block))
+                    verloren_gemeldet = verloren
                 if self.aufnahme is not None and len(self.aufnahme) < MAX_AUFNAHME_BLOECKE:
                     self.aufnahme.append(block.copy())
                 werte = analyse.verarbeite(block)
@@ -95,27 +139,56 @@ class AudioBetrieb:
                 if werte.treffer:
                     self.treffer_zaehler += 1
                 self.messwerte, self.zeitpunkt = werte, time.monotonic()
+                self.rechenzeiten.append(self.zeitpunkt - beginn)
+                if self.zeitpunkt - bericht["zeit"] >= BERICHT_S:
+                    self._bericht(quelle, bericht)
         except Exception as fehler:
+            logging.exception("Audio-Analyse")
             self.fehler = str(fehler)
 
-    def _neu_verbinden(self, quelle, stopp: threading.Event, fehler: Exception):
-        """Eingang weg (USB-Kabel, Treiber): alle 2 Sekunden neu öffnen. Bis dahin Grundlicht (Rückfall)."""
-        neu_oeffnen = getattr(quelle, "neu_oeffnen", None)
-        if neu_oeffnen is None:
-            raise fehler
+    def _weg(self, quelle, fehler: Exception) -> None:
+        self.weg_seit = time.time()
+        self.abrisse += 1
         self.fehler = f"Ton weg ({fehler}). Das Programm öffnet den Eingang von selbst neu."
-        self.messwerte = None
         logging.warning("Audio-Eingang weg: %s", fehler)
-        while not stopp.wait(2.0):
+
+    def _neu_oeffnen(self, quelle, stopp: threading.Event):
+        """Öffnet den Eingang neu, bis es klappt: erst nach 2 s, dann mit wachsender Pause (höchstens 10 s).
+        Die Pause wächst weiter, solange nach dem Öffnen kein Ton kommt (zum Beispiel Deckel zu)."""
+        while not stopp.wait(self._pause):
+            self._versuche += 1
+            self._pause = min(self._pause * 1.5, LAENGSTE_PAUSE_S)
             try:
-                quelle = neu_oeffnen()
+                neu = quelle.neu_oeffnen()
             except Exception:
                 continue
-            self.quelle, self.fehler = quelle, None
-            self.wieder_verbunden += 1
-            logging.info("Audio-Eingang wieder da")
-            return quelle
+            self.quelle = neu
+            return neu
         return None
+
+    def _bericht(self, quelle, bericht: dict) -> None:
+        """Einmal pro Minute: Holpert der Ton (verworfene Blöcke, Lieferpausen)? Nur dann eine Zeile ins Logbuch."""
+        verloren, luecken = getattr(quelle, "verloren", 0), getattr(quelle, "luecken", 0)
+        neu_verloren, neu_luecken = verloren - bericht["verloren"], luecken - bericht["luecken"]
+        if neu_verloren > 0 or neu_luecken > 0:
+            logging.warning("Ton holpert: %d Blöcke verworfen, %d Lieferpausen in der letzten Minute (Rechenzeit "
+                            "p95 %.1f ms)", max(0, neu_verloren), max(0, neu_luecken), self.rechenzeit_p95_ms())
+        bericht.update(zeit=time.monotonic(), verloren=verloren, luecken=luecken)
+
+    def rechenzeit_p95_ms(self) -> float:
+        if not self.rechenzeiten:
+            return 0.0
+        werte = sorted(self.rechenzeiten)
+        return round(1000 * werte[int(0.95 * (len(werte) - 1))], 1)
+
+    def gesundheit(self) -> dict:
+        """Für Konzert-Check, Live-Seite und iPad: Wie gut kommt der Ton an?"""
+        quelle = self.quelle
+        return {"abrisse": self.abrisse, "wieder_verbunden": self.wieder_verbunden,
+                "weg_seit_s": round(time.time() - self.weg_seit) if self.weg_seit else None,
+                "verloren": getattr(quelle, "verloren", 0), "luecken": getattr(quelle, "luecken", 0),
+                "treiber": getattr(quelle, "status_meldungen", 0),
+                "rechenzeit_ms": self.rechenzeit_p95_ms(), "vorlauf_ms": round(self.vorlauf_s * 1000)}
 
     def aufnahme_starten(self) -> None:
         if self.quelle is None:
@@ -153,7 +226,14 @@ class AudioBetrieb:
                        treffer=neuer_treffer)
 
     def aktuell(self, jetzt: Optional[float] = None) -> Optional[Messwerte]:
-        """Die neuesten Messwerte, oder None, wenn nichts Frisches da ist."""
+        """Die neuesten Messwerte. Nach einem Aussetzer gelten sie noch HALTEN_S lang, danach None (Grundlicht)."""
+        jetzt = time.monotonic() if jetzt is None else jetzt
+        if self.messwerte is None or jetzt - self.zeitpunkt > HALTEN_S:
+            return None
+        return self.messwerte
+
+    def frisch(self, jetzt: Optional[float] = None) -> Optional[Messwerte]:
+        """Nur wirklich frische Messwerte (jünger als 0,5 s): Kommt gerade Ton an?"""
         jetzt = time.monotonic() if jetzt is None else jetzt
         if self.messwerte is None or jetzt - self.zeitpunkt > MAX_ALTER_S:
             return None

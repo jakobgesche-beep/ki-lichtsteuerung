@@ -31,7 +31,7 @@ def pruefen(show) -> list:
         punkt("DMX", "problem", kein_enttec_text())
 
     # Ton rein
-    werte = show.audio.aktuell()
+    werte = show.audio.frisch()
     if show.audio.name == "aus":
         punkt("Ton", "problem", "Kein Ton-Eingang gewählt. Seite Live → Quelle: Eingang vom X32 (oder Mikrofon).")
     elif werte is None:
@@ -40,6 +40,10 @@ def pruefen(show) -> list:
         punkt("Ton", "ok", f"Ton kommt an ({show.audio.name}).")
     else:
         punkt("Ton", "hinweis", f"Der Ton kommt aus „{show.audio.name}“, nicht aus einem Eingang. Für das Konzert den X32-Eingang wählen.")
+    gesund = show.audio.gesundheit()
+    if gesund["abrisse"]:
+        punkt("Ton", "hinweis", f"Der Ton war seit dem Start {gesund['abrisse']}-mal weg (steht mit Uhrzeit im Logbuch). "
+                                "Kabel prüfen und den Mac nicht zuklappen.")
 
     # Songs
     songs = show.song.songs()
@@ -91,6 +95,12 @@ def pruefen(show) -> list:
         punkt("Pult", "problem", "Der DMX-Test läuft noch (Setup → DMX-Test beenden).")
 
     # Rechner
+    mac = wachhalten.mac_stand()
+    if mac["deckel_zu"]:
+        punkt("Rechner", "problem", "Der MacBook-Deckel ist zu: Der Mac schläft gleich ein und das eingebaute Mikrofon "
+                                    "ist aus. Deckel offen lassen (Bildschirm darf dunkel sein).")
+    if mac["netzteil"] is False:
+        punkt("Rechner", "problem", "Der Mac läuft auf Akku. Netzteil anstecken, sonst kann er einschlafen.")
     if wachhalten.aktiv:
         punkt("Rechner", "ok", "Der Laptop schläft nicht ein, solange das Programm läuft. Netzteil anstecken, Deckel offen lassen.")
     else:

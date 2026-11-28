@@ -155,7 +155,7 @@ class Rueckblick:
 
     def _technik_beobachten(self, jetzt: float) -> None:
         audio = self.show.audio
-        weg = audio.name != "aus" and audio.aktuell(jetzt) is None
+        weg = audio.name != "aus" and audio.frisch(jetzt) is None
         if weg:
             self._ton_weg_seit = self._ton_weg_seit if self._ton_weg_seit is not None else jetzt
             if not self._ton_weg_gemeldet and jetzt - self._ton_weg_seit >= TON_WEG_S:
@@ -222,6 +222,10 @@ class Rueckblick:
         ton_weg = [e["zeit"][:5] for e in ereignisse if e["art"] == "ton_weg"]
         if ton_weg:
             hinweise.append(f"Der Ton war {len(ton_weg)}-mal weg ({', '.join(ton_weg[:5])}). Kabel, Stecker und den Eingang am Laptop prüfen.")
+        schlaf = [e["zeit"][:5] for e in ereignisse if e["art"] == "schlaf"]
+        if schlaf:
+            hinweise.append(f"Der Mac hat {len(schlaf)}-mal geschlafen ({', '.join(schlaf[:5])}). Dann bleibt das Licht "
+                            "stehen und das Mikrofon ist aus: Deckel offen lassen und das Netzteil anstecken.")
         dmx_weg = [e["zeit"][:5] for e in ereignisse if e["art"] == "dmx_weg"]
         if dmx_weg:
             hinweise.append(f"DMX war {len(dmx_weg)}-mal weg ({', '.join(dmx_weg[:5])}). USB-Kabel des Enttec prüfen (nicht über einen Hub).")
@@ -257,6 +261,8 @@ class Rueckblick:
             text = f"Kein Ton mehr von „{e.get('eingang', '')}“"
         elif art == "ton_da":
             text = f"Ton wieder da (nach {e.get('nach_s', '?')} s)"
+        elif art == "schlaf":
+            text = f"Der Mac hat geschlafen (etwa {e.get('minuten', '?')} Minuten)"
         elif art == "dmx_weg":
             text = "DMX weg: Das Enttec antwortet nicht"
         elif art == "dmx_da":

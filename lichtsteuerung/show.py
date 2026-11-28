@@ -65,6 +65,20 @@ TEST_MAX_S = 120.0          # Ein vergessener DMX-Test endet von selbst.
 GERAET_TEST_S = 15 * 60.0   # "Ein Gerät testen" darf länger dauern (Anleitung lesen, ausprobieren)
 
 
+SCHLAF_AB_S = 5.0          # springt die Wanduhr so viel weiter als die Programm-Uhr, hat der Mac geschlafen
+
+
+def vorlauf_fuer(geraet_name: str, eigener_ms: Optional[int] = None) -> float:
+    """Wie viel früher das Licht einen Beat zeigen soll (Sekunden). Ton übers X32-USB ist schneller da als
+    über ein Mikrofon im Saal (dort kommen noch rund 30–45 ms Schallweg dazu)."""
+    if eigener_ms is not None:
+        return max(0, min(300, int(eigener_ms))) / 1000
+    name = (geraet_name or "").lower()
+    if any(teil in name for teil in ("x-usb", "x32", "behringer", "x usb")):
+        return 0.06
+    return 0.10
+
+
 class Show:
     def __init__(self, pfade: Optional[daten.Pfade] = None, ausgabe: Optional[DmxAusgabe] = None):
         self.pfade = pfade or daten.standard_pfade()
@@ -94,6 +108,7 @@ class Show:
         self.aufnahme_weitere = False          # die Aufnahme ist eine weitere Aufnahme eines Songs
         self.automatik_an = True
         self.audio_auftrag: Optional[dict] = None
+        self.vorlauf_ms: Optional[int] = None    # None: automatisch je nach Tonquelle (siehe vorlauf_fuer)
         self.vorschau = Vorschau(self)
         self.vorschau_geraete = None
         self.ki = KiKonto(self.pfade.lokal)     # Claude: Schlüssel, Modelle, Kosten (Chat, Lichtdesign, Regie)
@@ -509,12 +524,15 @@ class Show:
 
     def _sitzung_speichern(self) -> None:
         daten.schreibe_json(self.pfade.sitzung, {"profil": self.profil["name"], "automatik": self.automatik_an,
-                                                 "audio": self.audio_auftrag, "ki_regie": self.regie.an})
+                                                 "audio": self.audio_auftrag, "ki_regie": self.regie.an,
+                                                 "vorlauf_ms": self.vorlauf_ms})
 
     def audio_quelle_setzen(self, auftrag: dict, merken: bool = True) -> str:
         """Tonquelle wählen. Gemerkt wird sie, damit sie nach einem Neustart von selbst wieder da ist."""
         art = auftrag.get("art", "aus")
         try:
+            if art != "eingang":
+                self.audio.vorlauf_setzen(0.0)          # Dateien und Testsignal: kein Weg durch die Luft
             if art == "aus":
                 self.audio.stoppen()
             elif art == "test":
@@ -528,6 +546,7 @@ class Show:
             elif art == "eingang":
                 kanaele = tuple(int(k) for k in (auftrag.get("kanaele") or (1,)))
                 quelle = quellen.Eingang(auftrag.get("geraet"), kanaele, name=auftrag.get("name"), api=auftrag.get("api"))
+                self.audio.vorlauf_setzen(vorlauf_fuer(quelle.geraet_name, self.vorlauf_ms))
                 self.audio.starten(quelle, f"Eingang: {quelle.geraet_name}")
                 auftrag = {"art": "eingang", "name": quelle.geraet_name, "api": quelle.api_name, "kanaele": list(kanaele)}
             else:
@@ -558,6 +577,8 @@ class Show:
             self.profil = RUHE_PROFIL
         self.automatik_an = sitzung.get("automatik", True)
         self.audio_auftrag = sitzung.get("audio") if isinstance(sitzung.get("audio"), dict) else None
+        vorlauf = sitzung.get("vorlauf_ms")
+        self.vorlauf_ms = int(vorlauf) if isinstance(vorlauf, (int, float)) else None
         # KI-Regie: gemerkt wie gewählt; beim ersten Mal an, wenn ein Claude-Schlüssel da ist
         self.regie.an = bool(sitzung.get("ki_regie", self.ki.bereit()))
         self.regie.meldung = "wartet auf Musik" if self.regie.an else "aus"
@@ -664,7 +685,7 @@ class Show:
                     "hazer_erlaubt": self.profil["hazer"],
                     "audio": {"quelle": self.audio.name, "fehler": self.audio.fehler,
                               "erkennung": self.audio.beat_erkennung, "beats": self.audio.beat_zaehler,
-                              "werte": vars(werte) if werte else None}}
+                              "werte": vars(werte) if werte else None, "gesundheit": self.audio.gesundheit()}}
 
     def buehnen_aufbau(self) -> dict:
         return {"buehne": self.buehne.daten["buehne"], "publikum": self.buehne.publikum,
@@ -695,6 +716,14 @@ class Show:
         self.fernbedienung.ausschalten()
         self.ausgabe.ausschalten()
 
+    def _geschlafen(self, sekunden: float) -> None:
+        minuten = round(sekunden / 60, 1)
+        logging.warning("Der Mac hat geschlafen (etwa %s Minuten). Deckel offen lassen, Netzteil anstecken.", minuten)
+        try:
+            self.rueckblick.ereignis("schlaf", minuten=minuten)
+        except Exception:
+            logging.exception("Rückblick")
+
     def _erkennen_schleife(self) -> None:
         """Song-Erkennung: alle 0,5 s vergleichen, alle 10 s neue oder geänderte Aufnahmen einlesen."""
         vorbereitet = -99.0
@@ -710,8 +739,16 @@ class Show:
     def _schleife(self) -> None:
         abstand = 1.0 / BILDER_PRO_SEKUNDE
         naechstes = time.monotonic()
+        wand_vorher, uhr_vorher = time.time(), time.monotonic()
         while not self._stopp.is_set():
             beginn = time.monotonic()
+            # Hat der Mac geschlafen? Dann ist die Wanduhr weit gesprungen, die Programm-Uhr aber nicht.
+            wand = time.time()
+            geschlafen = (wand - wand_vorher) - (beginn - uhr_vorher)
+            wand_vorher, uhr_vorher = wand, beginn
+            if geschlafen > SCHLAF_AB_S:
+                self._geschlafen(geschlafen)
+                naechstes = beginn
             try:
                 bild = self.baue_bild(beginn)
             except Exception as fehler:

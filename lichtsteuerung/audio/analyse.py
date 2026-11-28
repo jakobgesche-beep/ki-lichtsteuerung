@@ -350,6 +350,16 @@ class Analyse:
         self.treffer_verlauf = deque(maxlen=int(2 * ABTASTRATE / BLOCK))
         self.seit_treffer = 99.0
 
+    def luecke(self, proben: int) -> None:
+        """Verlorene Blöcke: nur die Takt-Uhr muss die Zeit mitzählen (die übrigen Werte gleichen sich von selbst an)."""
+        if hasattr(self.beat, "luecke"):
+            self.beat.luecke(proben)
+
+    def neu_einzaehlen(self) -> None:
+        """Nach einem Abriss des Eingangs: Der Takt beginnt neu (die Zeit dazwischen kennt niemand)."""
+        if hasattr(self.beat, "neu_anfangen"):
+            self.beat.neu_anfangen()
+
     def verarbeite(self, block: np.ndarray) -> Messwerte:
         dauer = len(block) / ABTASTRATE
         beat, tempo = self.beat.verarbeite(block)
