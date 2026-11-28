@@ -11,6 +11,7 @@ import { dmxTestSeite } from "./dmxtest.js";
 import { sicherungSeite } from "./sicherung.js";
 import { midiSeite } from "./midi.js";
 import { positionenSeite } from "./positionen.js";
+import { ipadSeite } from "./ipad.js";
 import { tastenLeiste } from "./tasten.js";
 import { befehlszeile } from "./befehl.js";
 import { abonnieren } from "./verbindung.js";
@@ -20,7 +21,7 @@ const views = [
   ["Pult", pultSeite],
   ["Live", liveSeite],
   ["Probe", probeSeite],
-  ["Setup", null, [["Patch", patchSeite], ["Positionen", positionenSeite], ["Profile", profileSeite], ["Katalog", katalogSeite], ["DMX-Test", dmxTestSeite], ["MIDI", midiSeite], ["Sicherung", sicherungSeite]]],
+  ["Setup", null, [["Patch", patchSeite], ["Positionen", positionenSeite], ["Profile", profileSeite], ["Katalog", katalogSeite], ["DMX-Test", dmxTestSeite], ["MIDI", midiSeite], ["iPad", ipadSeite], ["Sicherung", sicherungSeite]]],
 ];
 
 const inhalt = document.getElementById("inhalt");

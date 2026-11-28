@@ -173,3 +173,26 @@ def test_desktop_routen_fuer_koppeln(show):
             assert client.post("/api/netz/beim_start", json={"an": False}).json()["beim_start"] is False
         finally:
             client.post("/api/netz/aus")
+
+
+def test_port_bleibt_nach_schnellem_neustart_gleich(show):
+    """Das iPad-Symbol merkt sich den Port. Nach einem Neustart (alte Verbindungen noch in TIME_WAIT) muss
+    derselbe Port wieder gehen, sonst zeigt das Symbol ins Leere."""
+    import json
+    import socket
+    from websockets.sync.client import connect
+    from lichtsteuerung import fernbedienung
+    fern = show.fernbedienung
+    port = fernbedienung._freier_port("127.0.0.1", 8799)
+    fern.einschalten(host="127.0.0.1", port=port)
+    try:
+        for _ in range(3):                         # ein paar Verbindungen, die beim Ausschalten offen sind
+            with connect(f"ws://127.0.0.1:{port}/pult/ws") as ws:
+                ws.send(json.dumps({"typ": "hallo", "token": "x"}))
+                try:
+                    ws.recv(timeout=2)
+                except Exception:
+                    pass
+    finally:
+        fern.ausschalten()
+    assert fernbedienung._freier_port("127.0.0.1", port) == port

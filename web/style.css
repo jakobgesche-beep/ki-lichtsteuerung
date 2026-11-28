@@ -434,3 +434,8 @@ label.datei-knopf:hover { background: var(--kachel-hover); }
 table.ausrichtung { width: 100%; border-collapse: collapse; margin: 6px 0; }
 table.ausrichtung td { padding: 6px 4px; border-top: 1px solid var(--titel); vertical-align: middle; }
 table.ausrichtung td.zeile { gap: 4px; flex-wrap: wrap; }
+
+/* Setup → iPad */
+.ipad-koppeln { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+.ipad-koppeln .qr svg { width: 220px; height: 220px; background: #fff; padding: 6px; border-radius: 8px; }
+.ipad-koppeln .pin { font-size: 32px; letter-spacing: 6px; color: var(--auswahl); }

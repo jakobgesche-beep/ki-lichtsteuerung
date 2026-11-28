@@ -89,6 +89,28 @@ def selbsttest(adresse: str) -> None:
         werte = analyse.verarbeite(ton[start:start + BLOCK])
         beats += werte.beat
     assert analyse.beat.name == "takt" and beats >= 8 and 110 <= werte.tempo_bpm <= 130, (beats, werte.tempo_bpm)
+    # iPad-Pult: Netz-Server, Seite, Dateien und Live-Verbindung müssen in der gebauten App gehen
+    netz = urllib.request.Request(adresse + "/api/netz/an", data=b"{}", method="POST",
+                                  headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(netz, timeout=10) as antwort:
+        port = json.load(antwort)["port"]
+    try:
+        for pfad in ("/pult/", "/pult/static/app.js", "/pult/static/stil.css", "/gemeinsam/dip.js"):
+            with urllib.request.urlopen(f"http://127.0.0.1:{port}{pfad}", timeout=10) as antwort:
+                assert antwort.status == 200 and len(antwort.read()) > 100, pfad
+        from websockets.exceptions import ConnectionClosed
+        from websockets.sync.client import connect
+        with connect(f"ws://127.0.0.1:{port}/pult/ws", open_timeout=10) as ws:
+            ws.send(json.dumps({"typ": "hallo", "token": "falsch"}))
+            try:
+                ws.recv(timeout=10)
+                raise AssertionError("falscher Schlüssel wurde angenommen")
+            except ConnectionClosed as zu:
+                assert zu.rcvd is not None and zu.rcvd.code == 4401, zu
+    finally:
+        aus = urllib.request.Request(adresse + "/api/netz/aus", data=b"{}", method="POST",
+                                     headers={"Content-Type": "application/json"})
+        urllib.request.urlopen(aus, timeout=10).read()
     print("Selbsttest bestanden")
 
 

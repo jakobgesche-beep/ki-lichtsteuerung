@@ -22,6 +22,7 @@ import io
 import logging
 import secrets
 import socket
+import sys
 import threading
 import time
 from typing import Optional
@@ -91,14 +92,33 @@ def lan_adressen() -> list:
     return [a for a in adressen if not a.startswith("127.") and not a.startswith("0.")]
 
 
-def _freier_port(host: str, wunsch: int) -> int:
-    for port in (wunsch, wunsch + 1, wunsch + 2, 0):
-        with socket.socket() as probe:
-            try:
-                probe.bind((host, port))
-                return probe.getsockname()[1]
-            except OSError:
-                continue
+def _port_frei(host: str, port: int) -> Optional[int]:
+    with socket.socket() as probe:
+        if sys.platform != "win32":
+            # Wie uvicorn selbst: Verbindungen eines eben beendeten Programms (TIME_WAIT) blockieren den Port nicht
+            probe.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            probe.bind((host, port))
+            return probe.getsockname()[1]
+        except OSError:
+            return None
+
+
+def _freier_port(host: str, wunsch: int, warten_s: float = 0.0) -> int:
+    """Am liebsten immer derselbe Port: Das Symbol auf dem iPad merkt sich die Adresse mit Port.
+    Nach einem schnellen Neustart darf es kurz dauern, bis der alte Port frei ist (`warten_s`)."""
+    ende = time.monotonic() + warten_s
+    while True:
+        frei = _port_frei(host, wunsch)
+        if frei is not None:
+            return frei
+        if time.monotonic() >= ende:
+            break
+        time.sleep(0.5)
+    for port in (wunsch + 1, wunsch + 2, 0):
+        frei = _port_frei(host, port)
+        if frei is not None:
+            return frei
     raise OSError("Kein freier Port für die Fernbedienung.")
 
 
@@ -143,7 +163,7 @@ class Fernbedienung:
         with self.sperre:
             if self.server is not None:
                 return
-            port = port or _freier_port(host, PORT_WUNSCH)
+            port = port or _freier_port(host, PORT_WUNSCH, warten_s=8.0 if self.kopplung.hat_ipad() else 0.0)
             if port != PORT_WUNSCH and host == self.host:
                 logging.warning("Netz-Server: Port %d belegt, nehme %d (Lesezeichen auf dem iPad passen dann nicht)",
                                 PORT_WUNSCH, port)
