@@ -77,7 +77,9 @@ TREFFER_BODEN = 0.62     # starke Looks: von hier aus springt das Licht auf jede
                          # zählt es nicht als Blitz, so hält der Blitz-Wächter das Licht bei einem Wirbel nicht dunkel.
 TREFFER_ABKLANG_S = 0.12
 WEISS_ABKLANG_S = 0.15   # großer Schlag (Becken): kurz weiß
-STAERKE_HALTEN_S = 3.0   # so lange hält die Stärke nach (ein kurzer Break macht das Licht nicht gleich ruhig)
+STAERKE_HALTEN_S = 6.0   # so lange hält die Stärke nach (ein kurzer Break macht das Licht nicht gleich ruhig;
+                         # 2.5.2: vorher 3 s, da sprang die Stärke zwischen zwei Schlägen über die Höhepunkt-Grenze)
+SPRUNG = 0.2             # so viel stärker als einen Takt vorher: Ein neuer Songteil hat begonnen (Refrain)
 RHYTHMUS_TREFFER = 2.0   # so viele Treffer pro Sekunde (mit Takt): Das ist nie "Ruhe", mindestens Stufe 1
 ERSTER_LOOK_S = 0.5      # so lange nach dem ersten Schlag eines Songs wird der erste Look gewählt
 ERSTER_LOOK_SPAETESTENS_S = 1.5   # Musik ganz ohne Schläge (Fläche, Orgel): spätestens dann
@@ -99,27 +101,38 @@ class Look:
     stufe: int                       # 0 ruhig, 1 mittel, 2 stark, 3 Höhepunkt
     bewegung: Optional[str] = None   # None: das Licht steht
     beats: int = 16                  # Beats für eine Runde der Bewegung
-    farben: str = "eine"             # eine, zwei (fest verteilt), wechsel (alle 4 Beats)
+    farben: str = "eine"             # eine, zwei (fest verteilt), wechsel (pro Phrase), lauf (3 Farben wandern)
     gobo: bool = False
     drehung: float = 0.0
     puls: str = "beat"               # atmen, beat, akzent (Takt-Eins doppelt hell)
     schub: bool = False              # kleiner Ruck auf jedem Beat
 
 
+# 2.5.2: In mittleren Teilen standen die Köpfe meist still (gemessen: Pop-Song, Bewegung im Median 0 °/s). Jetzt
+# bewegen sich auch ruhige und mittlere Looks, nur langsam; „Stehen“ bleibt als Ruhepunkt. Starke Teile bekommen
+# Acht und Gegenlauf, der Höhepunkt Ballyhoo und Farb-Lauf.
 LOOKS = (
     Look("Ruhe", 0, puls="atmen"),
     Look("Ruhe schwenkt", 0, bewegung="schwenk", beats=32, puls="atmen", gobo=True),
+    Look("Ruhe kreist", 0, bewegung="kreis", beats=32, puls="atmen", farben="zwei"),
     Look("Stehen", 1, gobo=True),
     Look("Sanfter Schwenk", 1, bewegung="schwenk", beats=16, farben="zwei"),
-    Look("Farbwechsel", 1, farben="wechsel", gobo=True),
+    Look("Farbwechsel", 1, bewegung="kreis", beats=32, farben="wechsel", gobo=True),
+    Look("Langsame Acht", 1, bewegung="acht", beats=32, farben="zwei", gobo=True),
+    Look("Wippen", 1, bewegung="nicken", beats=16),
     Look("Schwenk", 2, bewegung="schwenk", beats=8, gobo=True, drehung=0.3, schub=True),
     Look("Kreuz", 2, bewegung="kreuz", beats=8, farben="zwei", gobo=True, drehung=0.3),
     Look("Nicken", 2, bewegung="nicken", beats=4, farben="wechsel", schub=True),
     Look("Stehen mit Akzent", 2, farben="wechsel", gobo=True, puls="akzent"),
+    Look("Acht", 2, bewegung="acht", beats=8, farben="zwei", gobo=True, drehung=0.4),
+    Look("Gegenlauf", 2, bewegung="gegenkreis", beats=8, farben="wechsel", gobo=True, drehung=0.3, puls="akzent"),
     Look("Kreis", 3, bewegung="kreis", beats=8, farben="wechsel", gobo=True, drehung=0.5, puls="akzent"),
     Look("Fächer", 3, bewegung="faecher", beats=4, farben="zwei", gobo=True, drehung=0.6, puls="akzent", schub=True),
     Look("Höhepunkt", 3, bewegung="kreuz", beats=4, farben="wechsel", gobo=True, drehung=0.8, puls="akzent", schub=True),
+    Look("Ballyhoo", 3, bewegung="ballyhoo", beats=4, farben="lauf", gobo=True, drehung=0.8, puls="akzent", schub=True),
+    Look("Farb-Lauf", 3, bewegung="acht", beats=8, farben="lauf", gobo=True, drehung=0.5, puls="akzent"),
 )
+ABSCHNITT_FENSTER_BEATS = 8  # so lange nach dem Becken am Anfang eines Teils darf der Look noch auf der Eins wechseln
 
 
 class Engine:
@@ -152,6 +165,12 @@ class Engine:
         # Song und Takt
         self.song_nummer = -1
         self.farben_paar: Optional[tuple] = None   # (A, B) des laufenden Songs
+        self.farbe_drei = "weiss"                  # dritte Farbe für den Farb-Lauf
+        self.abschnitt_beat = -999                 # Beat, an dem ein neuer Songteil erkannt wurde (Becken, Sprung)
+        self.abschnitt_takt = 0
+        self.staerke_vor_takt = 0.0                # Stärke auf der letzten Eins (für den Sprung)
+        self.hoeher_beats = 0                      # so viele Beats ist die Musik schon stärker als der Look
+        self.im_stopp = False                      # die Band hat eben schlagartig aufgehört (Licht aus)
         self.pause_seit: Optional[float] = None
         self.takte = 0                  # gezählte Takt-Einsen im Song
         self.eins_bekannt = False       # hat der Takt-Folger schon eine Eins gemeldet?
@@ -315,6 +334,8 @@ class Engine:
         if neu or not all(f in palette for f in self.farben_paar):
             tempo = m.tempo_bpm if 40.0 <= m.tempo_bpm <= 240.0 else STANDARD_TEMPO
             self.farben_paar = farbpaar(palette, tempo, nummer=max(0, self.song_nummer))
+            rest = [f for f in palette if f not in self.farben_paar]
+            self.farbe_drei = rest[max(0, self.song_nummer) % len(rest)] if rest else self.farben_paar[0]
 
     def _eins_zaehlen(self) -> None:
         self.eins_bekannt = True
@@ -409,26 +430,58 @@ class Engine:
             else:
                 regie["angewendet"] = True  # ein plötzlicher Sprung geht vor; Claude sieht ihn bei der nächsten Frage
         seit = self.beats - self.look_seit
+        if m.beat:
+            self.hoeher_beats = self.hoeher_beats + 1 if stufe > self.look.stufe else 0
+        if self._abschnitt_beginnt(m):
+            self.abschnitt_beat, self.abschnitt_takt = self.beats, self.takte - 1
+        if m.beat and m.eins and self.eins_bekannt:
+            if staerke - self.staerke_vor_takt >= SPRUNG and self.beats - self.abschnitt_beat > 4:
+                # Deutlich lauter als einen Takt vorher, auch ohne erkanntes Becken: Der neue Teil begann
+                # vermutlich auf der letzten Eins (der Pegel braucht etwa eine Sekunde).
+                self.abschnitt_beat, self.abschnitt_takt = self.beats, max(0, self.takte - 2)
+            self.staerke_vor_takt = staerke
         if self.eins_bekannt:
             # Mit bekannter Eins: Wechsel nur zu Beginn einer 8-Takt-Phrase (auf der Eins)
             abwechslung = 4 * (ABWECHSLUNG_TAKTE_STARK if self.look.stufe >= 2 else ABWECHSLUNG_TAKTE)
             phrase_um = self._phrase_beginnt(m) and seit >= PHRASE
+            # Ruhiger werden: einen Takt nach dem Phrasen-Anfang entscheiden. Auf der Eins selbst kennt der Pegel den
+            # neuen Teil noch nicht (er braucht etwa eine Sekunde); sonst ging das Licht genau beim Refrain-Einsatz
+            # kurz auf ruhig.
+            ruhiger_jetzt = bool(m.beat and m.eins and (self.takte - 1 - self.phrase_basis) % PHRASE_TAKTE == 1
+                                 and seit >= PHRASE + 4 and stufe < self.stufe)
+            if phrase_um and stufe < self.stufe:
+                phrase_um = False                         # siehe oben: erst einen Takt später
             weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and m.eins and seit >= 8
             if self._abschnitt_beginnt(m) and stufe != self.look.stufe and seit >= 8:
                 # Neuer Songteil mit Becken und anderer Stärke: jetzt wechseln und die Phrasen ab hier zählen
                 weit_daneben = True
                 self.phrase_basis = self.takte - 1
+            elif self._abschnitt_beginnt(m) and seit < 8:
+                self.phrase_basis = self.takte - 1      # Look kam eben erst (Sprung): Das Becken zeigt den Teil-Anfang sicherer
+            elif m.beat and m.eins and stufe > self.look.stufe and self.hoeher_beats >= 8 and seit >= 16:
+                # Lauter werden (Überleitung in den Refrain) wartet nicht auf das Ende der Phrase: Ist die Musik
+                # seit zwei Takten stärker als der Look, kommt der stärkere Look auf der nächsten Eins.
+                # Ruhiger werden wartet weiter auf die Phrase (Ruhe statt Dauerwechsel).
+                weit_daneben = True
+                self.phrase_basis = self.takte - 1
+            elif (m.beat and m.eins and 0 <= self.beats - self.abschnitt_beat <= ABSCHNITT_FENSTER_BEATS
+                  and stufe != self.look.stufe and seit >= 8):
+                # Ein, zwei Takte nach dem Becken hört man, ob der neue Teil stärker ist (der Pegel braucht etwa
+                # eine Sekunde): jetzt wechseln, wie ein Operator beim Refrain, und die Phrasen ab dem Becken zählen.
+                weit_daneben = True
+                self.phrase_basis = self.abschnitt_takt
         else:
             abwechslung = ABWECHSLUNG_STARK if self.look.stufe >= 2 else ABWECHSLUNG
             phrase_um = m.beat and seit >= PHRASE and seit % 8 == 0
+            ruhiger_jetzt = False
             # Passt der Look gar nicht (zwei Stufen daneben), wartet er nur bis zum nächsten Takt.
             weit_daneben = abs(stufe - self.look.stufe) >= 2 and m.beat and seit >= 8 and seit % 4 == 0
         # Der erste Look eines Songs: eine halbe Sekunde nach dem ersten Schlag (nicht schon beim Rauschen davor).
         erster = self.look_offen and (
             (self.erste_regung is not None and jetzt - self.erste_regung >= ERSTER_LOOK_S)
             or (self.musik_seit is not None and jetzt - self.musik_seit >= ERSTER_LOOK_SPAETESTENS_S))
-        wechseln = erster or (drop and seit >= 4) or weit_daneben or (
-            phrase_um and (stufe != self.stufe or seit >= abwechslung))
+        wechseln = erster or (drop and seit >= 4) or weit_daneben or ruhiger_jetzt or (
+            phrase_um and (stufe != self.stufe or seit >= abwechslung - 2))   # -2: Look begann vielleicht kurz nach der Eins
         self.stufe = stufe if (wechseln or seit < 1) else self.stufe
         if not wechseln and self.look in self._passende_looks(self.look.stufe, profil):
             return
@@ -467,12 +520,18 @@ class Engine:
         a, b = self.farben_paar or ("blau", "rot")
         return lies_farbe(a), lies_farbe(b)
 
-    def _farbe(self, art: str) -> tuple:
+    def _farbe(self, art: str, nummer: int = 0) -> tuple:
         """Die Farbe eines Geräts im aktuellen Look: eine Song-Farbe (A) oder Spots B über PARs A.
-        "wechsel": zu Beginn jeder 8-Takt-Phrase tauschen Spots und PARs die Farben (nicht mehr alle 4 Beats)."""
+        "wechsel": zu Beginn jeder 8-Takt-Phrase tauschen Spots und PARs die Farben (nicht mehr alle 4 Beats).
+        "lauf": drei Farben wandern alle 4 Takte ein Gerät weiter (auf der Eins; alle 2 Takte waren bei schnellen
+        Songs über 15 Farbwechsel pro Minute)."""
         a, b = self._song_farben()
         if self.look.farben == "eine":
             return a
+        if self.look.farben == "lauf":
+            farben = (a, b, lies_farbe(self.farbe_drei))
+            schritt = (self.takte - 1 - self.phrase_basis) // 4 if self.eins_bekannt else self.beats // 16
+            return farben[(schritt + nummer + (1 if art == "par" else 0)) % len(farben)]
         if self.look.farben == "wechsel" and self.phrase_nummer % 2 == 1:
             a, b = b, a
         return b if art == "spot" else a
@@ -516,6 +575,14 @@ class Engine:
         self.tempo = tempo
         self.schub = math.exp(-(jetzt - self.letzter_beat) / (PULS_ABKLANG * periode))
         if reaktion >= 0.5:
+            if getattr(m, "stopp", False) and (self.look.stufe >= 2 or self.drop_laeuft()):
+                # Gemeinsamer Schlusspunkt oder Break in kräftiger Musik: Licht aus, wie ein Operator auf dem Stopp.
+                # (Dauert es länger, kommt nach 0,8 s „leise“ und das Grundlicht blendet ein.)
+                self.im_stopp = True
+                return self._stopp_bild()
+            if self.im_stopp:
+                self.im_stopp = False
+                self.letzter_akzent = jetzt           # die Band setzt wieder ein: voll hell, kurz weiß
             regie = self._regie(jetzt)
             leise_gehoert = regie is not None and (regie["lage"] in REGIE_LEISE or (
                 regie["lage"] not in REGIE_KRAEFTIG and regie.get("look_obj") is not None and regie["look_obj"].stufe <= 1))
@@ -545,7 +612,7 @@ class Engine:
         pars = self.patch.in_gruppe(GRUPPE_FARBE)
         for nummer, geraet in enumerate(pars):
             hell = self._helligkeit(m, grenze, reaktion, nummer, len(pars), jetzt, periode)
-            ziel = self._farbe("par")
+            ziel = self._farbe("par", nummer)
             ergebnis[geraet["id"]] = Eigenschaften(helligkeit=hell,
                                                    farbe=mit_weiss(self._weiche_farbe(geraet["id"], ziel)))
 
@@ -553,7 +620,7 @@ class Engine:
         spots = self.patch.in_gruppe(GRUPPE_BEWEGUNG)
         for nummer, geraet in enumerate(spots):
             e = Eigenschaften(helligkeit=self._helligkeit(m, grenze, reaktion, nummer, len(spots), jetzt, periode),
-                              farbe=mit_weiss(self._farbe("spot")),
+                              farbe=mit_weiss(self._farbe("spot", nummer)),
                               strobo_hz=strobo if "Effektlicht" in self.patch.gruppen_von(geraet) else 0.0)
             gobos = self._gobos(geraet)
             if gobos and self.look.gobo and reaktion >= 0.3:
@@ -597,6 +664,17 @@ class Engine:
                 self._zielen(geraet, (x, masse["tiefe_m"] * (0.5 - 0.3 * s), ZIEL_HOEHE_M), e)
             ergebnis[geraet["id"]] = e
         self.zustand_text = f"Aufbau {round(m.spannung * 100)} %"
+        return ergebnis
+
+    def _stopp_bild(self) -> dict:
+        """Licht aus auf dem Stopp. Die Köpfe bleiben stehen (kein Fahren im Dunkeln, das sähe man im Saal)."""
+        ergebnis = {}
+        for art, _, geraet in self._alle_lichter():
+            e = Eigenschaften(helligkeit=0.0, farbe=self.led_farbe.get(geraet["id"], (1.0, 1.0, 1.0)))
+            if art == "spot" and geraet["id"] in self.winkel:
+                e.pan, e.tilt = self.winkel[geraet["id"]]
+            ergebnis[geraet["id"]] = e
+        self.zustand_text = "Stopp"
         return ergebnis
 
     def _pause(self, grenze: float) -> dict:
@@ -695,6 +773,15 @@ class Engine:
             return (seite * 0.38 * breite * weite * math.sin(winkel), tiefe * 0.5)
         if muster == "nicken":       # vor und zurück, gegeneinander
             return (seite * 0.2 * breite, tiefe * (0.5 + 0.3 * weite * math.sin(winkel + versatz)))
+        if muster == "acht":         # liegende Acht, die Köpfe gegeneinander
+            return (0.32 * breite * weite * math.sin(winkel + versatz / 2),
+                    tiefe * (0.5 + 0.18 * weite * math.sin(2 * winkel + versatz)))
+        if muster == "gegenkreis":   # gespiegelte Kreise: ein Kopf rechts herum, der andere links herum
+            return (seite * breite * weite * (0.12 + 0.16 * math.cos(winkel)),
+                    tiefe * (0.5 + 0.25 * weite * math.sin(winkel)))
+        if muster == "ballyhoo":     # groß und wild (zwei Takte, die nie ganz gleich aussehen), aber auf der Bühne
+            return (0.4 * breite * weite * math.sin(winkel + versatz / 2) * (0.7 + 0.3 * math.cos(1.5 * winkel)),
+                    tiefe * (0.5 + 0.32 * weite * math.sin(1.5 * winkel + versatz)))
         return (0.35 * breite * weite * math.sin(winkel + versatz / 2), tiefe * 0.5)   # Schwenk
 
     def _runde_beats(self, bewegung: str) -> float:

@@ -298,3 +298,36 @@ Wunsch der Technik-AG: „alles über die Claude-API“ (Erkennung und Programmi
 - **Selbsttest der Mac-App:** Die Suche nach der eigenen Adresse über den Rechnernamen hing auf den Mac-Bau-Rechnern
   bei GitHub sekundenlang (Selbsttest 2.5.0 scheiterte). Sie läuft jetzt im Hintergrund mit Zwischenspeicher; eine
   Anfrage wartet höchstens 0,3 s. Das hilft auch im Saal, wenn der Router keinen DNS hat.
+
+## Licht weniger langweilig: Stärke in dB, neue Looks, Stopp (ab 2.5.2)
+
+- **Stärke (laut/leise) neu gemessen:** Pegel in dB über etwa 1 s gegen die lauten Stellen der letzten 5 Minuten Musik
+  (`lichtsteuerung/audio/lautheit.py`). Vorher wurde der Pegel durch seine eigene Spitze geteilt; das maß eher „gleich-
+  mäßig oder nicht“: Ein Intro nur mit Akkorden kam lauter heraus als die Strophe mit Schlagzeug, der Refrain kaum lauter
+  als die Strophe. Umrechnung: 0 dB unter dem Bezug = 1,0, 1,5 dB = 0,8 (Höhepunkt), 4 dB = 0,6 (stark), 9 dB = 0,35
+  (mittel), 15 dB = 0. Gemessen an den Test-Songs: Refrain 0 dB, Überleitung −1, Strophe −4, Bridge −6, Intro −13 dB.
+- **Erster Song:** Ohne gemerkten Bezug gilt am Anfang „es wird noch 4 dB lauter“ (schrumpft in 45 s Musik auf null).
+  Mit 6 dB über 90 s bekam ein lautes Schlagzeug-Solo am Anfang eine Minute lang nur mittlere Looks. **Gemerkter Bezug:**
+  Nach einer Minute Musik merkt sich das Programm die lauten Stellen pro Ton-Eingang und Summen-Kanälen
+  (`sitzung.json`, „ton_bezug“). Am 3.12. gilt also der Bezug vom Soundcheck am 2.12. Gemessen: Schlagzeug-Solo als
+  erster Song ohne Bezug 38 % starke Looks, mit Bezug 83 %; Ballade ohne Bezug zu 81 % stark, mit Bezug ruhig am Anfang.
+  Ein zu hoher gemerkter Bezug gibt 0,05 dB pro Sekunde Musik nach.
+- **Wechsel:** Abwechslung weiter nur zu Beginn einer 8-Takt-Phrase. Neu: Lauter werden wartet nicht. Ein Sprung um
+  0,2 auf einer Eins (oder ein Becken) gilt als neuer Songteil, und ist die Musik seit 2 Takten stärker als der Look,
+  kommt der stärkere Look auf der nächsten Eins. Ruhiger werden entscheidet einen Takt nach dem Phrasen-Anfang (auf der
+  Eins selbst kennt der Pegel einen neuen, lauteren Teil noch nicht; sonst ging das Licht genau beim Refrain kurz auf
+  ruhig). Die Stärke hält Spitzen 6 s (vorher 3 s, sie sprang zwischen zwei Schlägen über die Höhepunkt-Grenze).
+- **Looks:** 19 statt 12. Ruhige und mittlere Looks bewegen sich langsam (vorher standen die Köpfe dort still);
+  „Stehen“ bleibt als Ruhepunkt. Neu: Ruhe kreist, Langsame Acht, Wippen, Acht, Gegenlauf (gespiegelte Kreise),
+  Ballyhoo, Farb-Lauf (drei Farben wandern alle 4 Takte ein Gerät weiter).
+- **Stopp:** Hört die Band schlagartig auf (davor mindestens 1 s dichte, kräftige Musik, dann innerhalb von 0,2 s
+  mindestens 25 dB leiser als der Bezug), geht das Licht in starken Looks aus; beim Einsatz kommt ein voller Akzent.
+  Lücken zwischen Tönen (Ballade, Solo), leise Teile und Ausklingen zählen nicht. Gemessen an 9 Test-Stücken: nur die
+  harten Schlusspunkte (Rock, Punk, Shuffle, Akustik) und zwei Breaks im Schlagzeug-Solo.
+- **Messung vorher → nachher** (Test-Songs, Rig wie am 3.12.: 2 MH-X25 + LED PAR 64, Profil Weihnachtszauber):
+  Pop-Song mit Strophe/Refrain: verschiedene Looks 5 → 11, starke Looks 22 → 74 %, Bewegung im Median 0 → 28 °/s,
+  Refrain jetzt Höhepunkt (vorher meist „Farbwechsel“ ohne Bewegung). Farbwechsel pro Minute 3,6 bis 6,8 (Ziel ≤ 8).
+  Look-Wechsel pro Minute 3,5 bis 7. Bewegung in Ballyhoo/Höhepunkt/Kreis bis 94 bis 172 °/s (95 %).
+- **Grenzen:** Gemessen nur mit künstlicher Musik (echte Probe-Aufnahmen „Hh“/„Boböd“ lagen nicht mehr vor).
+  Ohne Soundcheck-Bezug wird der erste Song des Abends nach sich selbst eingeschätzt.
+

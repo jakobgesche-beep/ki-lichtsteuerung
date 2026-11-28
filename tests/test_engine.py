@@ -256,15 +256,29 @@ def takte_spielen(engine, profil, takte, energie, von=0.0, bpm=120):
     return zeit, verlauf
 
 
-def test_looks_wechseln_nur_zu_beginn_einer_8_takt_phrase(engine):
-    zeit, verlauf = takte_spielen(engine, PARTY, 4, 0.5)
-    for energie in (0.7, 0.45, 0.7, 0.45, 0.7):         # immer nur eine Stufe Unterschied
-        zeit, neu = takte_spielen(engine, PARTY, 6, energie, von=zeit)
-        verlauf += neu
+def test_eine_stufe_leiser_wechselt_nur_zu_beginn_einer_8_takt_phrase(engine):
+    zeit, verlauf = takte_spielen(engine, PARTY, 9, 0.7)
+    zeit, neu = takte_spielen(engine, PARTY, 12, 0.45, von=zeit)     # eine Stufe ruhiger, mitten in Phrase 2
+    verlauf += neu
     # (der erste Look des Songs kommt kurz nach dem ersten Schlag, er zählt hier nicht)
     wechsel = [i for i in range(2, len(verlauf)) if verlauf[i][1] != verlauf[i - 1][1]]
-    assert wechsel
-    assert all(verlauf[i][2] and i % 32 == 0 for i in wechsel)    # auf der Eins, zu Beginn einer 8-Takt-Phrase
+    assert wechsel and engine.look.stufe == 1
+    # Auf der Eins: Abwechslung zu Beginn einer 8-Takt-Phrase, ruhiger erst einen Takt danach (2.5.2: auf der
+    # Phrasen-Eins kennt der Pegel einen neuen, vielleicht lauteren Teil noch nicht).
+    assert all(verlauf[i][2] and i % 32 in (0, 4) for i in wechsel)
+    assert any(i % 32 == 4 and verlauf[i][1] != verlauf[i - 1][1] for i in wechsel)
+
+
+def test_deutlich_lauterer_neuer_teil_wechselt_gleich_auf_der_eins(engine):
+    """2.5.2: Wird es deutlich lauter (Refrain), wartet das Licht nicht bis zum Ende der Phrase, auch ohne Becken."""
+    zeit, verlauf = takte_spielen(engine, PARTY, 10, 0.45)          # Strophe, mitten in Phrase 2
+    alt = engine.look
+    zeit, neu = takte_spielen(engine, PARTY, 4, 0.7, von=zeit)
+    namen = [alt.name] + [n for _, n, _ in neu]
+    wechsel = [i - 1 for i in range(1, len(namen)) if namen[i] != namen[i - 1]]
+    assert engine.look.stufe == 2 and engine.look != alt
+    assert wechsel and neu[wechsel[0]][2] and wechsel[0] <= 4        # auf einer Eins, spätestens im zweiten Takt
+    assert len(wechsel) == 1                                          # und dann bleibt er
 
 
 def test_grosser_sprung_wechselt_auf_der_naechsten_eins(engine):
@@ -476,3 +490,47 @@ def test_neuer_teil_mit_becken_wechselt_sofort_auf_der_eins(engine):
     engine.bewerte(m, PARTY, zeit)
     assert engine.look != alt and engine.look.stufe == 2
     assert engine.phrase_basis == engine.takte - 1
+
+
+# --- 2.5.2: Stopp-Treffer, lebendigere Looks -------------------------------------------------------------
+
+def test_stopp_in_kraeftiger_musik_macht_licht_aus_und_der_einsatz_knallt(engine):
+    _, zeit = einschwingen(engine, PARTY, Messwerte(**{**MUSIK, "energie": 0.9}))
+    erzwinge(engine, "Kreis")
+    for i in range(8):                                     # Band hört schlagartig auf (0,2 s)
+        bild = engine.bewerte(Messwerte(**{**MUSIK, "energie": 0.9}, stopp=True), PARTY, zeit + i / 40)
+    assert all(e.helligkeit == 0.0 for gid, e in bild.items() if gid in ("kopf", "par-1", "par-2"))
+    assert engine.zustand_text == "Stopp"
+    wieder = zeit + 0.2
+    bild = engine.bewerte(Messwerte(**{**MUSIK, "energie": 0.9}, beat=True), PARTY, wieder)
+    assert engine.letzter_akzent == wieder and bild["kopf"].helligkeit >= 0.9
+
+
+def test_stopp_in_ruhigem_look_macht_kein_dunkel(engine):
+    _, zeit = einschwingen(engine, PARTY, Messwerte(**{**MUSIK, "energie": 0.45}))
+    erzwinge(engine, "Sanfter Schwenk")
+    bild = engine.bewerte(Messwerte(**{**MUSIK, "energie": 0.45}, stopp=True), PARTY, zeit)
+    assert bild["kopf"].helligkeit > 0.1
+
+
+def test_neue_muster_bleiben_auf_der_buehne(nur_spots):
+    """Acht, Gegenlauf und Ballyhoo: über eine ganze Runde immer auf dem Bühnenboden (nie im Publikum)."""
+    masse = nur_spots.buehne.daten["buehne"]
+    for muster in ("acht", "gegenkreis", "ballyhoo"):
+        for nummer in (0, 1):
+            for schritt in range(64):
+                nur_spots.phase = schritt / 4
+                x, y = nur_spots._muster(nummer, 8, 1.0, muster)
+                assert abs(x) <= 0.5 * masse["breite_m"] and 0.1 * masse["tiefe_m"] <= y <= 0.9 * masse["tiefe_m"]
+
+
+def test_farb_lauf_wandert_alle_vier_takte(engine):
+    zeit, _ = takte_spielen(engine, PARTY, 1, 0.95)
+    erzwinge(engine, "Farb-Lauf")
+    farben = []
+    for _ in range(12):
+        zeit, _ = takte_spielen(engine, PARTY, 1, 0.95, von=zeit)
+        farben.append(engine.bewerte(Messwerte(tempo_bpm=120, energie=0.95, leise=False), PARTY, zeit)["kopf"].farbe)
+    wechsel = sum(1 for a, b in zip(farben, farben[1:]) if a != b)
+    assert 2 <= wechsel <= 3                               # 12 Takte: alle 4 Takte eine neue Farbe
+    assert len({tuple(round(x, 2) for x in f) for f in farben}) == 3          # drei Farben

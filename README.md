@@ -216,6 +216,10 @@ Am besten hört die Musik-Erkennung den Ton direkt vom X32 über USB (sauberer a
 Die Einzelkanäle kommen vor dem Fader. Jede Rolle misst ihren eigenen Grundpegel, feste Pegel muss niemand einstellen.
 Fehlt eine Rolle, arbeitet die Erkennung wie vorher nur mit der Summe. Die Wahl wird gemerkt.
 
+**Soundcheck nicht vergessen (ab 2.5.2):** Nach einer Minute Musik merkt sich das Programm, wie laut die Band an
+den lauten Stellen ist. Dann weiß es schon beim ersten Song des Abends, was leise und was laut ist. Also beim
+Soundcheck die Band über den gewählten Ton-Eingang mindestens eine Minute laut spielen lassen.
+
 ## Neue Version veröffentlichen
 
 1. In `lichtsteuerung/version.py` die Nummer erhöhen, zum Beispiel auf `1.1.0`, und committen.

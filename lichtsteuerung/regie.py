@@ -41,16 +41,23 @@ WECHSEL = ["jetzt", "naechste_phrase", "bleiben"]
 LOOK_TEXT = {
     "Ruhe": "steht, atmet langsam, eine Farbe",
     "Ruhe schwenkt": "langsamer Schwenk, atmet",
+    "Ruhe kreist": "sehr langsamer Kreis, atmet, zwei Farben",
     "Stehen": "steht, Puls im Beat, Gobo",
     "Sanfter Schwenk": "sanfter Schwenk, zwei Farben",
-    "Farbwechsel": "steht, Farben tauschen pro Phrase",
+    "Farbwechsel": "langsamer Kreis, Farben tauschen pro Phrase",
+    "Langsame Acht": "langsame Acht, zwei Farben",
+    "Wippen": "Köpfe wippen langsam gegeneinander",
     "Schwenk": "Schwenk mit Ruck auf dem Beat",
     "Kreuz": "Strahlen kreuzen sich",
     "Nicken": "Köpfe nicken im Beat",
     "Stehen mit Akzent": "steht, Eins im Takt doppelt hell",
+    "Acht": "Acht im Takt, Gobos drehen",
+    "Gegenlauf": "gespiegelte Kreise in Gegenrichtung, Akzent auf der Eins",
     "Kreis": "Kreise, Akzent auf der Eins",
     "Fächer": "Fächer auf und zu, schnell",
     "Höhepunkt": "schnelles Kreuzen, alles voll",
+    "Ballyhoo": "große wilde Bewegung, drei Farben wandern",
+    "Farb-Lauf": "Acht, drei Farben wandern über die Geräte",
 }
 
 SYSTEM = """Du bist die Live-Lichtregie der Technik-AG bei einer Schulveranstaltung. Alle paar Sekunden bekommst \

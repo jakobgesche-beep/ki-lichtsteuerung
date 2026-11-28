@@ -544,7 +544,8 @@ class Show:
     def _sitzung_speichern(self) -> None:
         daten.schreibe_json(self.pfade.sitzung, {"profil": self.profil["name"], "automatik": self.automatik_an,
                                                  "audio": self.audio_auftrag, "ki_regie": self.regie.an,
-                                                 "vorlauf_ms": self.vorlauf_ms})
+                                                 "vorlauf_ms": self.vorlauf_ms,
+                                                 "ton_bezug": dict(self.audio.bezuege)})
 
     def audio_quelle_setzen(self, auftrag: dict, merken: bool = True) -> str:
         """Tonquelle wählen. Gemerkt wird sie, damit sie nach einem Neustart von selbst wieder da ist."""
@@ -602,6 +603,10 @@ class Show:
         self.audio_auftrag = sitzung.get("audio") if isinstance(sitzung.get("audio"), dict) else None
         vorlauf = sitzung.get("vorlauf_ms")
         self.vorlauf_ms = int(vorlauf) if isinstance(vorlauf, (int, float)) else None
+        bezuege = sitzung.get("ton_bezug")
+        self.audio.bezuege = {str(k): float(v) for k, v in bezuege.items() if isinstance(v, (int, float))} \
+            if isinstance(bezuege, dict) else {}
+        self.audio.bezug_gelernt = self._sitzung_speichern
         # KI-Regie: gemerkt wie gewählt; beim ersten Mal an, wenn ein Claude-Schlüssel da ist
         self.regie.an = bool(sitzung.get("ki_regie", self.ki.bereit()))
         self.regie.meldung = "wartet auf Musik" if self.regie.an else "aus"

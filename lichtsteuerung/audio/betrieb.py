@@ -53,6 +53,10 @@ class AudioBetrieb:
         self.vorlauf_s = 0.0          # Beats so viel früher melden (Verzögerung von Ton, Licht und Weg ausgleichen)
         self.rechenzeiten: deque = deque(maxlen=600)      # Rechenzeit pro Block (Analyse + Zuhörer), Sekunden
         self._analyse: Optional[Analyse] = None
+        # Gemerkte Lautstärke der lauten Stellen pro Ton-Eingang (dB), siehe audio/lautheit.py. Gelernt nach einer
+        # Minute Musik (zum Beispiel beim Soundcheck), damit schon der erste Song am Abend richtig eingeschätzt wird.
+        self.bezuege: dict = {}
+        self.bezug_gelernt = None     # wird aufgerufen, wenn sich ein Bezug ändert (die Show speichert ihn dann)
         self._thread: Optional[threading.Thread] = None
         self._stopp = threading.Event()
 
@@ -84,7 +88,7 @@ class AudioBetrieb:
 
     def _schleife(self, quelle, stopp: threading.Event) -> None:
         try:
-            analyse = Analyse()
+            analyse = Analyse(bezug_db=self.bezuege.get(self._bezug_name(quelle)))
             self._analyse = analyse
             self.vorlauf_setzen(self.vorlauf_s)
             self.beat_erkennung = analyse.beat.name
@@ -142,6 +146,7 @@ class AudioBetrieb:
                 self.rechenzeiten.append(self.zeitpunkt - beginn)
                 if self.zeitpunkt - bericht["zeit"] >= BERICHT_S:
                     self._bericht(quelle, bericht)
+                    self._bezug_merken(quelle, analyse)
         except Exception as fehler:
             logging.exception("Audio-Analyse")
             self.fehler = str(fehler)
@@ -174,6 +179,27 @@ class AudioBetrieb:
             logging.warning("Ton holpert: %d Blöcke verworfen, %d Lieferpausen in der letzten Minute (Rechenzeit "
                             "p95 %.1f ms)", max(0, neu_verloren), max(0, neu_luecken), self.rechenzeit_p95_ms())
         bericht.update(zeit=time.monotonic(), verloren=verloren, luecken=luecken)
+
+    def _bezug_name(self, quelle) -> Optional[str]:
+        """Unter diesem Namen wird der Bezug gemerkt: nur echte Eingänge, mit den Kanälen der Summe."""
+        if not str(self.name).startswith("Eingang"):
+            return None
+        kanaele = getattr(quelle, "kanaele", None)
+        return f"{self.name} | {','.join(str(k) for k in kanaele)}" if kanaele else self.name
+
+    def _bezug_merken(self, quelle, analyse) -> None:
+        name, gelernt = self._bezug_name(quelle), analyse.lautheit.gelernt()
+        if name is None or gelernt is None:
+            return
+        alt = self.bezuege.get(name)
+        if alt is None or abs(alt - gelernt) >= 0.5:
+            self.bezuege[name] = gelernt
+            logging.info("Ton: Bezug für „%s“ gemerkt: %.1f dB (laute Stellen)", name, gelernt)
+            if self.bezug_gelernt is not None:
+                try:
+                    self.bezug_gelernt()
+                except Exception:
+                    logging.exception("Bezug speichern")
 
     def kanal_pegel(self) -> dict:
         """Für den Kanal-Finder: Pegel aller Kanäle des Eingangs und was die Rollen gerade hören."""

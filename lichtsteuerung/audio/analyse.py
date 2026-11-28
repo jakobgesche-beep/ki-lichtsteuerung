@@ -19,6 +19,7 @@ from typing import Optional
 import numpy as np
 
 from .quellen import ABTASTRATE, BLOCK
+from .lautheit import Lautheit
 
 FFT_LAENGE = 1024         # kurz, damit Bass und Höhen kaum Verzögerung haben
 BEAT_FFT = 512
@@ -58,6 +59,7 @@ class Messwerte:
     applaus: bool = False      # breites Rauschen ohne Töne, eine Weile lang: Klatschen
     eins: bool = False         # dieser Beat ist die Eins im Takt (nur in einem Block wahr, nur wenn sicher erkannt)
     treffer: bool = False      # ein kräftiger Einsatz (Schlagzeug-Schlag, Akkord), nur in einem Block wahr
+    stopp: bool = False        # die Band hat eben schlagartig aufgehört (gemeinsamer Schlusspunkt), siehe lautheit.py
     # Nur mit Einzelkanälen vom X32 (siehe audio/rollen.py):
     rollen: bool = False       # es kommen Einzelkanäle an
     rede_sicher: bool = False  # Mikro offen und Band still: sicher eine Ansage
@@ -314,8 +316,10 @@ class DropErkennung:
 
 
 class Analyse:
-    def __init__(self, beat=None):
+    def __init__(self, beat=None, bezug_db: Optional[float] = None):
+        """`bezug_db`: gemerkter Pegel der lauten Stellen vom letzten Mal (siehe lautheit.py)."""
         self.beat = beat or beat_erkennung()
+        self.lautheit = Lautheit(bezug_db)
         self.uhr = BeatUhr()
         self.puffer = np.zeros(FFT_LAENGE, dtype=np.float32)
         self.fenster = np.hanning(FFT_LAENGE)
@@ -331,8 +335,6 @@ class Analyse:
         self.tempo = 0.0
         self.anteil_mitte = 0.0
         self.drops = DropErkennung(frequenzen)
-        self.energie_verlauf = deque(maxlen=60 * 10)    # eine Minute, zehnmal pro Sekunde
-        self.bis_energie_merken = 0
         # Große Schläge: ein Einsatz, viel stärker als die Schläge der letzten 4 Sekunden
         self.vorheriges = None
         self.fluss_verlauf = deque(maxlen=int(4 * ABTASTRATE / BLOCK))
@@ -415,21 +417,6 @@ class Analyse:
         roh = self.pegel_glatt / self.pegel_spitze
         self.energie += (roh - self.energie) * 0.02
 
-        # Intensität: Energie im Vergleich zur letzten Minute. So ist die lauteste Stelle
-        # auch wirklich "Höhepunkt", egal wie laut das Mikrofon insgesamt ist.
-        self.bis_energie_merken -= 1
-        if self.bis_energie_merken <= 0:
-            self.energie_verlauf.append(self.energie)
-            self.bis_energie_merken = int(ABTASTRATE / BLOCK / 10)
-        if len(self.energie_verlauf) > 50:
-            unten, oben = np.percentile(self.energie_verlauf, (10, 95))
-            intensitaet = float(min(1.0, max(0.0, (self.energie - unten) / max(oben - unten, 0.08))))
-        else:
-            intensitaet = float(min(1.0, self.energie))
-        # Laut bleibt laut: Spielt die Band (oder ein Schlagzeug-Solo) minutenlang volle Kanne, darf das nicht
-        # zur "normalen" Stärke werden. Gemessen an "Hh": Strophe 0,27 bis 0,40, Refrain 0,57 bis 0,77; Solo 0,56 bis 0,72.
-        intensitaet = max(intensitaet, float(min(1.0, max(0.0, (self.energie - 0.3) / 0.4))))
-
         leise_jetzt = self.pegel_glatt < LEISE_PEGEL
         self.zeit_still = self.zeit_still + dauer if leise_jetzt else 0.0
         self.zeit_ohne_beat = 0.0 if beat else self.zeit_ohne_beat + dauer
@@ -453,13 +440,16 @@ class Analyse:
             self.neu_gezaehlt = True
         elif self.zeit_pause == 0.0:
             self.neu_gezaehlt = False
+        # Stärke: Pegel in dB gegen die lauten Stellen der Musik (lautheit.py). Rede, Applaus, Stille zählen nicht.
+        applaus = applaus and not (rollen_werte and rollen_werte.band_aktiv)
+        intensitaet = self.lautheit.verarbeite(block, dauer, musik=not (leise or rede or applaus))
         return Messwerte(beat=beat, tempo_bpm=round(self.tempo, 1), bass=self.werte["bass"],
                          mitte=self.werte["mitte"], hoehe=self.werte["hoehe"],
                          energie=min(1.0, self.energie), pegel=pegel, leise=leise and not self.drops.vor_drop,
                          rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
                          vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3),
-                         schlag=schlag and not leise, applaus=applaus and not (rollen_werte and rollen_werte.band_aktiv),
-                         eins=eins, treffer=treffer and not leise,
+                         schlag=schlag and not leise, applaus=applaus,
+                         eins=eins, treffer=treffer and not leise, stopp=self.lautheit.stopp,
                          rollen=rollen_werte is not None,
                          rede_sicher=bool(rollen_werte and rollen_werte.rede_sicher),
                          schlagzeug_solo=bool(rollen_werte and rollen_werte.schlagzeug_solo),
