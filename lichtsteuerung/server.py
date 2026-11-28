@@ -257,6 +257,44 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     # --- Override-Tasten ----------------------------------------------------
 
+    # --- iPad-Pult: Koppeln und Netz-Server (nur vom MacBook aus) ---------------------------
+
+    @app.get("/api/netz")
+    def netz_zustand():
+        return show.fernbedienung.ipad_zustand()
+
+    @app.post("/api/netz/koppeln")
+    def netz_koppeln():
+        return show.fernbedienung.ipad_koppeln()
+
+    @app.post("/api/netz/fenster_zu")
+    def netz_fenster_zu():
+        show.fernbedienung.kopplung.fenster_schliessen()
+        return show.fernbedienung.ipad_zustand()
+
+    @app.post("/api/netz/entfernen")
+    def netz_entfernen(auftrag: dict = Body(...)):
+        if auftrag.get("alle"):
+            show.fernbedienung.kopplung.alle_entfernen()
+        else:
+            show.fernbedienung.kopplung.entfernen(int(auftrag.get("nummer", -1)))
+        return show.fernbedienung.ipad_zustand()
+
+    @app.post("/api/netz/beim_start")
+    def netz_beim_start(auftrag: dict = Body(...)):
+        show.fernbedienung.beim_start_setzen(bool(auftrag.get("an")))
+        return show.fernbedienung.ipad_zustand()
+
+    @app.post("/api/netz/an")
+    def netz_an():
+        show.fernbedienung.einschalten()
+        return show.fernbedienung.ipad_zustand()
+
+    @app.post("/api/netz/aus")
+    def netz_aus():
+        show.fernbedienung.ausschalten()
+        return show.fernbedienung.ipad_zustand()
+
     @app.post("/api/override/{taste}")
     def override(taste: str):
         with show.sperre:

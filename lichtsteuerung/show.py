@@ -125,6 +125,7 @@ class Show:
         self.follow_spot = FollowSpot(self)
         self.pult.extra.append(self.zwischenlicht.platz)
         self._messwerte = None
+        self.letzter_zustand = {}               # Eigenschaften je Gerät im letzten Bild
         self.chat_platz = Executor(-1)          # spielt den Vorschlag des Licht-Chats, nur für die Vorschau
         self.chat_vorschau_geraete = None
         self.blitze = BlitzWaechter()
@@ -208,6 +209,7 @@ class Show:
             self.mitschnitt.takt(jetzt)
             zustand = self._profil_grenzen(zustand, jetzt)
             zustand = self.overrides.anwenden(zustand, self.patch.geraete, self.warm_stellung)
+            self.letzter_zustand = zustand            # für Encoder am iPad: relativ zum aktuellen Wert
             bild = self.renderer.bild(zustand)
             self._test_einmischen(bild)
             bild, meldungen, blitzt = self.pruefer.pruefe(bild, self._vorgaben(), jetzt)
@@ -704,6 +706,7 @@ class Show:
         self._thread = threading.Thread(target=self._schleife, name="Show", daemon=True)
         self._thread.start()
         threading.Thread(target=self._audio_wiederherstellen, name="Ton wieder öffnen", daemon=True).start()
+        threading.Thread(target=self.fernbedienung.automatisch_starten, name="Netz-Server", daemon=True).start()
         threading.Thread(target=self._erkennen_schleife, name="Song-Erkennung", daemon=True).start()
 
     def stopp(self) -> None:

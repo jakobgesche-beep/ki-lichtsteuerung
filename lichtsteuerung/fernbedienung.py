@@ -26,10 +26,13 @@ import threading
 import time
 from typing import Optional
 
-from fastapi import Body, FastAPI, Header, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import Body, FastAPI, Header, Request, WebSocket
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 
 from . import daten, showtasten
+from .kopplung import Kopplung
+from .tablet import Hub
+from .version import VERSION
 
 PORT_WUNSCH = 8765
 PIN_STELLEN = 6
@@ -39,6 +42,34 @@ FEHLVERSUCHE_GESAMT = 30
 SPERRE_GESAMT_S = 300.0
 MAX_HANDYS = 10
 AKTIV_S = 10.0                 # so lange nach der letzten Anfrage zählt ein Handy als verbunden
+TABLET = daten.PROJEKT / "web" / "tablet"
+GEMEINSAM = daten.PROJEKT / "web" / "gemeinsam"
+MEDIEN = {".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8", ".png": "image/png",
+          ".svg": "image/svg+xml", ".json": "application/json", ".webmanifest": "application/manifest+json",
+          ".html": "text/html; charset=utf-8"}
+
+
+def rechnername() -> Optional[str]:
+    """Der Bonjour-Name des Macs (zum Beispiel MacBook-Air-von-Jakob): Damit bleibt die iPad-Adresse gleich,
+    auch wenn der Router dem Mac eine andere IP gibt."""
+    import subprocess
+    import sys
+    if sys.platform != "darwin":
+        return None
+    try:
+        name = subprocess.run(["/usr/sbin/scutil", "--get", "LocalHostName"], capture_output=True, text=True,
+                              timeout=3).stdout.strip()
+    except Exception:
+        return None
+    return name or None
+
+
+def _datei_aus(ordner, pfad: str):
+    """Eine Datei aus dem Ordner, nie darüber hinaus (kein ../)."""
+    ziel = (ordner / pfad).resolve()
+    if ordner.resolve() not in ziel.parents or not ziel.is_file():
+        raise FileNotFoundError(pfad)
+    return ziel
 
 
 def lan_adressen() -> list:
@@ -94,6 +125,10 @@ class Fernbedienung:
         self.fehler: Optional[str] = None
         self._qr = (None, None)                    # (Link, SVG): nur neu, wenn sich der Link ändert
         self.host = "0.0.0.0"                      # von allen Geräten im Netz erreichbar (Tests: nur dieser Rechner)
+        self.kopplung = Kopplung(show.pfade.wurzel / "daten" / "netz_geraete.json")
+        self.hub = Hub(show, self.kopplung)
+        self.einstellung_pfad = show.pfade.wurzel / "daten" / "netz.json"
+        self._name = None
         self.app = self._app_bauen()
 
     # --- Ein und aus (vom Laptop aus) ------------------------------------------------
@@ -102,13 +137,16 @@ class Fernbedienung:
     def an(self) -> bool:
         return self.server is not None
 
-    def einschalten(self, host: Optional[str] = None) -> None:
+    def einschalten(self, host: Optional[str] = None, port: Optional[int] = None) -> None:
         import uvicorn
         host = host or self.host
         with self.sperre:
             if self.server is not None:
                 return
-            port = _freier_port(host, PORT_WUNSCH)
+            port = port or _freier_port(host, PORT_WUNSCH)
+            if port != PORT_WUNSCH and host == self.host:
+                logging.warning("Netz-Server: Port %d belegt, nehme %d (Lesezeichen auf dem iPad passen dann nicht)",
+                                PORT_WUNSCH, port)
             server = uvicorn.Server(uvicorn.Config(self.app, host=host, port=port, log_level="warning", log_config=None))
             faden = threading.Thread(target=server.run, name="Fernbedienung", daemon=True)
             faden.start()
@@ -140,6 +178,54 @@ class Fernbedienung:
             if self.server is None:
                 raise ValueError("Die Fernbedienung ist aus.")
             self.pin, self.handys = self._neue_pin(), {}
+
+    # --- iPad-Pult ---------------------------------------------------------------------
+
+    def beim_start(self) -> bool:
+        return bool((daten.lese_json_sicher(self.einstellung_pfad, {}) or {}).get("beim_start", True))
+
+    def beim_start_setzen(self, an: bool) -> None:
+        daten.schreibe_json(self.einstellung_pfad, {"beim_start": bool(an)})
+
+    def automatisch_starten(self) -> None:
+        """Beim Programmstart: Ist ein iPad gekoppelt (und nicht abgeschaltet), läuft der Netz-Server gleich mit."""
+        if self.kopplung.hat_ipad() and self.beim_start():
+            try:
+                self.einschalten()
+            except Exception as fehler:
+                logging.warning("Netz-Server startet nicht: %s", fehler)
+
+    def ipad_koppeln(self) -> dict:
+        """Knopf am MacBook: Netz-Server an (falls aus) und 5 Minuten Kopplungsfenster mit PIN."""
+        if self.server is None:
+            self.einschalten()
+        self.kopplung.fenster_oeffnen()
+        return self.ipad_zustand()
+
+    def ipad_links(self, pin: Optional[str] = None) -> list:
+        if self.server is None:
+            return []
+        if self._name is None:
+            self._name = rechnername() or ""
+        frage = f"?pin={pin}" if pin else ""
+        links = []
+        if self._name:
+            links.append({"art": "name", "link": f"http://{self._name}.local:{self.port}/pult/{frage}"})
+        links += [{"art": "ip", "link": f"http://{a}:{self.port}/pult/{frage}"} for a in lan_adressen()]
+        return links
+
+    def ipad_zustand(self) -> dict:
+        fenster = self.kopplung.fenster()
+        links = self.ipad_links(fenster["pin"] if fenster["offen"] else None)
+        qr = None
+        if links:
+            link = links[0]["link"]
+            if self._qr[0] != link:
+                self._qr = (link, qr_svg(link))
+            qr = self._qr[1]
+        return {"an": self.server is not None, "port": self.port, "links": links, "qr": qr, "fenster": fenster,
+                "geraete": self.kopplung.liste(), "verbunden": self.hub.anzahl(), "beim_start": self.beim_start(),
+                "fehler": self.fehler}
 
     @staticmethod
     def _neue_pin() -> str:
@@ -238,6 +324,51 @@ class Fernbedienung:
         @app.get("/")
         def seite():
             return FileResponse(daten.PROJEKT / "web" / "fern.html")
+
+        # --- iPad-Pult: Seite und Dateien (ohne Schlüssel, darin steht nichts Geheimes) ---------------
+
+        @app.get("/pult")
+        @app.get("/pult/")
+        def pult_seite():
+            html = (TABLET / "index.html").read_text("utf-8").replace("{{VERSION}}", VERSION)
+            return HTMLResponse(html)
+
+        @app.get("/pult/static/{pfad:path}")
+        def pult_datei(pfad: str):
+            try:
+                ziel = _datei_aus(TABLET, pfad)
+            except FileNotFoundError:
+                return JSONResponse({"fehler": "Gibt es nicht."}, status_code=404)
+            return Response(ziel.read_bytes(), media_type=MEDIEN.get(ziel.suffix, "application/octet-stream"))
+
+        @app.get("/gemeinsam/{pfad:path}")
+        def gemeinsame_datei(pfad: str):
+            try:
+                ziel = _datei_aus(GEMEINSAM, pfad)
+            except FileNotFoundError:
+                return JSONResponse({"fehler": "Gibt es nicht."}, status_code=404)
+            return Response(ziel.read_bytes(), media_type=MEDIEN.get(ziel.suffix, "application/octet-stream"))
+
+        @app.get("/pult/manifest.webmanifest")
+        def manifest():
+            return JSONResponse({
+                "name": "Lichtpult", "short_name": "Lichtpult", "start_url": "/pult/", "scope": "/pult/",
+                "display": "standalone", "orientation": "landscape", "background_color": "#000000",
+                "theme_color": "#000000",
+                "icons": [{"src": "/pult/static/symbol-192.png", "sizes": "192x192", "type": "image/png"},
+                          {"src": "/pult/static/symbol-512.png", "sizes": "512x512", "type": "image/png"}]},
+                media_type="application/manifest+json")
+
+        @app.post("/pult/koppeln")
+        def pult_koppeln(anfrage: Request, auftrag: dict = Body(...)):
+            adresse = anfrage.client.host if anfrage.client else "?"
+            token = fern.kopplung.koppeln(str(auftrag.get("pin", "")), str(auftrag.get("name", "iPad")), adresse)
+            fern.show.rueckblick.ereignis("fernbedienung", handy="iPad gekoppelt")
+            return {"token": token}
+
+        @app.websocket("/pult/ws")
+        async def pult_ws(websocket: WebSocket):
+            await fern.hub.verbinden(websocket)
 
         @app.post("/fern/anmelden")
         def anmelden(anfrage: Request, auftrag: dict = Body(...)):

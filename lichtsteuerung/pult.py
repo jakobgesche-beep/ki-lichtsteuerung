@@ -21,6 +21,8 @@ from __future__ import annotations
 
 import copy
 import math
+import time
+from collections import deque
 from pathlib import Path
 from typing import Optional
 
@@ -439,6 +441,7 @@ class Pult:
         self._speichern_ab: Optional[float] = None
         self.zaehler = 0
         self.meldungen = []
+        self.hinweise = deque(maxlen=20)   # kurze Hinweise für die Bedienung: (Zeit, Text), z. B. „Fader war auf 0“
         self.effekte = None
         self.letzte_zeit: Optional[float] = None
         # Show-Tasten: ein eigener Executor (nicht unter den acht), dazu Halten und Tap
@@ -523,7 +526,7 @@ class Pult:
             # Fader stand unten: Go würde unsichtbar starten. Wie ein Motorfader: hochfahren und Bescheid sagen.
             executor.fader = 1.0
             self._speichern_ab = jetzt + 1.5
-            self.meldungen.append(f"Fader {nummer} stand auf 0 und ist jetzt auf 100 %.")
+            self.hinweis(f"Fader {nummer} stand auf 0 und ist jetzt auf 100 %.", jetzt)
         self.haupt = nummer - 1
         song = getattr(self.show, "song", None)
         if executor.zeitcode == "song" and song is not None and song.laeuft_auf(nummer):
@@ -637,6 +640,13 @@ class Pult:
             executor.belegen(None)
         self._tempo_anwenden()
         self.belegung_speichern()
+
+    def hinweis(self, text: str, jetzt: Optional[float] = None) -> None:
+        self.hinweise.append((time.monotonic() if jetzt is None else jetzt, text))
+
+    def aktuelle_hinweise(self, jetzt: Optional[float] = None, dauer_s: float = 6.0) -> list:
+        jetzt = time.monotonic() if jetzt is None else jetzt
+        return [text for zeit, text in self.hinweise if jetzt - zeit < dauer_s]
 
     def tasten_fuer(self, executor: Executor) -> dict:
         """Was die drei Tasten eines Executors gerade machen (eigene Belegung oder Standard).

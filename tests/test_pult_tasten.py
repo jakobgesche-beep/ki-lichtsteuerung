@@ -35,7 +35,7 @@ def test_go_auf_fader_0_faehrt_ihn_hoch(show):
     pult.executor(2).fader = 0.0                           # wie beim Nutzer: Fader stand unten
     pult.taste(2, "toggle", 5.0)
     assert pult.executor(2).fader == 1.0 and pult.executor(2).index == 0
-    assert any("stand auf 0" in m for m in pult.meldungen)
+    assert any("stand auf 0" in m for m in pult.aktuelle_hinweise(5.5))
 
 
 def test_standard_tasten_und_toggle(show):
