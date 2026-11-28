@@ -18,6 +18,7 @@ Sicherheit:
 from __future__ import annotations
 
 import hmac
+from pathlib import Path
 import io
 import logging
 import secrets
@@ -66,15 +67,54 @@ def rechnername() -> Optional[str]:
 
 
 def _datei_aus(ordner, pfad: str):
-    """Eine Datei aus dem Ordner, nie darüber hinaus (kein ../)."""
-    ziel = (ordner / pfad).resolve()
-    if ordner.resolve() not in ziel.parents or not ziel.is_file():
+    """Eine Datei aus dem Ordner, nie darüber hinaus (kein ../, kein absoluter Pfad).
+
+    Absichtlich ohne resolve(): In der Mac-App liegen die Dateien hinter Symlinks (Contents/Frameworks →
+    Contents/Resources). Mit resolve() sah jede Datei so aus, als läge sie außerhalb (Fehler in 2.5.0)."""
+    teile = Path(str(pfad).replace("\\", "/")).parts
+    if not teile or Path(pfad).is_absolute() or any(t in ("..", "") or ":" in t for t in teile):
+        raise FileNotFoundError(pfad)
+    ziel = Path(ordner, *teile)
+    if not ziel.is_file():
         raise FileNotFoundError(pfad)
     return ziel
 
 
+NAMEN_NEU_S = 30.0             # so lange gelten die über den Rechnernamen gefundenen Adressen
+NAMEN_WARTEN_S = 0.3           # so lange wartet eine Anfrage höchstens auf die Namensauflösung
+_namen = {"zeit": None, "liste": [], "faden": None}
+_namen_sperre = threading.Lock()
+
+
+def _namen_nachschlagen() -> None:
+    try:
+        liste = [info[4][0] for info in socket.getaddrinfo(socket.gethostname(), None, socket.AF_INET)]
+    except (OSError, UnicodeError):
+        liste = []
+    with _namen_sperre:
+        _namen.update(zeit=time.monotonic(), liste=liste)
+
+
+def _namens_adressen(warten_s: float = NAMEN_WARTEN_S) -> list:
+    """Adressen über den Rechnernamen. Das kann hängen: ohne DNS im Router (Saal ohne Internet) oder auf den
+    Mac-Bau-Rechnern bei GitHub mehrere Sekunden lang (daran scheiterte der Selbsttest von 2.5.0). Darum im
+    Hintergrund, mit Zwischenspeicher, und eine Anfrage wartet höchstens kurz darauf."""
+    neu = None
+    with _namen_sperre:
+        veraltet = _namen["zeit"] is None or time.monotonic() - _namen["zeit"] >= NAMEN_NEU_S
+        faden = _namen["faden"]
+        if veraltet and (faden is None or not faden.is_alive()):
+            neu = threading.Thread(target=_namen_nachschlagen, name="Rechnername", daemon=True)
+            _namen["faden"] = neu
+            neu.start()
+    if neu is not None and warten_s > 0:
+        neu.join(warten_s)          # nur wer die Suche startet, wartet kurz; alle anderen nehmen den letzten Stand
+    with _namen_sperre:
+        return list(_namen["liste"])
+
+
 def lan_adressen() -> list:
-    """Die Adressen dieses Rechners im Netz (WLAN, Kabel), die beste zuerst."""
+    """Die Adressen dieses Rechners im Netz (WLAN, Kabel), die beste zuerst. Immer schnell (höchstens ~0,3 s)."""
     adressen = []
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as probe:
@@ -82,13 +122,9 @@ def lan_adressen() -> list:
             adressen.append(probe.getsockname()[0])
     except OSError:
         pass
-    try:
-        for info in socket.getaddrinfo(socket.gethostname(), None, socket.AF_INET):
-            adresse = info[4][0]
-            if adresse not in adressen:
-                adressen.append(adresse)
-    except OSError:
-        pass
+    for adresse in _namens_adressen():
+        if adresse not in adressen:
+            adressen.append(adresse)
     return [a for a in adressen if not a.startswith("127.") and not a.startswith("0.")]
 
 

@@ -12,7 +12,10 @@ APP=dist/Lichtsteuerung.app
 codesign --force --deep -s - "$APP"
 codesign --verify --deep "$APP"
 plutil -extract CFBundleShortVersionString raw "$APP/Contents/Info.plist" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'
-LICHT_DATEN="$(mktemp -d)" "$APP/Contents/MacOS/Lichtsteuerung" --selbsttest --port 8391
+DATEN="$(mktemp -d)"
+if ! LICHT_DATEN="$DATEN" "$APP/Contents/MacOS/Lichtsteuerung" --selbsttest --port 8391; then
+  echo "Selbsttest fehlgeschlagen. Logbuch:"; tail -40 "$DATEN/logbuch.txt" 2>/dev/null; exit 1
+fi
 ditto -c -k --keepParent "$APP" "dist/Lichtsteuerung-$ARCH.zip"
 mkdir dist/dmg
 cp -R "$APP" dist/dmg/

@@ -196,3 +196,45 @@ def test_port_bleibt_nach_schnellem_neustart_gleich(show):
     finally:
         fern.ausschalten()
     assert fernbedienung._freier_port("127.0.0.1", port) == port
+
+
+def test_dateien_hinter_symlinks_wie_in_der_mac_app(tmp_path):
+    """In der Mac-App sind die Dateien Symlinks nach Contents/Resources. Sie müssen trotzdem ausgeliefert werden,
+    aber ../ und absolute Pfade nie."""
+    from lichtsteuerung.fernbedienung import _datei_aus
+    echt = tmp_path / "Resources" / "tablet"
+    echt.mkdir(parents=True)
+    (echt / "app.js").write_text("x")
+    ordner = tmp_path / "Frameworks" / "tablet"
+    ordner.mkdir(parents=True)
+    (ordner / "app.js").symlink_to(echt / "app.js")
+    assert _datei_aus(ordner, "app.js").read_text() == "x"
+    for boese in ("../Resources/tablet/app.js", "/etc/passwd", "..\\\\x", "a/../../b", ""):
+        with pytest.raises(FileNotFoundError):
+            _datei_aus(ordner, boese)
+
+
+def test_adressen_auch_bei_haengender_namensaufloesung_schnell(monkeypatch):
+    """Auf den Mac-Bau-Rechnern (und im Saal ohne DNS) hängt die Suche über den Rechnernamen sekundenlang.
+    Die Seite fürs iPad und „Netz an“ dürfen darauf nicht warten (Selbsttest 2.5.0 lief deshalb in die Zeitgrenze)."""
+    import socket
+    import time
+    from lichtsteuerung import fernbedienung
+    echt = socket.getaddrinfo
+
+    def haengt(host, *argumente, **schluessel):
+        if host == socket.gethostname():
+            time.sleep(3.0)
+            return [(socket.AF_INET, socket.SOCK_STREAM, 6, "", ("192.168.50.7", 0))]
+        return echt(host, *argumente, **schluessel)
+
+    monkeypatch.setattr(socket, "getaddrinfo", haengt)
+    monkeypatch.setitem(fernbedienung._namen, "zeit", None)
+    monkeypatch.setitem(fernbedienung._namen, "liste", [])
+    monkeypatch.setitem(fernbedienung._namen, "faden", None)
+    start = time.monotonic()
+    for _ in range(5):
+        fernbedienung.lan_adressen()
+    assert time.monotonic() - start < 1.0
+    fernbedienung._namen["faden"].join(5.0)          # kommt die Antwort später, ist sie beim nächsten Mal da
+    assert "192.168.50.7" in fernbedienung.lan_adressen()
