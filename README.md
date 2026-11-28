@@ -199,6 +199,23 @@ Sicherung gehen nur am MacBook. Die Verbindung ist nicht verschlüsselt: nur im 
 Die **Handy-Fernbedienung** (Show-Seite, nur Show-Tasten) gibt es weiterhin. `./start.command --netz` macht dagegen die
 ganze Mac-Oberfläche ohne Passwort im Netz erreichbar: nur zum Entwickeln.
 
+## Ton vom X32 (ab 2.5.1)
+
+Am besten hört die Musik-Erkennung den Ton direkt vom X32 über USB (sauberer als ein Mikrofon im Saal).
+
+1. X32 per USB-Kabel mit dem MacBook verbinden. Auf **Live** als Quelle **Eingang: X-USB** wählen.
+2. **„Kanäle vom X32 …“** öffnet den Kanal-Finder: alle USB-Kanäle mit Pegel. Die Band kurz spielen lassen und jedem
+   wichtigen Kanal seine Rolle geben:
+   - **Summe (Main L/R):** was die Musik-Erkennung hört. Am X32 z. B. Routing → Out 15/16 = Main L/R und
+     Card Out 9–16 = „Out 9–16“, dann liegt die Summe auf USB 15 und 16.
+   - **Bassdrum, Snare:** machen das Schlagzeug-Solo sicher (dann knallt das Licht).
+   - **Gesang, Rednerpult:** machen Rede sicher (Mikro an, Band still = Ansage, ruhiges Licht).
+   - **Band (weitere):** z. B. Bass oder Keys; spielen sie, ist es keine Rede.
+3. **Vorlauf:** leer lassen (automatisch 60 ms bei X32-USB). Nur ändern, wenn das Licht sichtbar zu spät oder zu früh kommt.
+
+Die Einzelkanäle kommen vor dem Fader. Jede Rolle misst ihren eigenen Grundpegel, feste Pegel muss niemand einstellen.
+Fehlt eine Rolle, arbeitet die Erkennung wie vorher nur mit der Summe. Die Wahl wird gemerkt.
+
 ## Neue Version veröffentlichen
 
 1. In `lichtsteuerung/version.py` die Nummer erhöhen, zum Beispiel auf `1.1.0`, und committen.

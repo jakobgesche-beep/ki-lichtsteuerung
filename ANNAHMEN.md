@@ -279,3 +279,22 @@ Wunsch der Technik-AG: „alles über die Claude-API“ (Erkennung und Programmi
   `adresse_einstellen` oder `lichtsteuerung/adressierung.py`); ohne Angabe 9 Adress-Schalter plus Display-Schreibweise.
 - **Profil Weihnachtszauber:** wie Weihnachten, aber beat_reaktion 0,6 und Bewegung voll. Strobo bleibt aus.
 - **Nicht getestet** bis zum Aufbau: echtes iPad (nur WebKit-Nachbildung), WLAN am Ort, Bonjour-Name im Router-Netz.
+
+## Ton vom X32: Kanal-Rollen (ab 2.5.1)
+
+- **Rollen:** Summe, Bassdrum, Snare, Gesang, Rednerpult, Band. Der Eingang öffnet alle Kanäle des Geräts (höchstens 32)
+  und gibt jeder Rolle ihren eigenen Block; jede Rolle misst Grundpegel und Spitze selbst („spielt“ = 15 dB über dem
+  eigenen Grundpegel). Grund: Die USB-Kanäle kommen vor dem Fader, ihre Pegel sind an jedem Abend anders.
+- **Rede sicher:** Mikro (Gesang/Rednerpult) aktiv und Schlagzeug/Band seit 1,5 s still. Hört das Gesangsmikro nur das
+  Schlagzeug mit (Übersprechen), springt sein Pegel genau mit den Schlägen (Korrelation ≥ 0,5): Das zählt nicht als Stimme.
+- **Schlagzeug-Solo:** mindestens 2,5 Schläge pro Sekunde auf Bassdrum/Snare, keine Stimme, Band still, 2 s lang.
+  Dann mindestens Stärke 2 (das Licht knallt).
+- **Applaus** zählt nicht, solange die Band spielt.
+- **Rhythmus-Mischung (Bassdrum/Snare in den Takt-Folger) ist aus:** gemessen mit künstlichen Songs (6 Stile, viel Hall,
+  sehr lautes Publikum) Beats 94,6 → 95,8 %, aber bei EDM rutschte die Eins um einen Schlag. Mit sauberer Summe vom X32
+  sitzt der Takt ohnehin bei 97–99 %. Schalter: `RHYTHMUS_MISCHEN` in `lichtsteuerung/audio/rollen.py`.
+- **Nicht getestet** bis zum Aufbau: echtes X32 (Kanal-Zuordnung, Pegel, Latenz). Geprüft nur mit nachgebildeten
+  Mehrkanal-Eingängen und künstlichen Einzelspuren (`werkzeuge/testmusik.py`, `tests/test_rollen.py`).
+- **Selbsttest der Mac-App:** Die Suche nach der eigenen Adresse über den Rechnernamen hing auf den Mac-Bau-Rechnern
+  bei GitHub sekundenlang (Selbsttest 2.5.0 scheiterte). Sie läuft jetzt im Hintergrund mit Zwischenspeicher; eine
+  Anfrage wartet höchstens 0,3 s. Das hilft auch im Saal, wenn der Router keinen DNS hat.

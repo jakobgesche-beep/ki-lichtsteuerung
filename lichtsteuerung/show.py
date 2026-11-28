@@ -68,6 +68,25 @@ GERAET_TEST_S = 15 * 60.0   # "Ein Gerät testen" darf länger dauern (Anleitung
 SCHLAF_AB_S = 5.0          # springt die Wanduhr so viel weiter als die Programm-Uhr, hat der Mac geschlafen
 
 
+def rollen_pruefen(rollen) -> dict:
+    """Kanal-Rollen vom X32 (Kanal-Finder): nur bekannte Rollen, Kanäle 1 bis 64."""
+    from .audio.rollen import ROLLEN
+    if not rollen:
+        return {}
+    if not isinstance(rollen, dict):
+        raise ValueError("Rollen müssen {Rolle: [Kanäle]} sein.")
+    ergebnis = {}
+    for rolle, kanaele in rollen.items():
+        if rolle not in ROLLEN or rolle == "summe":
+            raise ValueError(f"Unbekannte Rolle {rolle!r}.")
+        liste = [int(k) for k in (kanaele or [])]
+        if any(not 1 <= k <= 64 for k in liste):
+            raise ValueError("Kanäle gehen von 1 bis 64.")
+        if liste:
+            ergebnis[rolle] = tuple(sorted(set(liste)))
+    return ergebnis
+
+
 def vorlauf_fuer(geraet_name: str, eigener_ms: Optional[int] = None) -> float:
     """Wie viel früher das Licht einen Beat zeigen soll (Sekunden). Ton übers X32-USB ist schneller da als
     über ein Mikrofon im Saal (dort kommen noch rund 30–45 ms Schallweg dazu)."""
@@ -547,10 +566,14 @@ class Show:
                 auftrag = {"art": "datei", "name": name}
             elif art == "eingang":
                 kanaele = tuple(int(k) for k in (auftrag.get("kanaele") or (1,)))
-                quelle = quellen.Eingang(auftrag.get("geraet"), kanaele, name=auftrag.get("name"), api=auftrag.get("api"))
+                rollen = rollen_pruefen(auftrag.get("rollen"))
+                quelle = quellen.Eingang(auftrag.get("geraet"), kanaele, name=auftrag.get("name"), api=auftrag.get("api"),
+                                         rollen=rollen)
                 self.audio.vorlauf_setzen(vorlauf_fuer(quelle.geraet_name, self.vorlauf_ms))
                 self.audio.starten(quelle, f"Eingang: {quelle.geraet_name}")
                 auftrag = {"art": "eingang", "name": quelle.geraet_name, "api": quelle.api_name, "kanaele": list(kanaele)}
+                if rollen:
+                    auftrag["rollen"] = {r: list(k) for r, k in rollen.items()}
             else:
                 raise ValueError(f"Unbekannte Audioquelle: {art}")
         except quellen.AudioFehler as fehler:

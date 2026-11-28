@@ -218,13 +218,17 @@ class Umrechner:
 
 
 class Eingang:
-    """Mikrofon oder X32. Beim X32 wählt `kanaele` das Paar aus (zum Beispiel 31 und 32).
+    """Mikrofon oder X32. Beim X32 wählt `kanaele` die Summe aus (zum Beispiel 31 und 32).
+
+    `rollen` (nur X32-USB): weitere Kanäle mit Rolle, zum Beispiel {"bassdrum": [1], "rednerpult": [12]}.
+    Ihre Blöcke liegen nach jedem lies() in `letzte_rollen` (gleich lang wie der Summen-Block).
+    Gemessen wird der Pegel aller Kanäle des Geräts (bis 32): für den Kanal-Finder (`pegel_liste`).
 
     Öffnet mit 44,1 kHz. Kann das Gerät das nicht, nimmt es seine eigene Abtastrate und rechnet um.
     """
 
     def __init__(self, geraet: Optional[int] = None, kanaele: tuple = (1,), name: Optional[str] = None,
-                 api: Optional[str] = None):
+                 api: Optional[str] = None, rollen: Optional[dict] = None):
         try:
             sd = _sounddevice()
         except Exception as fehler:
@@ -241,8 +245,17 @@ class Eingang:
         except Exception as fehler:
             raise AudioFehler(f"Audio-Eingang nicht gefunden: {fehler}") from fehler
         self.kanaele = tuple(kanaele)
+        self.rollen = {r: tuple(int(k) for k in ks) for r, ks in (rollen or {}).items() if ks}
         self.warteschlange = queue.Queue(maxsize=WARTESCHLANGE)
         self.auswahl = [k - 1 for k in self.kanaele]
+        self.rollen_index = {r: [k - 1 for k in ks] for r, ks in self.rollen.items()}
+        gebraucht = max([max(self.kanaele)] + [max(ks) for ks in self.rollen.values()])
+        geraet_kanaele = int(info.get("max_input_channels") or gebraucht)
+        self.offene_kanaele = max(gebraucht, min(geraet_kanaele, 32))
+        self.pegel = np.zeros(self.offene_kanaele, np.float32)      # Spitzenpegel je Kanal (fällt langsam)
+        self.rollen_puffer = {r: np.zeros(0, np.float32) for r in self.rollen}
+        self.rollen_umrechner: dict = {}
+        self.letzte_rollen: Optional[dict] = None
         # Zum Nachsehen, wenn der Ton wegbleibt (steht im Logbuch und im Konzert-Check)
         self.verloren = 0                    # Blöcke, die wegen Rückstau verworfen wurden
         self.luecken = 0                     # Pausen > 0,1 s zwischen zwei Lieferungen des Geräts
@@ -261,19 +274,33 @@ class Eingang:
             if status:
                 self.status_meldungen += 1
                 self.letzter_status = str(status)
+            effektiv = np.sqrt(np.mean(np.square(daten), axis=0))
+            self.pegel = np.maximum(effektiv, self.pegel * 0.85)
             mono = daten[:, self.auswahl].mean(axis=1)
+            rollen_neu = {r: daten[:, idx].mean(axis=1) for r, idx in self.rollen_index.items()}
             if self.umrechner is not None:
                 mono = self.umrechner(mono)
+                rollen_neu = {r: self.rollen_umrechner[r](x) for r, x in rollen_neu.items()}
             self.puffer = np.concatenate([self.puffer, mono.astype(np.float32)])
+            for r, x in rollen_neu.items():
+                self.rollen_puffer[r] = np.concatenate([self.rollen_puffer[r], x.astype(np.float32)])
             while len(self.puffer) >= BLOCK:
                 block, self.puffer = self.puffer[:BLOCK].copy(), self.puffer[BLOCK:]
+                teile = None
+                if self.rollen_puffer:
+                    teile = {}
+                    for r in self.rollen_puffer:
+                        stueck = self.rollen_puffer[r][:BLOCK]
+                        if len(stueck) < BLOCK:
+                            stueck = np.pad(stueck, (0, BLOCK - len(stueck)))
+                        teile[r], self.rollen_puffer[r] = stueck.copy(), self.rollen_puffer[r][BLOCK:]
                 try:
-                    self.warteschlange.put_nowait(block)
+                    self.warteschlange.put_nowait((block, teile))
                 except queue.Full:
                     self.verloren += 1     # Lieber einen Block verlieren als hinterherhinken (die Uhr erfährt es).
 
         def oeffnen(rate):
-            return sd.InputStream(device=geraet, channels=max(self.kanaele), samplerate=rate, blocksize=0,
+            return sd.InputStream(device=geraet, channels=self.offene_kanaele, samplerate=rate, blocksize=0,
                                   dtype="float32", callback=angekommen, latency="low", extra_settings=zusatz)
 
         try:
@@ -284,6 +311,7 @@ class Eingang:
                 if abs(eigene - ABTASTRATE) < 1:
                     raise
                 self.umrechner = Umrechner(eigene)
+                self.rollen_umrechner = {r: Umrechner(eigene) for r in self.rollen}    # gleich lange Blöcke wie die Summe
                 self.strom = oeffnen(eigene)
             self.strom.start()
         except Exception as fehler:
@@ -291,9 +319,14 @@ class Eingang:
 
     def lies(self) -> np.ndarray:
         try:
-            return self.warteschlange.get(timeout=NICHTS_KOMMT_S)
+            block, self.letzte_rollen = self.warteschlange.get(timeout=NICHTS_KOMMT_S)
+            return block
         except queue.Empty:
             raise AudioFehler(f"Vom Audio-Eingang kommt nichts mehr ({self.diagnose()}).") from None
+
+    def pegel_liste(self) -> list:
+        """Für den Kanal-Finder: Pegel jedes Kanals in dB (Spitze der letzten Zeit)."""
+        return [round(float(20 * np.log10(max(w, 1e-6))), 1) for w in self.pegel]
 
     def diagnose(self) -> str:
         """Kurz, warum der Ton fehlen könnte: fürs Logbuch."""
@@ -324,7 +357,7 @@ class Eingang:
         PortAudio neu einlesen. Das beendet nämlich alle offenen Tonströme des Programms."""
         self.schliessen()
         try:
-            return Eingang(kanaele=self.kanaele, name=self.geraet_name, api=self.api_name)
+            return Eingang(kanaele=self.kanaele, name=self.geraet_name, api=self.api_name, rollen=self.rollen)
         except AudioFehler:
             pass
         try:
@@ -333,4 +366,4 @@ class Eingang:
             sd._initialize()
         except Exception:
             pass
-        return Eingang(kanaele=self.kanaele, name=self.geraet_name, api=self.api_name)
+        return Eingang(kanaele=self.kanaele, name=self.geraet_name, api=self.api_name, rollen=self.rollen)

@@ -15,6 +15,8 @@ export function liveSeite(wurzel) {
         <section class="fenster"><header>Ton <span id="beat" class="beat"></span></header>
           <div class="inhalt">
             <label>Quelle <select id="quelle"></select></label>
+            <p class="zeile"><button id="kanaele-oeffnen">Kanäle vom X32 …</button>
+              <span class="leise" id="kanaele-text"></span></p>
             <input id="datei" type="file" accept="audio/*" hidden>
             <div class="leise" id="ton"></div>
             <div class="pegel"><span>Bass</span><i id="m-bass"></i></div>
@@ -129,6 +131,69 @@ export function liveSeite(wurzel) {
   });
   feld("automatik").onchange = () => senden("/automatik", { an: feld("automatik").checked });
   feld("quelle").onchange = quelleWaehlen;
+  feld("kanaele-oeffnen").onclick = kanalFinder;
+
+  // Kanal-Finder: Pegel aller USB-Kanäle vom X32, jedem Kanal eine Rolle geben (Summe, Bassdrum, Snare, Gesang …)
+  async function kanalFinder() {
+    const wahl = feld("quelle").value;
+    if (!wahl.startsWith("eingang:")) return alert("Zuerst oben als Quelle den Eingang vom X32 wählen (X-USB).");
+    let stand;
+    try { stand = await api("/audio/pegel"); } catch { return; }
+    const zuRolle = {};
+    for (const k of stand.summe || []) zuRolle[k] = "summe";
+    for (const [rolle, kanaele] of Object.entries(stand.rollen || {})) for (const k of kanaele) zuRolle[k] = rolle;
+    const dialog = document.createElement("dialog");
+    dialog.className = "kanalfinder";
+    const rollen = Object.entries(stand.rollen_namen || {});
+    dialog.innerHTML = `<form method="dialog">
+      <h2>Kanäle vom X32: ${t(stand.geraet || "")}</h2>
+      <p class="leise">Jeder Kanal zeigt seinen Pegel. Lass die Band (oder jemand am Mikro) kurz spielen und sag dann,
+        welcher Kanal was ist. <b>Summe</b> = was die Musik-Erkennung hört (am besten Main L/R).
+        Bassdrum, Snare und Rednerpult/Gesang machen Rede und Schlagzeug-Solo sicher.</p>
+      <p class="leise">Am X32: Routing → Card Out. Standard ist meist Kanal 1–16 = die Mikros (Local In).
+        Für die Summe z. B. Routing → Out 15/16 = Main L/R und Card Out 9–16 = „Out 9–16“, dann ist die Summe auf 15 und 16.
+        Am Pult nachsehen – der Pegel hier zeigt, ob es stimmt.</p>
+      <div class="kanal-liste">${(stand.kanaele || []).map((db, i) => `
+        <div class="kanal-zeile"><b>${i + 1}</b><span class="kanal-pegel"><i data-kanal="${i}"></i></span>
+          <span class="leise" data-db="${i}">${db} dB</span>
+          <select data-rolle="${i + 1}"><option value="">–</option>${rollen.map(([id, name]) =>
+            `<option value="${id}" ${zuRolle[i + 1] === id ? "selected" : ""}>${t(name)}</option>`).join("")}</select></div>`).join("")}</div>
+      <label>Vorlauf (Licht kommt so viel früher als der gehörte Beat, ms; leer = automatisch, jetzt ${stand.vorlauf_jetzt_ms} ms)
+        <input id="vorlauf" type="number" min="0" max="300" step="10" value="${stand.vorlauf_ms ?? ""}" placeholder="automatisch"></label>
+      <p class="zeile ende"><button value="abbrechen">Abbrechen</button><button value="ok" class="haupt" id="kanaele-ok">Übernehmen</button></p>
+    </form>`;
+    document.body.append(dialog);
+    dialog.showModal();
+    const uhr = setInterval(async () => {
+      try {
+        const neu = await api("/audio/pegel");
+        neu.kanaele.forEach((db, i) => {
+          const balken = dialog.querySelector(`[data-kanal="${i}"]`);
+          if (balken) balken.style.width = `${Math.max(0, Math.min(100, (db + 70) / 70 * 100))}%`;
+          const zahl = dialog.querySelector(`[data-db="${i}"]`);
+          if (zahl) zahl.textContent = `${db} dB`;
+        });
+      } catch {}
+    }, 150);
+    dialog.addEventListener("close", async () => {
+      clearInterval(uhr);
+      if (dialog.returnValue === "ok") {
+        const summe = [], rollen = {};
+        dialog.querySelectorAll("[data-rolle]").forEach((auswahl) => {
+          const kanal = Number(auswahl.dataset.rolle), rolle = auswahl.value;
+          if (!rolle) return;
+          if (rolle === "summe") summe.push(kanal); else (rollen[rolle] ||= []).push(kanal);
+        });
+        const vorlauf = dialog.querySelector("#vorlauf").value;
+        try {
+          await senden("/audio/vorlauf", { ms: vorlauf === "" ? null : Number(vorlauf) });
+          await senden("/audio/quelle", { art: "eingang", geraet: Number(wahl.split(":")[1]), kanaele: summe.length ? summe : [1], rollen });
+          feld("kanaele-text").textContent = `Summe: ${summe.join("+") || "1"}${Object.keys(rollen).length ? " · " + Object.entries(rollen).map(([r, k]) => `${stand.rollen_namen[r]} ${k.join("+")}`).join(", ") : ""}`;
+        } catch {}
+      }
+      dialog.remove();
+    });
+  }
   feld("datei").onchange = dateiHochladen;
   feld("profil").onchange = () => senden(`/profile/${encodeURIComponent(feld("profil").value)}/laden`);
   api("/profile").then(({ namen, aktiv }) => {

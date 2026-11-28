@@ -64,6 +64,8 @@ class TaktFolger:
         self.filter = songanalyse._baender(N_FFT, 40, 30.0, 11000.0)
         self.fenster = np.hanning(N_FFT).astype(np.float32)
         self.puffer = np.zeros(N_FFT // 2, np.float32)       # wie offline: der erste Messpunkt liegt bei 0 s
+        self.puffer_summe = np.zeros(N_FFT // 2, np.float32)  # nur mit Einzelkanälen: Summe allein (für die Eins)
+        self.baender_summe: deque = deque(maxlen=int(LANG_S * songanalyse.RATE))
         self.baender: deque = deque(maxlen=int(LANG_S * songanalyse.RATE))
         self.pegel: deque = deque(maxlen=int(FENSTER_S * songanalyse.RATE))
         self.oktaven: deque = deque(maxlen=OKTAVE_MAL)          # letzte Ergebnisse der Oktav-Prüfung
@@ -104,20 +106,32 @@ class TaktFolger:
 
     # --- Ton rein ----------------------------------------------------------------
 
-    def verarbeite(self, block: np.ndarray):
-        """Gibt (Beat in diesem Block?, Tempo in BPM) zurück."""
+    def verarbeite(self, block: np.ndarray, ton_fuer_akkorde: Optional[np.ndarray] = None):
+        """Gibt (Beat in diesem Block?, Tempo in BPM) zurück.
+
+        ton_fuer_akkorde: Mit Einzelkanälen ist `block` die Rhythmus-Mischung (Summe + Bassdrum + Snare). Die
+        Akkorde für die Eins kommen dann aus der Summe allein – Trommeln haben keine Tonhöhe und würden stören."""
         self.puffer = np.concatenate([self.puffer, block.astype(np.float32)])
+        if ton_fuer_akkorde is not None:
+            self.puffer_summe = np.concatenate([self.puffer_summe, ton_fuer_akkorde.astype(np.float32)])
         while len(self.puffer) >= N_FFT:
             betrag = np.abs(np.fft.rfft(self.puffer[:N_FFT] * self.fenster))
             self.puffer = self.puffer[HOP:]
             with np.errstate(all="ignore"):
                 band = np.log1p(1e4 * ((betrag ** 2) @ self.filter.T))
             self.baender.append(np.nan_to_num(band))
+            if ton_fuer_akkorde is not None and len(self.puffer_summe) >= N_FFT:
+                # Für die Eins zählt nur die Summe (wie ohne Einzelkanäle): Die beigemischte Bassdrum auf jedem
+                # Schlag (EDM) würde die Takt-Eins sonst verwischen.
+                betrag = np.abs(np.fft.rfft(self.puffer_summe[:N_FFT] * self.fenster))
+                self.puffer_summe = self.puffer_summe[HOP:]
+                with np.errstate(all="ignore"):
+                    self.baender_summe.append(np.nan_to_num(np.log1p(1e4 * ((betrag ** 2) @ self.filter.T))))
             self.pegel.append(float(10 * np.log10(np.mean(np.expm1(band) / 1e4) + 1e-12)))
             self.messpunkte += 1
             self.seit_rechnung += 1
         self.proben += len(block)
-        self._tonklassen(block)
+        self._tonklassen(block if ton_fuer_akkorde is None else ton_fuer_akkorde)
         jetzt = self.proben / ABTASTRATE
         if self.seit_rechnung >= RECHNEN_ALLE and len(self.baender) >= MIN_S * songanalyse.RATE:
             self.seit_rechnung = 0
@@ -313,7 +327,8 @@ class TaktFolger:
         if self.rechnungen % OKTAVE_ALLE == 0 and len(lang) >= 0.75 * LANG_S * songanalyse.RATE:
             self._oktave(lang)
         if self.rechnungen % OKTAVE_ALLE == OKTAVE_ALLE // 2 and self.periode:
-            self._eins(lang, jetzt)
+            summe = np.asarray(self.baender_summe, np.float32) if len(self.baender_summe) == len(lang) else lang
+            self._eins(summe, jetzt)
         beats = songanalyse.beats_finden(einsatz, self.tempo) + start
         sicher = beats[beats <= jetzt - SICHER_ABSTAND_S][-8:]
         if len(sicher) < 4:

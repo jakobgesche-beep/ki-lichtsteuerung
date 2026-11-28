@@ -393,6 +393,8 @@ class Engine:
         stufe = self._stufe(staerke)
         if stufe == 0 and m.tempo_bpm > 0 and self.treffer_rate >= RHYTHMUS_TREFFER:
             stufe = 1                   # klarer Rhythmus mit vielen Schlägen ist nie "Ruhe"
+        if getattr(m, "schlagzeug_solo", False):
+            stufe = max(stufe, 2)       # Einzelkanäle: Schlagzeug spielt dicht, keine Stimme – das muss knallen
         if self.look_offen:
             self.energie_langsam = staerke
         # Ein Sprung: von ruhig oder mittel plötzlich auf Höhepunkt, deutlich über dem Schnitt.

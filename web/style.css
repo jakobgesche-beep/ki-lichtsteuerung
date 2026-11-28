@@ -439,3 +439,12 @@ table.ausrichtung td.zeile { gap: 4px; flex-wrap: wrap; }
 .ipad-koppeln { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
 .ipad-koppeln .qr svg { width: 220px; height: 220px; background: #fff; padding: 6px; border-radius: 8px; }
 .ipad-koppeln .pin { font-size: 32px; letter-spacing: 6px; color: var(--auswahl); }
+
+/* Kanal-Finder (Live → Kanäle vom X32) */
+dialog.kanalfinder { width: min(760px, 94vw); background: var(--fenster); color: var(--text); border: 1px solid var(--linie); border-radius: 8px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6); }
+dialog.kanalfinder::backdrop { background: rgba(0, 0, 0, 0.55); }
+dialog.kanalfinder h2 { margin: 0 0 8px; font-size: 16px; }
+.kanal-liste { max-height: 52vh; overflow: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin: 8px 0; }
+.kanal-zeile { display: grid; grid-template-columns: 28px 1fr 64px 130px; gap: 6px; align-items: center; }
+.kanal-pegel { height: 10px; background: #1b1c1f; border-radius: 3px; overflow: hidden; }
+.kanal-pegel i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #2fbf55, #e0a800 75%, #ff453a); transition: width 0.12s; }

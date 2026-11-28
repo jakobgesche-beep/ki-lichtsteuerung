@@ -1083,6 +1083,24 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
         dateien = sorted(p.name for p in ordner.glob("*") if p.suffix.lower() in AUDIO_ENDUNGEN)
         return {"eingaenge": quellen.eingaenge(), "dateien": dateien}
 
+    @app.get("/api/audio/pegel")
+    def audio_pegel():
+        """Kanal-Finder: Pegel aller Kanäle des Eingangs (X32-USB: bis 32) und die Rollen."""
+        from .audio.rollen import ROLLEN
+        return {**show.audio.kanal_pegel(), "rollen_namen": ROLLEN, "vorlauf_ms": show.vorlauf_ms,
+                "vorlauf_jetzt_ms": round(show.audio.vorlauf_s * 1000)}
+
+    @app.post("/api/audio/vorlauf")
+    def audio_vorlauf(auftrag: dict = Body(...)):
+        """Wie viel früher das Licht den Beat zeigt. None = automatisch (X32-USB 60 ms, Mikrofon 100 ms)."""
+        ms = auftrag.get("ms")
+        show.vorlauf_ms = None if ms in (None, "") else max(0, min(300, int(ms)))
+        from .show import vorlauf_fuer
+        show.audio.vorlauf_setzen(vorlauf_fuer(getattr(show.audio.quelle, "geraet_name", ""), show.vorlauf_ms)
+                                  if show.audio_auftrag and show.audio_auftrag.get("art") == "eingang" else 0.0)
+        show._sitzung_speichern()
+        return {"vorlauf_ms": show.vorlauf_ms, "vorlauf_jetzt_ms": round(show.audio.vorlauf_s * 1000)}
+
     @app.post("/api/audio/quelle")
     def audio_quelle(auftrag: dict = Body(...)):
         """Tonquelle wählen. Sie wird gemerkt und nach einem Neustart von selbst wieder geöffnet."""

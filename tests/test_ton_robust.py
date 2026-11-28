@@ -99,7 +99,7 @@ def test_abgerissener_eingang_kommt_von_selbst_wieder():
 
 
 class FalscherEingang:
-    def __init__(self, geraet=None, kanaele=(1,), name=None, api=None):
+    def __init__(self, geraet=None, kanaele=(1,), name=None, api=None, rollen=None):
         self.geraet_name, self.api_name, self.kanaele = name or "X-USB 1-2", api or "Core Audio", kanaele
 
     def lies(self):
@@ -284,3 +284,61 @@ def test_schlaf_landet_im_rueckblick(tmp_path):
     auswertung = show.rueckblick.zusammenfassung(tag)
     assert any(e["art"] == "schlaf" and "100" in e["text"] for e in auswertung["ereignisse"])
     assert any("geschlafen" in h for h in auswertung["hinweise"])
+
+
+def test_rollen_werden_gemerkt_und_geprueft(tmp_path, monkeypatch):
+    monkeypatch.setattr(quellen, "Eingang", FalscherEingang)
+    daten.einrichten(tmp_path / "d")
+    pfade = daten.Pfade(tmp_path / "d", daten.PROJEKT / "catalog")
+    show = Show(pfade)
+    show.audio_quelle_setzen({"art": "eingang", "geraet": 3, "kanaele": [31, 32],
+                              "rollen": {"bassdrum": [1], "rednerpult": [12, 12]}})
+    show.audio.stoppen()
+    assert Show(pfade).audio_auftrag["rollen"] == {"bassdrum": [1], "rednerpult": [12]}
+    with pytest.raises(ValueError):
+        show.audio_quelle_setzen({"art": "eingang", "geraet": 3, "rollen": {"chef": [1]}})
+    with pytest.raises(ValueError):
+        show.audio_quelle_setzen({"art": "eingang", "geraet": 3, "rollen": {"snare": [99]}})
+
+
+def test_eingang_liefert_rollen_bloecke_gleich_lang(monkeypatch):
+    """Ein X32 mit 48 kHz: Summe und Rollen werden gleich umgerechnet und kommen als gleich lange Blöcke."""
+    class Strom:
+        def __init__(self, **k):
+            self.k = k
+        def start(self):
+            pass
+        def stop(self):
+            pass
+        def close(self):
+            pass
+
+    class Sd:
+        def query_devices(self, geraet, art):
+            return {"name": "X-USB", "hostapi": 0, "max_input_channels": 32, "default_samplerate": 48000}
+        def query_hostapis(self, nummer):
+            return {"name": "Core Audio"}
+        def InputStream(self, **k):
+            if k["samplerate"] == 44100:
+                raise RuntimeError("geht nur mit 48 kHz")
+            Sd.strom = Strom(**k)
+            return Sd.strom
+
+    monkeypatch.setattr(quellen, "_sounddevice", lambda: Sd())
+    e = quellen.Eingang(3, (31, 32), rollen={"bassdrum": (1,), "gesang": (5,)})
+    assert Sd.strom.k["channels"] == 32 and e.umrechner is not None
+    t = np.arange(4800) / 48000
+    daten_x32 = np.zeros((4800, 32), np.float32)
+    daten_x32[:, 0] = np.sin(2 * np.pi * 60 * t)          # Bassdrum
+    daten_x32[:, 4] = 0.5 * np.sin(2 * np.pi * 300 * t)   # Gesang
+    for start in range(0, 4800, 480):
+        Sd.strom.k["callback"](daten_x32[start:start + 480], 480, None, None)
+    bloecke = 0
+    while not e.warteschlange.empty():
+        block = e.lies()
+        assert set(e.letzte_rollen) == {"bassdrum", "gesang"}
+        assert all(len(b) == len(block) == BLOCK for b in e.letzte_rollen.values())
+        bloecke += 1
+    assert bloecke >= 7
+    pegel = e.pegel_liste()
+    assert len(pegel) == 32 and pegel[0] > -6 and pegel[4] > -12 and pegel[10] < -60

@@ -58,6 +58,11 @@ class Messwerte:
     applaus: bool = False      # breites Rauschen ohne Töne, eine Weile lang: Klatschen
     eins: bool = False         # dieser Beat ist die Eins im Takt (nur in einem Block wahr, nur wenn sicher erkannt)
     treffer: bool = False      # ein kräftiger Einsatz (Schlagzeug-Schlag, Akkord), nur in einem Block wahr
+    # Nur mit Einzelkanälen vom X32 (siehe audio/rollen.py):
+    rollen: bool = False       # es kommen Einzelkanäle an
+    rede_sicher: bool = False  # Mikro offen und Band still: sicher eine Ansage
+    schlagzeug_solo: bool = False
+    band_aktiv: bool = False
 
 
 class AubioBeatErkennung:
@@ -349,6 +354,7 @@ class Analyse:
         self.treffer_vorher = None
         self.treffer_verlauf = deque(maxlen=int(2 * ABTASTRATE / BLOCK))
         self.seit_treffer = 99.0
+        self.rollen = None                              # RollenAnalyse, sobald Einzelkanäle ankommen
 
     def luecke(self, proben: int) -> None:
         """Verlorene Blöcke: nur die Takt-Uhr muss die Zeit mitzählen (die übrigen Werte gleichen sich von selbst an)."""
@@ -360,9 +366,24 @@ class Analyse:
         if hasattr(self.beat, "neu_anfangen"):
             self.beat.neu_anfangen()
 
-    def verarbeite(self, block: np.ndarray) -> Messwerte:
+    def verarbeite(self, block: np.ndarray, rollen: Optional[dict] = None) -> Messwerte:
         dauer = len(block) / ABTASTRATE
-        beat, tempo = self.beat.verarbeite(block)
+        rollen_werte = None
+        if rollen:
+            # Einzelkanäle vom X32: Bassdrum und Snare stechen für den Takt-Folger heraus, Rede wird sicher
+            if self.rollen is None:
+                from .rollen import RollenAnalyse
+                self.rollen = RollenAnalyse()
+            rollen_werte = self.rollen.verarbeite(block, rollen)
+            from .rollen import RHYTHMUS_MISCHEN
+            takt_ton = (self.rollen.rhythmus(block, rollen)
+                        if RHYTHMUS_MISCHEN and any(n in rollen for n in ("bassdrum", "snare")) else block)
+            if takt_ton is block or not hasattr(self.beat, "ist_uhr"):
+                beat, tempo = self.beat.verarbeite(takt_ton)
+            else:
+                beat, tempo = self.beat.verarbeite(takt_ton, block)
+        else:
+            beat, tempo = self.beat.verarbeite(block)
         if tempo > 0:
             self.tempo = tempo
         self.puffer = np.concatenate([self.puffer[len(block):], block])
@@ -417,6 +438,8 @@ class Analyse:
         leise = self.zeit_still >= RUHE_S
         # Grobe Schätzung. Sicher erkennt es später das X32 (offenes Rednerpult).
         rede = self._rede(pegel, leise, dauer)
+        if rollen_werte is not None and rollen and any(n in rollen for n in ("gesang", "rednerpult")):
+            rede = rollen_werte.rede_sicher            # mit Mikro-Kanal: nicht mehr raten
         if not getattr(self.beat, "ist_uhr", False):      # der Takt-Folger zählt selbst mit, sonst überbrückt die Uhr
             beat = self.uhr.takt(beat, self.tempo, dauer)
         eins = beat and bool(getattr(self.beat, "takt_eins", False))
@@ -435,7 +458,12 @@ class Analyse:
                          energie=min(1.0, self.energie), pegel=pegel, leise=leise and not self.drops.vor_drop,
                          rede=rede and self.drops.spannung < 0.3, spannung=round(self.drops.spannung, 2),
                          vor_drop=self.drops.vor_drop, drop=drop, intensitaet=round(intensitaet, 3),
-                         schlag=schlag and not leise, applaus=applaus, eins=eins, treffer=treffer and not leise)
+                         schlag=schlag and not leise, applaus=applaus and not (rollen_werte and rollen_werte.band_aktiv),
+                         eins=eins, treffer=treffer and not leise,
+                         rollen=rollen_werte is not None,
+                         rede_sicher=bool(rollen_werte and rollen_werte.rede_sicher),
+                         schlagzeug_solo=bool(rollen_werte and rollen_werte.schlagzeug_solo),
+                         band_aktiv=bool(rollen_werte and rollen_werte.band_aktiv))
 
     def _rede(self, pegel: float, leise: bool, dauer: float) -> bool:
         """Spricht gerade jemand (Ansage zwischen den Songs)?"""

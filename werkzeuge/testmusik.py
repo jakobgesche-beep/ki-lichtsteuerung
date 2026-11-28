@@ -54,8 +54,19 @@ def _einfuegen(ziel: np.ndarray, klang: np.ndarray, start: float) -> None:
     ziel[a:b] += klang[: b - a]
 
 
+
+def _spur(ton: np.ndarray, spuren, name: str, klang: np.ndarray, start: float) -> None:
+    """Wie _einfuegen, legt den Klang aber zusätzlich auf seine Einzelspur (falls Spuren gewünscht sind)."""
+    _einfuegen(ton, klang, start)
+    if spuren is not None:
+        if name not in spuren:
+            spuren[name] = np.zeros(len(ton))
+        _einfuegen(spuren[name], klang, start)
+
 def song(stil: str = "rock", tempo: float = 120.0, takte: int = 32, seed: int = 1, drift: float = 0.0,
-         vorlauf_s: float = 1.0) -> tuple:
+         vorlauf_s: float = 1.0, spuren: dict = None) -> tuple:
+    """spuren: ein leeres dict – dann stehen danach die Einzelspuren darin ("bassdrum", "snare"), wie die
+    Mikrofone am Schlagzeug über X32-USB (gleich laut skaliert wie die Summe)."""
     rng = np.random.default_rng(seed)
     grundton = 98.0 * 2 ** (int(rng.integers(0, 12)) / 12)
     folge_a, folge_b = (FOLGEN[i] for i in rng.choice(len(FOLGEN), 2, replace=False))
@@ -91,11 +102,11 @@ def song(stil: str = "rock", tempo: float = 120.0, takte: int = 32, seed: int = 
                     _einfuegen(ton, _hihat(rng, 0.07 if achtel == 0 else 0.045), b + achtel * periode / 3)
                 _einfuegen(ton, _ton([akkord[0] / 2], periode, 0.3 * laut, rng, obertoene=2, abkling=4.0), b)
                 if schlag == 0:
-                    _einfuegen(ton, _kick(rng), b)
+                    _spur(ton, spuren, "bassdrum", _kick(rng), b)
                 elif schlag == 1:
-                    _einfuegen(ton, _kick(rng) * 0.6, b + 2 * periode / 3)
+                    _spur(ton, spuren, "bassdrum", _kick(rng) * 0.6, b + 2 * periode / 3)
                 elif schlag == 2:
-                    _einfuegen(ton, _snare(rng), b)
+                    _spur(ton, spuren, "snare", _snare(rng), b)
                 continue
             if stil in ("akustik", "ballade"):
                 # geschlagene Akkorde: auf jedem Viertel, die Eins etwas stärker
@@ -106,32 +117,37 @@ def song(stil: str = "rock", tempo: float = 120.0, takte: int = 32, seed: int = 
             if ohne_schlagzeug:
                 continue
             if stil == "edm":
-                _einfuegen(ton, _kick(rng), b)
+                _spur(ton, spuren, "bassdrum", _kick(rng), b)
                 _einfuegen(ton, _hihat(rng, 0.12), b + periode / 2)
                 if schlag in (1, 3):
-                    _einfuegen(ton, _snare(rng) * 0.6, b)
+                    _spur(ton, spuren, "snare", _snare(rng) * 0.6, b)
                 continue
             if stil == "punk":
-                _einfuegen(ton, _kick(rng) if schlag % 2 == 0 else _snare(rng), b)
-                _einfuegen(ton, _kick(rng) * 0.7, b + periode / 2)
+                _spur(ton, spuren, "bassdrum", _kick(rng) if schlag % 2 == 0 else _snare(rng), b)
+                _spur(ton, spuren, "bassdrum", _kick(rng) * 0.7, b + periode / 2)
                 _einfuegen(ton, _hihat(rng, 0.1), b)
                 _einfuegen(ton, _hihat(rng, 0.1), b + periode / 2)
                 continue
             if schlag in (0, 2):
-                _einfuegen(ton, _kick(rng), b)
+                _spur(ton, spuren, "bassdrum", _kick(rng), b)
             else:
-                _einfuegen(ton, _snare(rng), b)
+                _spur(ton, spuren, "snare", _snare(rng), b)
             if stil == "pop" and schlag == 2:
-                _einfuegen(ton, _kick(rng) * 0.6, b + periode / 2)
+                _spur(ton, spuren, "bassdrum", _kick(rng) * 0.6, b + periode / 2)
             if stil == "shuffle":
                 _einfuegen(ton, _hihat(rng), b)
                 _einfuegen(ton, _hihat(rng, 0.06), b + periode * 2 / 3)       # Swing-Achtel
                 if schlag in (1, 3):
-                    _einfuegen(ton, _kick(rng) * 0.5, b + periode * 2 / 3)     # punktierte Bassdrum
+                    _spur(ton, spuren, "bassdrum", _kick(rng) * 0.5, b + periode * 2 / 3)     # punktierte Bassdrum
             else:
                 _einfuegen(ton, _hihat(rng), b)
                 _einfuegen(ton, _hihat(rng, 0.06), b + periode / 2)
-    ton = ton / (np.max(np.abs(ton)) + 1e-9) * 0.8
+    faktor = 0.8 / (np.max(np.abs(ton)) + 1e-9)
+    ton = ton * faktor
+    if spuren is not None:
+        for name in ("bassdrum", "snare"):
+            spur = spuren.get(name)
+            spuren[name] = (np.zeros(len(ton)) if spur is None else np.pad(spur, (0, max(0, len(ton) - len(spur))))[:len(ton)] * faktor).astype(np.float32)
     wahr = {"beats": [round(b, 4) for b in beats[:anzahl]], "einsen": [round(b, 4) for b in beats[:anzahl:4]],
             "tempo": tempo, "teile": teile}
     return ton.astype(np.float32), wahr

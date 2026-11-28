@@ -119,7 +119,7 @@ class AudioBetrieb:
                     verloren_gemeldet = verloren
                 if self.aufnahme is not None and len(self.aufnahme) < MAX_AUFNAHME_BLOECKE:
                     self.aufnahme.append(block.copy())
-                werte = analyse.verarbeite(block)
+                werte = analyse.verarbeite(block, getattr(quelle, "letzte_rollen", None))
                 jetzt = time.monotonic()
                 for zuhoerer in [self.zuhoerer] + list(self.mithoerer):
                     if zuhoerer is None:
@@ -174,6 +174,14 @@ class AudioBetrieb:
             logging.warning("Ton holpert: %d Blöcke verworfen, %d Lieferpausen in der letzten Minute (Rechenzeit "
                             "p95 %.1f ms)", max(0, neu_verloren), max(0, neu_luecken), self.rechenzeit_p95_ms())
         bericht.update(zeit=time.monotonic(), verloren=verloren, luecken=luecken)
+
+    def kanal_pegel(self) -> dict:
+        """Für den Kanal-Finder: Pegel aller Kanäle des Eingangs und was die Rollen gerade hören."""
+        quelle = self.quelle
+        analyse = self._analyse
+        return {"geraet": getattr(quelle, "geraet_name", None), "kanaele": quelle.pegel_liste() if hasattr(quelle, "pegel_liste") else [],
+                "summe": list(getattr(quelle, "kanaele", ())), "rollen": {r: list(k) for r, k in getattr(quelle, "rollen", {}).items()},
+                "rollen_pegel": analyse.rollen.pegel() if analyse is not None and analyse.rollen is not None else {}}
 
     def rechenzeit_p95_ms(self) -> float:
         if not self.rechenzeiten:
