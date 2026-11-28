@@ -27,6 +27,12 @@ class Overrides:
             raise ValueError(f"Unbekannte Taste: {taste}")
         setattr(self, taste, not getattr(self, taste))
 
+    def setzen(self, taste: str, an: bool) -> None:
+        """Fest an oder aus (nicht umschalten): Kommt ein Druck übers Netz doppelt an, bleibt es richtig."""
+        if taste not in TASTEN:
+            raise ValueError(f"Unbekannte Taste: {taste}")
+        setattr(self, taste, bool(an))
+
     def anwenden(self, zustand: dict, alle_geraete: list, warm_stellung: Optional[dict] = None) -> dict:
         """warm_stellung: wohin Moving Heads bei Warmweiß zeigen, falls sie kein Ziel haben."""
         warm_stellung = warm_stellung or {}

@@ -281,6 +281,12 @@ PRO_SEITE = 10                  # Fader pro Seite
 ANZAHL_EXECUTOREN = SEITEN * PRO_SEITE
 SONG_NUMMER = 99                # eigener Platz für Song-Start: nimmt keinem Fader etwas weg
 FLASH_MAX_S = 20.0              # eine hängende Flash-Taste geht von selbst aus
+FADER_NULL = 0.02               # so tief = „Fader steht unten“: Go zieht ihn dann auf 100 %
+# Tasten eines Executors (wie die drei Tasten pro Fader am grandMA): was jede Taste macht
+TASTEN_ARTEN = {"go": "Go+", "zurueck": "Go−", "toggle": "An/Aus", "flash": "Flash", "aus": "Aus"}
+TASTEN_PLAETZE = ("oben", "mitte", "unten")
+EXECUTOR_FARBEN = ("#3f7fc0", "#c9a227", "#9b6bd6", "#3aa55c", "#d9534f", "#e07b39", "#2bb3b3", "#d36fb4",
+                   "#8d9196", "#5b6cff", "#9acd32", "#f2c200")
 EXECUTOR_ARTEN = {"sequenz": "Sequenz", "gruppe": "Gruppen-Master", "tempo": "Tempo"}
 # Eigene Presets (wie bei grandMA): gespeicherte Werte einer Feature-Art, zum Beispiel "Lieblingsblau"
 PRESET_ARTEN = {"dimmer": ("helligkeit",), "position": ("position", "punkt", "pan", "tilt"), "farbe": ("farbe",),
@@ -294,6 +300,18 @@ def tempo_faktor(fader: float) -> float:
         return 1.0
     return 2.0 ** ((max(0.0, min(1.0, fader)) - 0.5) * 4.0)
 
+
+
+def tasten_pruefen(tasten) -> dict:
+    """Nur bekannte Plätze und Tasten (aus der Datei oder vom iPad)."""
+    if not isinstance(tasten, dict):
+        raise ValueError("Tastenbelegung muss {oben, mitte, unten} sein.")
+    ergebnis = {}
+    for platz, art in tasten.items():
+        if platz not in TASTEN_PLAETZE or art not in TASTEN_ARTEN:
+            raise ValueError(f"Unbekannte Taste {platz!r}: {art!r}.")
+        ergebnis[platz] = art
+    return ergebnis
 
 class Executor:
     """Ein Platz mit Fader und Tasten. Darauf liegt eine Sequenz, ein Gruppen-Master oder der Tempo-Fader.
@@ -321,6 +339,8 @@ class Executor:
         self.flash_startete = False   # Flash hat die Sequenz eingeschaltet: Loslassen schaltet sie wieder aus
         self.sofort = False           # diese Überblendung ohne Zeit (Flash)
         self.stumm = False            # Gruppen-Master: Gruppe aus
+        self.tasten: Optional[dict] = None   # eigene Tastenbelegung {"oben": "go", …}, None = Standard
+        self.farbe: Optional[str] = None     # eigene Farbe des Executors (wie am Pult), None = nach Art
 
     @property
     def aktiv(self) -> bool:
@@ -331,6 +351,8 @@ class Executor:
         self.art = "sequenz" if sequenz else None
         self.gruppe, self.label, self.zeitcode, self.stumm = None, None, False, False
         self.flash_seit, self.flash_startete, self.sofort = None, False, False
+        if sequenz is None:
+            self.tasten, self.farbe = None, None
 
     def belegen_gruppe(self, gruppe: str) -> None:
         self.belegen(None)
@@ -351,6 +373,10 @@ class Executor:
             eintrag["gruppe"] = self.gruppe
         if self.label:
             eintrag["label"] = self.label
+        if self.tasten:
+            eintrag["tasten"] = dict(self.tasten)
+        if self.farbe:
+            eintrag["farbe"] = self.farbe
         return eintrag
 
     def wirksam(self) -> float:
@@ -455,6 +481,11 @@ class Pult:
                 executor.belegen(None)
                 continue
             executor.label = eintrag.get("label")
+            try:
+                executor.tasten = tasten_pruefen(eintrag["tasten"]) if eintrag.get("tasten") else None
+            except ValueError:
+                executor.tasten = None             # kaputte Belegung in der Datei: Standard-Tasten
+            executor.farbe = eintrag["farbe"] if eintrag.get("farbe") in EXECUTOR_FARBEN else None
             if isinstance(eintrag.get("fader"), (int, float)):
                 executor.fader = max(0.0, min(1.0, float(eintrag["fader"])))
         self._tempo_anwenden()
@@ -488,6 +519,11 @@ class Pult:
             return
         if executor.sequenz is None:
             raise ValueError(f"Auf Fader {nummer} liegt nichts. Erst eine Sequenz zuweisen (Assign) oder speichern (Store).")
+        if schritt > 0 and executor.fader <= FADER_NULL and not executor.zeitcode:
+            # Fader stand unten: Go würde unsichtbar starten. Wie ein Motorfader: hochfahren und Bescheid sagen.
+            executor.fader = 1.0
+            self._speichern_ab = jetzt + 1.5
+            self.meldungen.append(f"Fader {nummer} stand auf 0 und ist jetzt auf 100 %.")
         self.haupt = nummer - 1
         song = getattr(self.show, "song", None)
         if executor.zeitcode == "song" and song is not None and song.laeuft_auf(nummer):
@@ -588,6 +624,8 @@ class Pult:
         self.merke_belegung(zusammen=zusammen)
         if art == "sequenz":
             executor.belegen(sequenz)
+            if executor.fader <= FADER_NULL:
+                executor.fader = 1.0           # sonst zeigt Go auf diesem Fader nichts (Fehler bis 2.4.2)
         elif art == "gruppe":
             executor.belegen_gruppe(ziel)
         elif art == "tempo":
@@ -599,6 +637,66 @@ class Pult:
             executor.belegen(None)
         self._tempo_anwenden()
         self.belegung_speichern()
+
+    def tasten_fuer(self, executor: Executor) -> dict:
+        """Was die drei Tasten eines Executors gerade machen (eigene Belegung oder Standard).
+
+        Standard wie beim spontanen Fahren am grandMA: oben An/Aus (bei mehreren Cues: Go+), Mitte Flash,
+        unten Aus. Gruppen-Master: An/Aus, Flash, Aus. Tempo: Tippen (Go), Tippen, Normal (Aus)."""
+        standard = {"oben": "toggle", "mitte": "flash", "unten": "aus"}
+        if executor.art == "sequenz" and executor.sequenz and len(executor.sequenz["cues"]) > 1:
+            standard["oben"] = "go"
+        if executor.art == "tempo":
+            standard = {"oben": "go", "mitte": "flash", "unten": "aus"}
+        return {**standard, **(executor.tasten or {})}
+
+    def tasten_setzen(self, nummer: int, tasten: Optional[dict]) -> None:
+        executor = self.executor(nummer)
+        if executor.art is None:
+            raise ValueError(f"Auf Fader {nummer} liegt nichts.")
+        self.merke_belegung()
+        executor.tasten = tasten_pruefen(tasten) if tasten else None
+        self.belegung_speichern()
+
+    def farbe_setzen(self, nummer: int, farbe: Optional[str]) -> None:
+        executor = self.executor(nummer)
+        if executor.art is None:
+            raise ValueError(f"Auf Fader {nummer} liegt nichts.")
+        if farbe and farbe not in EXECUTOR_FARBEN:
+            raise ValueError("Diese Farbe gibt es für Executoren nicht.")
+        self.merke_belegung()
+        executor.farbe = farbe or None
+        self.belegung_speichern()
+
+    def taste(self, nummer: int, taste: str, jetzt: float, an: bool = True, erwartet: Optional[bool] = None) -> None:
+        """Eine Executor-Taste wie am Pult. toggle: an, wenn aus, sonst aus. `erwartet` (für Netz-Geräte):
+        So soll es danach sein. Stimmt das schon (Druck kam doppelt an), passiert nichts."""
+        if taste not in TASTEN_ARTEN:
+            raise ValueError(f"Unbekannte Taste {taste!r}.")
+        executor = self.executor(nummer)
+        if taste == "flash":
+            self.flash(nummer, an, jetzt)
+        elif taste == "go":
+            self.go(nummer, jetzt, 1)
+        elif taste == "zurueck":
+            self.go(nummer, jetzt, -1)
+        elif taste == "aus":
+            self.aus(nummer, jetzt)                # zweimal Aus schadet nie
+        elif taste == "toggle":
+            if executor.art == "gruppe":
+                laeuft = not executor.stumm
+            else:
+                laeuft = executor.index >= 0
+            if erwartet is not None and erwartet == laeuft:
+                return
+            if executor.art == "gruppe":
+                executor.stumm = laeuft
+            elif executor.art == "tempo":
+                self.tap(jetzt)
+            elif laeuft:
+                self.aus(nummer, jetzt)
+            else:
+                self.go(nummer, jetzt, 1)
 
     def label_setzen(self, nummer: int, text: str) -> None:
         executor = self.executor(nummer)
@@ -628,6 +726,8 @@ class Pult:
         if executor.sequenz is None:
             self.merke_belegung(zusammen=True)
             executor.belegen(sequenz)
+            if executor.fader <= FADER_NULL:
+                executor.fader = 1.0
             self.belegung_speichern()
         return sequenz
 
@@ -1079,7 +1179,9 @@ class Pult:
                 "label": executor.label, "sequenz": executor.sequenz["name"] if executor.sequenz else None,
                 "gruppe": executor.gruppe, "index": executor.index, "anzahl": len(cues),
                 "fader": round(executor.fader, 3), "flash": executor.flash_seit is not None,
-                "stumm": executor.stumm, "song": executor.zeitcode == "song"}
+                "stumm": executor.stumm, "song": executor.zeitcode == "song",
+                "laeuft": executor.index >= 0 if executor.art != "gruppe" else not executor.stumm,
+                "tasten": self.tasten_fuer(executor), "farbe": executor.farbe}
         if 0 <= executor.index < len(cues):
             info["cue"] = cues[executor.index]["name"]
         if cues:
