@@ -180,9 +180,24 @@ Die Tests laufen ohne Hardware und ohne Internet.
 
 Das braucht Internet und läuft nie während einer Show.
 
-## Für das Tablet
+## iPad-Pult (ab 2.5.0)
 
-Am besten die **Handy-Fernbedienung** auf der Show-Seite benutzen (mit PIN, nur die Show-Tasten). `./start.command --netz` macht dagegen die ganze Oberfläche im Netzwerk erreichbar, ohne Passwort: Jeder im selben Netz kann dann alles bedienen. Also nur im eigenen Netz der Technik-AG und nur zum Entwickeln benutzen.
+Das iPad wird zum Pult wie ein grandMA3 Command Wing: 10 Executoren pro Seite mit Fader und Tasten, GO+/GO−,
+Grand Master, Not-Tasten, Programmieren mit Kugel-Feld und Effekt-Editor, Show-Tasten, KI-Chat. Das MacBook rechnet
+weiter alles (Licht, DMX, Musik); das iPad ist nur der Bildschirm. Fällt es aus, läuft das Licht weiter.
+
+1. MacBook und iPad ins selbe WLAN (am besten der Router der Technik-AG).
+2. Am MacBook: **Setup → iPad → „iPad koppeln“**. QR-Code mit dem iPad scannen (oder die Adresse in Safari
+   öffnen und die PIN eingeben). Die PIN gilt 5 Minuten für genau ein iPad.
+3. Auf dem iPad in Safari: Teilen → **„Zum Home-Bildschirm“**, dann über das Symbol „Lichtpult“ öffnen.
+4. iPad-Einstellungen: Automatische Sperre **Nie**, Multitasking & Gesten: **Gesten aus**, am Abend **Geführter Zugriff**.
+
+Das iPad bleibt gekoppelt (auch nach einem Neustart). Ist ein iPad gekoppelt, startet der Netz-Server mit dem Programm
+(Port 8765, Adresse `http://<Mac-Name>.local:8765/pult/`). Patch, Profile bearbeiten, Ton-Eingang, Claude-Schlüssel und
+Sicherung gehen nur am MacBook. Die Verbindung ist nicht verschlüsselt: nur im eigenen WLAN benutzen.
+
+Die **Handy-Fernbedienung** (Show-Seite, nur Show-Tasten) gibt es weiterhin. `./start.command --netz` macht dagegen die
+ganze Mac-Oberfläche ohne Passwort im Netz erreichbar: nur zum Entwickeln.
 
 ## Neue Version veröffentlichen
 

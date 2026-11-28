@@ -257,3 +257,25 @@ Wunsch der Technik-AG: „alles über die Claude-API“ (Erkennung und Programmi
 - **Modelle:** Chat und Lichtdesign `claude-opus-5-5`, Regie `claude-haiku-5-5` mit kurzem Nachdenken (Antwort in 2 bis 6 Sekunden). Ohne Nachdenken war Haiku schneller, verwechselte aber Applaus mit Musik und ließ ein falsches Drop-Licht in einer Ballade stehen; mit Nachdenken erkannte er beides, fast so gut wie Sonnet (das live etwa das Zehnfache kostet; einstellbar in `lokal.json`).
 - **Kosten** (gemessen): Chat etwa 3 Cent pro Nachricht, Lichtdesign eines Songs etwa 7 Cent, Regie mit Haiku etwa 2 Cent pro 3 Minuten Musik (rund 35 Cent pro Stunde). Limit der Regie: 1 € pro Sitzung.
 - **Wer zahlt:** offen (siehe Offene Fragen in CLAUDE.md).
+
+## iPad-Pult, Ton-Stabilität und DIP-Schalter (ab 2.5.0)
+
+- **iPad-Pult:** eigener Netz-Server (Erweiterung der Handy-Fernbedienung, Port 8765) mit Seite `/pult/` und WebSocket
+  `/pult/ws`. Gekoppelt wird über ein 5-Minuten-Fenster mit PIN am MacBook; gespeichert wird nur der SHA-256 des
+  Schlüssels (`daten/netz_geraete.json`). Der Stand geht 25-mal pro Sekunde und nur mit Änderungen ans iPad (die
+  Mac-Oberfläche bekommt weiter alles 40-mal pro Sekunde). Was das iPad darf, steht in `lichtsteuerung/aktionen.py`.
+  Gehaltene Tasten (Flash, Halten) lässt das MacBook los, wenn die Verbindung abreißt oder 4 s nichts kommt.
+- **Seiten pro Bildschirm:** iPad und Mac blättern die Fader-Seiten unabhängig; die Executoren sind für alle dieselben.
+- **Fader auf 0:** Eine neu zugewiesene Sequenz bekommt Fader 100 %, und Go auf einen Fader unter 2 % zieht ihn hoch.
+  Vorher blieb der Fader auf 0, und Go zeigte nichts.
+- **Not-Tasten übers Netz** werden fest gesetzt (an/aus), nicht umgeschaltet: Ein doppelt angekommener Druck schaltet
+  nicht zurück.
+- **Ton:** Nach einem Aussetzer gelten die letzten Messwerte noch 3 s (vorher nach 0,5 s Grundlicht). Wiederverbinden
+  mit wachsender Pause, Logbuch nur „weg“ (mit Grund) und „wieder da“. Die meisten „Ton weg“ am 21.11. waren Schlaf
+  des Macs (Deckel zu); der Konzert-Check warnt jetzt bei Deckel zu und Akku, das Programm erkennt Schlaf.
+- **Vorlauf:** Beats gehen 60 ms (X32-USB) bzw. 100 ms (Mikrofon) vor ihrer Zeit raus, weil Ton-Weg, Puffer, Bild und
+  DMX zusammen etwa so lange brauchen.
+- **DIP-Schalter:** Schalter 1 zählt 1, 2 zählt 2, 3 zählt 4 … Die Schalterzahl kommt pro Gerätetyp (Feld
+  `adresse_einstellen` oder `lichtsteuerung/adressierung.py`); ohne Angabe 9 Adress-Schalter plus Display-Schreibweise.
+- **Profil Weihnachtszauber:** wie Weihnachten, aber beat_reaktion 0,6 und Bewegung voll. Strobo bleibt aus.
+- **Nicht getestet** bis zum Aufbau: echtes iPad (nur WebKit-Nachbildung), WLAN am Ort, Bonjour-Name im Router-Netz.
