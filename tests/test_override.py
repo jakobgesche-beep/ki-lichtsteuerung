@@ -191,7 +191,7 @@ def test_alle_mitgelieferten_profile_sind_gueltig():
     from lichtsteuerung.daten import PROJEKT
     from lichtsteuerung.profile import Profile
     profile = Profile(PROJEKT / "profile")
-    assert len(profile.namen()) == 4
+    assert len(profile.namen()) == 5                      # dazu ab 2.5: Weihnachtszauber
     for name in profile.namen():
         profile.laden(name)
 

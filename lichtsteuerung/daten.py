@@ -68,6 +68,31 @@ def einrichten(ziel: Path, vorlage: Path = PROJEKT) -> None:
     for name in STANDARD_ORDNER:
         if not (ziel / name).exists():
             shutil.copytree(vorlage / name, ziel / name)
+    neue_dateien_anbieten(ziel, vorlage)
+
+
+# Dateien, die nach dem ersten Start dazugekommen sind (Update). Jede wird einmal angeboten und nie überschrieben:
+# Wer sie löscht, bekommt sie nicht wieder.
+NEUE_STANDARD_DATEIEN = ("profile/weihnachtszauber.json",)
+
+
+def neue_dateien_anbieten(ziel: Path, vorlage: Path = PROJEKT) -> None:
+    merker = ziel / "daten" / "neue_dateien.json"
+    try:
+        angeboten = set(lese_json(merker, []) or [])
+    except (ValueError, OSError):
+        angeboten = set()
+    neu = False
+    for name in NEUE_STANDARD_DATEIEN:
+        if name in angeboten or not (vorlage / name).exists():
+            continue
+        if not (ziel / name).exists():
+            (ziel / name).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(vorlage / name, ziel / name)
+        angeboten.add(name)
+        neu = True
+    if neu:
+        schreibe_json(merker, sorted(angeboten))
 
 
 START_MELDUNGEN = []      # zum Beispiel "Show geladen": zeigt die Oberfläche einmal an

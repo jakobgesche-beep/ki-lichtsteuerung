@@ -394,3 +394,36 @@ def test_doppelte_eintraege_einer_gruppe_werden_zusammengelegt():
     sequenz = aus_vorschlag({"name": "X", "cues": [{"name": "A", "zeit_s": 1, "effekte": [], "werte": [
         {"gruppe": "Spots", "farbe": "blau"}, {"gruppe": "Spots", "helligkeit": 0.8, "position": "Mitte"}]}]})
     assert sequenz["cues"][0]["werte"] == [{"gruppe": "Spots", "farbe": "blau", "helligkeit": 0.8, "position": "Mitte"}]
+
+
+def test_diktierte_wilde_szene_offline(tmp_path):
+    """Diktiert am iPad: Der einfache Satz-Leser (ohne Internet) baut trotzdem Bewegung + Farbwechsel."""
+    from lichtsteuerung import daten
+    from lichtsteuerung.licht_chat import einfach_verstehen
+    from lichtsteuerung.show import Show
+    daten.einrichten(tmp_path / "d")
+    show = Show(daten.Pfade(tmp_path / "d", daten.PROJEKT / "catalog"))
+    for satz in ("Die Moving Heads drehen sich wild und wechseln ständig die Farbe.",
+                 "moving heads drehen sich wild und wechseln die ganze zeit die farbe"):
+        vorschlag = einfach_verstehen(show, satz)
+        assert vorschlag, satz
+        effekte = [e for c in vorschlag["sequenz"]["cues"] for e in c.get("effekte", [])]
+        arten = {e["art"] for e in effekte}
+        assert arten & {"kreis", "acht"} and "farbwechsel" in arten, (satz, arten)
+
+
+def test_neues_profil_kommt_einmal_in_vorhandene_daten(tmp_path):
+    from lichtsteuerung import daten
+    ziel = tmp_path / "d"
+    daten.einrichten(ziel)
+    assert (ziel / "profile" / "weihnachtszauber.json").exists()
+    (ziel / "profile" / "weihnachtszauber.json").unlink()            # wer es löscht, bekommt es nicht wieder
+    daten.einrichten(ziel)
+    assert not (ziel / "profile" / "weihnachtszauber.json").exists()
+    alt = tmp_path / "alt"                                            # Datenordner von vor 2.5: Profil fehlt noch
+    daten.einrichten(alt)
+    (alt / "profile" / "weihnachtszauber.json").unlink()
+    (alt / "daten" / "neue_dateien.json").unlink()
+    daten.einrichten(alt)
+    profil = __import__("json").loads((alt / "profile" / "weihnachtszauber.json").read_text())
+    assert profil["beat_reaktion"] >= 0.5 and profil["strobo"] == "aus"

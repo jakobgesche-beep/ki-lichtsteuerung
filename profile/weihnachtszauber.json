@@ -1,0 +1,33 @@
+{
+  "_hinweis": "Weihnachtszauber mit Band: warme Grundfarben wie „Weihnachten“, aber laute Songs, Soli und Drops dürfen knallen (Treffer, Weiß-Akzente, Bewegung). Ruhige Stellen bleiben ruhig. Strobo bleibt aus (erst mit der Lehrkraft eine Grenze festlegen).",
+  "name": "Weihnachtszauber",
+  "palette": [
+    "rot",
+    "gold",
+    "warmweiss",
+    "blau",
+    "lila",
+    "pink",
+    "cyan"
+  ],
+  "max_helligkeit": 1.0,
+  "bewegung": "voll",
+  "beat_reaktion": 0.6,
+  "strobo": "aus",
+  "grundlicht": {
+    "werte": [
+      {
+        "gruppe": "Farb-PARs",
+        "farbe": "warmweiss",
+        "helligkeit": 0.45
+      },
+      {
+        "gruppe": "Frontlicht",
+        "farbe": "warmweiss",
+        "helligkeit": 0.5,
+        "position": "Mitte"
+      }
+    ]
+  },
+  "hazer": false
+}

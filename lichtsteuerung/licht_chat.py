@@ -138,6 +138,10 @@ zu einem Höhepunkt passt, und nie über der Grenze.
 - Soll eine vorhandene Sequenz geändert werden, lies sie zuerst mit sequenz_lesen. Im Vorschlag dann derselbe Name \
 und ersetzt = true. Eine Song-Show (Sequenz mit „Song“) änderst du mit song_show_entwerfen, nicht mit vorschlag_machen.
 - Nennt der Mensch einen Fader, setze fader auf diese Nummer. Sonst lass fader weg (der Mensch wählt beim Übernehmen).
+- Szenen für Fader (wie beim spontanen Fahren am grandMA, „Busking“): eine Sequenz mit EINEM Cue, helligkeit 1, kurzer Name (höchstens 14 Zeichen, zum Beispiel „Wirbel Bunt“), zeit_s 0 bis 0,5 bei kräftigen Szenen, 1 bis 3 bei ruhigen. Der Fader regelt dann die Helligkeit, die Taste startet sie.
+- „Wild“, „drehen“, „wirbeln“, „Party“: Bewegungs-Effekt kreis oder acht mit groesse 0,7 bis 1, beats 2 bis 4 und verteilung 0,5 bis 1 (dann laufen die Köpfe versetzt, das sieht nach mehr aus). Dazu farbwechsel mit 3 bis 6 kräftigen Farben und beats 1 bis 2, auf Wunsch dimmer_puls mit beats 1 und tiefe 0,6 bis 0,8, bei Spots gobo_drehung.
+- Mit zwei Köpfen: Fächer und Gegenbewegung wirken stark (verteilung 0,5 = Gegenbewegung bei zwei Geräten). Farb-PARs in einer Gegenfarbe zu den Spots, oder als Puls im Takt.
+- Ruhig, „Ballade“, „schön“: beats 16 bis 32, groesse 0,2 bis 0,4, ein bis zwei Farben, keine Gobo-Drehung.
 - Meldet die Prüfung Fehler, korrigiere den Vorschlag und rufe das Werkzeug noch einmal auf.
 - Fehlt dir eine wichtige Angabe, frag kurz nach. Antworte immer kurz, in einfachem Deutsch und in der du-Form. \
 Der Mensch tippt schnell und macht Tippfehler: Rate wohlwollend, was gemeint ist.
@@ -478,9 +482,11 @@ def einfach_verstehen(show, text: str) -> Optional[dict]:
         fader = int(treffer.group(1))
         satz = satz.replace(treffer.group(0), " ")
     zeit = 2.0
+    zeit_genannt = False
     treffer = re.search(r"(\d+(?:[.,]\d+)?)\s*(?:s\b|sek|sekunde)", satz)
     if treffer:
         zeit = float(treffer.group(1).replace(",", "."))
+        zeit_genannt = True
         satz = satz.replace(treffer.group(0), " ")
     werte, effekte, verstanden, notizen, stil_namen = {}, [], [], [], []
     gruppen_vorher: list = []
@@ -584,7 +590,9 @@ def einfach_verstehen(show, text: str) -> Optional[dict]:
                     if wirbel:
                         effekte[-1]["verteilung"] = 1.0       # jeder Kopf anders: durcheinander
                 elif art == "farbwechsel":
-                    effekt_setzen(art, gruppe, 2 if schnell or wirbel else 4,
+                    staendig = any(x.startswith(("ständig", "staendig", "dauernd", "immer", "permanent")) for x in woerter) \
+                        or "ganze zeit" in " ".join(woerter)
+                    effekt_setzen(art, gruppe, 1 if staendig else 2 if schnell or wirbel else 4,
                                   farben=farben if len(farben) >= 2 else ["rot", "blau", "lila", "gold"])
                 elif art == "dimmer_welle":
                     effekt_setzen(art, gruppe, 16 if langsam or (stil and stil["beats"] >= 16) else 8, tiefe=0.6)
@@ -609,6 +617,8 @@ def einfach_verstehen(show, text: str) -> Optional[dict]:
         name = " ".join(dict.fromkeys(teile))
     zusatz = " mit Strobo" if any("strobo_hz" in v for v in werte.values()) else ""
     name = (name[:30 - len(zusatz)].strip() or "Look") + zusatz
+    if not zeit_genannt and (wirbelt or any(e.get("beats", 4) <= 2 for e in effekte)):
+        zeit = 0.3                                  # kräftige Szene: sofort da (wie beim spontanen Fahren)
     cue = {"name": name, "zeit_s": zeit, "folgen_s": None, "werte": list(werte.values()), "effekte": effekte}
     beschreibung = []
     for v in werte.values():
