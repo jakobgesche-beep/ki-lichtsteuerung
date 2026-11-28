@@ -145,13 +145,13 @@ export function wingAnsicht(wurzel) {
     const haupt = stand.z.exec[String(m.haupt)] || {};
     hauptTitel.innerHTML = `<b>${t(m.haupt || "")}</b> ${t(haupt.label || haupt.name || "–")}`;
     cueListe.replaceChildren(...(m.haupt_cues || []).map((name, i) => tippen(el(`button.cue${i === m.haupt_index ? ".aktiv" : ""}`, {}, el("b", {}, String(i + 1)), name),
-      () => befehl("taste", { nr: m.haupt, taste: "go" }).catch(() => {}))));
+      () => befehl("goto", { nr: m.haupt, index: i }).catch(() => {}))));
     for (const knopf of looks.children) knopf.classList.toggle("an", knopf.dataset.look === stand.z.show?.look);
   }
 
   wurzel.replaceChildren(el("div.wing", {},
     el("div.wing-oben", {}, el("section.fenster.wing-buehne", {}, el("header", {}, "Bühne live"), buehne.element),
-      el("section.fenster.wing-cues", {}, el("header", {}, hauptTitel), cueListe),
+      el("section.fenster.wing-cues", {}, el("header", {}, hauptTitel, el("span.leise", {}, "Tipp = Goto")), cueListe),
       el("section.fenster.wing-looks", {}, el("header", {}, "Looks"), looks)),
     el("div.wing-unten", {}, seitenLeiste, reihe), zielSchild));
   bauen();

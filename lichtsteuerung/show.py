@@ -90,12 +90,10 @@ def rollen_pruefen(rollen) -> dict:
 def vorlauf_fuer(geraet_name: str, eigener_ms: Optional[int] = None) -> float:
     """Wie viel früher das Licht einen Beat zeigen soll (Sekunden). Ton übers X32-USB ist schneller da als
     über ein Mikrofon im Saal (dort kommen noch rund 30–45 ms Schallweg dazu)."""
+    from .audio.rollen import ist_x32_usb
     if eigener_ms is not None:
         return max(0, min(300, int(eigener_ms))) / 1000
-    name = (geraet_name or "").lower()
-    if any(teil in name for teil in ("x-usb", "x32", "behringer", "x usb")):
-        return 0.06
-    return 0.10
+    return 0.06 if ist_x32_usb(geraet_name) else 0.10
 
 
 class Show:

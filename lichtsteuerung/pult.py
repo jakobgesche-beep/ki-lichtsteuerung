@@ -522,11 +522,8 @@ class Pult:
             return
         if executor.sequenz is None:
             raise ValueError(f"Auf Fader {nummer} liegt nichts. Erst eine Sequenz zuweisen (Assign) oder speichern (Store).")
-        if schritt > 0 and executor.fader <= FADER_NULL and not executor.zeitcode:
-            # Fader stand unten: Go würde unsichtbar starten. Wie ein Motorfader: hochfahren und Bescheid sagen.
-            executor.fader = 1.0
-            self._speichern_ab = jetzt + 1.5
-            self.hinweis(f"Fader {nummer} stand auf 0 und ist jetzt auf 100 %.", jetzt)
+        if schritt > 0 and not executor.zeitcode:
+            self._fader_hoch(executor, nummer, jetzt)
         self.haupt = nummer - 1
         song = getattr(self.show, "song", None)
         if executor.zeitcode == "song" and song is not None and song.laeuft_auf(nummer):
@@ -536,6 +533,13 @@ class Pult:
             return
         if executor.go(jetzt, schritt):
             self.nach_oben(executor, jetzt, umschalten=False)
+
+    def _fader_hoch(self, executor: Executor, nummer: int, jetzt: float) -> None:
+        """Fader stand unten: Go würde unsichtbar starten. Wie ein Motorfader: hochfahren und Bescheid sagen."""
+        if executor.fader <= FADER_NULL:
+            executor.fader = 1.0
+            self._speichern_ab = jetzt + 1.5
+            self.hinweis(f"Fader {nummer} stand auf 0 und ist jetzt auf 100 %.", jetzt)
 
     def nach_oben(self, executor: Executor, jetzt: float, umschalten: bool = True) -> None:
         """Dieser Executor liegt jetzt oben (wie "zuletzt gedrückt" am Pult)."""
@@ -995,6 +999,7 @@ class Pult:
             song.zu_cue(index)               # der Song läuft von dort aus weiter
             return
         executor.zeitcode = False
+        self._fader_hoch(executor, nummer, jetzt)
         executor.gehe_zu(index, jetzt)
         self.haupt = nummer - 1
         self.zaehler += 1

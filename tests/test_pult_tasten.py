@@ -88,3 +88,18 @@ def test_not_tasten_fest_an_und_aus():
     assert o.blackout is False
     with pytest.raises(ValueError):
         o.setzen("alles", True)
+
+
+def test_goto_aus_der_cue_liste_auch_vom_ipad(show):
+    """Tipp auf einen Cue in der Cue-Liste (iPad wie Mac): genau dorthin, Fader auf 0 fährt hoch."""
+    from lichtsteuerung import aktionen
+    pult = show.pult
+    pult.zuweisen(4, "sequenz", "Ablauf")
+    pult.executor(4).fader = 0.0
+    sitzung = aktionen.Sitzung(show, "Test-iPad")
+    aktionen.ausfuehren(show, "goto", {"nr": 4, "index": 1}, sitzung)
+    assert pult.executor(4).index == 1 and pult.executor(4).fader == 1.0 and pult.haupt == 3
+    with pytest.raises(ValueError):
+        aktionen.ausfuehren(show, "goto", {"nr": 4, "index": 7}, sitzung)
+    with pytest.raises(ValueError):
+        aktionen.ausfuehren(show, "goto", {"nr": 4, "index": "1"}, sitzung)

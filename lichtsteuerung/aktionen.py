@@ -80,6 +80,15 @@ def go_haupt(show, d, sitzung):
         show.pult.go(show.pult.haupt + 1, time.monotonic(), richtung)
 
 
+def goto(show, d, sitzung):
+    """Cue-Liste: direkt zu einem Cue springen (wie Goto am Pult)."""
+    nummer, index = _nr(d), d.get("index")
+    if not isinstance(index, int) or isinstance(index, bool):
+        raise ValueError("Welcher Cue? (index fehlt)")
+    with show.sperre:
+        show.pult.goto(nummer, index, time.monotonic())
+
+
 def haupt_aus(show, d, sitzung):
     with show.sperre:
         show.pult.aus(show.pult.haupt + 1, time.monotonic())
@@ -408,7 +417,7 @@ def chat_neu(show, d, sitzung):
 
 AKTIONEN: dict = {
     # Spielen
-    "fader": fader, "taste": taste, "grand": grand, "go_haupt": go_haupt, "haupt_aus": haupt_aus,
+    "fader": fader, "taste": taste, "grand": grand, "go_haupt": go_haupt, "goto": goto, "haupt_aus": haupt_aus,
     "haupt_waehlen": haupt_waehlen, "override": override,
     # Programmieren
     "auswahl": auswahl, "werte": werte, "encoder": encoder, "xy": xy, "punkt": punkt, "effekt": effekt,

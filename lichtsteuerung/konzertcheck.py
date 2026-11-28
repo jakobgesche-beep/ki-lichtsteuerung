@@ -10,6 +10,7 @@ import time
 from pathlib import Path
 
 from . import generalprobe, sicherung, wachhalten
+from .audio.rollen import ROLLEN, ist_x32_usb
 from .dmx_ausgabe import kein_enttec_text
 
 
@@ -40,6 +41,8 @@ def pruefen(show) -> list:
         punkt("Ton", "ok", f"Ton kommt an ({show.audio.name}).")
     else:
         punkt("Ton", "hinweis", f"Der Ton kommt aus „{show.audio.name}“, nicht aus einem Eingang. Für das Konzert den X32-Eingang wählen.")
+    if werte is not None and show.audio.name.startswith("Eingang"):
+        _ton_rollen(show, punkt)
     gesund = show.audio.gesundheit()
     if gesund["abrisse"]:
         punkt("Ton", "hinweis", f"Der Ton war seit dem Start {gesund['abrisse']}-mal weg (steht mit Uhrzeit im Logbuch). "
@@ -74,6 +77,19 @@ def pruefen(show) -> list:
         else:
             handys = fern.handys_aktiv()
             punkt("Handy", "ok", f"Fernbedienung ist an ({handys} Handy{'s' if handys != 1 else ''} verbunden).")
+
+    # iPad-Pult (nur wenn eins gekoppelt ist; ohne iPad geht alles am MacBook)
+    if fern.kopplung.hat_ipad():
+        if not fern.an:
+            punkt("iPad", "hinweis", "Ein iPad ist gekoppelt, aber das iPad-Pult ist aus. "
+                                     "Setup → iPad → „Netz-Server einschalten“.")
+        elif fern.hub.anzahl():
+            anzahl = fern.hub.anzahl()
+            punkt("iPad", "ok", f"iPad-Pult verbunden ({anzahl} Gerät{'e' if anzahl != 1 else ''}). "
+                                "Fällt es aus, läuft das Licht weiter, und das MacBook kann alles.")
+        else:
+            punkt("iPad", "hinweis", "Das iPad-Pult läuft, aber kein iPad ist verbunden. iPad entsperren und das Symbol "
+                                     "„Lichtpult“ öffnen (gleiches WLAN wie das MacBook).")
 
     # Profil und Strobo
     punkt("Profil", "ok", f"Profil: {show.profil['name']}.")
@@ -112,3 +128,26 @@ def pruefen(show) -> list:
     else:
         punkt("Rechner", "hinweis", "Heute noch keine Sicherung. Setup → Sicherung → Show sichern (auf einen USB-Stick).")
     return punkte
+
+
+def _ton_rollen(show, punkt) -> None:
+    """Ton vom X32: Sind Kanal-Rollen gewählt, und hat jede schon etwas gehört (Soundcheck)?"""
+    quelle = show.audio.quelle
+    geraet = getattr(quelle, "geraet_name", "") or ""
+    rollen = getattr(quelle, "rollen", None) or {}
+    if not ist_x32_usb(geraet):
+        return
+    if not rollen:
+        punkt("Ton", "hinweis", "Der Ton kommt vom X32, aber ohne Kanal-Rollen. Live → „Kanäle vom X32 …“: Bassdrum, "
+                                "Snare und Gesang/Rednerpult zuweisen. Dann erkennt das Programm Rede und "
+                                "Schlagzeug-Solo sicher.")
+        return
+    pegel = show.audio.kanal_pegel().get("rollen_pegel", {})
+    still = [f"{ROLLEN.get(rolle, rolle)} (Kanal {'+'.join(str(k) for k in kanaele)})"
+             for rolle, kanaele in rollen.items() if not pegel.get(rolle, {}).get("gehoert")]
+    if still:
+        punkt("Ton", "hinweis", "Noch nichts gehört von: " + ", ".join(still) + ". Beim Soundcheck kurz spielen lassen; "
+                                "bleibt es still, am X32 Routing → Card Out prüfen (Live → „Kanäle vom X32 …“ zeigt die Pegel).")
+    else:
+        punkt("Ton", "ok", "Alle Kanal-Rollen vom X32 haben schon etwas gehört: "
+                           + ", ".join(ROLLEN.get(r, r) for r in rollen) + ".")

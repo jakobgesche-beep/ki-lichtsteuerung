@@ -37,6 +37,13 @@ MISCH_ANTEIL = 0.8            # wie stark Bassdrum/Snare der Summe für den Takt
 # aber bei EDM (Bassdrum auf jedem Schlag) rutschte die Eins um einen Schlag. Kommt die Summe sauber vom X32
 # (ohne Saal), sitzt der Takt ohnehin bei 97–99 %. Darum aus; die Einzelkanäle helfen bei Rede, Solo und Applaus.
 RHYTHMUS_MISCHEN = False
+X32_NAMEN = ("x-usb", "x32", "behringer", "x usb")
+
+
+def ist_x32_usb(geraet_name: Optional[str]) -> bool:
+    """Ist dieses Audio-Gerät das X32 über USB? (Auf dem Mac heißt es meist „X-USB“.)"""
+    name = (geraet_name or "").lower()
+    return any(teil in name for teil in X32_NAMEN)
 
 
 @dataclass
@@ -61,6 +68,7 @@ class _Kanal:
         self.verlauf = deque(maxlen=int(FENSTER_S * ABTASTRATE / BLOCK))   # aktiv ja/nein pro Block
         self.pegel_verlauf = deque(maxlen=int(FENSTER_S * ABTASTRATE / BLOCK))   # dB pro Block
         self.rms_glatt = 1e-4
+        self.jemals_aktiv = False      # für den Konzert-Check: hat dieser Kanal seit dem Start schon etwas gehört?
 
     def verarbeite(self, block: np.ndarray) -> bool:
         """Gibt zurück, ob in diesem Block ein Schlag (Einsatz) beginnt."""
@@ -75,6 +83,7 @@ class _Kanal:
             self.grund_db = min(self.db, self.grund_db + GRUND_STEIGT_DB_S * dauer)
         self.spitze_db = max(self.db, self.spitze_db - 3.0 * dauer)
         aktiv = self.db > self.grund_db + AKTIV_UEBER_DB
+        self.jemals_aktiv = self.jemals_aktiv or aktiv
         self.verlauf.append(aktiv)
         self.pegel_verlauf.append(self.db)
         # Einsatz: Hüllkurve springt deutlich (Schlagzeug: sehr kurz, sehr steil)
@@ -162,5 +171,6 @@ class RollenAnalyse:
                            stimme_aktiv=stimme_aktiv, schlaege_pro_s=round(pro_s, 2))
 
     def pegel(self) -> dict:
-        return {name: {"db": round(k.db, 1), "grund_db": round(k.grund_db, 1), "aktiv": k.anteil_aktiv() > 0.3}
+        return {name: {"db": round(k.db, 1), "grund_db": round(k.grund_db, 1), "aktiv": k.anteil_aktiv() > 0.3,
+                       "gehoert": k.jemals_aktiv}
                 for name, k in self.kanaele.items()}

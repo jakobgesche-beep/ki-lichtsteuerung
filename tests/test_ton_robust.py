@@ -342,3 +342,86 @@ def test_eingang_liefert_rollen_bloecke_gleich_lang(monkeypatch):
     assert bloecke >= 7
     pegel = e.pegel_liste()
     assert len(pegel) == 32 and pegel[0] > -6 and pegel[4] > -12 and pegel[10] < -60
+
+
+# --- Konzert-Check 2.5.1: X32-Kanal-Rollen und iPad --------------------------------------------------------
+
+class X32MitRollen:
+    """X-USB mit Rollen. Kanäle in `still` liefern nur Nullen (z. B. am X32 nicht auf Card Out gelegt)."""
+    still = {"snare"}
+
+    def __init__(self, geraet=None, kanaele=(1,), name=None, api=None, rollen=None):
+        self.geraet_name, self.api_name, self.kanaele = "X-USB", "Core Audio", kanaele
+        self.rollen = rollen or {}
+        self.letzte_rollen = None
+        self.zufall = np.random.default_rng(1)
+
+    def lies(self):
+        time.sleep(BLOCK / ABTASTRATE)
+        self.letzte_rollen = {r: np.zeros(BLOCK, np.float32) if r in X32MitRollen.still
+                              else (0.3 * self.zufall.standard_normal(BLOCK)).astype(np.float32) for r in self.rollen}
+        return (0.1 * self.zufall.standard_normal(BLOCK)).astype(np.float32)
+
+    def schliessen(self):
+        pass
+
+
+def _bis_wahr(bedingung, hoechstens_s=5.0):
+    ende = time.monotonic() + hoechstens_s
+    while time.monotonic() < ende:
+        if bedingung():
+            return
+        time.sleep(0.05)
+    raise AssertionError("kam nicht")
+
+
+def test_konzert_check_x32_rollen(tmp_path, monkeypatch):
+    from lichtsteuerung import konzertcheck
+    monkeypatch.setattr(quellen, "Eingang", X32MitRollen)
+    monkeypatch.setattr(X32MitRollen, "still", {"snare"})
+    daten.einrichten(tmp_path / "d")
+    show = Show(daten.Pfade(tmp_path / "d", daten.PROJEKT / "catalog"))
+
+    def ton():
+        return " ".join(p["stufe"] + ": " + p["text"] for p in konzertcheck.pruefen(show) if p["thema"] == "Ton")
+
+    try:
+        show.audio_quelle_setzen({"art": "eingang", "geraet": 3, "kanaele": [15, 16]})
+        _bis_wahr(lambda: show.audio.frisch() is not None)
+        assert "hinweis: Der Ton kommt vom X32, aber ohne Kanal-Rollen" in ton()
+        show.audio_quelle_setzen({"art": "eingang", "geraet": 3, "kanaele": [15, 16],
+                                  "rollen": {"bassdrum": [1], "snare": [2]}})
+        _bis_wahr(lambda: show.audio.frisch() is not None
+                  and show.audio.kanal_pegel()["rollen_pegel"].get("bassdrum", {}).get("gehoert"))
+        assert "hinweis: Noch nichts gehört von: Snare (Kanal 2). " in ton()
+        X32MitRollen.still = set()                    # Soundcheck: jetzt spielt auch die Snare
+        _bis_wahr(lambda: show.audio.kanal_pegel()["rollen_pegel"].get("snare", {}).get("gehoert"))
+        assert "ok: Alle Kanal-Rollen vom X32 haben schon etwas gehört: Bassdrum, Snare." in ton()
+    finally:
+        show.audio.stoppen()
+
+
+def test_konzert_check_ipad(tmp_path):
+    from fastapi.testclient import TestClient
+    from lichtsteuerung import konzertcheck
+    daten.einrichten(tmp_path / "d")
+    show = Show(daten.Pfade(tmp_path / "d", daten.PROJEKT / "catalog"))
+    fern = show.fernbedienung
+
+    def ipad():
+        return [(p["stufe"], p["text"]) for p in konzertcheck.pruefen(show) if p["thema"] == "iPad"]
+
+    assert ipad() == []                                # ohne gekoppeltes iPad: kein Punkt (alles geht am MacBook)
+    token = fern.kopplung.koppeln(fern.kopplung.fenster_oeffnen()["pin"], "Test-iPad", "1.2.3.4")
+    assert ipad()[0][0] == "hinweis" and "iPad-Pult ist aus" in ipad()[0][1]
+    fern.einschalten(host="127.0.0.1")
+    try:
+        assert "kein iPad ist verbunden" in ipad()[0][1]
+        with TestClient(fern.app).websocket_connect("/pult/ws") as ws:
+            ws.send_json({"typ": "hallo", "token": token, "protokoll": 1})
+            for _ in range(50):
+                if ws.receive_json().get("typ") == "zustand":
+                    break
+            assert ipad()[0][0] == "ok" and "1 Gerät)" in ipad()[0][1]
+    finally:
+        fern.ausschalten()
