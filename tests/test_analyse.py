@@ -83,7 +83,9 @@ def test_alte_messwerte_gelten_als_ausfall():
     betrieb = AudioBetrieb()
     betrieb.messwerte, betrieb.zeitpunkt = object(), 100.0
     assert betrieb.aktuell(100.2) is not None
-    assert betrieb.aktuell(100.6) is None        # Analyse hängt
+    assert betrieb.frisch(100.6) is None         # Analyse hängt: nichts Frisches mehr
+    assert betrieb.aktuell(102.5) is not None    # kurzer Aussetzer: die letzten Werte gelten noch (kein Grundlicht)
+    assert betrieb.aktuell(103.1) is None        # danach: Rückfall aufs Grundlicht
 
 
 def test_beatuhr_ueberbrueckt_luecken_und_hoert_wieder_auf():
