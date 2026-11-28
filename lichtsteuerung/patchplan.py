@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from html import escape
 
+from . import adressierung
+
 DIP_SCHALTER = 10
 
 
@@ -31,16 +33,34 @@ def eintraege(show) -> list:
             "haengend": ort.get("montage") == "haengend", "x": ort.get("x", 0.0),
             "reihe": list(ORTE).index(ort["ort"]) if ort.get("ort") in ORTE else 9,
             "geprueft": typ.daten.get("handbuch_geprueft", False),
+            "einstellen": adressierung.einstellen(geraet["adresse"], adressierung.info_fuer(typ.daten)),
             "beweglich": any(k["typ"] in ("pan", "tilt") for _, k in typ.kanaele_im_modus(geraet["modus"])),
         })
     return sorted(liste, key=lambda e: (e["reihe"], e["x"]))
 
 
+
+def einstellen_html(einstellen: dict) -> str:
+    """Schalterreihe (schwarz oben = an), Text, Display-Schreibweise und Hinweise für eine Zelle im Plan."""
+    teile = []
+    if einstellen["dip"]:
+        teile.append("".join(
+            '<span class="dip{an}{modus}" title="Schalter {nr}">{nr}</span>'.format(
+                an=" an" if s["an"] else "", modus=" modus" if s["rolle"] == "modus" else "", nr=s["nr"])
+            for s in einstellen["dip"]["schalter"]))
+        teile.append("<small>" + escape(einstellen["dip"]["text"]) + "</small>")
+    if einstellen["display"]:
+        teile.append("Display: <b>" + escape(einstellen["display"]) + "</b>")
+    if einstellen["hinweis"] and einstellen["art"] != "unbekannt":
+        teile.append("<small>" + escape(einstellen["hinweis"]) + "</small>")
+    if einstellen["warnung"]:
+        teile.append('<b class="warnung">' + escape(einstellen["warnung"]) + "</b>")
+    return "<br>".join(teile)
+
 def seite(show) -> str:
     zeilen = []
     for e in eintraege(show):
-        schalter = "".join(f'<span class="dip {"an" if an else ""}" title="Schalter {i + 1}">{i + 1}</span>'
-                           for i, an in enumerate(dip(e["adresse"])))
+        schalter = einstellen_html(e["einstellen"])
         zeilen.append(f"""
         <tr>
           <td><b>{escape(e['name'])}</b><br><small>{escape(e['typ'])}</small></td>
@@ -65,6 +85,7 @@ def seite(show) -> str:
   .dip {{ display: inline-block; width: 18px; margin-right: 2px; text-align: center; font-size: 11px;
          border: 1px solid #888; padding-top: 14px; background: linear-gradient(#fff 50%, #888 50%); }}
   .dip.an {{ background: linear-gradient(#222 50%, #fff 50%); color: #000; }}
+  .dip.modus {{ border-color: #c60; }}
   .dips {{ white-space: nowrap; }}
   .warnung {{ color: #b00; font-weight: 600; }}
   .hinweis {{ color: #444; }}
@@ -77,7 +98,7 @@ schwarz oben heißt EIN.</p>
 {probleme}
 {'<p class="warnung">Einige Gerätedaten sind noch nicht mit dem Handbuch abgeglichen: Kanalzahl im Handbuch nachsehen.</p>' if ungeprueft else ''}
 <table>
-<tr><th>Gerät</th><th>Ort</th><th>Startadresse</th><th>Modus</th><th>belegt</th><th>DIP-Schalter (falls vorhanden)</th></tr>
+<tr><th>Gerät</th><th>Ort</th><th>Startadresse</th><th>Modus</th><th>belegt</th><th>Am Gerät einstellen (DIP-Schalter oder Display)</th></tr>
 {''.join(zeilen)}
 </table>
 <p class="nicht-drucken"><button onclick="print()">Drucken</button></p>

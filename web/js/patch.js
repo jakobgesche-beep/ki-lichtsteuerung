@@ -1,5 +1,6 @@
 // Patch-Assistent: Ablauf wie bei grandMA3, in fünf Schritten.
 import { api, senden, t } from "./api.js";
+import { dipHtml, STANDARD } from "../gemeinsam/dip.js";
 
 export function patchSeite(wurzel) {
   wurzel.innerHTML = `
@@ -15,6 +16,7 @@ export function patchSeite(wurzel) {
         </div>
         <label>Gruppen nach Funktion <select id="gruppen" multiple size="5"></select></label>
         <label>4. Startadresse (leer = nächste freie) <input id="start" type="number" min="1" max="512"></label>
+        <div id="start-dip" class="leise"></div>
         <div class="zeile">
           <label>5. Ort <select id="ort">
             <option value="traverse">Traverse</option><option value="stativ">Stativ</option><option value="boden">Boden</option>
@@ -58,6 +60,24 @@ export function patchSeite(wurzel) {
       .map((m) => `<option value="${t(m.name)}">${t(m.name)} (${m.kanaele} Kanäle)</option>`).join("");
     feld("name").value = feld("name").value || geraet.name;
     feld("hinzu").disabled = false;
+    startDip();
+  }
+
+  // Unter der Startadresse: so stellt man sie am Gerät ein (DIP-Schalter oder Display), live beim Tippen
+  async function startDip() {
+    const info = gewaehlt?.adresse_einstellen || STANDARD;
+    let adresse = Number(feld("start").value);
+    let zusatz = "";
+    if (!adresse) {
+      const modus = gewaehlt?.modi.find((m) => m.name === feld("modus").value);
+      if (!modus) { feld("start-dip").innerHTML = ""; return; }
+      try { adresse = (await api(`/patch/naechste_freie?kanaele=${modus.kanaele}`)).adresse; } catch { adresse = 0; }
+      if (!adresse) { feld("start-dip").textContent = "Im Patch ist kein Platz mehr für so viele Kanäle."; return; }
+      zusatz = ` (nächste freie: ${adresse})`;
+    }
+    const anzahl = Number(feld("anzahl").value) || 1;
+    feld("start-dip").innerHTML = `Am Gerät${zusatz}: ${dipHtml(adresse, info, { ohneHinweis: false })}` +
+      (anzahl > 1 ? `<br><span class="leise">Die weiteren Geräte bekommen die nächsten Adressen, ihre Schalter stehen danach in der Liste und im Patchplan.</span>` : "");
   }
 
   function zeigen(patch) {
@@ -72,13 +92,19 @@ export function patchSeite(wurzel) {
         <td>${t(g.name)}</td>
         <td>${t(g.typ_name)}${g.handbuch_geprueft ? "" : ` <span class="leise" title="Noch nicht mit dem Handbuch abgeglichen">(ungeprüft)</span>`}</td>
         <td>${t(g.modus)}</td>
-        <td><input type="number" min="1" max="512" value="${g.adresse}" data-adresse="${t(g.id)}"> <span class="leise">bis ${g.letzte_adresse}</span></td>
+        <td><input type="number" min="1" max="512" value="${g.adresse}" data-adresse="${t(g.id)}"> <span class="leise">bis ${g.letzte_adresse}</span>
+          <div data-dip="${t(g.id)}">${dipHtml(g.adresse, g.adresse_einstellen)}</div></td>
         <td>${t(g.gruppen.join(", "))}</td>
         <td><select data-ort="${t(g.id)}">${["traverse", "stativ", "boden"].map((o) =>
           `<option value="${o}" ${o === g.ort.ort ? "selected" : ""}>${{ traverse: "Traverse (hängend)", stativ: "Stativ", boden: "Boden" }[o]}</option>`).join("")}</select></td>
         <td><button data-tausch="${t(g.id)}">Tauschen</button> <button class="gefahr" data-weg="${t(g.id)}">Entfernen</button></td>
       </tr>`).join("");
     wurzel.querySelectorAll("[data-adresse]").forEach((eingabe) => {
+      const geraet = patch.geraete.find((g) => g.id === eingabe.dataset.adresse);
+      eingabe.oninput = () => {
+        const ziel = wurzel.querySelector(`[data-dip="${CSS.escape(eingabe.dataset.adresse)}"]`);
+        if (ziel) ziel.innerHTML = dipHtml(Number(eingabe.value) || 0, geraet?.adresse_einstellen);
+      };
       eingabe.onchange = async () => {
         try { zeigen(await api("/patch/" + eingabe.dataset.adresse, { method: "PATCH", daten: { adresse: Number(eingabe.value) } })); }
         catch { laden(); }
@@ -117,6 +143,9 @@ export function patchSeite(wurzel) {
   feld("plan-drucken").onclick = () => senden("/patchplan/oeffnen");
 
   feld("suche").oninput = suchen;
+  feld("start").oninput = startDip;
+  feld("modus").onchange = startDip;
+  feld("anzahl").oninput = startDip;
   feld("hinzu").onclick = async () => {
     const start = feld("start").value;
     zeigen(await senden("/patch", {
@@ -126,6 +155,7 @@ export function patchSeite(wurzel) {
       ort: feld("ort").value, montage: feld("montage").value,
     }));
     feld("start").value = "";
+    startDip();
   };
 
   suchen();

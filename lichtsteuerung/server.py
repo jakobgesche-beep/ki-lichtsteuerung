@@ -25,7 +25,7 @@ from .farben import FARBNAMEN
 from .importe import gdtf, qxf
 from .importe.gemeinsam import speichere_import
 from .katalog import KatalogFehler
-from . import daten, konzertcheck, showtasten, patchplan, sicherung
+from . import adressierung, daten, konzertcheck, showtasten, patchplan, sicherung
 from .befehle import Befehlszeile
 from .patch import FUNKTIONS_GRUPPEN, PatchFehler
 from .probe import akzente_alle
@@ -52,6 +52,7 @@ def patch_antwort(show: Show) -> dict:
             "typ_name": f"{typ.daten['hersteller']} {typ.daten['name']}",
             "handbuch_geprueft": typ.daten.get("handbuch_geprueft", False),
             "ort": show.buehne.geraet(geraet["id"]) or {}, "problem": geraet["id"] in rot,
+            "adresse_einstellen": adressierung.info_fuer(typ.daten),
         })
     return {"geraete": geraete, "probleme": probleme,
             "warnungen": show.patch.traverse_warnungen(show.buehne),
@@ -94,7 +95,8 @@ def erstelle_app(show: Optional[Show] = None) -> FastAPI:
 
     @app.get("/api/katalog/{hersteller}/{geraet}")
     def katalog_eintrag(hersteller: str, geraet: str):
-        return show.katalog.typ(f"{hersteller}/{geraet}").daten
+        daten_typ = show.katalog.typ(f"{hersteller}/{geraet}").daten
+        return {**daten_typ, "adresse_einstellen": adressierung.info_fuer(daten_typ)}
 
     @app.post("/api/katalog")
     def katalog_speichern(eintrag: dict = Body(...)):

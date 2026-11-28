@@ -1,5 +1,6 @@
 // DMX-Test: jedes Gerät kurz einzeln an, oder einzelne Kanäle setzen.
 import { api, senden, t } from "./api.js";
+import { dipHtml, STANDARD } from "../gemeinsam/dip.js";
 
 export function dmxTestSeite(wurzel) {
   wurzel.innerHTML = `
@@ -41,6 +42,7 @@ export function dmxTestSeite(wurzel) {
           <label>Startadresse <input id="gt-adresse" type="number" min="1" max="512" value="1"></label>
           <label>Kanäle <input id="gt-anzahl" type="number" min="1" max="32" value="9"></label>
         </div>
+        <div id="gt-dip" class="leise"></div>
         <p class="zeile"><button id="gt-start" class="haupt">Test starten</button>
           <button id="gt-ende">Test beenden</button> <span id="gt-status" class="leise"></span></p>
         <div id="gt-bereich" hidden>
@@ -129,7 +131,8 @@ export function dmxTestSeite(wurzel) {
     ["dimmer", "Dimmer"], ["rot", "Rot"], ["gruen", "Grün"], ["blau", "Blau"], ["weiss", "Weiß"], ["strobo", "Strobo / Shutter"],
     ["tempo", "Tempo (Bewegung)"], ["farbrad", "Farbrad / Farbmakro"], ["gobo", "Gobo"], ["makro", "Auto / Programm / Reset"],
     ["sonstiges", "Sonstiges"]];
-  const gt = { werte: [], arten: [], bewegen: false, laeuft: false };
+  const gt = { werte: [], arten: [], bewegen: false, laeuft: false, einstellen: STANDARD };
+  const gtDip = () => { feld("gt-dip").innerHTML = `Am Gerät einstellen: ${dipHtml(adresse(), gt.einstellen, { ohneHinweis: false })}`; };
   const adresse = () => Math.max(1, Math.min(512, Number(feld("gt-adresse").value) || 1));
   const anzahl = () => Math.max(1, Math.min(32, Number(feld("gt-anzahl").value) || 1));
   const kanalVon = (art) => gt.arten.findIndex((a) => a === art);
@@ -221,6 +224,8 @@ export function dmxTestSeite(wurzel) {
   for (const id of ["gt-adresse", "gt-anzahl"]) {
     feld(id).onchange = () => { if (gt.laeuft) { gtTabelle(); gtZeigen(); gtSenden(); gtFrei(); } };
   }
+  feld("gt-adresse").addEventListener("input", gtDip);
+  gtDip();
   feld("gt-kanaele").addEventListener("input", (e) => {
     const i = e.target.dataset.gtWert;
     if (i === undefined) return;
@@ -272,7 +277,7 @@ export function dmxTestSeite(wurzel) {
   }
   feld("gt-geraet").onchange = async () => {
     const id = feld("gt-geraet").value;
-    if (!id) { geladen = null; feld("gt-speichern").textContent = "Speichern und patchen"; return; }
+    if (!id) { geladen = null; gt.einstellen = STANDARD; gtDip(); feld("gt-speichern").textContent = "Speichern und patchen"; return; }
     const { geraete } = await api("/patch");
     const g = geraete.find((x) => x.id === id);
     if (!g) return;
@@ -282,7 +287,9 @@ export function dmxTestSeite(wurzel) {
     gt.arten = modus.kanaele.map((k) => (bekannt.has(typ.kanaele[k]?.typ) ? typ.kanaele[k].typ : "sonstiges"));
     gt.werte = modus.kanaele.map((k) => typ.kanaele[k]?.standard ?? 0);
     geladen = { id: g.id, typ: g.typ };
+    gt.einstellen = typ.adresse_einstellen || STANDARD;
     feld("gt-adresse").value = g.adresse;
+    gtDip();
     feld("gt-anzahl").value = modus.kanaele.length;
     feld("gt-name").value = g.name;
     feld("gt-ort").value = ["traverse", "stativ", "boden"].includes(g.ort?.ort) ? g.ort.ort : "boden";

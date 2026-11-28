@@ -111,5 +111,10 @@
     "name": "Cameo PAR 56 CAN (CLP56RGB10), Bedienungsanleitung, DMX-Tabelle",
     "url": "https://www.manualslib.de/manual/97116/Cameo-Par-56-Can.html?page=9"
   },
-  "handbuch_geprueft": true
+  "handbuch_geprueft": true,
+  "adresse_einstellen": {
+    "art": "display",
+    "display": "{:03d}",
+    "hinweis": "Mit MODE in den DMX-Betrieb, dann die Adresse einstellen (Punkt unter der ersten Ziffer = 4 Kanäle)."
+  }
 }

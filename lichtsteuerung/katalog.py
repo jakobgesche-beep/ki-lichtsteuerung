@@ -28,7 +28,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from . import daten
+from . import adressierung, daten
 
 FARB_TYPEN = {
     "rot": "#ff0000", "gruen": "#00ff00", "blau": "#0000ff", "weiss": "#ffffff",
@@ -97,6 +97,7 @@ class Geraetetyp:
             ],
             "eigener_eintrag": self.daten.get("quelle", {}).get("art") != "ofl",
             "handbuch_geprueft": self.daten.get("handbuch_geprueft", False),
+            "adresse_einstellen": adressierung.info_fuer(self.daten),
         }
 
 

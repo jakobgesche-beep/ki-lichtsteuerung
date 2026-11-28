@@ -27,31 +27,92 @@
       "typ": "makro",
       "standard": 0,
       "bereiche": [
-        {"von": 0, "bis": 7, "typ": "aus", "name": "Makro aus"},
-        {"von": 8, "bis": 255, "typ": "sonstiges", "name": "31 Farb-Makros"}
+        {
+          "von": 0,
+          "bis": 7,
+          "typ": "aus",
+          "name": "Makro aus"
+        },
+        {
+          "von": 8,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "31 Farb-Makros"
+        }
       ]
     },
     "Tempo/Strobo": {
       "typ": "strobo",
       "standard": 0,
       "bereiche": [
-        {"von": 0, "bis": 15, "typ": "offen", "name": "kein Strobo"},
-        {"von": 16, "bis": 255, "typ": "strobo", "hz_von": null, "hz_bis": null,
-         "name": "Strobo in 16 Stufen (in den Programmen: Tempo)"}
+        {
+          "von": 0,
+          "bis": 15,
+          "typ": "offen",
+          "name": "kein Strobo"
+        },
+        {
+          "von": 16,
+          "bis": 255,
+          "typ": "strobo",
+          "hz_von": null,
+          "hz_bis": null,
+          "name": "Strobo in 16 Stufen (in den Programmen: Tempo)"
+        }
       ]
     },
     "Modus": {
       "typ": "makro",
       "standard": 0,
       "bereiche": [
-        {"von": 0, "bis": 31, "typ": "aus", "name": "Farbe über DMX"},
-        {"von": 32, "bis": 63, "typ": "sonstiges", "name": "Abblenden"},
-        {"von": 64, "bis": 95, "typ": "sonstiges", "name": "Aufblenden"},
-        {"von": 96, "bis": 127, "typ": "sonstiges", "name": "Auf- und Abblenden"},
-        {"von": 128, "bis": 159, "typ": "sonstiges", "name": "Auto-Mix"},
-        {"von": 160, "bis": 191, "typ": "sonstiges", "name": "3-Farben-Lauf"},
-        {"von": 192, "bis": 223, "typ": "sonstiges", "name": "7-Farben-Lauf"},
-        {"von": 224, "bis": 255, "typ": "sonstiges", "name": "Soundsteuerung"}
+        {
+          "von": 0,
+          "bis": 31,
+          "typ": "aus",
+          "name": "Farbe über DMX"
+        },
+        {
+          "von": 32,
+          "bis": 63,
+          "typ": "sonstiges",
+          "name": "Abblenden"
+        },
+        {
+          "von": 64,
+          "bis": 95,
+          "typ": "sonstiges",
+          "name": "Aufblenden"
+        },
+        {
+          "von": 96,
+          "bis": 127,
+          "typ": "sonstiges",
+          "name": "Auf- und Abblenden"
+        },
+        {
+          "von": 128,
+          "bis": 159,
+          "typ": "sonstiges",
+          "name": "Auto-Mix"
+        },
+        {
+          "von": 160,
+          "bis": 191,
+          "typ": "sonstiges",
+          "name": "3-Farben-Lauf"
+        },
+        {
+          "von": 192,
+          "bis": 223,
+          "typ": "sonstiges",
+          "name": "7-Farben-Lauf"
+        },
+        {
+          "von": 224,
+          "bis": 255,
+          "typ": "sonstiges",
+          "name": "Soundsteuerung"
+        }
       ]
     },
     "Dimmer": {
@@ -62,7 +123,15 @@
   "modi": [
     {
       "name": "7 Kanäle (DIP 10–12 aus)",
-      "kanaele": ["Rot", "Grün", "Blau", "Makro", "Tempo/Strobo", "Modus", "Dimmer"]
+      "kanaele": [
+        "Rot",
+        "Grün",
+        "Blau",
+        "Makro",
+        "Tempo/Strobo",
+        "Modus",
+        "Dimmer"
+      ]
     }
   ],
   "quelle": {
@@ -70,5 +139,18 @@
     "name": "Thomann, Stairville LED PAR 56/64 10 mm RGB, Bedienungsanleitung (ID 115012 … 115050, V2), Kapitel 7.5 DMX-Modus",
     "url": "https://images.static-thomann.de/pics/atg/atgdata/document/manual/c_115012_115025_215918_115048_215926_115050_v2_r3_de_online.pdf"
   },
-  "handbuch_geprueft": true
+  "handbuch_geprueft": true,
+  "adresse_einstellen": {
+    "art": "dip",
+    "dip": {
+      "anzahl": 12,
+      "adresse": 9,
+      "aus": [
+        10,
+        11,
+        12
+      ]
+    },
+    "hinweis": "Schalter 10, 11 und 12 aus = DMX-Modus (Thomann-Anleitung, Kapitel 7.5)."
+  }
 }
